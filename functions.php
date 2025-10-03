@@ -12,6 +12,7 @@ define( 'POETHEME_URI', get_template_directory_uri() );
 
 require_once POETHEME_DIR . '/inc/theme-options.php';
 require_once POETHEME_DIR . '/inc/template-tags.php';
+require_once POETHEME_DIR . '/inc/schema-jsonld.php';
 
 if ( ! function_exists( 'poetheme_setup' ) ) {
     /**
@@ -131,56 +132,6 @@ function poetheme_block_editor_assets() {
     wp_script_add_data( 'poetheme-editor-alpine', 'defer', true );
 }
 add_action( 'enqueue_block_editor_assets', 'poetheme_block_editor_assets' );
-
-/**
- * Output structured data and breadcrumbs schema.
- */
-function poetheme_output_schema() {
-    if ( is_admin() ) {
-        return;
-    }
-
-    $breadcrumbs = poetheme_get_breadcrumbs_items();
-
-    $schema = array(
-        '@context'        => 'https://schema.org',
-        '@type'           => 'WebSite',
-        'name'            => get_bloginfo( 'name' ),
-        'url'             => home_url(),
-        'potentialAction' => array(
-            '@type'       => 'SearchAction',
-            'target'      => home_url( '?s={search_term_string}' ),
-            'query-input' => 'required name=search_term_string',
-        ),
-    );
-
-    if ( ! empty( $breadcrumbs ) ) {
-        $schema_breadcrumbs = array(
-            '@context'        => 'https://schema.org',
-            '@type'           => 'BreadcrumbList',
-            'itemListElement' => array(),
-        );
-
-        foreach ( $breadcrumbs as $index => $breadcrumb ) {
-            $list_item = array(
-                '@type'    => 'ListItem',
-                'position' => $index + 1,
-                'name'     => wp_strip_all_tags( $breadcrumb['label'] ),
-            );
-
-            if ( ! empty( $breadcrumb['url'] ) ) {
-                $list_item['item'] = esc_url_raw( $breadcrumb['url'] );
-            }
-
-            $schema_breadcrumbs['itemListElement'][] = $list_item;
-        }
-
-        echo '<script type="application/ld+json">' . wp_json_encode( $schema_breadcrumbs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
-    }
-
-    echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
-}
-add_action( 'wp_head', 'poetheme_output_schema', 20 );
 
 /**
  * Output custom CSS defined in the theme options.
