@@ -33,6 +33,7 @@ if ( ! function_exists( 'poetheme_setup' ) ) {
         register_nav_menus(
             array(
                 'primary' => __( 'Primary Menu', 'poetheme' ),
+                'top-info' => __( 'Top Info Menu', 'poetheme' ),
                 'footer'  => __( 'Footer Menu', 'poetheme' ),
             )
         );

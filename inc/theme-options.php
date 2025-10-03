@@ -10,6 +10,58 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Retrieve the available header social networks definitions.
+ *
+ * @return array
+ */
+function poetheme_get_header_social_networks() {
+    return array(
+        'facebook'  => array(
+            'label' => __( 'Facebook', 'poetheme' ),
+            'icon'  => 'facebook',
+        ),
+        'instagram' => array(
+            'label' => __( 'Instagram', 'poetheme' ),
+            'icon'  => 'instagram',
+        ),
+        'youtube'   => array(
+            'label' => __( 'YouTube', 'poetheme' ),
+            'icon'  => 'youtube',
+        ),
+        'twitter'   => array(
+            'label' => __( 'Twitter', 'poetheme' ),
+            'icon'  => 'twitter',
+        ),
+        'linkedin'  => array(
+            'label' => __( 'LinkedIn', 'poetheme' ),
+            'icon'  => 'linkedin',
+        ),
+    );
+}
+
+/**
+ * Default values for header options.
+ *
+ * @return array
+ */
+function poetheme_get_default_header_options() {
+    $social_defaults = array();
+
+    foreach ( poetheme_get_header_social_networks() as $key => $data ) {
+        $social_defaults[ $key ] = '';
+    }
+
+    return array(
+        'layout'         => 'style-1',
+        'show_top_bar'   => true,
+        'top_bar_texts'  => array( '', '', '' ),
+        'cta_text'       => __( 'Get Started', 'poetheme' ),
+        'cta_url'        => home_url( '/' ),
+        'social_links'   => $social_defaults,
+    );
+}
+
+/**
  * Register theme settings.
  */
 function poetheme_register_settings() {
@@ -32,6 +84,16 @@ function poetheme_register_settings() {
             'type'              => 'string',
             'sanitize_callback' => 'poetheme_sanitize_custom_css',
             'default'           => '',
+        )
+    );
+
+    register_setting(
+        'poetheme_header_group',
+        'poetheme_header',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'poetheme_sanitize_header_options',
+            'default'           => poetheme_get_default_header_options(),
         )
     );
 }
@@ -162,10 +224,89 @@ function poetheme_render_logo_page() {
  * Render the header settings page.
  */
 function poetheme_render_header_page() {
+    $options       = poetheme_get_header_options();
+    $layouts       = array(
+        'style-1' => __( 'Layout 1 – Classico', 'poetheme' ),
+        'style-2' => __( 'Layout 2 – Centrato', 'poetheme' ),
+        'style-3' => __( 'Layout 3 – Minimal', 'poetheme' ),
+        'style-4' => __( 'Layout 4 – Vetrina', 'poetheme' ),
+        'style-5' => __( 'Layout 5 – Overlay', 'poetheme' ),
+        'style-6' => __( 'Layout 6 – Sticky', 'poetheme' ),
+        'style-7' => __( 'Layout 7 – Promo', 'poetheme' ),
+        'style-8' => __( 'Layout 8 – E-commerce', 'poetheme' ),
+    );
+    $socials       = poetheme_get_header_social_networks();
+    $top_bar_texts = isset( $options['top_bar_texts'] ) && is_array( $options['top_bar_texts'] ) ? $options['top_bar_texts'] : array();
+    $top_bar_texts = array_pad( array_slice( $top_bar_texts, 0, 3 ), 3, '' );
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Intestazione', 'poetheme' ); ?></h1>
-        <p class="description"><?php esc_html_e( "Le impostazioni dell'intestazione saranno disponibili a breve.", 'poetheme' ); ?></p>
+        <form action="options.php" method="post" class="poetheme-options-form">
+            <?php settings_fields( 'poetheme_header_group' ); ?>
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><label for="poetheme_header_layout"><?php esc_html_e( 'Seleziona layout', 'poetheme' ); ?></label></th>
+                        <td>
+                            <select id="poetheme_header_layout" name="poetheme_header[layout]">
+                                <?php foreach ( $layouts as $layout_key => $label ) : ?>
+                                    <option value="<?php echo esc_attr( $layout_key ); ?>" <?php selected( $options['layout'], $layout_key ); ?>><?php echo esc_html( $label ); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description"><?php esc_html_e( "Scegli quale testata applicare al tema.", 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Barra superiore', 'poetheme' ); ?></th>
+                        <td>
+                            <label for="poetheme_header_show_top_bar">
+                                <input type="checkbox" id="poetheme_header_show_top_bar" name="poetheme_header[show_top_bar]" value="1" <?php checked( ! empty( $options['show_top_bar'] ) ); ?> />
+                                <?php esc_html_e( 'Mostra la barra superiore con informazioni e social.', 'poetheme' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'La barra comprende tre campi di testo, un menù informativo e le icone social.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                    <?php for ( $i = 0; $i < 3; $i++ ) : ?>
+                        <tr>
+                            <th scope="row">
+                                <label for="poetheme_header_top_text_<?php echo esc_attr( $i ); ?>"><?php printf( esc_html__( 'Testo barra %d', 'poetheme' ), $i + 1 ); ?></label>
+                            </th>
+                            <td>
+                                <input type="text" id="poetheme_header_top_text_<?php echo esc_attr( $i ); ?>" name="poetheme_header[top_bar_texts][<?php echo esc_attr( $i ); ?>]" value="<?php echo esc_attr( $top_bar_texts[ $i ] ); ?>" class="regular-text" />
+                            </td>
+                        </tr>
+                    <?php endfor; ?>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Call to Action', 'poetheme' ); ?></th>
+                        <td>
+                            <label for="poetheme_header_cta_text" class="screen-reader-text"><?php esc_html_e( 'Testo pulsante', 'poetheme' ); ?></label>
+                            <input type="text" id="poetheme_header_cta_text" name="poetheme_header[cta_text]" value="<?php echo esc_attr( $options['cta_text'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Get Started', 'poetheme' ); ?>" />
+                            <p class="description"><?php esc_html_e( 'Lascia vuoto per nascondere il pulsante.', 'poetheme' ); ?></p>
+                            <label for="poetheme_header_cta_url" class="screen-reader-text"><?php esc_html_e( 'Link pulsante', 'poetheme' ); ?></label>
+                            <input type="url" id="poetheme_header_cta_url" name="poetheme_header[cta_url]" value="<?php echo esc_attr( $options['cta_url'] ); ?>" class="regular-text" placeholder="<?php echo esc_attr( home_url( '/' ) ); ?>" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Icone social', 'poetheme' ); ?></th>
+                        <td>
+                            <p class="description"><?php esc_html_e( 'Inserisci gli URL dei tuoi profili social per mostrarne le icone nella barra superiore.', 'poetheme' ); ?></p>
+                            <?php foreach ( $socials as $key => $social ) :
+                                $value = isset( $options['social_links'][ $key ] ) ? $options['social_links'][ $key ] : '';
+                                ?>
+                                <p>
+                                    <label for="poetheme_header_social_<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $social['label'] ); ?></label><br />
+                                    <input type="url" id="poetheme_header_social_<?php echo esc_attr( $key ); ?>" name="poetheme_header[social_links][<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="regular-text" placeholder="https://" />
+                                </p>
+                            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <?php submit_button(); ?>
+        </form>
+        <p class="description">
+            <?php esc_html_e( 'Suggerimento: assegna un menù alla posizione "Top Info Menu" da Aspetto → Menu per mostrare i link informativi nella barra superiore.', 'poetheme' ); ?>
+        </p>
     </div>
     <?php
 }
@@ -264,6 +405,49 @@ function poetheme_sanitize_custom_css( $css ) {
 }
 
 /**
+ * Sanitize header options.
+ *
+ * @param array $input Raw input values.
+ * @return array
+ */
+function poetheme_sanitize_header_options( $input ) {
+    $defaults = poetheme_get_default_header_options();
+    $output   = $defaults;
+
+    if ( ! is_array( $input ) ) {
+        return $output;
+    }
+
+    if ( isset( $input['layout'] ) ) {
+        $layout = sanitize_key( $input['layout'] );
+        if ( preg_match( '/^style-[1-8]$/', $layout ) ) {
+            $output['layout'] = $layout;
+        }
+    }
+
+    $output['show_top_bar'] = ! empty( $input['show_top_bar'] );
+
+    $output['top_bar_texts'] = array();
+    for ( $i = 0; $i < 3; $i++ ) {
+        $value = '';
+        if ( isset( $input['top_bar_texts'][ $i ] ) ) {
+            $value = sanitize_text_field( $input['top_bar_texts'][ $i ] );
+        }
+        $output['top_bar_texts'][ $i ] = $value;
+    }
+
+    $output['cta_text'] = isset( $input['cta_text'] ) ? sanitize_text_field( $input['cta_text'] ) : '';
+    $output['cta_url']  = isset( $input['cta_url'] ) ? esc_url_raw( $input['cta_url'] ) : '';
+
+    $output['social_links'] = array();
+    foreach ( poetheme_get_header_social_networks() as $key => $social ) {
+        $output['social_links'][ $key ] = isset( $input['social_links'][ $key ] ) ? esc_url_raw( $input['social_links'][ $key ] ) : '';
+    }
+
+    return $output;
+}
+
+/**
  * Enqueue admin assets for the options pages.
  *
  * @param string $hook Current admin page hook.
@@ -326,4 +510,41 @@ function poetheme_get_options() {
     $options = get_option( 'poetheme_options', array() );
 
     return wp_parse_args( $options, $defaults );
+}
+
+/**
+ * Retrieve header options with defaults.
+ *
+ * @return array
+ */
+function poetheme_get_header_options() {
+    $defaults = poetheme_get_default_header_options();
+    $options  = get_option( 'poetheme_header', array() );
+    $options  = wp_parse_args( $options, $defaults );
+
+    // Ensure top bar texts always contain three entries.
+    $top_bar_texts = array();
+    if ( isset( $options['top_bar_texts'] ) && is_array( $options['top_bar_texts'] ) ) {
+        $top_bar_texts = array_values( $options['top_bar_texts'] );
+    }
+    $options['top_bar_texts'] = array_pad( array_slice( $top_bar_texts, 0, 3 ), 3, '' );
+
+    // Merge social defaults preserving keys.
+    $social_defaults = $defaults['social_links'];
+    $social_values   = array();
+    if ( isset( $options['social_links'] ) && is_array( $options['social_links'] ) ) {
+        $social_values = $options['social_links'];
+    }
+    $options['social_links'] = array_merge( $social_defaults, array_intersect_key( $social_values, $social_defaults ) );
+
+    // Validate layout fallback.
+    $layout = isset( $options['layout'] ) ? sanitize_key( $options['layout'] ) : $defaults['layout'];
+    if ( ! preg_match( '/^style-[1-8]$/', $layout ) ) {
+        $layout = $defaults['layout'];
+    }
+    $options['layout'] = $layout;
+
+    $options['show_top_bar'] = ! empty( $options['show_top_bar'] );
+
+    return $options;
 }
