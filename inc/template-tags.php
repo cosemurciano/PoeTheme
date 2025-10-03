@@ -188,6 +188,47 @@ function poetheme_the_logo() {
 }
 
 /**
+ * Build the context array used by header templates.
+ *
+ * @return array
+ */
+function poetheme_get_header_context() {
+    $options = poetheme_get_header_options();
+
+    $top_bar_texts = array();
+    if ( isset( $options['top_bar_texts'] ) && is_array( $options['top_bar_texts'] ) ) {
+        foreach ( $options['top_bar_texts'] as $text ) {
+            $top_bar_texts[] = sanitize_text_field( $text );
+        }
+    }
+    $top_bar_texts = array_pad( array_slice( $top_bar_texts, 0, 3 ), 3, '' );
+
+    $cta_text = isset( $options['cta_text'] ) ? sanitize_text_field( $options['cta_text'] ) : '';
+    $cta_url  = '';
+    if ( ! empty( $options['cta_url'] ) ) {
+        $cta_url = $options['cta_url'];
+    } elseif ( ! empty( $cta_text ) ) {
+        $cta_url = home_url( '/' );
+    }
+
+    $social_links = array();
+    $socials      = poetheme_get_header_social_networks();
+    foreach ( $socials as $key => $social ) {
+        $social_links[ $key ] = isset( $options['social_links'][ $key ] ) ? $options['social_links'][ $key ] : '';
+    }
+
+    return array(
+        'layout'             => isset( $options['layout'] ) ? $options['layout'] : 'style-1',
+        'show_top_bar'       => ! empty( $options['show_top_bar'] ),
+        'top_bar_texts'      => $top_bar_texts,
+        'cta_text'           => $cta_text,
+        'cta_url'            => $cta_url,
+        'social_links'       => $social_links,
+        'social_definitions' => $socials,
+    );
+}
+
+/**
  * Output accessible pagination.
  */
 function poetheme_the_posts_navigation() {

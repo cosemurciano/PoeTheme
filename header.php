@@ -21,26 +21,17 @@
 <body <?php body_class( 'bg-gray-50 text-gray-900 leading-relaxed' ); ?>>
 <?php wp_body_open(); ?>
 <?php do_action( 'poetheme_before_header' ); ?>
-<header class="bg-white shadow-sm" role="banner">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div class="flex items-center gap-4">
-            <?php poetheme_the_logo(); ?>
-            <p class="text-sm text-gray-600" id="site-description"><?php echo esc_html( get_bloginfo( 'description' ) ); ?></p>
-        </div>
-        <nav class="nav-primary" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
-            <?php
-            wp_nav_menu(
-                array(
-                    'theme_location' => 'primary',
-                    'menu_class'     => 'flex flex-wrap gap-4 text-base font-medium',
-                    'container'      => false,
-                    'fallback_cb'    => 'wp_page_menu',
-                )
-            );
-            ?>
-        </nav>
-    </div>
-</header>
+<?php
+$header_context = poetheme_get_header_context();
+$layout         = isset( $header_context['layout'] ) ? $header_context['layout'] : 'style-1';
+$template_slug  = 'template-parts/header/' . $layout;
+
+if ( ! locate_template( array( $template_slug . '.php' ), false, false ) ) {
+    $template_slug = 'template-parts/header/style-1';
+}
+
+get_template_part( $template_slug, null, $header_context );
+?>
 
 <main id="primary-content" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10" tabindex="-1">
     <?php poetheme_the_breadcrumbs(); ?>
