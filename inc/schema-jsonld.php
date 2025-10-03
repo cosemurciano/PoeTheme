@@ -111,7 +111,9 @@ function tsg_sanitize_options($input){
 
 function tsg_render_options_page(){
   if (!current_user_can('manage_options')) return;
+  wp_enqueue_media();
   $opt = tsg_get_options();
+  $default_pub_base = trailingslashit( home_url() );
   $day_labels = [
     'Monday'    => __('Lunedì', 'tsg'),
     'Tuesday'   => __('Martedì', 'tsg'),
@@ -204,6 +206,7 @@ function tsg_render_options_page(){
   ?>
   <div class="wrap tsg-schema-page">
     <h1><?php _e('SEO Schema (JSON-LD)','tsg'); ?></h1>
+    <p class="tsg-top-link"><a href="https://search.google.com/test/rich-results?hl=it" target="_blank" rel="noopener noreferrer"><?php _e('Verifica con il Test risultati multimediali di Google','tsg'); ?></a></p>
     <form method="post" action="options.php" id="tsg-form">
       <?php settings_fields('tsg_schema_group'); ?>
 
@@ -287,10 +290,154 @@ function tsg_render_options_page(){
               <p class="description"><?php _e('Scegli il tipo di entità che rappresenta il sito.', 'tsg'); ?></p>
             </td>
           </tr>
+        </table>
+
+        <div class="tsg-publisher-types">
+          <div class="tsg-panel tsg-box tsg-org">
+            <h2 class="title">Organization / OnlineStore</h2>
+            <table class="form-table" role="presentation">
+              <tr>
+                <th scope="row"><label for="tsg_org_legal">legalName</label></th>
+                <td>
+                  <input type="text" class="regular-text" id="tsg_org_legal" name="tsg_schema_options[org_legal]" value="<?php echo esc_attr($opt['org_legal']); ?>" />
+                  <p class="description"><?php _e('Nome legale completo dell&#39;organizzazione.', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="tsg_org_alt">alternateName</label></th>
+                <td>
+                  <input type="text" class="regular-text" id="tsg_org_alt" name="tsg_schema_options[org_alt]" value="<?php echo esc_attr($opt['org_alt']); ?>" />
+                  <p class="description"><?php _e('Marchio commerciale o abbreviazione conosciuta.', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="tsg_org_tel">telephone</label></th>
+                <td>
+                  <input type="text" class="regular-text" id="tsg_org_tel" name="tsg_schema_options[org_tel]" value="<?php echo esc_attr($opt['org_tel']); ?>" placeholder="+39..." />
+                  <p class="description"><?php _e('Numero telefonico principale dell&#39;azienda.', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="tsg_org_vat">vatID</label></th>
+                <td>
+                  <input type="text" class="regular-text" id="tsg_org_vat" name="tsg_schema_options[org_vat]" value="<?php echo esc_attr($opt['org_vat']); ?>" />
+                  <p class="description"><?php _e('Partita IVA o VAT number.', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="tsg_org_tax">taxID</label></th>
+                <td>
+                  <input type="text" class="regular-text" id="tsg_org_tax" name="tsg_schema_options[org_tax]" value="<?php echo esc_attr($opt['org_tax']); ?>" />
+                  <p class="description"><?php _e('Codice fiscale o altro identificativo fiscale (facoltativo).', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><?php _e('address','tsg'); ?></th>
+                <td>
+                  <input type="text" name="tsg_schema_options[org_addr_street]" id="tsg_org_addr_street" value="<?php echo esc_attr($opt['org_addr_street']); ?>" placeholder="streetAddress" class="regular-text" />
+                  <input type="text" name="tsg_schema_options[org_addr_city]" id="tsg_org_addr_city" value="<?php echo esc_attr($opt['org_addr_city']); ?>" placeholder="addressLocality" class="regular-text" />
+                  <input type="text" name="tsg_schema_options[org_addr_region]" id="tsg_org_addr_region" value="<?php echo esc_attr($opt['org_addr_region']); ?>" placeholder="addressRegion" class="regular-text" />
+                  <input type="text" name="tsg_schema_options[org_addr_postal]" id="tsg_org_addr_postal" value="<?php echo esc_attr($opt['org_addr_postal']); ?>" placeholder="postalCode" class="regular-text" />
+                  <input type="text" name="tsg_schema_options[org_addr_country]" id="tsg_org_addr_country" value="<?php echo esc_attr($opt['org_addr_country']); ?>" placeholder="addressCountry" class="regular-text" />
+                  <p class="description"><?php _e('Compila l&#39;indirizzo completo della sede principale.', 'tsg'); ?></p>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="tsg-panel tsg-box tsg-lb">
+            <h2 class="title">LocalBusiness</h2>
+            <table class="form-table" role="presentation">
+              <tr>
+                <th scope="row"><label for="tsg_lb_pricerange">priceRange</label></th>
+                <td>
+                  <input type="text" class="regular-text" id="tsg_lb_pricerange" name="tsg_schema_options[lb_pricerange]" value="<?php echo esc_attr($opt['lb_pricerange']); ?>" placeholder="€€" />
+                  <p class="description"><?php _e('Intervallo di prezzo indicativo (es. €€, €€€).', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><?php _e('geo','tsg'); ?></th>
+                <td>
+                  <div class="tsg-inline">
+                    <label for="tsg_lb_geo_lat">latitude <input type="text" id="tsg_lb_geo_lat" name="tsg_schema_options[lb_geo_lat]" value="<?php echo esc_attr($opt['lb_geo_lat']); ?>" placeholder="45.4642" class="regular-text"></label>
+                    <label for="tsg_lb_geo_lng">longitude <input type="text" id="tsg_lb_geo_lng" name="tsg_schema_options[lb_geo_lng]" value="<?php echo esc_attr($opt['lb_geo_lng']); ?>" placeholder="9.1900" class="regular-text"></label>
+                  </div>
+                  <p class="description"><?php _e('Coordinate geografiche della sede (opzionali ma consigliate).', 'tsg'); ?></p>
+                </td>
+              </tr>
+            </table>
+
+            <h3 class="tsg-subtitle"><?php _e('Orari di apertura','tsg'); ?></h3>
+            <p class="description"><?php echo esc_html($oh_config['description']); ?></p>
+            <input type="hidden" name="tsg_schema_options[lb_openinghours]" id="tsg_oh_json" value="<?php echo esc_attr($opt['lb_openinghours']); ?>" />
+            <div id="tsg_oh_items" class="tsg-repeater" data-config="<?php echo esc_attr(wp_json_encode($oh_config, JSON_UNESCAPED_UNICODE)); ?>" data-days="<?php echo esc_attr(wp_json_encode($day_labels, JSON_UNESCAPED_UNICODE)); ?>"></div>
+            <p><button type="button" class="button button-secondary" id="tsg_oh_add_btn"><?php echo esc_html($oh_config['add_label']); ?></button></p>
+
+            <table class="form-table" role="presentation">
+              <tr>
+                <th scope="row"><label for="tsg_lb_images"><?php _e('Immagini della sede','tsg'); ?></label></th>
+                <td>
+                  <textarea name="tsg_schema_options[lb_images]" id="tsg_lb_images" rows="3" class="large-text" placeholder="https://.../esterno.jpg&#10;https://.../interno.jpg"><?php echo esc_textarea($opt['lb_images']); ?></textarea>
+                  <p class="description"><?php _e('Inserisci una URL per riga con immagini rappresentative (opzionale).', 'tsg'); ?></p>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="tsg-panel tsg-box tsg-person">
+            <h2 class="title">Person</h2>
+            <table class="form-table" role="presentation">
+              <tr>
+                <th scope="row"><label for="tsg_person_image">image.url</label></th>
+                <td>
+                  <div class="tsg-inline">
+                    <input type="url" class="regular-text" name="tsg_schema_options[person_image_url]" id="tsg_person_image" value="<?php echo esc_attr($opt['person_image_url']); ?>" placeholder="https://example.com/avatar.jpg" />
+                    <button type="button" class="button" id="tsg_person_img_btn"><?php _e('Seleziona dal Media','tsg'); ?></button>
+                  </div>
+                  <div class="tsg-inline">
+                    <label for="tsg_person_image_w">width <input type="number" id="tsg_person_image_w" name="tsg_schema_options[person_image_w]" value="<?php echo esc_attr($opt['person_image_w']); ?>" min="0" class="small-text"></label>
+                    <label for="tsg_person_image_h">height <input type="number" id="tsg_person_image_h" name="tsg_schema_options[person_image_h]" value="<?php echo esc_attr($opt['person_image_h']); ?>" min="0" class="small-text"></label>
+                  </div>
+                  <p class="description"><?php _e('Carica un ritratto riconoscibile (minimo 200×200 px).', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="tsg_person_job">jobTitle</label></th>
+                <td>
+                  <input type="text" class="regular-text" id="tsg_person_job" name="tsg_schema_options[person_job]" value="<?php echo esc_attr($opt['person_job']); ?>" />
+                  <p class="description"><?php _e('Ruolo o mansione principale (es. CEO, Consulente SEO).', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="tsg_person_worksfor">worksFor</label></th>
+                <td>
+                  <input type="text" class="regular-text" id="tsg_person_worksfor" name="tsg_schema_options[person_worksfor]" value="<?php echo esc_attr($opt['person_worksfor']); ?>" />
+                  <p class="description"><?php _e('Nome dell&#39;organizzazione per cui lavora (facoltativo).', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="tsg_person_email">email</label></th>
+                <td>
+                  <input type="email" class="regular-text" id="tsg_person_email" name="tsg_schema_options[person_email]" value="<?php echo esc_attr($opt['person_email']); ?>" />
+                  <p class="description"><?php _e('Email pubblica di riferimento.', 'tsg'); ?></p>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><label for="tsg_person_url">url</label></th>
+                <td>
+                  <input type="url" class="regular-text" id="tsg_person_url" name="tsg_schema_options[person_url]" value="<?php echo esc_attr($opt['person_url']); ?>" />
+                  <p class="description"><?php _e('Pagina personale o profilo professionale.', 'tsg'); ?></p>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <table class="form-table" role="presentation">
           <tr>
             <th scope="row"><label for="tsg_pub_id">@id</label></th>
             <td>
-              <input type="text" class="regular-text" id="tsg_pub_id" name="tsg_schema_options[pub_id]" value="<?php echo esc_attr($opt['pub_id']); ?>" />
+              <input type="text" class="regular-text" id="tsg_pub_id" name="tsg_schema_options[pub_id]" value="<?php echo esc_attr($opt['pub_id']); ?>" data-default-base="<?php echo esc_attr( $default_pub_base ); ?>" />
               <p class="description"><?php _e('Identificatore univoco dell&#39;entità (es. https://example.com/#organization).', 'tsg'); ?></p>
             </td>
           </tr>
@@ -322,7 +469,7 @@ function tsg_render_options_page(){
                 <input type="url" class="regular-text" name="tsg_schema_options[pub_logo_url]" id="tsg_logo_url" value="<?php echo esc_attr($opt['pub_logo_url']); ?>" placeholder="https://example.com/logo.png" />
                 <button type="button" class="button" id="tsg_logo_btn"><?php _e('Seleziona dal Media','tsg'); ?></button>
               </div>
-              <p class="description"><?php _e('Si consiglia un logo quadrato (≥112×112 px) accessibile pubblicamente.', 'tsg'); ?></p>
+              <p class="description"><?php _e('Si consiglia un logo quadrato (≥112×112 px) accessibile pubblicamente.', 'tsg');?></p>
               <div class="tsg-inline">
                 <label for="tsg_logo_w">width <input type="number" id="tsg_logo_w" name="tsg_schema_options[pub_logo_w]" value="<?php echo esc_attr($opt['pub_logo_w']); ?>" min="0" class="small-text"></label>
                 <label for="tsg_logo_h">height <input type="number" id="tsg_logo_h" name="tsg_schema_options[pub_logo_h]" value="<?php echo esc_attr($opt['pub_logo_h']); ?>" min="0" class="small-text"></label>
@@ -332,8 +479,7 @@ function tsg_render_options_page(){
           <tr>
             <th scope="row"><label for="tsg_pub_sameas">sameAs</label></th>
             <td>
-              <textarea name="tsg_schema_options[pub_sameas]" id="tsg_pub_sameas" rows="3" class="large-text" placeholder="https://instagram.com/...
-https://www.facebook.com/..."><?php echo esc_textarea($opt['pub_sameas']); ?></textarea>
+              <textarea name="tsg_schema_options[pub_sameas]" id="tsg_pub_sameas" rows="3" class="large-text" placeholder="https://instagram.com/...&#10;https://www.facebook.com/..."><?php echo esc_textarea($opt['pub_sameas']); ?></textarea>
               <p class="description"><?php _e('Inserisci una URL per riga verso profili social ufficiali o directory verificabili.', 'tsg'); ?></p>
             </td>
           </tr>
@@ -346,146 +492,6 @@ https://www.facebook.com/..."><?php echo esc_textarea($opt['pub_sameas']); ?></t
         <p><button type="button" class="button button-secondary" id="tsg_cp_add_btn"><?php echo esc_html($cp_config['add_label']); ?></button></p>
       </div>
 
-      <div class="tsg-panel tsg-box tsg-org">
-        <h2 class="title">Organization / OnlineStore</h2>
-        <table class="form-table" role="presentation">
-          <tr>
-            <th scope="row"><label for="tsg_org_legal">legalName</label></th>
-            <td>
-              <input type="text" class="regular-text" id="tsg_org_legal" name="tsg_schema_options[org_legal]" value="<?php echo esc_attr($opt['org_legal']); ?>" />
-              <p class="description"><?php _e('Nome legale completo dell&#39;organizzazione.', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><label for="tsg_org_alt">alternateName</label></th>
-            <td>
-              <input type="text" class="regular-text" id="tsg_org_alt" name="tsg_schema_options[org_alt]" value="<?php echo esc_attr($opt['org_alt']); ?>" />
-              <p class="description"><?php _e('Marchio commerciale o abbreviazione conosciuta.', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><label for="tsg_org_tel">telephone</label></th>
-            <td>
-              <input type="text" class="regular-text" id="tsg_org_tel" name="tsg_schema_options[org_tel]" value="<?php echo esc_attr($opt['org_tel']); ?>" placeholder="+39..." />
-              <p class="description"><?php _e('Numero telefonico principale dell&#39;azienda.', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><label for="tsg_org_vat">vatID</label></th>
-            <td>
-              <input type="text" class="regular-text" id="tsg_org_vat" name="tsg_schema_options[org_vat]" value="<?php echo esc_attr($opt['org_vat']); ?>" />
-              <p class="description"><?php _e('Partita IVA o VAT number.', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><label for="tsg_org_tax">taxID</label></th>
-            <td>
-              <input type="text" class="regular-text" id="tsg_org_tax" name="tsg_schema_options[org_tax]" value="<?php echo esc_attr($opt['org_tax']); ?>" />
-              <p class="description"><?php _e('Codice fiscale o altro identificativo fiscale (facoltativo).', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><?php _e('address','tsg'); ?></th>
-            <td>
-              <input type="text" name="tsg_schema_options[org_addr_street]" id="tsg_org_addr_street" value="<?php echo esc_attr($opt['org_addr_street']); ?>" placeholder="streetAddress" class="regular-text" />
-              <input type="text" name="tsg_schema_options[org_addr_city]" id="tsg_org_addr_city" value="<?php echo esc_attr($opt['org_addr_city']); ?>" placeholder="addressLocality" class="regular-text" />
-              <input type="text" name="tsg_schema_options[org_addr_region]" id="tsg_org_addr_region" value="<?php echo esc_attr($opt['org_addr_region']); ?>" placeholder="addressRegion" class="regular-text" />
-              <input type="text" name="tsg_schema_options[org_addr_postal]" id="tsg_org_addr_postal" value="<?php echo esc_attr($opt['org_addr_postal']); ?>" placeholder="postalCode" class="regular-text" />
-              <input type="text" name="tsg_schema_options[org_addr_country]" id="tsg_org_addr_country" value="<?php echo esc_attr($opt['org_addr_country']); ?>" placeholder="addressCountry" class="regular-text" />
-              <p class="description"><?php _e('Compila l&#39;indirizzo completo della sede principale.', 'tsg'); ?></p>
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="tsg-panel tsg-box tsg-lb">
-        <h2 class="title">LocalBusiness</h2>
-        <table class="form-table" role="presentation">
-          <tr>
-            <th scope="row"><label for="tsg_lb_pricerange">priceRange</label></th>
-            <td>
-              <input type="text" class="regular-text" id="tsg_lb_pricerange" name="tsg_schema_options[lb_pricerange]" value="<?php echo esc_attr($opt['lb_pricerange']); ?>" placeholder="€€" />
-              <p class="description"><?php _e('Intervallo di prezzo indicativo (es. €€, €€€).', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><?php _e('geo','tsg'); ?></th>
-            <td>
-              <div class="tsg-inline">
-                <label for="tsg_lb_geo_lat">latitude <input type="text" id="tsg_lb_geo_lat" name="tsg_schema_options[lb_geo_lat]" value="<?php echo esc_attr($opt['lb_geo_lat']); ?>" placeholder="45.4642" class="regular-text"></label>
-                <label for="tsg_lb_geo_lng">longitude <input type="text" id="tsg_lb_geo_lng" name="tsg_schema_options[lb_geo_lng]" value="<?php echo esc_attr($opt['lb_geo_lng']); ?>" placeholder="9.1900" class="regular-text"></label>
-              </div>
-              <p class="description"><?php _e('Coordinate geografiche della sede (opzionali ma consigliate).', 'tsg'); ?></p>
-            </td>
-          </tr>
-        </table>
-
-        <h3 class="tsg-subtitle"><?php _e('Orari di apertura','tsg'); ?></h3>
-        <p class="description"><?php echo esc_html($oh_config['description']); ?></p>
-        <input type="hidden" name="tsg_schema_options[lb_openinghours]" id="tsg_oh_json" value="<?php echo esc_attr($opt['lb_openinghours']); ?>" />
-        <div id="tsg_oh_items" class="tsg-repeater" data-config="<?php echo esc_attr(wp_json_encode($oh_config, JSON_UNESCAPED_UNICODE)); ?>" data-days="<?php echo esc_attr(wp_json_encode($day_labels, JSON_UNESCAPED_UNICODE)); ?>"></div>
-        <p><button type="button" class="button button-secondary" id="tsg_oh_add_btn"><?php echo esc_html($oh_config['add_label']); ?></button></p>
-
-        <table class="form-table" role="presentation">
-          <tr>
-            <th scope="row"><label for="tsg_lb_images"><?php _e('Immagini della sede','tsg'); ?></label></th>
-            <td>
-              <textarea name="tsg_schema_options[lb_images]" id="tsg_lb_images" rows="3" class="large-text" placeholder="https://.../esterno.jpg
-https://.../interno.jpg"><?php echo esc_textarea($opt['lb_images']); ?></textarea>
-              <p class="description"><?php _e('Inserisci una URL per riga con immagini rappresentative (opzionale).', 'tsg'); ?></p>
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="tsg-panel tsg-box tsg-person">
-        <h2 class="title">Person</h2>
-        <table class="form-table" role="presentation">
-          <tr>
-            <th scope="row"><label for="tsg_person_image">image.url</label></th>
-            <td>
-              <div class="tsg-inline">
-                <input type="url" class="regular-text" name="tsg_schema_options[person_image_url]" id="tsg_person_image" value="<?php echo esc_attr($opt['person_image_url']); ?>" placeholder="https://example.com/avatar.jpg" />
-                <button type="button" class="button" id="tsg_person_img_btn"><?php _e('Seleziona dal Media','tsg'); ?></button>
-              </div>
-              <div class="tsg-inline">
-                <label for="tsg_person_image_w">width <input type="number" id="tsg_person_image_w" name="tsg_schema_options[person_image_w]" value="<?php echo esc_attr($opt['person_image_w']); ?>" min="0" class="small-text"></label>
-                <label for="tsg_person_image_h">height <input type="number" id="tsg_person_image_h" name="tsg_schema_options[person_image_h]" value="<?php echo esc_attr($opt['person_image_h']); ?>" min="0" class="small-text"></label>
-              </div>
-              <p class="description"><?php _e('Carica un ritratto riconoscibile (minimo 200×200 px).', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><label for="tsg_person_job">jobTitle</label></th>
-            <td>
-              <input type="text" class="regular-text" id="tsg_person_job" name="tsg_schema_options[person_job]" value="<?php echo esc_attr($opt['person_job']); ?>" />
-              <p class="description"><?php _e('Ruolo o mansione principale (es. CEO, Consulente SEO).', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><label for="tsg_person_worksfor">worksFor</label></th>
-            <td>
-              <input type="text" class="regular-text" id="tsg_person_worksfor" name="tsg_schema_options[person_worksfor]" value="<?php echo esc_attr($opt['person_worksfor']); ?>" />
-              <p class="description"><?php _e('Nome dell&#39;organizzazione per cui lavora (facoltativo).', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><label for="tsg_person_email">email</label></th>
-            <td>
-              <input type="email" class="regular-text" id="tsg_person_email" name="tsg_schema_options[person_email]" value="<?php echo esc_attr($opt['person_email']); ?>" />
-              <p class="description"><?php _e('Email pubblica di riferimento.', 'tsg'); ?></p>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row"><label for="tsg_person_url">url</label></th>
-            <td>
-              <input type="url" class="regular-text" id="tsg_person_url" name="tsg_schema_options[person_url]" value="<?php echo esc_attr($opt['person_url']); ?>" />
-              <p class="description"><?php _e('Pagina personale o profilo professionale.', 'tsg'); ?></p>
-            </td>
-          </tr>
-        </table>
-      </div>
-
       <?php submit_button(); ?>
     </form>
   </div>
@@ -494,9 +500,13 @@ https://.../interno.jpg"><?php echo esc_textarea($opt['lb_images']); ?></textare
     .tsg-schema-page .tsg-panel { background:#fff; border:1px solid #dcdcde; padding:24px; margin-bottom:24px; border-radius:6px; }
     .tsg-schema-page .tsg-panel .title { margin-top:0; }
     .tsg-schema-page .tsg-section-description { max-width:800px; }
+    .tsg-schema-page .tsg-top-link { margin:8px 0 24px; }
+    .tsg-schema-page .tsg-top-link a { font-weight:600; }
     .tsg-schema-page .tsg-inline { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     .tsg-schema-page .tsg-subtitle { margin-top:32px; margin-bottom:8px; font-size:16px; }
     .tsg-schema-page .tsg-repeater { margin-top:12px; }
+    .tsg-schema-page .tsg-publisher-types { display:grid; gap:16px; margin:16px 0 24px; }
+    .tsg-schema-page .tsg-publisher-types .tsg-panel { margin:0; }
     .tsg-schema-page .tsg-card { border:1px solid #dcdcde; border-radius:6px; padding:16px; background:#fafafa; margin-bottom:16px; }
     .tsg-schema-page .tsg-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
     .tsg-schema-page .tsg-card-title { font-size:15px; margin:0; }
@@ -937,31 +947,99 @@ https://.../interno.jpg"><?php echo esc_textarea($opt['lb_images']); ?></textare
       serializeOpeningHours();
     });
 
+    var $publisherType = $('#tsg_publisher_type');
+    var $publisherId = $('#tsg_pub_id');
+
+    var defaultPublisherBase = $publisherId.data('default-base') || '';
+    var initialBase = ($publisherId.val() || '').split('#')[0];
+    if (initialBase) {
+      $publisherId.data('publisher-base', initialBase);
+    } else if (defaultPublisherBase) {
+      $publisherId.data('publisher-base', defaultPublisherBase);
+    }
+
+    var publisherAnchors = {
+      Organization: 'organization',
+      OnlineStore: 'onlinestore',
+      LocalBusiness: 'localbusiness',
+      Person: 'person'
+    };
+
     function toggleBoxes(){
-      var t = $('#tsg_publisher_type').val();
+      var t = $publisherType.val();
       $('.tsg-org, .tsg-lb, .tsg-person').hide();
       if (t === 'Organization' || t === 'OnlineStore') { $('.tsg-org').show(); }
       if (t === 'LocalBusiness') { $('.tsg-org, .tsg-lb').show(); }
       if (t === 'Person') { $('.tsg-person').show(); }
     }
-    $(document).on('change','#tsg_publisher_type', toggleBoxes);
-    toggleBoxes();
 
-    function bindUploader(btnId, inputId){
+    function updatePublisherId(){
+      if (!$publisherId.length) { return; }
+      var type = $publisherType.val();
+      var anchor = publisherAnchors[type] || (type ? type.toLowerCase() : 'organization');
+      var base = $publisherId.data('publisher-base');
+      if (typeof base === 'undefined' || base === '') {
+        base = defaultPublisherBase;
+      }
+      if (typeof base !== 'string') {
+        base = '';
+      }
+      if (base && base.slice(-1) === '#') {
+        base = base.slice(0, -1);
+      }
+      var newVal = base ? base + '#' + anchor : '#' + anchor;
+      $publisherId.val(newVal);
+      $publisherId.data('publisher-base', base);
+    }
+
+    $publisherId.on('input change', function(){
+      var val = $(this).val() || '';
+      var base = val.split('#')[0];
+      if (base || !$(this).data('publisher-base')) {
+        $(this).data('publisher-base', base);
+      }
+    });
+
+    $publisherType.on('change', function(){
+      toggleBoxes();
+      updatePublisherId();
+    });
+
+    toggleBoxes();
+    updatePublisherId();
+
+    function bindUploader(btnSelector, inputSelector, onSelect){
       var frame;
-      $(btnId).on('click', function(e){
+      $(document).on('click', btnSelector, function(e){
         e.preventDefault();
+        if (typeof wp === 'undefined' || !wp.media) { return; }
         if (frame) { frame.open(); return; }
-        frame = wp.media({ title:'<?php echo esc_js(__('Seleziona immagine','tsg')); ?>', button:{ text:'<?php echo esc_js(__('Usa immagine','tsg')); ?>' }, multiple:false });
+        frame = wp.media({ title:'<?php echo esc_js(__('Seleziona immagine','tsg')); ?>', button:{ text:'<?php echo esc_js(__('Usa immagine','tsg')); ?>' }, library:{ type:'image' }, multiple:false });
         frame.on('select', function(){
           var at = frame.state().get('selection').first().toJSON();
-          $(inputId).val(at.url);
+          var $input = $(inputSelector);
+          if ($input.length) {
+            $input.val(at.url || '').trigger('change');
+          }
+          if (typeof onSelect === 'function') {
+            onSelect(at);
+          }
         });
         frame.open();
       });
     }
-    bindUploader('#tsg_logo_btn', '#tsg_logo_url');
-    bindUploader('#tsg_person_img_btn', '#tsg_person_image');
+    bindUploader('#tsg_logo_btn', '#tsg_logo_url', function(at){
+      if (at && typeof at === 'object') {
+        if (at.width) { $('#tsg_logo_w').val(at.width); }
+        if (at.height) { $('#tsg_logo_h').val(at.height); }
+      }
+    });
+    bindUploader('#tsg_person_img_btn', '#tsg_person_image', function(at){
+      if (at && typeof at === 'object') {
+        if (at.width) { $('#tsg_person_image_w').val(at.width); }
+        if (at.height) { $('#tsg_person_image_h').val(at.height); }
+      }
+    });
   })(jQuery);
   </script>
   <?php
