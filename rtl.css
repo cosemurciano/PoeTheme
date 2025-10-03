@@ -1,0 +1,15 @@
+/* RTL adjustments for PoeTheme */
+body {
+  direction: rtl;
+}
+
+.nav-primary,
+.breadcrumbs,
+.widget,
+footer nav {
+  text-align: right;
+}
+
+.breadcrumbs .mx-2 {
+  transform: scaleX(-1);
+}
