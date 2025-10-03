@@ -52,12 +52,17 @@ function poetheme_get_default_header_options() {
     }
 
     return array(
-        'layout'         => 'style-1',
-        'show_top_bar'   => true,
-        'top_bar_texts'  => array( '', '', '' ),
-        'cta_text'       => __( 'Get Started', 'poetheme' ),
-        'cta_url'        => home_url( '/' ),
-        'social_links'   => $social_defaults,
+        'layout'        => 'style-1',
+        'show_top_bar'  => true,
+        'top_bar_texts' => array(
+            'text_1'  => '',
+            'email'   => '',
+            'phone'   => '',
+            'whatsapp'=> '',
+        ),
+        'cta_text'      => __( 'Get Started', 'poetheme' ),
+        'cta_url'       => home_url( '/' ),
+        'social_links'  => $social_defaults,
     );
 }
 
@@ -237,7 +242,15 @@ function poetheme_render_header_page() {
     );
     $socials       = poetheme_get_header_social_networks();
     $top_bar_texts = isset( $options['top_bar_texts'] ) && is_array( $options['top_bar_texts'] ) ? $options['top_bar_texts'] : array();
-    $top_bar_texts = array_pad( array_slice( $top_bar_texts, 0, 3 ), 3, '' );
+    $top_bar_texts = wp_parse_args(
+        $top_bar_texts,
+        array(
+            'text_1'  => '',
+            'email'   => '',
+            'phone'   => '',
+            'whatsapp'=> '',
+        )
+    );
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Intestazione', 'poetheme' ); ?></h1>
@@ -266,16 +279,38 @@ function poetheme_render_header_page() {
                             <p class="description"><?php esc_html_e( 'La barra comprende tre campi di testo, un menù informativo e le icone social.', 'poetheme' ); ?></p>
                         </td>
                     </tr>
-                    <?php for ( $i = 0; $i < 3; $i++ ) : ?>
-                        <tr>
-                            <th scope="row">
-                                <label for="poetheme_header_top_text_<?php echo esc_attr( $i ); ?>"><?php printf( esc_html__( 'Testo barra %d', 'poetheme' ), $i + 1 ); ?></label>
-                            </th>
-                            <td>
-                                <input type="text" id="poetheme_header_top_text_<?php echo esc_attr( $i ); ?>" name="poetheme_header[top_bar_texts][<?php echo esc_attr( $i ); ?>]" value="<?php echo esc_attr( $top_bar_texts[ $i ] ); ?>" class="regular-text" />
-                            </td>
-                        </tr>
-                    <?php endfor; ?>
+                    <tr>
+                        <th scope="row">
+                            <label for="poetheme_header_top_text_info"><?php esc_html_e( 'Testo barra 1', 'poetheme' ); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" id="poetheme_header_top_text_info" name="poetheme_header[top_bar_texts][text_1]" value="<?php echo esc_attr( $top_bar_texts['text_1'] ); ?>" class="regular-text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="poetheme_header_top_text_email"><?php esc_html_e( 'Email', 'poetheme' ); ?></label>
+                        </th>
+                        <td>
+                            <input type="email" id="poetheme_header_top_text_email" name="poetheme_header[top_bar_texts][email]" value="<?php echo esc_attr( $top_bar_texts['email'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'esempio@dominio.it', 'poetheme' ); ?>" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="poetheme_header_top_text_phone"><?php esc_html_e( 'Telefono', 'poetheme' ); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" id="poetheme_header_top_text_phone" name="poetheme_header[top_bar_texts][phone]" value="<?php echo esc_attr( $top_bar_texts['phone'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( '+39 012 3456789', 'poetheme' ); ?>" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="poetheme_header_top_text_whatsapp"><?php esc_html_e( 'WhatsApp', 'poetheme' ); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" id="poetheme_header_top_text_whatsapp" name="poetheme_header[top_bar_texts][whatsapp]" value="<?php echo esc_attr( $top_bar_texts['whatsapp'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( '+39 012 3456789', 'poetheme' ); ?>" />
+                        </td>
+                    </tr>
                     <tr>
                         <th scope="row"><?php esc_html_e( 'Call to Action', 'poetheme' ); ?></th>
                         <td>
@@ -428,12 +463,25 @@ function poetheme_sanitize_header_options( $input ) {
     $output['show_top_bar'] = ! empty( $input['show_top_bar'] );
 
     $output['top_bar_texts'] = array();
-    for ( $i = 0; $i < 3; $i++ ) {
+    foreach ( $defaults['top_bar_texts'] as $key => $default_value ) {
         $value = '';
-        if ( isset( $input['top_bar_texts'][ $i ] ) ) {
-            $value = sanitize_text_field( $input['top_bar_texts'][ $i ] );
+
+        if ( isset( $input['top_bar_texts'][ $key ] ) ) {
+            switch ( $key ) {
+                case 'email':
+                    $value = sanitize_email( $input['top_bar_texts'][ $key ] );
+                    break;
+                case 'phone':
+                case 'whatsapp':
+                    $value = sanitize_text_field( $input['top_bar_texts'][ $key ] );
+                    break;
+                default:
+                    $value = sanitize_text_field( $input['top_bar_texts'][ $key ] );
+                    break;
+            }
         }
-        $output['top_bar_texts'][ $i ] = $value;
+
+        $output['top_bar_texts'][ $key ] = $value;
     }
 
     $output['cta_text'] = isset( $input['cta_text'] ) ? sanitize_text_field( $input['cta_text'] ) : '';
@@ -522,12 +570,31 @@ function poetheme_get_header_options() {
     $options  = get_option( 'poetheme_header', array() );
     $options  = wp_parse_args( $options, $defaults );
 
-    // Ensure top bar texts always contain three entries.
-    $top_bar_texts = array();
+    // Ensure top bar texts always contain expected keys.
+    $top_bar_defaults = $defaults['top_bar_texts'];
+    $top_bar_values   = array();
+
     if ( isset( $options['top_bar_texts'] ) && is_array( $options['top_bar_texts'] ) ) {
-        $top_bar_texts = array_values( $options['top_bar_texts'] );
+        $top_bar_values = $options['top_bar_texts'];
+
+        // Legacy support for numeric indexes.
+        if ( array_values( $top_bar_values ) === $top_bar_values ) {
+            $legacy_values = array_values( $top_bar_values );
+            $top_bar_values = array(
+                'text_1'   => isset( $legacy_values[0] ) ? $legacy_values[0] : '',
+                'email'    => isset( $legacy_values[1] ) ? $legacy_values[1] : '',
+                'phone'    => isset( $legacy_values[2] ) ? $legacy_values[2] : '',
+                'whatsapp' => isset( $legacy_values[3] ) ? $legacy_values[3] : '',
+            );
+        }
     }
-    $options['top_bar_texts'] = array_pad( array_slice( $top_bar_texts, 0, 3 ), 3, '' );
+
+    $normalized_top_bar = array();
+    foreach ( $top_bar_defaults as $key => $default_value ) {
+        $normalized_top_bar[ $key ] = isset( $top_bar_values[ $key ] ) ? $top_bar_values[ $key ] : $default_value;
+    }
+
+    $options['top_bar_texts'] = $normalized_top_bar;
 
     // Merge social defaults preserving keys.
     $social_defaults = $defaults['social_links'];

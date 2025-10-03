@@ -11,7 +11,7 @@ if ( ! isset( $args ) || ! is_array( $args ) ) {
 
 $defaults = array(
     'show_top_bar'       => false,
-    'top_bar_texts'      => array( '', '', '' ),
+    'top_bar_items'      => array(),
     'social_links'       => array(),
     'social_definitions' => poetheme_get_header_social_networks(),
     'cta_text'           => '',
@@ -19,13 +19,22 @@ $defaults = array(
 );
 
 $context = wp_parse_args( $args, $defaults );
-$top_bar_texts = array_pad( array_map( 'trim', (array) $context['top_bar_texts'] ), 3, '' );
+$top_bar_items = array();
+if ( isset( $context['top_bar_items'] ) && is_array( $context['top_bar_items'] ) ) {
+    foreach ( $context['top_bar_items'] as $item ) {
+        if ( ! is_array( $item ) || empty( $item['text'] ) ) {
+            continue;
+        }
+
+        $top_bar_items[] = $item;
+    }
+}
 $social_links  = is_array( $context['social_links'] ) ? $context['social_links'] : array();
 $cta_text      = trim( (string) $context['cta_text'] );
 $cta_url       = $context['cta_url'];
 $show_top_bar  = ! empty( $context['show_top_bar'] );
 
-$has_top_texts = array_filter( $top_bar_texts, 'strlen' );
+$has_top_items = ! empty( $top_bar_items );
 $has_social    = false;
 foreach ( $social_links as $link ) {
     if ( ! empty( $link ) ) {
@@ -38,16 +47,21 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
 ?>
 <header class="sticky top-0 z-40" role="banner" x-data="{ mobileOpen: false, scrolled: false }" @scroll.window="scrolled = window.scrollY > 30">
-    <?php if ( $show_top_bar && ( $has_top_texts || $has_social || $has_top_menu ) ) : ?>
+    <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="bg-rose-600 text-white text-xs" x-show="!scrolled" x-transition.opacity>
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <?php if ( $has_top_texts ) : ?>
-                    <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
-                        <?php foreach ( $top_bar_texts as $text ) : ?>
-                            <?php if ( '' === $text ) : continue; endif; ?>
-                            <span class="uppercase tracking-wide text-rose-100"><?php echo esc_html( $text ); ?></span>
-                        <?php endforeach; ?>
-                    </div>
+                <?php if ( $has_top_items ) : ?>
+                    <?php
+                    poetheme_render_top_bar_items(
+                        $top_bar_items,
+                        array(
+                            'container_classes' => 'flex flex-wrap items-center gap-x-4 gap-y-1',
+                            'text_class'        => 'uppercase tracking-wide text-rose-100',
+                            'link_class'        => 'inline-flex items-center gap-2 text-rose-100 hover:text-white transition',
+                            'icon_class'        => 'w-3.5 h-3.5',
+                        )
+                    );
+                    ?>
                 <?php endif; ?>
 
                 <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-5 md:ml-auto">
