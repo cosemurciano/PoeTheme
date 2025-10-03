@@ -104,6 +104,15 @@ function poetheme_add_options_pages() {
         'poetheme-custom-css',
         'poetheme_render_custom_css_page'
     );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'SEO Schema', 'poetheme' ),
+        __( 'SEO Schema', 'poetheme' ),
+        'manage_options',
+        'poetheme-seo-schema',
+        'tsg_render_options_page'
+    );
 }
 add_action( 'admin_menu', 'poetheme_add_options_pages' );
 
