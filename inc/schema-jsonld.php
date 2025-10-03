@@ -16,20 +16,6 @@
 
 if (!defined('ABSPATH')) { exit; }
 
-// =============================
-// =  REGISTRAZIONE OPZIONI   =
-// =============================
-add_action('admin_menu', function(){
-  add_theme_page(
-    __('SEO Schema (JSON-LD)','tsg'),
-    __('SEO Schema','tsg'),
-    'manage_options',
-    'tsg-schema-options',
-    'tsg_render_options_page',
-    60
-  );
-});
-
 add_action('admin_init', function(){
   register_setting('tsg_schema_group', 'tsg_schema_options', [
     'type' => 'array',
@@ -420,6 +406,13 @@ add_action('wp_head', function(){
 // =  ASSET ADMIN (solo pagina) =
 // =============================
 add_action('admin_enqueue_scripts', function($hook){
-  if ($hook !== 'appearance_page_tsg-schema-options') return;
+  $allowed_hooks = [
+    'appearance_page_tsg-schema-options',
+    'poetheme-settings_page_poetheme-seo-schema',
+  ];
+
+  if (!in_array($hook, $allowed_hooks, true)) {
+    return;
+  }
   wp_enqueue_media(); // per media uploader
 });
