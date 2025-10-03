@@ -1,0 +1,15 @@
+.poetheme-logo-preview {
+    margin: 1em 0;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.poetheme-logo-preview__image {
+    max-width: 240px;
+    height: auto;
+    border: 1px solid #ccd0d4;
+    padding: 8px;
+    background: #fff;
+}

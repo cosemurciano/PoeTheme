@@ -148,12 +148,33 @@ function poetheme_the_breadcrumbs() {
  * Output site logo.
  */
 function poetheme_the_logo() {
-    $options = poetheme_get_options();
-
     if ( has_custom_logo() ) {
         the_custom_logo();
         return;
     }
+
+    $logo_options = poetheme_get_logo_options();
+
+    if ( ! empty( $logo_options['logo_id'] ) ) {
+        $logo_markup = wp_get_attachment_image(
+            $logo_options['logo_id'],
+            'full',
+            false,
+            array(
+                'class' => 'h-12 w-auto',
+                'alt'   => get_bloginfo( 'name' ),
+            )
+        );
+
+        if ( $logo_markup ) {
+            echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="inline-flex" rel="home">';
+            echo wp_kses_post( $logo_markup );
+            echo '</a>';
+            return;
+        }
+    }
+
+    $options = poetheme_get_options();
 
     if ( ! empty( $options['custom_logo'] ) ) {
         $alt = esc_attr( get_bloginfo( 'name' ) );

@@ -183,6 +183,26 @@ function poetheme_output_schema() {
 add_action( 'wp_head', 'poetheme_output_schema', 20 );
 
 /**
+ * Output custom CSS defined in the theme options.
+ */
+function poetheme_output_custom_css() {
+    $custom_css = get_option( 'poetheme_custom_css', '' );
+
+    if ( empty( $custom_css ) ) {
+        return;
+    }
+
+    $custom_css = trim( wp_kses( $custom_css, array() ) );
+
+    if ( '' === $custom_css ) {
+        return;
+    }
+
+    echo '<style id="poetheme-custom-css">' . $custom_css . '</style>';
+}
+add_action( 'wp_head', 'poetheme_output_custom_css', 120 );
+
+/**
  * Add body classes.
  */
 function poetheme_body_classes( $classes ) {

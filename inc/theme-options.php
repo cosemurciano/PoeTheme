@@ -1,6 +1,6 @@
 <?php
 /**
- * Theme options page.
+ * Theme options pages and helpers.
  *
  * @package PoeTheme
  */
@@ -13,86 +13,297 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Register theme settings.
  */
 function poetheme_register_settings() {
-    register_setting( 'poetheme_options', 'poetheme_options', 'poetheme_sanitize_options' );
-
-    add_settings_section(
-        'poetheme_general_section',
-        __( 'General', 'poetheme' ),
-        '__return_false',
-        'poetheme_options'
+    register_setting(
+        'poetheme_logo_group',
+        'poetheme_logo',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'poetheme_sanitize_logo_options',
+            'default'           => array(
+                'logo_id' => 0,
+            ),
+        )
     );
 
-    add_settings_field(
-        'poetheme_tagline',
-        __( 'Alternative Tagline', 'poetheme' ),
-        'poetheme_field_tagline',
-        'poetheme_options',
-        'poetheme_general_section'
-    );
-
-    add_settings_field(
-        'poetheme_enable_breadcrumbs',
-        __( 'Enable Breadcrumbs', 'poetheme' ),
-        'poetheme_field_enable_breadcrumbs',
-        'poetheme_options',
-        'poetheme_general_section'
-    );
-
-    add_settings_section(
-        'poetheme_logo_section',
-        __( 'Logo', 'poetheme' ),
-        '__return_false',
-        'poetheme_options'
-    );
-
-    add_settings_field(
-        'poetheme_custom_logo',
-        __( 'Custom Logo URL', 'poetheme' ),
-        'poetheme_field_custom_logo',
-        'poetheme_options',
-        'poetheme_logo_section'
+    register_setting(
+        'poetheme_custom_css_group',
+        'poetheme_custom_css',
+        array(
+            'type'              => 'string',
+            'sanitize_callback' => 'poetheme_sanitize_custom_css',
+            'default'           => '',
+        )
     );
 }
 add_action( 'admin_init', 'poetheme_register_settings' );
 
 /**
- * Add options page to admin menu.
+ * Add options pages to the admin menu.
  */
-function poetheme_add_options_page() {
-    add_theme_page(
-        __( 'PoeTheme Options', 'poetheme' ),
-        __( 'PoeTheme Options', 'poetheme' ),
+function poetheme_add_options_pages() {
+    add_menu_page(
+        __( 'PoeTheme', 'poetheme' ),
+        __( 'PoeTheme', 'poetheme' ),
         'manage_options',
-        'poetheme-options',
-        'poetheme_render_options_page'
+        'poetheme-settings',
+        'poetheme_render_global_page',
+        'dashicons-admin-customizer',
+        61
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'Globale', 'poetheme' ),
+        __( 'Globale', 'poetheme' ),
+        'manage_options',
+        'poetheme-settings',
+        'poetheme_render_global_page'
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'Logo', 'poetheme' ),
+        __( 'Logo', 'poetheme' ),
+        'manage_options',
+        'poetheme-logo',
+        'poetheme_render_logo_page'
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'Intestazione', 'poetheme' ),
+        __( 'Intestazione', 'poetheme' ),
+        'manage_options',
+        'poetheme-header',
+        'poetheme_render_header_page'
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'Sottointestazione', 'poetheme' ),
+        __( 'Sottointestazione', 'poetheme' ),
+        'manage_options',
+        'poetheme-subheader',
+        'poetheme_render_subheader_page'
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'Piè di pagina', 'poetheme' ),
+        __( 'Piè di pagina', 'poetheme' ),
+        'manage_options',
+        'poetheme-footer',
+        'poetheme_render_footer_page'
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'Custom CSS', 'poetheme' ),
+        __( 'Custom CSS', 'poetheme' ),
+        'manage_options',
+        'poetheme-custom-css',
+        'poetheme_render_custom_css_page'
     );
 }
-add_action( 'admin_menu', 'poetheme_add_options_page' );
+add_action( 'admin_menu', 'poetheme_add_options_pages' );
 
 /**
- * Sanitize options.
+ * Render the global settings page.
+ */
+function poetheme_render_global_page() {
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e( 'Globale', 'poetheme' ); ?></h1>
+        <p class="description"><?php esc_html_e( 'Le impostazioni globali saranno disponibili a breve.', 'poetheme' ); ?></p>
+    </div>
+    <?php
+}
+
+/**
+ * Render the logo settings page.
+ */
+function poetheme_render_logo_page() {
+    $options = poetheme_get_logo_options();
+    $logo_id = $options['logo_id'];
+    $logo    = $logo_id ? wp_get_attachment_image_src( $logo_id, 'medium' ) : false;
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e( 'Logo', 'poetheme' ); ?></h1>
+        <form action="options.php" method="post">
+            <?php settings_fields( 'poetheme_logo_group' ); ?>
+            <div id="poetheme-logo-preview" class="poetheme-logo-preview">
+                <?php if ( $logo ) : ?>
+                    <img src="<?php echo esc_url( $logo[0] ); ?>" alt="" class="poetheme-logo-preview__image" />
+                <?php else : ?>
+                    <p class="description"><?php esc_html_e( 'Nessun logo selezionato.', 'poetheme' ); ?></p>
+                <?php endif; ?>
+            </div>
+            <input type="hidden" name="poetheme_logo[logo_id]" id="poetheme_logo_id" value="<?php echo esc_attr( $logo_id ); ?>" />
+            <p>
+                <button type="button" class="button button-secondary" id="poetheme-logo-upload"><?php esc_html_e( 'Carica logo', 'poetheme' ); ?></button>
+                <button type="button" class="button" id="poetheme-logo-remove" <?php disabled( 0 === $logo_id ); ?>><?php esc_html_e( 'Rimuovi logo', 'poetheme' ); ?></button>
+            </p>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
+/**
+ * Render the header settings page.
+ */
+function poetheme_render_header_page() {
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e( 'Intestazione', 'poetheme' ); ?></h1>
+        <p class="description"><?php esc_html_e( "Le impostazioni dell'intestazione saranno disponibili a breve.", 'poetheme' ); ?></p>
+    </div>
+    <?php
+}
+
+/**
+ * Render the subheader settings page.
+ */
+function poetheme_render_subheader_page() {
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e( 'Sottointestazione', 'poetheme' ); ?></h1>
+        <p class="description"><?php esc_html_e( 'Le impostazioni della sottointestazione saranno disponibili a breve.', 'poetheme' ); ?></p>
+    </div>
+    <?php
+}
+
+/**
+ * Render the footer settings page.
+ */
+function poetheme_render_footer_page() {
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e( 'Piè di pagina', 'poetheme' ); ?></h1>
+        <p class="description"><?php esc_html_e( 'Le impostazioni del piè di pagina saranno disponibili a breve.', 'poetheme' ); ?></p>
+    </div>
+    <?php
+}
+
+/**
+ * Render the custom CSS settings page.
+ */
+function poetheme_render_custom_css_page() {
+    $custom_css = get_option( 'poetheme_custom_css', '' );
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e( 'Custom CSS', 'poetheme' ); ?></h1>
+        <form action="options.php" method="post">
+            <?php settings_fields( 'poetheme_custom_css_group' ); ?>
+            <label class="screen-reader-text" for="poetheme_custom_css"><?php esc_html_e( 'CSS personalizzato', 'poetheme' ); ?></label>
+            <textarea id="poetheme_custom_css" name="poetheme_custom_css" rows="20" class="large-text code"><?php echo esc_textarea( $custom_css ); ?></textarea>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
+/**
+ * Retrieve logo options with defaults.
  *
- * @param array $input Input values.
  * @return array
  */
-function poetheme_sanitize_options( $input ) {
-    $output = poetheme_get_options();
+function poetheme_get_logo_options() {
+    $defaults = array(
+        'logo_id' => 0,
+    );
 
-    if ( isset( $input['tagline'] ) ) {
-        $output['tagline'] = sanitize_text_field( $input['tagline'] );
+    $options = get_option( 'poetheme_logo', array() );
+
+    return wp_parse_args( $options, $defaults );
+}
+
+/**
+ * Sanitize logo options.
+ *
+ * @param array $input Raw input values.
+ * @return array
+ */
+function poetheme_sanitize_logo_options( $input ) {
+    $output = poetheme_get_logo_options();
+
+    if ( ! is_array( $input ) ) {
+        $input = array();
     }
 
-    $output['enable_breadcrumbs'] = isset( $input['enable_breadcrumbs'] ) ? (bool) $input['enable_breadcrumbs'] : false;
-
-    if ( isset( $input['custom_logo'] ) ) {
-        $output['custom_logo'] = esc_url_raw( $input['custom_logo'] );
+    if ( isset( $input['logo_id'] ) ) {
+        $output['logo_id'] = absint( $input['logo_id'] );
     }
 
     return $output;
 }
 
 /**
- * Retrieve theme options with defaults.
+ * Sanitize custom CSS option.
+ *
+ * @param string $css Raw CSS code.
+ * @return string
+ */
+function poetheme_sanitize_custom_css( $css ) {
+    if ( empty( $css ) ) {
+        return '';
+    }
+
+    $css = (string) $css;
+
+    return wp_kses( $css, array() );
+}
+
+/**
+ * Enqueue admin assets for the options pages.
+ *
+ * @param string $hook Current admin page hook.
+ */
+function poetheme_options_admin_assets( $hook ) {
+    $screens = array(
+        'toplevel_page_poetheme-settings',
+        'poetheme_page_poetheme-logo',
+        'poetheme_page_poetheme-header',
+        'poetheme_page_poetheme-subheader',
+        'poetheme_page_poetheme-footer',
+        'poetheme_page_poetheme-custom-css',
+    );
+
+    if ( in_array( $hook, $screens, true ) ) {
+        wp_enqueue_style( 'poetheme-theme-options', POETHEME_URI . '/assets/css/theme-options.css', array(), POETHEME_VERSION );
+    }
+
+    if ( 'poetheme_page_poetheme-logo' === $hook ) {
+        wp_enqueue_media();
+        wp_enqueue_script( 'poetheme-theme-options', POETHEME_URI . '/assets/js/theme-options.js', array( 'jquery' ), POETHEME_VERSION, true );
+        wp_localize_script(
+            'poetheme-theme-options',
+            'poethemeThemeOptions',
+            array(
+                'chooseLogo' => __( 'Scegli un logo', 'poetheme' ),
+                'selectLogo' => __( 'Usa questo logo', 'poetheme' ),
+                'noLogo'     => __( 'Nessun logo selezionato.', 'poetheme' ),
+            )
+        );
+    }
+
+    if ( 'poetheme_page_poetheme-custom-css' === $hook ) {
+        $settings = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+
+        if ( false !== $settings ) {
+            wp_enqueue_script( 'code-editor' );
+            wp_enqueue_style( 'code-editor' );
+            wp_add_inline_script(
+                'code-editor',
+                'jQuery(function(){wp.codeEditor.initialize("poetheme_custom_css", ' . wp_json_encode( $settings ) . ');});'
+            );
+        }
+    }
+}
+add_action( 'admin_enqueue_scripts', 'poetheme_options_admin_assets' );
+
+/**
+ * Retrieve legacy theme options with defaults.
  *
  * @return array
  */
@@ -106,57 +317,4 @@ function poetheme_get_options() {
     $options = get_option( 'poetheme_options', array() );
 
     return wp_parse_args( $options, $defaults );
-}
-
-/**
- * Render tagline field.
- */
-function poetheme_field_tagline() {
-    $options = poetheme_get_options();
-    ?>
-    <input type="text" id="poetheme_tagline" name="poetheme_options[tagline]" value="<?php echo esc_attr( $options['tagline'] ); ?>" class="regular-text" />
-    <p class="description"><?php esc_html_e( 'Overrides the site tagline for meta descriptions.', 'poetheme' ); ?></p>
-    <?php
-}
-
-/**
- * Render breadcrumbs toggle field.
- */
-function poetheme_field_enable_breadcrumbs() {
-    $options = poetheme_get_options();
-    ?>
-    <label for="poetheme_enable_breadcrumbs">
-        <input type="checkbox" id="poetheme_enable_breadcrumbs" name="poetheme_options[enable_breadcrumbs]" value="1" <?php checked( $options['enable_breadcrumbs'], true ); ?> />
-        <?php esc_html_e( 'Display breadcrumbs on archive and singular pages.', 'poetheme' ); ?>
-    </label>
-    <?php
-}
-
-/**
- * Render custom logo field.
- */
-function poetheme_field_custom_logo() {
-    $options = poetheme_get_options();
-    ?>
-    <input type="url" id="poetheme_custom_logo" name="poetheme_options[custom_logo]" value="<?php echo esc_attr( $options['custom_logo'] ); ?>" class="regular-text" />
-    <p class="description"><?php esc_html_e( 'Paste the URL of the logo image if you prefer not to use the Customizer logo.', 'poetheme' ); ?></p>
-    <?php
-}
-
-/**
- * Render options page markup.
- */
-function poetheme_render_options_page() {
-    ?>
-    <div class="wrap">
-        <h1><?php esc_html_e( 'PoeTheme Options', 'poetheme' ); ?></h1>
-        <form action="options.php" method="post">
-            <?php
-            settings_fields( 'poetheme_options' );
-            do_settings_sections( 'poetheme_options' );
-            submit_button();
-            ?>
-        </form>
-    </div>
-    <?php
 }
