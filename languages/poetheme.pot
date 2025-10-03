@@ -1,0 +1,188 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PoeTheme 1.0.0\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: OpenAI ChatGPT\n"
+
+#: comments.php:24
+msgid "%1$s Comment"
+msgstr ""
+
+#: comments.php:24
+msgid "%1$s Comments"
+msgstr ""
+
+#: comments.php:39
+msgid "Comments navigation"
+msgstr ""
+
+#: comments.php:42
+msgid "Older Comments"
+msgstr ""
+
+#: comments.php:43
+msgid "Newer Comments"
+msgstr ""
+
+#: comments.php:50
+msgid "Comments are closed."
+msgstr ""
+
+#: footer.php:20
+msgid "Footer widgets"
+msgstr ""
+
+#: footer.php:26
+msgid "Widget Area"
+msgstr ""
+
+#: footer.php:27
+msgid "Add widgets in the WordPress admin to replace this placeholder."
+msgstr ""
+
+#: index.php:88
+msgid "About this site"
+msgstr ""
+
+#: index.php:89
+msgid "Use the Widgets area in the WordPress admin to customize this sidebar."
+msgstr ""
+
+#: footer.php:33
+msgid "Footer navigation"
+msgstr ""
+
+#: header.php:27
+msgid "Primary navigation"
+msgstr ""
+
+#: functions.php:34
+msgid "Primary Menu"
+msgstr ""
+
+#: functions.php:35
+msgid "Footer Menu"
+msgstr ""
+
+#: functions.php:64
+msgid "Sidebar"
+msgstr ""
+
+#: functions.php:66
+msgid "Add widgets here."
+msgstr ""
+
+#: functions.php:76
+msgid "Footer Widgets"
+msgstr ""
+
+#: functions.php:78
+msgid "Appears in the footer widget area."
+msgstr ""
+
+#: functions.php:113
+msgid "Skip to content"
+msgstr ""
+
+#: inc/template-tags.php:27
+msgid "Home"
+msgstr ""
+
+#: inc/template-tags.php:63
+msgid "Search results for \"%s\""
+msgstr ""
+
+#: inc/template-tags.php:69
+msgid "404 Not Found"
+msgstr ""
+
+#: inc/template-tags.php:83
+msgid "Breadcrumb"
+msgstr ""
+
+#: inc/template-tags.php:120
+msgid "Previous"
+msgstr ""
+
+#: inc/template-tags.php:121
+msgid "Next"
+msgstr ""
+
+#: inc/template-tags.php:122
+msgid "Posts navigation"
+msgstr ""
+
+#: inc/theme-options.php:20
+msgid "General"
+msgstr ""
+
+#: inc/theme-options.php:28
+msgid "Alternative Tagline"
+msgstr ""
+
+#: inc/theme-options.php:37
+msgid "Enable Breadcrumbs"
+msgstr ""
+
+#: inc/theme-options.php:48
+msgid "Logo"
+msgstr ""
+
+#: inc/theme-options.php:56
+msgid "Custom Logo URL"
+msgstr ""
+
+#: inc/theme-options.php:90
+msgid "Overrides the site tagline for meta descriptions."
+msgstr ""
+
+#: inc/theme-options.php:101
+msgid "Display breadcrumbs on archive and singular pages."
+msgstr ""
+
+#: inc/theme-options.php:112
+msgid "Paste the URL of the logo image if you prefer not to use the Customizer logo."
+msgstr ""
+
+#: inc/theme-options.php:122
+msgid "PoeTheme Options"
+msgstr ""
+
+#: index.php:24
+msgid "Author"
+msgstr ""
+
+#: index.php:43
+msgid "Page"
+msgstr ""
+
+#: index.php:53
+msgid "Tags: "
+msgstr ""
+
+#: index.php:54
+msgid "Categories: "
+msgstr ""
+
+#: index.php:66
+msgid "Nothing found"
+msgstr ""
+
+#: index.php:69
+msgid "It seems we can’t find what you’re looking for. Perhaps searching can help."
+msgstr ""
+
+#: searchform.php:11
+msgid "Search for:"
+msgstr ""
+
+#: searchform.php:12
+msgid "Search …"
+msgstr ""
+
+#: searchform.php:14
+msgid "Search"
+msgstr ""
