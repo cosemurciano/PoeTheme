@@ -68,13 +68,12 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     <?php if ( $has_top_menu ) : ?>
                         <nav aria-label="<?php esc_attr_e( 'Link utili', 'poetheme' ); ?>" class="text-indigo-100">
                             <?php
-                            wp_nav_menu(
+                            poetheme_render_navigation_menu(
+                                'top-info',
+                                'desktop',
                                 array(
-                                    'theme_location' => 'top-info',
-                                    'menu_class'     => 'flex flex-wrap items-center gap-4 text-sm uppercase',
-                                    'container'      => false,
-                                    'depth'          => 1,
-                                    'fallback_cb'    => false,
+                                    'menu_class'  => 'flex flex-wrap items-center gap-4 text-sm uppercase',
+                                    'fallback_cb' => false,
                                 )
                             );
                             ?>
@@ -114,13 +113,12 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
                 <nav class="nav-primary hidden lg:flex flex-1 items-center justify-center gap-8 text-sm font-medium" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                     <?php
-                    wp_nav_menu(
+                    poetheme_render_navigation_menu(
+                        'primary',
+                        'desktop',
                         array(
-                            'theme_location' => 'primary',
-                            'menu_class'     => 'flex flex-wrap items-center gap-8 text-sm font-medium uppercase tracking-wide',
-                            'container'      => false,
-                            'fallback_cb'    => 'wp_page_menu',
-                            'depth'          => 3,
+                            'menu_class'  => 'flex flex-wrap items-center gap-8 text-sm font-medium uppercase tracking-wide',
+                            'fallback_cb' => 'wp_page_menu',
                         )
                     );
                     ?>
@@ -141,12 +139,12 @@ $has_top_menu = has_nav_menu( 'top-info' );
         <div class="px-4 py-5 space-y-4" @click.away="mobileOpen = false">
             <nav aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                 <?php
-                wp_nav_menu(
+                poetheme_render_navigation_menu(
+                    'primary',
+                    'mobile',
                     array(
-                        'theme_location' => 'primary',
-                        'menu_class'     => 'flex flex-col gap-4 text-base font-medium text-gray-900',
-                        'container'      => false,
-                        'fallback_cb'    => 'wp_page_menu',
+                        'menu_class'  => 'flex flex-col gap-4 text-base font-medium text-gray-900',
+                        'fallback_cb' => 'wp_page_menu',
                     )
                 );
                 ?>

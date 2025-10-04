@@ -13,6 +13,7 @@ define( 'POETHEME_URI', get_template_directory_uri() );
 require_once POETHEME_DIR . '/inc/theme-options.php';
 require_once POETHEME_DIR . '/inc/template-tags.php';
 require_once POETHEME_DIR . '/inc/schema-jsonld.php';
+require_once POETHEME_DIR . '/inc/nav-menu.php';
 
 if ( ! function_exists( 'poetheme_setup' ) ) {
     /**
