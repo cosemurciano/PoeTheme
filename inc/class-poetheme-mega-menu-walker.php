@@ -26,8 +26,8 @@ if ( ! class_exists( 'PoeTheme_Mega_Menu_Walker' ) ) {
          */
         public function start_lvl( &$output, $depth = 0, $args = array() ) {
             if ( 0 === $depth ) {
-                $output .= "\n<div class=\"mega-menu-bridge\" x-show=\"isOpen\" x-cloak></div>";
-                $output .= "\n<div class=\"mega-menu-dropdown align-left bg-white shadow-2xl rounded-lg p-6\" x-show=\"isOpen\" x-transition.opacity.duration.200ms x-cloak :class=\"{ 'is-open': isOpen }\">";
+                $output .= "\n<div class=\"mega-menu-bridge\" x-show=\"isOpen\" x-cloak @mouseenter=\"open()\" @mouseleave=\"scheduleClose()\"></div>";
+                $output .= "\n<div class=\"mega-menu-dropdown align-left bg-white shadow-2xl rounded-lg p-6\" x-show=\"isOpen\" x-transition.opacity.duration.200ms x-cloak :class=\"{ 'is-open': isOpen }\" @mouseenter=\"open()\" @mouseleave=\"scheduleClose()\">";
                 $output .= "\n    <div class=\"mega-menu-grid grid gap-6 sm:grid-cols-2 lg:grid-cols-3\">";
             } elseif ( 1 === $depth ) {
                 $output .= "\n        <ul class=\"mega-menu-links space-y-2 ml-7\">";
@@ -113,8 +113,13 @@ if ( ! class_exists( 'PoeTheme_Mega_Menu_Walker' ) ) {
                 $output .= '<li class="' . esc_attr( $class_attribute ) . '">';
 
                 if ( $has_children ) {
-                    $output .= '<div class="mega-menu-wrapper relative" x-data="poethemeMegaMenu()" @mouseenter="open()" @mouseleave="close()" @focusin="open()" @focusout.window="close()" @keydown.escape.window="close()">';
-                    $output .= '<a' . $attributes . ' class="nav-link inline-flex items-center gap-2 transition-colors duration-150">' . $icon_html . '<span class="' . esc_attr( $title_classes ) . '">' . esc_html( $title ) . '</span><i data-lucide="chevron-down" class="w-4 h-4"></i></a>';
+                    $title_attribute = '';
+                    if ( ! empty( $atts['title'] ) ) {
+                        $title_attribute = ' title="' . esc_attr( $atts['title'] ) . '"';
+                    }
+
+                    $output .= '<div class="mega-menu-wrapper relative" x-data="poethemeMegaMenu()" @mouseenter="open()" @mouseleave="scheduleClose()" @focusin="open()" @focusout.window="close()" @keydown.escape.window="close()">';
+                    $output .= '<button type="button" class="mega-menu-trigger nav-link inline-flex items-center gap-2 transition-colors duration-150" aria-haspopup="true" x-bind:aria-expanded="isOpen ? \'true\' : \'false\'" @mouseenter="open()" @mouseleave="scheduleClose()" @click="toggle()"' . $title_attribute . '>' . $icon_html . '<span class="' . esc_attr( $title_classes ) . '">' . esc_html( $title ) . '</span><i data-lucide="chevron-down" class="w-4 h-4"></i></button>';
                 } else {
                     $output .= '<a' . $attributes . ' class="nav-link inline-flex items-center gap-2 transition-colors duration-150">' . $icon_html . '<span class="' . esc_attr( $title_classes ) . '">' . esc_html( $title ) . '</span></a>';
                 }
