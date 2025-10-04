@@ -33,6 +33,7 @@ $social_links  = is_array( $context['social_links'] ) ? $context['social_links']
 $cta_text      = trim( (string) $context['cta_text'] );
 $cta_url       = $context['cta_url'];
 $show_top_bar  = ! empty( $context['show_top_bar'] );
+$show_cta      = ! empty( $context['show_cta'] );
 
 $has_top_items = ! empty( $top_bar_items );
 $has_social    = false;
@@ -129,7 +130,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     ?>
                 </nav>
 
-                <?php if ( '' !== $cta_text ) : ?>
+                <?php if ( $show_cta && '' !== $cta_text ) : ?>
                     <div class="hidden lg:block">
                         <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex items-center px-6 py-3 rounded-full bg-white text-indigo-700 font-semibold shadow-lg shadow-indigo-900/30 hover:bg-indigo-50 transition">
                             <?php echo esc_html( $cta_text ); ?>
@@ -146,7 +147,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     <p class="text-indigo-100 text-lg max-w-xl">
                         <?php echo esc_html__( 'Un header con effetto overlay perfetto per presentazioni immersive.', 'poetheme' ); ?>
                     </p>
-                    <?php if ( '' !== $cta_text ) : ?>
+                    <?php if ( $show_cta && '' !== $cta_text ) : ?>
                         <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex items-center px-6 py-3 rounded-full bg-white text-indigo-700 font-semibold shadow-lg shadow-indigo-900/30 hover:bg-indigo-50 transition lg:hidden">
                             <?php echo esc_html( $cta_text ); ?>
                         </a>
@@ -181,7 +182,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                 ?>
             </nav>
 
-            <?php if ( '' !== $cta_text ) : ?>
+            <?php if ( $show_cta && '' !== $cta_text ) : ?>
                 <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex w-full justify-center items-center px-5 py-3 rounded-full bg-indigo-600 text-white shadow hover:bg-indigo-700 transition">
                     <?php echo esc_html( $cta_text ); ?>
                 </a>

@@ -148,43 +148,106 @@ function poetheme_the_breadcrumbs() {
  * Output site logo.
  */
 function poetheme_the_logo() {
-    if ( has_custom_logo() ) {
-        the_custom_logo();
-        return;
+    $logo_options    = poetheme_get_logo_options();
+    $show_site_title = ! empty( $logo_options['show_site_title'] );
+    $logo_height     = isset( $logo_options['logo_height'] ) ? absint( $logo_options['logo_height'] ) : 0;
+    $title_color     = isset( $logo_options['title_color'] ) ? sanitize_hex_color( $logo_options['title_color'] ) : '';
+    $title_size      = isset( $logo_options['title_size'] ) ? absint( $logo_options['title_size'] ) : 0;
+
+    $site_title   = get_bloginfo( 'name' );
+    $site_tagline = get_bloginfo( 'description', 'display' );
+
+    $title_attribute = $site_title;
+    if ( $site_tagline ) {
+        $title_attribute .= ' – ' . $site_tagline;
+    }
+    $title_attribute = trim( $title_attribute );
+
+    $anchor_attributes = array(
+        'href'  => esc_url( home_url( '/' ) ),
+        'class' => 'inline-flex flex-col items-start gap-1 no-underline poetheme-brand-link',
+        'rel'   => 'home',
+    );
+
+    if ( $title_attribute ) {
+        $anchor_attributes['title'] = $title_attribute;
     }
 
-    $logo_options = poetheme_get_logo_options();
+    $attribute_strings = array();
+    foreach ( $anchor_attributes as $attribute => $value ) {
+        if ( '' === $value ) {
+            continue;
+        }
 
-    if ( ! empty( $logo_options['logo_id'] ) ) {
-        $logo_markup = wp_get_attachment_image(
-            $logo_options['logo_id'],
-            'full',
-            false,
-            array(
-                'class' => 'h-12 w-auto',
-                'alt'   => get_bloginfo( 'name' ),
-            )
+        $attribute_strings[] = sprintf( '%s="%s"', $attribute, esc_attr( $value ) );
+    }
+
+    $logo_id = 0;
+
+    if ( ! $show_site_title ) {
+        $custom_logo_id = get_theme_mod( 'custom_logo' );
+        if ( $custom_logo_id ) {
+            $logo_id = $custom_logo_id;
+        } elseif ( ! empty( $logo_options['logo_id'] ) ) {
+            $logo_id = absint( $logo_options['logo_id'] );
+        }
+    }
+
+    if ( $logo_id ) {
+        $image_attributes = array(
+            'class' => 'poetheme-logo-image',
+            'alt'   => $title_attribute,
         );
 
+        if ( $title_attribute ) {
+            $image_attributes['title'] = $title_attribute;
+        }
+
+        if ( $logo_height > 0 ) {
+            $image_attributes['style'] = 'height:' . $logo_height . 'px;width:auto;';
+        }
+
+        $logo_markup = wp_get_attachment_image( $logo_id, 'full', false, $image_attributes );
+
         if ( $logo_markup ) {
-            echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="inline-flex" rel="home">';
+            echo '<a ' . implode( ' ', $attribute_strings ) . '>';
             echo wp_kses_post( $logo_markup );
             echo '</a>';
             return;
         }
     }
 
-    $options = poetheme_get_options();
+    if ( ! $show_site_title ) {
+        $legacy_options = poetheme_get_options();
 
-    if ( ! empty( $options['custom_logo'] ) ) {
-        $alt = esc_attr( get_bloginfo( 'name' ) );
-        echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="inline-flex" rel="home">';
-        echo '<img src="' . esc_url( $options['custom_logo'] ) . '" alt="' . $alt . '" class="h-12 w-auto" />';
-        echo '</a>';
-        return;
+        if ( ! empty( $legacy_options['custom_logo'] ) ) {
+            $style_attr = $logo_height > 0 ? ' style="height:' . esc_attr( $logo_height ) . 'px;width:auto;"' : '';
+            echo '<a ' . implode( ' ', $attribute_strings ) . '>';
+            echo '<img src="' . esc_url( $legacy_options['custom_logo'] ) . '" alt="' . esc_attr( $title_attribute ) . '" title="' . esc_attr( $title_attribute ) . '" class="poetheme-logo-image"' . $style_attr . ' />';
+            echo '</a>';
+            return;
+        }
     }
 
-    echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-2xl font-bold" rel="home">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
+    $title_styles = array();
+    if ( $title_color ) {
+        $title_styles[] = 'color:' . $title_color;
+    }
+    if ( $title_size > 0 ) {
+        $title_styles[] = 'font-size:' . $title_size . 'px';
+    }
+
+    $title_style_attr = $title_styles ? ' style="' . esc_attr( implode( ';', $title_styles ) ) . '"' : '';
+    $tagline_style_attr = $title_color ? ' style="' . esc_attr( 'color:' . $title_color . ';opacity:0.75;' ) . '"' : '';
+
+    echo '<a ' . implode( ' ', $attribute_strings ) . '>';
+    echo '<span class="poetheme-site-title font-bold leading-tight"' . $title_style_attr . '>' . esc_html( $site_title ) . '</span>';
+
+    if ( $site_tagline ) {
+        echo '<span class="poetheme-site-tagline text-sm"' . $tagline_style_attr . '>' . esc_html( $site_tagline ) . '</span>';
+    }
+
+    echo '</a>';
 }
 
 /**
@@ -200,10 +263,12 @@ function poetheme_get_header_context() {
         $top_bar_texts = wp_parse_args(
             $options['top_bar_texts'],
             array(
-                'text_1'   => '',
-                'email'    => '',
-                'phone'    => '',
-                'whatsapp' => '',
+                'text_1'         => '',
+                'email'          => '',
+                'phone'          => '',
+                'whatsapp'       => '',
+                'location_label' => '',
+                'location_url'   => '',
             )
         );
     }
@@ -257,6 +322,22 @@ function poetheme_get_header_context() {
         }
     }
 
+    if ( ! empty( $top_bar_texts['location_label'] ) && ! empty( $top_bar_texts['location_url'] ) ) {
+        $location_label = sanitize_text_field( $top_bar_texts['location_label'] );
+        $location_url   = esc_url_raw( $top_bar_texts['location_url'] );
+
+        if ( '' !== $location_label && '' !== $location_url ) {
+            $top_bar_items[] = array(
+                'type'   => 'location',
+                'text'   => $location_label,
+                'url'    => $location_url,
+                'icon'   => 'map-pin',
+                'target' => '_blank',
+                'rel'    => 'noopener noreferrer',
+            );
+        }
+    }
+
     $cta_text = isset( $options['cta_text'] ) ? sanitize_text_field( $options['cta_text'] ) : '';
     $cta_url  = '';
     if ( ! empty( $options['cta_url'] ) ) {
@@ -274,6 +355,7 @@ function poetheme_get_header_context() {
     return array(
         'layout'             => isset( $options['layout'] ) ? $options['layout'] : 'style-1',
         'show_top_bar'       => ! empty( $options['show_top_bar'] ),
+        'show_cta'           => ! empty( $options['show_cta'] ),
         'top_bar_texts'      => $top_bar_texts,
         'top_bar_items'      => $top_bar_items,
         'cta_text'           => $cta_text,
@@ -341,11 +423,22 @@ function poetheme_render_top_bar_items( $items, $args = array() ) {
             case 'whatsapp':
                 $aria_label = __( 'Apri chat WhatsApp', 'poetheme' );
                 break;
+            case 'location':
+                $aria_label = __( 'Apri la posizione su Google Maps', 'poetheme' );
+                break;
         }
 
         $link_attr = $link_class ? ' class="' . esc_attr( $link_class ) . '"' : '';
         if ( $aria_label ) {
             $link_attr .= ' aria-label="' . esc_attr( $aria_label ) . '"';
+        }
+
+        if ( ! empty( $item['target'] ) ) {
+            $link_attr .= ' target="' . esc_attr( $item['target'] ) . '"';
+        }
+
+        if ( ! empty( $item['rel'] ) ) {
+            $link_attr .= ' rel="' . esc_attr( $item['rel'] ) . '"';
         }
 
         echo '<a href="' . esc_url( $url ) . '"' . $link_attr . '>';
