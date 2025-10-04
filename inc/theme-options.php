@@ -28,10 +28,6 @@ function poetheme_get_header_social_networks() {
             'label' => __( 'YouTube', 'poetheme' ),
             'icon'  => 'youtube',
         ),
-        'twitter'   => array(
-            'label' => __( 'Twitter', 'poetheme' ),
-            'icon'  => 'twitter',
-        ),
         'linkedin'  => array(
             'label' => __( 'LinkedIn', 'poetheme' ),
             'icon'  => 'linkedin',
@@ -54,11 +50,14 @@ function poetheme_get_default_header_options() {
     return array(
         'layout'        => 'style-1',
         'show_top_bar'  => true,
+        'show_cta'      => true,
         'top_bar_texts' => array(
             'text_1'  => '',
             'email'   => '',
             'phone'   => '',
             'whatsapp'=> '',
+            'location_label' => '',
+            'location_url'   => '',
         ),
         'cta_text'      => __( 'Get Started', 'poetheme' ),
         'cta_url'       => home_url( '/' ),
@@ -200,25 +199,81 @@ function poetheme_render_global_page() {
  */
 function poetheme_render_logo_page() {
     $options = poetheme_get_logo_options();
-    $logo_id = $options['logo_id'];
-    $logo    = $logo_id ? wp_get_attachment_image_src( $logo_id, 'medium' ) : false;
+    $logo_id         = $options['logo_id'];
+    $logo            = $logo_id ? wp_get_attachment_image_src( $logo_id, 'medium' ) : false;
+    $logo_height     = isset( $options['logo_height'] ) ? absint( $options['logo_height'] ) : 0;
+    $show_site_title = ! empty( $options['show_site_title'] );
+    $title_color     = isset( $options['title_color'] ) ? $options['title_color'] : '#111827';
+    $title_size      = isset( $options['title_size'] ) ? absint( $options['title_size'] ) : 0;
+    $site_title      = get_bloginfo( 'name' );
+    $site_tagline    = get_bloginfo( 'description', 'display' );
+
+    $logo_style_attr    = $logo_height > 0 ? ' style="height: ' . esc_attr( $logo_height ) . 'px; width: auto;"' : '';
+    $title_style_attr   = '';
+    $tagline_style_attr = '';
+
+    if ( $title_color ) {
+        $title_style_attr   .= 'color:' . $title_color . ';';
+        $tagline_style_attr .= 'color:' . $title_color . ';opacity:0.75;';
+    }
+
+    if ( $title_size > 0 ) {
+        $title_style_attr .= 'font-size:' . $title_size . 'px;';
+    }
+
+    $title_style_attr   = $title_style_attr ? ' style="' . esc_attr( $title_style_attr ) . '"' : '';
+    $tagline_style_attr = $tagline_style_attr ? ' style="' . esc_attr( $tagline_style_attr ) . '"' : '';
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Logo', 'poetheme' ); ?></h1>
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_logo_group' ); ?>
             <div id="poetheme-logo-preview" class="poetheme-logo-preview">
-                <?php if ( $logo ) : ?>
-                    <img src="<?php echo esc_url( $logo[0] ); ?>" alt="" class="poetheme-logo-preview__image" />
-                <?php else : ?>
-                    <p class="description"><?php esc_html_e( 'Nessun logo selezionato.', 'poetheme' ); ?></p>
-                <?php endif; ?>
+                <div class="poetheme-logo-preview__image-wrapper"<?php echo $show_site_title ? ' style="display:none;"' : ''; ?>>
+                    <?php if ( $logo ) : ?>
+                        <img src="<?php echo esc_url( $logo[0] ); ?>" alt="" class="poetheme-logo-preview__image"<?php echo $logo_style_attr; ?> />
+                    <?php else : ?>
+                        <p class="description"><?php esc_html_e( 'Nessun logo selezionato.', 'poetheme' ); ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="poetheme-logo-preview__title-wrapper"<?php echo $show_site_title ? '' : ' style="display:none;"'; ?>>
+                    <div class="poetheme-logo-preview__title"<?php echo $title_style_attr; ?>><?php echo esc_html( $site_title ); ?></div>
+                    <?php if ( $site_tagline ) : ?>
+                        <div class="poetheme-logo-preview__tagline"<?php echo $tagline_style_attr; ?>><?php echo esc_html( $site_tagline ); ?></div>
+                    <?php endif; ?>
+                </div>
             </div>
             <input type="hidden" name="poetheme_logo[logo_id]" id="poetheme_logo_id" value="<?php echo esc_attr( $logo_id ); ?>" />
             <p>
                 <button type="button" class="button button-secondary" id="poetheme-logo-upload"><?php esc_html_e( 'Carica logo', 'poetheme' ); ?></button>
                 <button type="button" class="button" id="poetheme-logo-remove" <?php disabled( 0 === $logo_id ); ?>><?php esc_html_e( 'Rimuovi logo', 'poetheme' ); ?></button>
             </p>
+            <p>
+                <label for="poetheme_logo_show_site_title">
+                    <input type="checkbox" id="poetheme_logo_show_site_title" name="poetheme_logo[show_site_title]" value="1" <?php checked( $show_site_title ); ?> />
+                    <?php esc_html_e( 'Mostra il titolo del sito al posto del logo', 'poetheme' ); ?>
+                </label>
+            </p>
+
+            <div class="poetheme-logo-options"<?php echo $show_site_title ? ' style="display:none;"' : ''; ?>>
+                <p>
+                    <label for="poetheme_logo_height"><?php esc_html_e( 'Altezza del logo (px)', 'poetheme' ); ?></label><br />
+                    <input type="number" min="0" step="1" id="poetheme_logo_height" name="poetheme_logo[logo_height]" value="<?php echo esc_attr( $logo_height ); ?>" class="small-text" />
+                    <span class="description"><?php esc_html_e( 'Imposta 0 per utilizzare le proporzioni originali.', 'poetheme' ); ?></span>
+                </p>
+            </div>
+
+            <div class="poetheme-title-options"<?php echo $show_site_title ? '' : ' style="display:none;"'; ?>>
+                <p>
+                    <label for="poetheme_logo_title_color"><?php esc_html_e( 'Colore del titolo', 'poetheme' ); ?></label><br />
+                    <input type="color" id="poetheme_logo_title_color" name="poetheme_logo[title_color]" value="<?php echo esc_attr( $title_color ); ?>" />
+                </p>
+                <p>
+                    <label for="poetheme_logo_title_size"><?php esc_html_e( 'Dimensione del titolo (px)', 'poetheme' ); ?></label><br />
+                    <input type="number" min="16" step="1" id="poetheme_logo_title_size" name="poetheme_logo[title_size]" value="<?php echo esc_attr( $title_size ); ?>" class="small-text" />
+                </p>
+            </div>
+
             <?php submit_button(); ?>
         </form>
     </div>
@@ -241,6 +296,7 @@ function poetheme_render_header_page() {
         'style-8' => __( 'Layout 8 – E-commerce', 'poetheme' ),
     );
     $socials       = poetheme_get_header_social_networks();
+    $show_cta      = ! empty( $options['show_cta'] );
     $top_bar_texts = isset( $options['top_bar_texts'] ) && is_array( $options['top_bar_texts'] ) ? $options['top_bar_texts'] : array();
     $top_bar_texts = wp_parse_args(
         $top_bar_texts,
@@ -249,6 +305,8 @@ function poetheme_render_header_page() {
             'email'   => '',
             'phone'   => '',
             'whatsapp'=> '',
+            'location_label' => '',
+            'location_url'   => '',
         )
     );
     ?>
@@ -276,12 +334,12 @@ function poetheme_render_header_page() {
                                 <input type="checkbox" id="poetheme_header_show_top_bar" name="poetheme_header[show_top_bar]" value="1" <?php checked( ! empty( $options['show_top_bar'] ) ); ?> />
                                 <?php esc_html_e( 'Mostra la barra superiore con informazioni e social.', 'poetheme' ); ?>
                             </label>
-                            <p class="description"><?php esc_html_e( 'La barra comprende tre campi di testo, un menù informativo e le icone social.', 'poetheme' ); ?></p>
+                            <p class="description"><?php esc_html_e( 'La barra comprende messaggio iniziale, contatti, posizione, un menù informativo e le icone social.', 'poetheme' ); ?></p>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="poetheme_header_top_text_info"><?php esc_html_e( 'Testo barra 1', 'poetheme' ); ?></label>
+                            <label for="poetheme_header_top_text_info"><?php esc_html_e( 'Messaggio iniziale', 'poetheme' ); ?></label>
                         </th>
                         <td>
                             <input type="text" id="poetheme_header_top_text_info" name="poetheme_header[top_bar_texts][text_1]" value="<?php echo esc_attr( $top_bar_texts['text_1'] ); ?>" class="regular-text" />
@@ -314,11 +372,26 @@ function poetheme_render_header_page() {
                     <tr>
                         <th scope="row"><?php esc_html_e( 'Call to Action', 'poetheme' ); ?></th>
                         <td>
+                            <label for="poetheme_header_show_cta">
+                                <input type="checkbox" id="poetheme_header_show_cta" name="poetheme_header[show_cta]" value="1" <?php checked( $show_cta ); ?> />
+                                <?php esc_html_e( 'Mostra il pulsante Call to Action.', 'poetheme' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'Deseleziona per nascondere il pulsante in tutte le testate.', 'poetheme' ); ?></p>
                             <label for="poetheme_header_cta_text" class="screen-reader-text"><?php esc_html_e( 'Testo pulsante', 'poetheme' ); ?></label>
                             <input type="text" id="poetheme_header_cta_text" name="poetheme_header[cta_text]" value="<?php echo esc_attr( $options['cta_text'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Get Started', 'poetheme' ); ?>" />
-                            <p class="description"><?php esc_html_e( 'Lascia vuoto per nascondere il pulsante.', 'poetheme' ); ?></p>
                             <label for="poetheme_header_cta_url" class="screen-reader-text"><?php esc_html_e( 'Link pulsante', 'poetheme' ); ?></label>
                             <input type="url" id="poetheme_header_cta_url" name="poetheme_header[cta_url]" value="<?php echo esc_attr( $options['cta_url'] ); ?>" class="regular-text" placeholder="<?php echo esc_attr( home_url( '/' ) ); ?>" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="poetheme_header_top_text_location_label"><?php esc_html_e( 'Posizione', 'poetheme' ); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" id="poetheme_header_top_text_location_label" name="poetheme_header[top_bar_texts][location_label]" value="<?php echo esc_attr( $top_bar_texts['location_label'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Es. Piazza del Duomo, Milano', 'poetheme' ); ?>" />
+                            <p class="description"><?php esc_html_e( 'Testo mostrato accanto all’icona della posizione.', 'poetheme' ); ?></p>
+                            <label for="poetheme_header_top_text_location_url" class="screen-reader-text"><?php esc_html_e( 'Link Google Maps', 'poetheme' ); ?></label>
+                            <input type="url" id="poetheme_header_top_text_location_url" name="poetheme_header[top_bar_texts][location_url]" value="<?php echo esc_attr( $top_bar_texts['location_url'] ); ?>" class="regular-text" placeholder="https://maps.google.com/" />
                         </td>
                     </tr>
                     <tr>
@@ -395,12 +468,28 @@ function poetheme_render_custom_css_page() {
  */
 function poetheme_get_logo_options() {
     $defaults = array(
-        'logo_id' => 0,
+        'logo_id'        => 0,
+        'logo_height'    => 48,
+        'show_site_title'=> false,
+        'title_color'    => '#111827',
+        'title_size'     => 32,
     );
 
     $options = get_option( 'poetheme_logo', array() );
 
-    return wp_parse_args( $options, $defaults );
+    $options = wp_parse_args( $options, $defaults );
+
+    $options['logo_id']        = absint( $options['logo_id'] );
+    $options['logo_height']    = isset( $options['logo_height'] ) ? absint( $options['logo_height'] ) : $defaults['logo_height'];
+    $options['show_site_title']= ! empty( $options['show_site_title'] );
+
+    $color = isset( $options['title_color'] ) ? sanitize_hex_color( $options['title_color'] ) : '';
+    $options['title_color'] = $color ? $color : $defaults['title_color'];
+
+    $size = isset( $options['title_size'] ) ? absint( $options['title_size'] ) : 0;
+    $options['title_size'] = $size > 0 ? $size : $defaults['title_size'];
+
+    return $options;
 }
 
 /**
@@ -418,6 +507,27 @@ function poetheme_sanitize_logo_options( $input ) {
 
     if ( isset( $input['logo_id'] ) ) {
         $output['logo_id'] = absint( $input['logo_id'] );
+    }
+
+    if ( isset( $input['logo_height'] ) ) {
+        $height = absint( $input['logo_height'] );
+        $output['logo_height'] = $height >= 0 ? $height : $output['logo_height'];
+    }
+
+    $output['show_site_title'] = ! empty( $input['show_site_title'] );
+
+    if ( isset( $input['title_color'] ) ) {
+        $color = sanitize_hex_color( $input['title_color'] );
+        if ( $color ) {
+            $output['title_color'] = $color;
+        }
+    }
+
+    if ( isset( $input['title_size'] ) ) {
+        $size = absint( $input['title_size'] );
+        if ( $size > 0 ) {
+            $output['title_size'] = $size;
+        }
     }
 
     return $output;
@@ -461,6 +571,7 @@ function poetheme_sanitize_header_options( $input ) {
     }
 
     $output['show_top_bar'] = ! empty( $input['show_top_bar'] );
+    $output['show_cta']     = ! empty( $input['show_cta'] );
 
     $output['top_bar_texts'] = array();
     foreach ( $defaults['top_bar_texts'] as $key => $default_value ) {
@@ -474,6 +585,9 @@ function poetheme_sanitize_header_options( $input ) {
                 case 'phone':
                 case 'whatsapp':
                     $value = sanitize_text_field( $input['top_bar_texts'][ $key ] );
+                    break;
+                case 'location_url':
+                    $value = esc_url_raw( $input['top_bar_texts'][ $key ] );
                     break;
                 default:
                     $value = sanitize_text_field( $input['top_bar_texts'][ $key ] );
@@ -612,6 +726,7 @@ function poetheme_get_header_options() {
     $options['layout'] = $layout;
 
     $options['show_top_bar'] = ! empty( $options['show_top_bar'] );
+    $options['show_cta']     = ! empty( $options['show_cta'] );
 
     return $options;
 }

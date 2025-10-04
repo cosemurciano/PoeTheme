@@ -33,6 +33,7 @@ $social_links  = is_array( $context['social_links'] ) ? $context['social_links']
 $cta_text      = trim( (string) $context['cta_text'] );
 $cta_url       = $context['cta_url'];
 $show_top_bar  = ! empty( $context['show_top_bar'] );
+$show_cta      = ! empty( $context['show_cta'] );
 
 $has_top_items = ! empty( $top_bar_items );
 $has_social    = false;
@@ -133,7 +134,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     <span class="absolute -top-1 -right-1 inline-flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-indigo-600 rounded-full">3</span>
                     <span class="sr-only"><?php esc_html_e( 'Carrello', 'poetheme' ); ?></span>
                 </button>
-                <?php if ( '' !== $cta_text ) : ?>
+                <?php if ( $show_cta && '' !== $cta_text ) : ?>
                     <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="hidden sm:inline-flex items-center px-4 py-2 rounded-full bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition">
                         <?php echo esc_html( $cta_text ); ?>
                     </a>
@@ -186,7 +187,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                 ?>
             </nav>
 
-            <?php if ( '' !== $cta_text ) : ?>
+            <?php if ( $show_cta && '' !== $cta_text ) : ?>
                 <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex w-full justify-center items-center px-5 py-3 rounded-full bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition">
                     <?php echo esc_html( $cta_text ); ?>
                 </a>

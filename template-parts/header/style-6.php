@@ -33,6 +33,7 @@ $social_links  = is_array( $context['social_links'] ) ? $context['social_links']
 $cta_text      = trim( (string) $context['cta_text'] );
 $cta_url       = $context['cta_url'];
 $show_top_bar  = ! empty( $context['show_top_bar'] );
+$show_cta      = ! empty( $context['show_cta'] );
 
 $has_top_items = ! empty( $top_bar_items );
 $has_social    = false;
@@ -124,7 +125,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                 ?>
                 </nav>
 
-                <?php if ( '' !== $cta_text ) : ?>
+                <?php if ( $show_cta && '' !== $cta_text ) : ?>
                     <div class="hidden md:block">
                         <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex items-center px-5 py-2.5 rounded-lg bg-rose-600 text-white font-semibold shadow hover:bg-rose-700 transition">
                             <?php echo esc_html( $cta_text ); ?>
@@ -150,7 +151,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                 ?>
             </nav>
 
-            <?php if ( '' !== $cta_text ) : ?>
+            <?php if ( $show_cta && '' !== $cta_text ) : ?>
                 <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex w-full justify-center items-center px-5 py-3 rounded-lg bg-rose-600 text-white font-semibold shadow hover:bg-rose-700 transition">
                     <?php echo esc_html( $cta_text ); ?>
                 </a>
