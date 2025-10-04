@@ -64,20 +64,25 @@ if ( ! class_exists( 'PoeTheme_Mega_Menu_Walker' ) ) {
          * @param int      $id                Current item ID.
          */
         public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
-            $has_children = ! empty( $args->has_children );
+            $classes = empty( $item->classes ) ? array() : (array) $item->classes;
+            $classes = array_filter( $classes, 'strlen' );
+
+            $has_children = ! empty( $args->has_children ) || in_array( 'menu-item-has-children', $classes, true );
             if ( $has_children ) {
                 $this->items_with_children[ $item->ID ] = true;
             }
 
-            $title = apply_filters( 'the_title', $item->title, $item->ID );
+            $title    = apply_filters( 'the_title', $item->title, $item->ID );
             $is_title = (bool) get_post_meta( $item->ID, '_poetheme_menu_is_title', true );
             $icon     = trim( (string) get_post_meta( $item->ID, '_poetheme_menu_icon', true ) );
 
-            $atts          = array();
-            $atts['title'] = ! empty( $item->attr_title ) ? $item->attr_title : '';
-            $atts['target'] = ! empty( $item->target ) ? $item->target : '';
-            $atts['rel']    = ! empty( $item->xfn ) ? $item->xfn : '';
-            $atts['href']   = ! empty( $item->url ) ? $item->url : '';
+            $atts            = array();
+            $atts['title']   = ! empty( $item->attr_title ) ? $item->attr_title : '';
+            $atts['target']  = ! empty( $item->target ) ? $item->target : '';
+            $atts['rel']     = ! empty( $item->xfn ) ? $item->xfn : '';
+            $atts['href']    = ! empty( $item->url ) ? $item->url : '';
+            $atts['aria-haspopup'] = $has_children ? 'true' : '';
+            $atts['aria-expanded'] = $has_children ? 'false' : '';
 
             $attributes = '';
             foreach ( $atts as $attr => $value ) {
@@ -102,9 +107,7 @@ if ( ! class_exists( 'PoeTheme_Mega_Menu_Walker' ) ) {
             $title_classes = $is_title ? 'font-semibold text-gray-900' : 'font-medium text-gray-700';
 
             if ( 0 === $depth ) {
-                $class_names = empty( $item->classes ) ? array() : (array) $item->classes;
-                $class_names = array_filter( $class_names, 'strlen' );
-                $class_names = implode( ' ', array_map( 'sanitize_html_class', $class_names ) );
+                $class_names     = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
                 $class_attribute = trim( 'menu-item depth-0 ' . $class_names );
 
                 $output .= '<li class="' . esc_attr( $class_attribute ) . '">';
