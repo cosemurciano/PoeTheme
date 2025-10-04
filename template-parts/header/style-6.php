@@ -120,7 +120,6 @@ $has_top_menu = has_nav_menu( 'top-info' );
                             'menu_class'     => 'flex items-center gap-8 text-sm font-semibold uppercase tracking-wide',
                             'container'      => false,
                             'fallback_cb'    => 'wp_page_menu',
-                            'walker'         => new PoeTheme_Mega_Menu_Walker(),
                             'depth'          => 3,
                         )
                     );
