@@ -116,3 +116,33 @@ body.rtl .skip-link {
   right: 0;
 }
 
+.poetheme-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.poetheme-nav--desktop li.is-open > [data-poetheme-submenu="true"] {
+  display: block;
+}
+
+.poetheme-nav--desktop [data-poetheme-submenu="true"] {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.poetheme-nav--mobile[data-ready="true"] [data-poetheme-submenu="true"] {
+  display: none;
+}
+
+.poetheme-nav--mobile[data-ready="true"] li.is-open > [data-poetheme-submenu="true"] {
+  display: block;
+}
+
+.poetheme-nav--mobile .poetheme-submenu-indicator {
+  transition: transform 0.2s ease;
+}
+
+.poetheme-nav--mobile li.is-open .poetheme-submenu-indicator {
+  transform: rotate(180deg);
+}
+
