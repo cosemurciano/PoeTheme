@@ -29,6 +29,20 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
         protected $variant = 'desktop';
 
         /**
+         * Stack of menu item IDs while traversing submenu levels.
+         *
+         * @var array
+         */
+        protected $submenu_stack = array();
+
+        /**
+         * Map of menu item IDs to submenu element IDs.
+         *
+         * @var array
+         */
+        protected $submenu_ids = array();
+
+        /**
          * Constructor.
          *
          * @param array|string $args Walker configuration.
@@ -59,13 +73,21 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
         public function start_lvl( &$output, $depth = 0, $args = null ) {
             $indent = str_repeat( "\t", $depth );
 
+            $parent_id = ! empty( $this->submenu_stack ) ? end( $this->submenu_stack ) : 0;
+            $submenu_id = $parent_id && isset( $this->submenu_ids[ $parent_id ] ) ? $this->submenu_ids[ $parent_id ] : '';
+
             if ( 'mobile' === $this->variant ) {
                 $classes = array( 'poetheme-submenu', 'pl-4', 'border-l', 'border-gray-200', 'space-y-2', 'mt-2' );
                 if ( $depth > 0 ) {
                     $classes[] = 'ml-2';
                 }
 
-                $output .= "\n{$indent}<ul class='" . esc_attr( implode( ' ', $classes ) ) . "'>\n";
+                $attributes  = $submenu_id ? " id='" . esc_attr( $submenu_id ) . "'" : '';
+                $attributes .= " class='" . esc_attr( implode( ' ', $classes ) ) . "'";
+                $attributes .= " data-poetheme-submenu='true'";
+                $attributes .= " data-depth='" . esc_attr( (string) ( $depth + 1 ) ) . "'";
+
+                $output .= "\n{$indent}<ul{$attributes}>\n";
                 return;
             }
 
@@ -95,7 +117,12 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                 $classes[] = 'ml-1';
             }
 
-            $output .= "\n{$indent}<ul class='" . esc_attr( implode( ' ', $classes ) ) . "'>\n";
+            $attributes  = $submenu_id ? " id='" . esc_attr( $submenu_id ) . "'" : '';
+            $attributes .= " class='" . esc_attr( implode( ' ', $classes ) ) . "'";
+            $attributes .= " data-poetheme-submenu='true'";
+            $attributes .= " data-depth='" . esc_attr( (string) ( $depth + 1 ) ) . "'";
+
+            $output .= "\n{$indent}<ul{$attributes}>\n";
         }
 
         /**
@@ -124,6 +151,13 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $classes     = empty( $item->classes ) ? array() : (array) $item->classes;
             $classes[]   = 'menu-item-' . $item->ID;
             $has_children = in_array( 'menu-item-has-children', $classes, true );
+            $submenu_id   = '';
+
+            if ( $has_children ) {
+                $submenu_id                           = 'poetheme-submenu-' . $item->ID;
+                $this->submenu_ids[ $item->ID ]       = $submenu_id;
+                $this->submenu_stack[]                = $item->ID;
+            }
 
             $li_classes = array( 'poetheme-menu-item', 'relative' );
 
@@ -151,9 +185,14 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $atts['rel']    = ! empty( $item->xfn ) ? $item->xfn : '';
             $atts['href']   = ! empty( $item->url ) ? $item->url : '';
 
-            if ( $has_children && 'mobile' !== $this->variant ) {
+            if ( $has_children ) {
                 $atts['aria-haspopup'] = 'true';
                 $atts['aria-expanded'] = 'false';
+                if ( $submenu_id ) {
+                    $atts['aria-controls']        = $submenu_id;
+                    $atts['data-poetheme-toggle'] = 'submenu';
+                    $atts['data-poetheme-target'] = $submenu_id;
+                }
             }
 
             $link_classes = $this->get_link_classes( $depth, $has_children, $item );
@@ -185,8 +224,20 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
 
             $indicator = '';
             if ( $has_children ) {
-                $indicator_icon = ( 0 === $depth ) ? 'chevron-down' : 'chevron-right';
-                $indicator      = '<i data-lucide="' . esc_attr( $indicator_icon ) . '" class="w-4 h-4 ml-1 text-gray-400"></i>';
+                if ( 'mobile' === $this->variant ) {
+                    $indicator_icon = 'chevron-down';
+                } else {
+                    $indicator_icon = ( 0 === $depth ) ? 'chevron-down' : 'chevron-right';
+                }
+
+                $indicator_classes = array( 'poetheme-submenu-indicator', 'w-4', 'h-4', 'ml-1', 'text-gray-400' );
+
+                if ( 'mobile' === $this->variant ) {
+                    $indicator_classes[] = 'transition-transform';
+                    $indicator_classes[] = 'duration-200';
+                }
+
+                $indicator = '<i data-lucide="' . esc_attr( $indicator_icon ) . '" class="' . esc_attr( implode( ' ', $indicator_classes ) ) . '"></i>';
             }
 
             $title_markup = '<span class="menu-item-text' . ( $is_bold ? ' font-semibold' : '' ) . '">' . esc_html( $title ) . '</span>';
@@ -221,6 +272,14 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
          * @param stdClass $args   An object of wp_nav_menu() arguments.
          */
         public function end_el( &$output, $item, $depth = 0, $args = null ) {
+            if ( ! empty( $this->submenu_stack ) && end( $this->submenu_stack ) === $item->ID ) {
+                array_pop( $this->submenu_stack );
+            }
+
+            if ( isset( $this->submenu_ids[ $item->ID ] ) ) {
+                unset( $this->submenu_ids[ $item->ID ] );
+            }
+
             $output .= "</li>\n";
         }
 
@@ -290,6 +349,7 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
             'theme_location' => $location,
             'container'      => false,
             'depth'          => 3,
+            'items_wrap'     => '<ul id="%1$s" class="%2$s" data-poetheme-nav="1" data-variant="' . esc_attr( $variant ) . '" data-location="' . esc_attr( $location ) . '">%3$s</ul>',
         );
 
         if ( 'top-info' === $location ) {
@@ -309,6 +369,17 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
         }
 
         $args = wp_parse_args( $args, $defaults );
+
+        $base_classes = array( 'poetheme-nav', 'poetheme-nav--' . ( 'mobile' === $variant ? 'mobile' : 'desktop' ) );
+        if ( $location ) {
+            $base_classes[] = 'poetheme-nav--location-' . sanitize_html_class( $location );
+        }
+
+        if ( ! empty( $args['menu_class'] ) ) {
+            $args['menu_class'] .= ' ' . implode( ' ', $base_classes );
+        } else {
+            $args['menu_class'] = implode( ' ', $base_classes );
+        }
 
         wp_nav_menu( $args );
     }

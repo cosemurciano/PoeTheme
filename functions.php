@@ -122,6 +122,8 @@ function poetheme_scripts() {
         'document.addEventListener("DOMContentLoaded",function(){if(window.lucide){window.lucide.createIcons();}});'
     );
 
+    wp_enqueue_script( 'poetheme-navigation', POETHEME_URI . '/assets/js/navigation.js', array(), POETHEME_VERSION, true );
+    wp_script_add_data( 'poetheme-navigation', 'defer', true );
 }
 add_action( 'wp_enqueue_scripts', 'poetheme_scripts' );
 
