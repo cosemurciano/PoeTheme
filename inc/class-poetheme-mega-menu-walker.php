@@ -82,9 +82,19 @@ if ( ! class_exists( 'PoeTheme_Mega_Menu_Walker' ) ) {
             $atts['rel']     = ! empty( $item->xfn ) ? $item->xfn : '';
             $atts['href']    = ! empty( $item->url ) ? $item->url : '';
 
-            if ( in_array( trim( (string) $atts['href'] ), array( '', '#', '#0', '#!' ), true ) ) {
+            if ( $has_children ) {
+                // Parent items act purely as toggles for the mega menu, therefore
+                // any navigation attributes that could trigger a new tab must be
+                // removed to avoid accidental blank windows on hover or focus.
                 $atts['href']   = '';
                 $atts['target'] = '';
+                $atts['rel']    = '';
+            }
+
+            if ( in_array( trim( (string) $atts['href'] ), array( '', '#', '#0', '#!', 'javascript:void(0)', 'javascript:;' ), true ) ) {
+                $atts['href']   = '';
+                $atts['target'] = '';
+                $atts['rel']    = '';
             }
             $atts['aria-haspopup'] = $has_children ? 'true' : '';
             $atts['aria-expanded'] = $has_children ? 'false' : '';
