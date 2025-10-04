@@ -81,6 +81,11 @@ if ( ! class_exists( 'PoeTheme_Mega_Menu_Walker' ) ) {
             $atts['target']  = ! empty( $item->target ) ? $item->target : '';
             $atts['rel']     = ! empty( $item->xfn ) ? $item->xfn : '';
             $atts['href']    = ! empty( $item->url ) ? $item->url : '';
+
+            if ( in_array( trim( (string) $atts['href'] ), array( '', '#', '#0', '#!' ), true ) ) {
+                $atts['href']   = '';
+                $atts['target'] = '';
+            }
             $atts['aria-haspopup'] = $has_children ? 'true' : '';
             $atts['aria-expanded'] = $has_children ? 'false' : '';
 
