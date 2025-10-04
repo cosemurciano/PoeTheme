@@ -13,8 +13,6 @@ define( 'POETHEME_URI', get_template_directory_uri() );
 require_once POETHEME_DIR . '/inc/theme-options.php';
 require_once POETHEME_DIR . '/inc/template-tags.php';
 require_once POETHEME_DIR . '/inc/schema-jsonld.php';
-require_once POETHEME_DIR . '/inc/class-poetheme-mega-menu-walker.php';
-require_once POETHEME_DIR . '/inc/mega-menu.php';
 
 if ( ! function_exists( 'poetheme_setup' ) ) {
     /**
@@ -123,7 +121,6 @@ function poetheme_scripts() {
         'document.addEventListener("DOMContentLoaded",function(){if(window.lucide){window.lucide.createIcons();}});'
     );
 
-    wp_enqueue_script( 'poetheme-mega-menu', POETHEME_URI . '/assets/js/mega-menu.js', array( 'poetheme-alpine' ), POETHEME_VERSION, true );
 }
 add_action( 'wp_enqueue_scripts', 'poetheme_scripts' );
 
