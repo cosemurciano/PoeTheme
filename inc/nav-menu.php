@@ -348,7 +348,7 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
         $defaults = array(
             'theme_location' => $location,
             'container'      => false,
-            'depth'          => 3,
+            'depth'          => 0,
             'items_wrap'     => '<ul id="%1$s" class="%2$s" data-poetheme-nav="1" data-variant="' . esc_attr( $variant ) . '" data-location="' . esc_attr( $location ) . '">%3$s</ul>',
         );
 
@@ -365,7 +365,7 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
         $defaults['walker']   = new PoeTheme_Nav_Walker( $walker_args );
 
         if ( 'mobile' === $variant ) {
-            $defaults['depth'] = 3;
+            $defaults['depth'] = 0;
         }
 
         $args = wp_parse_args( $args, $defaults );
