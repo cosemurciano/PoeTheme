@@ -47,7 +47,12 @@ foreach ( $social_links as $link ) {
 $has_top_menu = has_nav_menu( 'top-info' );
 
 ?>
-<header class="relative bg-white shadow-sm" role="banner" x-data="{ mobileOpen: false }">
+<header
+    class="relative bg-white shadow-sm"
+    role="banner"
+    x-data="{ mobileOpen: false }"
+    x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
+>
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="bg-gray-900 text-white text-sm">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col items-center gap-3 text-center md:flex-row md:items-center md:justify-between md:text-left">
@@ -167,7 +172,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+            <div class="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-6">
                 <nav aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                     <?php
                     poetheme_render_navigation_menu(
