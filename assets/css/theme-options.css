@@ -101,51 +101,16 @@
 }
 
 .poetheme-color-control {
+    max-width: 280px;
+}
+
+.poetheme-color-control .wp-picker-container {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 8px;
-}
-
-.poetheme-color-control__inputs {
-    display: flex;
     align-items: center;
-    gap: 12px;
 }
 
-.poetheme-color-control__inputs .poetheme-color-field {
+.poetheme-color-control .wp-picker-input-wrap {
     flex: 1 1 auto;
-}
-
-.poetheme-color-native {
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background-color: #fff;
-    cursor: pointer;
-}
-
-.poetheme-color-native--empty {
-    background-image:
-        linear-gradient(45deg, rgba(148, 163, 184, 0.4) 25%, transparent 25%),
-        linear-gradient(-45deg, rgba(148, 163, 184, 0.4) 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, rgba(148, 163, 184, 0.4) 75%),
-        linear-gradient(-45deg, transparent 75%, rgba(148, 163, 184, 0.4) 75%);
-    background-size: 12px 12px;
-    background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
-}
-
-.poetheme-color-clear {
-    align-self: flex-start;
-    padding: 0;
-    border: none;
-    background: none;
-    color: #2563eb;
-    cursor: pointer;
-}
-
-.poetheme-color-clear:hover,
-.poetheme-color-clear:focus {
-    text-decoration: underline;
 }

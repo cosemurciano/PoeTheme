@@ -21,8 +21,6 @@
         var $backgroundUpload = $('#poetheme-background-upload');
         var $backgroundRemove = $('#poetheme-background-remove');
         var $colorFields = $('.poetheme-color-field');
-        var $nativeColorInputs = $('.poetheme-color-native');
-        var $clearColorButtons = $('.poetheme-color-clear');
 
         function toggleMode() {
             if (!$titleToggle.length) {
@@ -98,111 +96,19 @@
             $colorFields.each(function () {
                 var $field = $(this);
                 var defaultColor = $field.data('default-color');
-                var $wrapper = $field.closest('.poetheme-color-control');
-                var $native = $wrapper.find('.poetheme-color-native');
-
-                function setNativeEmptyState(isEmpty) {
-                    if (!$native.length) {
-                        return;
-                    }
-
-                    var nativeDefault = $native.data('default-color');
-                    nativeDefault = nativeDefault || '#000000';
-
-                    if (isEmpty) {
-                        $native.addClass('poetheme-color-native--empty');
-                        $native.val(nativeDefault);
-                    } else {
-                        $native.removeClass('poetheme-color-native--empty');
-                    }
-                }
-
-                if ($native.length) {
-                    if ($field.val()) {
-                        $native.val($field.val());
-                        $native.removeClass('poetheme-color-native--empty');
-                    } else {
-                        setNativeEmptyState(true);
-                    }
-                }
 
                 $field.wpColorPicker({
                     defaultColor: defaultColor || false,
                     change: function (event, ui) {
                         if (ui && ui.color) {
                             var colorValue = ui.color.toString();
-                            $field.val(colorValue);
-                            if ($native.length) {
-                                $native.val(colorValue);
-                                $native.removeClass('poetheme-color-native--empty');
-                            }
+                            $(event.target).val(colorValue).trigger('change');
                         }
                     },
-                    clear: function () {
-                        $field.val('');
-                        setNativeEmptyState(true);
+                    clear: function (event) {
+                        $(event.target).val('').trigger('change');
                     }
                 });
-
-                $field.on('input change', function () {
-                    var value = $field.val();
-                    if (!$native.length) {
-                        return;
-                    }
-
-                    if (value) {
-                        $native.val(value);
-                        $native.removeClass('poetheme-color-native--empty');
-                    } else {
-                        setNativeEmptyState(true);
-                    }
-                });
-            });
-        }
-
-        if ($nativeColorInputs.length) {
-            $nativeColorInputs.on('input change', function () {
-                var $native = $(this);
-                var $wrapper = $native.closest('.poetheme-color-control');
-                var $field = $wrapper.find('.poetheme-color-field');
-                var color = $native.val();
-
-                if ($field.length) {
-                    if (typeof $field.wpColorPicker === 'function') {
-                        $field.wpColorPicker('color', color);
-                    }
-                    $field.val(color).trigger('change');
-                }
-
-                $native.removeClass('poetheme-color-native--empty');
-            });
-        }
-
-        if ($clearColorButtons.length) {
-            $clearColorButtons.on('click', function (event) {
-                event.preventDefault();
-
-                var $button = $(this);
-                var targetId = $button.data('target');
-                var $field = $('#' + targetId);
-
-                if (!$field.length) {
-                    return;
-                }
-
-                if (typeof $field.wpColorPicker === 'function') {
-                    $field.wpColorPicker('color', '');
-                }
-
-                $field.val('').trigger('change');
-
-                var $wrapper = $field.closest('.poetheme-color-control');
-                var $native = $wrapper.find('.poetheme-color-native');
-                if ($native.length) {
-                    var nativeDefault = $native.data('default-color');
-                    $native.val(nativeDefault || '#000000');
-                    $native.addClass('poetheme-color-native--empty');
-                }
             });
         }
 
@@ -302,7 +208,7 @@
             $backgroundRemove.on('click', function (event) {
                 event.preventDefault();
 
-                $backgroundId.val('');
+                $backgroundId.val('0');
                 if ($backgroundPreview.length) {
                     var emptyLabel = options.noBackground || '';
                     $backgroundPreview.html('<p class="description">' + emptyLabel + '</p>');
