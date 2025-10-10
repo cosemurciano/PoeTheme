@@ -22,6 +22,30 @@
         var $backgroundRemove = $('#poetheme-background-remove');
         var $colorFields = $('.poetheme-color-field');
 
+        function updateColorPreview($field) {
+            if (!$field || !$field.length) {
+                return;
+            }
+
+            var fieldId = $field.attr('id');
+
+            if (!fieldId) {
+                return;
+            }
+
+            var $preview = $('[data-preview-for="' + fieldId + '"]');
+
+            if (!$preview.length) {
+                return;
+            }
+
+            var colorValue = $field.val() || $field.data('default-color') || 'transparent';
+
+            $preview.each(function () {
+                this.style.setProperty('--poetheme-preview-color', colorValue || 'transparent');
+            });
+        }
+
         function toggleMode() {
             if (!$titleToggle.length) {
                 return;
@@ -104,12 +128,20 @@
                         if (ui && ui.color) {
                             var colorValue = ui.color.toString();
                             $(event.target).val(colorValue).trigger('change');
+                            updateColorPreview($(event.target));
                         }
                     },
                     clear: function (event) {
                         $(event.target).val('').trigger('change');
+                        updateColorPreview($(event.target));
                     }
                 });
+
+                $field.on('input change', function () {
+                    updateColorPreview($field);
+                });
+
+                updateColorPreview($field);
             });
         }
 

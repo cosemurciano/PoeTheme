@@ -865,61 +865,78 @@ function poetheme_render_colors_page() {
     $defaults = poetheme_get_default_color_options();
     $groups   = poetheme_get_color_section_groups();
     ?>
-    <div class="wrap">
+    <div class="wrap poetheme-color-settings">
         <h1><?php esc_html_e( 'Gestione Colori', 'poetheme' ); ?></h1>
+
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_colors_group' ); ?>
+
             <div class="poetheme-color-groups">
                 <?php foreach ( $groups as $group_key => $group ) : ?>
                     <section class="poetheme-color-group" id="poetheme-color-group-<?php echo esc_attr( $group_key ); ?>">
-                        <div class="poetheme-color-group__header">
+                        <header class="poetheme-color-group__header">
                             <h2><?php echo esc_html( $group['title'] ); ?></h2>
                             <?php if ( ! empty( $group['description'] ) ) : ?>
                                 <p class="description"><?php echo esc_html( $group['description'] ); ?></p>
                             <?php endif; ?>
-                        </div>
-                        <div class="poetheme-options-sections">
+                        </header>
+
+                        <div class="poetheme-color-group__sections">
                             <?php foreach ( $group['sections'] as $section_key => $section ) : ?>
-                                <section class="poetheme-options-section" id="poetheme-section-<?php echo esc_attr( $section_key ); ?>">
-                                    <h3><?php echo esc_html( $section['title'] ); ?></h3>
-                                    <table class="form-table" role="presentation">
-                                        <tbody>
-                                            <?php foreach ( $section['fields'] as $field_key => $field ) :
-                                                $value      = isset( $options[ $field_key ] ) ? $options[ $field_key ] : '';
-                                                $default    = isset( $defaults[ $field_key ] ) ? $defaults[ $field_key ] : '';
-                                                $field_id   = 'poetheme-colors-' . $field_key;
-                                                $field_name = 'poetheme_colors[' . $field_key . ']';
-                                                $type       = isset( $field['type'] ) ? $field['type'] : 'color';
-                                                ?>
-                                                <tr>
-                                                    <th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
-                                                    <td>
-                                                        <?php if ( 'toggle' === $type ) : ?>
-                                                            <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
-                                                                <option value="0" <?php selected( false, ! empty( $value ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
-                                                                <option value="1" <?php selected( true, ! empty( $value ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
-                                                            </select>
-                                                        <?php else : ?>
-                                                            <div class="poetheme-color-control">
-                                                                <input
-                                                                    type="text"
-                                                                    class="poetheme-color-field"
-                                                                    id="<?php echo esc_attr( $field_id ); ?>"
-                                                                    name="<?php echo esc_attr( $field_name ); ?>"
-                                                                    value="<?php echo esc_attr( $value ); ?>"
-                                                                    data-default-color="<?php echo esc_attr( $default ); ?>"
-                                                                />
-                                                            </div>
-                                                        <?php endif; ?>
-                                                        <?php if ( ! empty( $field['description'] ) ) : ?>
-                                                            <p class="description"><?php echo esc_html( $field['description'] ); ?></p>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </section>
+                                <fieldset class="poetheme-color-section" id="poetheme-section-<?php echo esc_attr( $section_key ); ?>">
+                                    <legend class="poetheme-color-section__title"><?php echo esc_html( $section['title'] ); ?></legend>
+                                    <?php if ( ! empty( $section['description'] ) ) : ?>
+                                        <p class="description poetheme-color-section__description"><?php echo esc_html( $section['description'] ); ?></p>
+                                    <?php endif; ?>
+
+                                    <div class="poetheme-color-section__fields">
+                                        <?php foreach ( $section['fields'] as $field_key => $field ) :
+                                            $value        = isset( $options[ $field_key ] ) ? $options[ $field_key ] : '';
+                                            $default      = isset( $defaults[ $field_key ] ) ? $defaults[ $field_key ] : '';
+                                            $field_id     = 'poetheme-colors-' . $field_key;
+                                            $field_name   = 'poetheme_colors[' . $field_key . ']';
+                                            $type         = isset( $field['type'] ) ? $field['type'] : 'color';
+                                            $preview_color = $value;
+
+                                            if ( '' === $preview_color && '' !== $default ) {
+                                                $preview_color = $default;
+                                            }
+
+                                            if ( '' === $preview_color ) {
+                                                $preview_color = 'transparent';
+                                            }
+                                            ?>
+                                            <div class="poetheme-color-section__field">
+                                                <label class="poetheme-color-section__label" for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+
+                                                <div class="poetheme-color-section__control">
+                                                    <?php if ( 'toggle' === $type ) : ?>
+                                                        <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
+                                                            <option value="0" <?php selected( false, ! empty( $value ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
+                                                            <option value="1" <?php selected( true, ! empty( $value ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
+                                                        </select>
+                                                    <?php else : ?>
+                                                        <div class="poetheme-color-control">
+                                                            <input
+                                                                type="text"
+                                                                class="poetheme-color-field"
+                                                                id="<?php echo esc_attr( $field_id ); ?>"
+                                                                name="<?php echo esc_attr( $field_name ); ?>"
+                                                                value="<?php echo esc_attr( $value ); ?>"
+                                                                data-default-color="<?php echo esc_attr( $default ); ?>"
+                                                            />
+                                                            <span class="poetheme-color-preview" data-preview-for="<?php echo esc_attr( $field_id ); ?>" style="--poetheme-preview-color: <?php echo esc_attr( $preview_color ); ?>;"></span>
+                                                        </div>
+                                                    <?php endif; ?>
+
+                                                    <?php if ( ! empty( $field['description'] ) ) : ?>
+                                                        <p class="description poetheme-color-section__help"><?php echo esc_html( $field['description'] ); ?></p>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </fieldset>
                             <?php endforeach; ?>
                         </div>
                     </section>
