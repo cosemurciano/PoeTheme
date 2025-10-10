@@ -70,7 +70,8 @@
                 return;
             }
 
-            var color = $titleColor.val() || '#111827';
+            var defaultColor = $titleColor.data('default-color') || '#111827';
+            var color = $titleColor.val() || defaultColor;
             var size = parseInt($titleSize.val(), 10);
             var $title = $titleWrapper.find('.poetheme-logo-preview__title');
             var $tagline = $titleWrapper.find('.poetheme-logo-preview__tagline');
