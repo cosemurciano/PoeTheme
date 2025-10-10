@@ -86,6 +86,9 @@ function poetheme_get_default_color_options() {
         'content_strong_color'           => '#111827',
         'page_background_color'          => '#f9fafb',
         'content_background_color'       => '#ffffff',
+        'header_background_color'        => '#ffffff',
+        'header_background_transparent'  => false,
+        'header_disable_shadow'          => false,
         'menu_link_color'                => '#374151',
         'menu_link_background_color'     => '',
         'menu_active_link_color'         => '#2563eb',
@@ -186,13 +189,18 @@ function poetheme_sanitize_global_options( $input ) {
 function poetheme_sanitize_color_options( $input ) {
     $defaults = poetheme_get_default_color_options();
     $output   = array();
+    $boolean_keys = array(
+        'content_link_underline',
+        'header_background_transparent',
+        'header_disable_shadow',
+    );
 
     if ( ! is_array( $input ) ) {
         $input = array();
     }
 
     foreach ( $defaults as $key => $default_value ) {
-        if ( 'content_link_underline' === $key ) {
+        if ( in_array( $key, $boolean_keys, true ) ) {
             $output[ $key ] = ! empty( $input[ $key ] );
             continue;
         }
@@ -279,6 +287,11 @@ function poetheme_get_global_options() {
 function poetheme_get_color_options() {
     $defaults = poetheme_get_default_color_options();
     $options  = get_option( 'poetheme_colors', array() );
+    $boolean_keys = array(
+        'content_link_underline',
+        'header_background_transparent',
+        'header_disable_shadow',
+    );
 
     if ( ! is_array( $options ) ) {
         $options = array();
@@ -287,7 +300,7 @@ function poetheme_get_color_options() {
     $options = wp_parse_args( $options, $defaults );
 
     foreach ( $defaults as $key => $default_value ) {
-        if ( 'content_link_underline' === $key ) {
+        if ( in_array( $key, $boolean_keys, true ) ) {
             $options[ $key ] = ! empty( $options[ $key ] );
             continue;
         }
@@ -617,230 +630,303 @@ function poetheme_render_global_page() {
     <?php
 }
 
-function poetheme_render_colors_page() {
-    $options  = poetheme_get_color_options();
-    $defaults = poetheme_get_default_color_options();
-
-    $sections = array(
-        'content' => array(
-            'title'  => __( 'Contenuto', 'poetheme' ),
-            'fields' => array(
-                'content_text_color'       => array(
-                    'label'       => __( 'Colore del testo del contenuto', 'poetheme' ),
-                    'description' => __( 'Si applica ai testi principali all’interno del contenuto.', 'poetheme' ),
-                    'type'        => 'color',
+function poetheme_get_color_section_groups() {
+    return array(
+        'surfaces' => array(
+            'title'       => __( 'Contenuti e sfondi', 'poetheme' ),
+            'description' => __( 'Gestisci i colori principali delle aree di contenuto e dello sfondo del sito.', 'poetheme' ),
+            'sections'    => array(
+                'content' => array(
+                    'title'  => __( 'Contenuto principale', 'poetheme' ),
+                    'fields' => array(
+                        'content_text_color'       => array(
+                            'label'       => __( 'Colore del testo del contenuto', 'poetheme' ),
+                            'description' => __( 'Si applica ai testi principali all’interno del contenuto.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'content_link_color'       => array(
+                            'label'       => __( 'Colore dei link nel contenuto', 'poetheme' ),
+                            'description' => __( 'Personalizza il colore dei collegamenti nel corpo dei contenuti.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'content_link_underline'   => array(
+                            'label'       => __( 'Sottolinea i link del contenuto', 'poetheme' ),
+                            'description' => __( 'Attiva o disattiva la sottolineatura per i link nel contenuto.', 'poetheme' ),
+                            'type'        => 'toggle',
+                        ),
+                        'content_strong_color'     => array(
+                            'label'       => __( 'Colore del testo evidenziato (strong)', 'poetheme' ),
+                            'description' => __( 'Imposta il colore per i testi marcati in grassetto.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'page_background_color'    => array(
+                            'label'       => __( 'Colore di sfondo dell’intera pagina', 'poetheme' ),
+                            'description' => __( 'Utilizza questo colore assieme o in alternativa all’immagine di sfondo.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'content_background_color' => array(
+                            'label'       => __( 'Colore di sfondo del contenuto', 'poetheme' ),
+                            'description' => __( 'Colore applicato alle aree principali del contenuto.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                    ),
                 ),
-                'content_link_color'       => array(
-                    'label'       => __( 'Colore dei link nel contenuto', 'poetheme' ),
-                    'description' => __( 'Personalizza il colore dei collegamenti nel corpo dei contenuti.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'content_link_underline'   => array(
-                    'label'       => __( 'Sottolinea i link del contenuto', 'poetheme' ),
-                    'description' => __( 'Attiva o disattiva la sottolineatura per i link nel contenuto.', 'poetheme' ),
-                    'type'        => 'toggle',
-                ),
-                'content_strong_color'     => array(
-                    'label'       => __( 'Colore del testo evidenziato (strong)', 'poetheme' ),
-                    'description' => __( 'Imposta il colore per i testi marcati in grassetto.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'page_background_color'    => array(
-                    'label'       => __( 'Colore di sfondo dell’intera pagina', 'poetheme' ),
-                    'description' => __( 'Utilizza questo colore assieme o in alternativa all’immagine di sfondo.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'content_background_color' => array(
-                    'label'       => __( 'Colore di sfondo del contenuto', 'poetheme' ),
-                    'description' => __( 'Colore applicato alle aree principali del contenuto.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-            ),
-        ),
-        'menu' => array(
-            'title'  => __( 'Menù principale', 'poetheme' ),
-            'fields' => array(
-                'menu_link_color'             => array(
-                    'label'       => __( 'Colore link', 'poetheme' ),
-                    'description' => __( 'Colore base dei link del menù principale.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'menu_link_background_color'  => array(
-                    'label'       => __( 'Colore sfondo link', 'poetheme' ),
-                    'description' => __( 'Sfondo dei link del menù principale (desktop e mobile).', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'menu_active_link_color'      => array(
-                    'label'       => __( 'Colore del link attivo', 'poetheme' ),
-                    'description' => __( 'Colore per la voce di menù attiva o al passaggio del mouse.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'menu_active_link_background' => array(
-                    'label'       => __( 'Colore sfondo link attivo', 'poetheme' ),
-                    'description' => __( 'Sfondo della voce di menù attiva.', 'poetheme' ),
-                    'type'        => 'color',
+                'general' => array(
+                    'title'  => __( 'Link globali', 'poetheme' ),
+                    'fields' => array(
+                        'general_link_color' => array(
+                            'label'       => __( 'Colore link generale', 'poetheme' ),
+                            'description' => __( 'Colore applicato ai link generici del sito (intestazione, piè di pagina, ecc.).', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                    ),
                 ),
             ),
         ),
-        'cta' => array(
-            'title'  => __( 'Call to Action', 'poetheme' ),
-            'fields' => array(
-                'cta_background_color' => array(
-                    'label'       => __( 'Colore di sfondo', 'poetheme' ),
-                    'description' => __( 'Colore del pulsante principale di invito all’azione.', 'poetheme' ),
-                    'type'        => 'color',
+        'header' => array(
+            'title'       => __( 'Intestazione', 'poetheme' ),
+            'description' => __( 'Personalizza la testata, il menù principale e la call to action.', 'poetheme' ),
+            'sections'    => array(
+                'header_base' => array(
+                    'title'  => __( 'Testata', 'poetheme' ),
+                    'fields' => array(
+                        'header_background_color'       => array(
+                            'label'       => __( 'Colore di sfondo della testata', 'poetheme' ),
+                            'description' => __( 'Imposta il colore di sfondo del contenitore principale della testata.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'header_background_transparent' => array(
+                            'label'       => __( 'Rendi la testata trasparente', 'poetheme' ),
+                            'description' => __( 'Rimuove qualsiasi colore di sfondo e rende la testata trasparente.', 'poetheme' ),
+                            'type'        => 'toggle',
+                        ),
+                        'header_disable_shadow'         => array(
+                            'label'       => __( 'Rimuovi ombra della testata', 'poetheme' ),
+                            'description' => __( 'Disattiva l’ombra presente sotto la testata.', 'poetheme' ),
+                            'type'        => 'toggle',
+                        ),
+                    ),
                 ),
-                'cta_text_color'       => array(
-                    'label'       => __( 'Colore del testo', 'poetheme' ),
-                    'description' => __( 'Colore del testo all’interno del pulsante.', 'poetheme' ),
-                    'type'        => 'color',
+                'menu' => array(
+                    'title'  => __( 'Menù principale', 'poetheme' ),
+                    'fields' => array(
+                        'menu_link_color'             => array(
+                            'label'       => __( 'Colore link', 'poetheme' ),
+                            'description' => __( 'Colore base dei link del menù principale.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'menu_link_background_color'  => array(
+                            'label'       => __( 'Colore sfondo link', 'poetheme' ),
+                            'description' => __( 'Sfondo dei link del menù principale (desktop e mobile).', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'menu_active_link_color'      => array(
+                            'label'       => __( 'Colore del link attivo', 'poetheme' ),
+                            'description' => __( 'Colore per la voce di menù attiva o al passaggio del mouse.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'menu_active_link_background' => array(
+                            'label'       => __( 'Colore sfondo link attivo', 'poetheme' ),
+                            'description' => __( 'Sfondo della voce di menù attiva.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                    ),
+                ),
+                'cta' => array(
+                    'title'  => __( 'Call to Action', 'poetheme' ),
+                    'fields' => array(
+                        'cta_background_color' => array(
+                            'label'       => __( 'Colore di sfondo', 'poetheme' ),
+                            'description' => __( 'Colore del pulsante principale di invito all’azione.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'cta_text_color'       => array(
+                            'label'       => __( 'Colore del testo', 'poetheme' ),
+                            'description' => __( 'Colore del testo all’interno del pulsante.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                    ),
+                ),
+                'top_bar' => array(
+                    'title'  => __( 'Barra superiore', 'poetheme' ),
+                    'fields' => array(
+                        'top_bar_background_color' => array(
+                            'label'       => __( 'Colore di sfondo della barra', 'poetheme' ),
+                            'description' => __( 'Colore dello sfondo dell’intera barra superiore.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'top_bar_icon_color'       => array(
+                            'label'       => __( 'Colore delle icone', 'poetheme' ),
+                            'description' => __( 'Si applica alle icone social e di contatto.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'top_bar_text_color'       => array(
+                            'label'       => __( 'Colore del testo', 'poetheme' ),
+                            'description' => __( 'Colore del testo nella barra superiore.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'top_bar_link_color'       => array(
+                            'label'       => __( 'Colore dei link', 'poetheme' ),
+                            'description' => __( 'Colore dei collegamenti testuali della barra.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                    ),
                 ),
             ),
         ),
-        'top_bar' => array(
-            'title'  => __( 'Barra superiore', 'poetheme' ),
-            'fields' => array(
-                'top_bar_background_color' => array(
-                    'label'       => __( 'Colore di sfondo della barra', 'poetheme' ),
-                    'description' => __( 'Colore dello sfondo dell’intera barra superiore.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'top_bar_icon_color'       => array(
-                    'label'       => __( 'Colore delle icone', 'poetheme' ),
-                    'description' => __( 'Si applica alle icone social e di contatto.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'top_bar_text_color'       => array(
-                    'label'       => __( 'Colore del testo', 'poetheme' ),
-                    'description' => __( 'Colore del testo nella barra superiore.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'top_bar_link_color'       => array(
-                    'label'       => __( 'Colore dei link', 'poetheme' ),
-                    'description' => __( 'Colore dei collegamenti testuali della barra.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-            ),
-        ),
-        'general' => array(
-            'title'  => __( 'Colori generali', 'poetheme' ),
-            'fields' => array(
-                'general_link_color' => array(
-                    'label'       => __( 'Colore link generale', 'poetheme' ),
-                    'description' => __( 'Colore applicato ai link generici del sito (intestazione, piè di pagina, ecc.).', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-            ),
-        ),
-        'headings' => array(
-            'title'  => __( 'Intestazioni (H1–H6)', 'poetheme' ),
-            'fields' => array(
-                'heading_h1_color'      => array(
-                    'label'       => __( 'Colore H1', 'poetheme' ),
-                    'description' => __( 'Colore applicato alle intestazioni H1.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h1_background' => array(
-                    'label'       => __( 'Sfondo H1', 'poetheme' ),
-                    'description' => __( 'Colore di sfondo per le intestazioni H1.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h2_color'      => array(
-                    'label'       => __( 'Colore H2', 'poetheme' ),
-                    'description' => __( 'Colore applicato alle intestazioni H2.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h2_background' => array(
-                    'label'       => __( 'Sfondo H2', 'poetheme' ),
-                    'description' => __( 'Colore di sfondo per le intestazioni H2.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h3_color'      => array(
-                    'label'       => __( 'Colore H3', 'poetheme' ),
-                    'description' => __( 'Colore applicato alle intestazioni H3.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h3_background' => array(
-                    'label'       => __( 'Sfondo H3', 'poetheme' ),
-                    'description' => __( 'Colore di sfondo per le intestazioni H3.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h4_color'      => array(
-                    'label'       => __( 'Colore H4', 'poetheme' ),
-                    'description' => __( 'Colore applicato alle intestazioni H4.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h4_background' => array(
-                    'label'       => __( 'Sfondo H4', 'poetheme' ),
-                    'description' => __( 'Colore di sfondo per le intestazioni H4.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h5_color'      => array(
-                    'label'       => __( 'Colore H5', 'poetheme' ),
-                    'description' => __( 'Colore applicato alle intestazioni H5.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h5_background' => array(
-                    'label'       => __( 'Sfondo H5', 'poetheme' ),
-                    'description' => __( 'Colore di sfondo per le intestazioni H5.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h6_color'      => array(
-                    'label'       => __( 'Colore H6', 'poetheme' ),
-                    'description' => __( 'Colore applicato alle intestazioni H6.', 'poetheme' ),
-                    'type'        => 'color',
-                ),
-                'heading_h6_background' => array(
-                    'label'       => __( 'Sfondo H6', 'poetheme' ),
-                    'description' => __( 'Colore di sfondo per le intestazioni H6.', 'poetheme' ),
-                    'type'        => 'color',
+        'typography' => array(
+            'title'       => __( 'Tipografia', 'poetheme' ),
+            'description' => __( 'Imposta i colori delle intestazioni principali delle pagine (H1–H6).', 'poetheme' ),
+            'sections'    => array(
+                'headings' => array(
+                    'title'  => __( 'Intestazioni (H1–H6)', 'poetheme' ),
+                    'fields' => array(
+                        'heading_h1_color'      => array(
+                            'label'       => __( 'Colore H1', 'poetheme' ),
+                            'description' => __( 'Colore applicato alle intestazioni H1.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h1_background' => array(
+                            'label'       => __( 'Sfondo H1', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo per le intestazioni H1.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h2_color'      => array(
+                            'label'       => __( 'Colore H2', 'poetheme' ),
+                            'description' => __( 'Colore applicato alle intestazioni H2.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h2_background' => array(
+                            'label'       => __( 'Sfondo H2', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo per le intestazioni H2.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h3_color'      => array(
+                            'label'       => __( 'Colore H3', 'poetheme' ),
+                            'description' => __( 'Colore applicato alle intestazioni H3.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h3_background' => array(
+                            'label'       => __( 'Sfondo H3', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo per le intestazioni H3.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h4_color'      => array(
+                            'label'       => __( 'Colore H4', 'poetheme' ),
+                            'description' => __( 'Colore applicato alle intestazioni H4.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h4_background' => array(
+                            'label'       => __( 'Sfondo H4', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo per le intestazioni H4.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h5_color'      => array(
+                            'label'       => __( 'Colore H5', 'poetheme' ),
+                            'description' => __( 'Colore applicato alle intestazioni H5.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h5_background' => array(
+                            'label'       => __( 'Sfondo H5', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo per le intestazioni H5.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h6_color'      => array(
+                            'label'       => __( 'Colore H6', 'poetheme' ),
+                            'description' => __( 'Colore applicato alle intestazioni H6.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'heading_h6_background' => array(
+                            'label'       => __( 'Sfondo H6', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo per le intestazioni H6.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                    ),
                 ),
             ),
         ),
     );
+}
+
+function poetheme_render_colors_page() {
+    $options  = poetheme_get_color_options();
+    $defaults = poetheme_get_default_color_options();
+    $groups   = poetheme_get_color_section_groups();
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Gestione Colori', 'poetheme' ); ?></h1>
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_colors_group' ); ?>
-            <div class="poetheme-options-sections">
-                <?php foreach ( $sections as $section_key => $section ) : ?>
-                    <section class="poetheme-options-section" id="poetheme-section-<?php echo esc_attr( $section_key ); ?>">
-                        <h2><?php echo esc_html( $section['title'] ); ?></h2>
-                        <table class="form-table" role="presentation">
-                            <tbody>
-                                <?php foreach ( $section['fields'] as $field_key => $field ) :
-                                    $value        = isset( $options[ $field_key ] ) ? $options[ $field_key ] : '';
-                                    $default      = isset( $defaults[ $field_key ] ) ? $defaults[ $field_key ] : '';
-                                    $field_id     = 'poetheme-colors-' . $field_key;
-                                    $field_name   = 'poetheme_colors[' . $field_key . ']';
-                                    ?>
-                                    <tr>
-                                        <th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
-                                        <td>
-                                            <?php if ( 'toggle' === $field['type'] ) : ?>
-                                                <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
-                                                    <option value="0" <?php selected( false, ! empty( $options[ $field_key ] ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
-                                                    <option value="1" <?php selected( true, ! empty( $options[ $field_key ] ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
-                                                </select>
-                                            <?php else : ?>
-                                                <input
-                                                    type="text"
-                                                    class="poetheme-color-field"
-                                                    id="<?php echo esc_attr( $field_id ); ?>"
-                                                    name="<?php echo esc_attr( $field_name ); ?>"
-                                                    value="<?php echo esc_attr( $value ); ?>"
-                                                    data-default-color="<?php echo esc_attr( $default ); ?>"
-                                                />
-                                            <?php endif; ?>
-                                            <?php if ( ! empty( $field['description'] ) ) : ?>
-                                                <p class="description"><?php echo esc_html( $field['description'] ); ?></p>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+            <div class="poetheme-color-groups">
+                <?php foreach ( $groups as $group_key => $group ) : ?>
+                    <section class="poetheme-color-group" id="poetheme-color-group-<?php echo esc_attr( $group_key ); ?>">
+                        <div class="poetheme-color-group__header">
+                            <h2><?php echo esc_html( $group['title'] ); ?></h2>
+                            <?php if ( ! empty( $group['description'] ) ) : ?>
+                                <p class="description"><?php echo esc_html( $group['description'] ); ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <div class="poetheme-options-sections">
+                            <?php foreach ( $group['sections'] as $section_key => $section ) : ?>
+                                <section class="poetheme-options-section" id="poetheme-section-<?php echo esc_attr( $section_key ); ?>">
+                                    <h3><?php echo esc_html( $section['title'] ); ?></h3>
+                                    <table class="form-table" role="presentation">
+                                        <tbody>
+                                            <?php foreach ( $section['fields'] as $field_key => $field ) :
+                                                $value      = isset( $options[ $field_key ] ) ? $options[ $field_key ] : '';
+                                                $default    = isset( $defaults[ $field_key ] ) ? $defaults[ $field_key ] : '';
+                                                $field_id   = 'poetheme-colors-' . $field_key;
+                                                $field_name = 'poetheme_colors[' . $field_key . ']';
+                                                $type       = isset( $field['type'] ) ? $field['type'] : 'color';
+                                                ?>
+                                                <tr>
+                                                    <th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
+                                                    <td>
+                                                        <?php if ( 'toggle' === $type ) : ?>
+                                                            <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
+                                                                <option value="0" <?php selected( false, ! empty( $value ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
+                                                                <option value="1" <?php selected( true, ! empty( $value ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
+                                                            </select>
+                                                        <?php else : ?>
+                                                            <div class="poetheme-color-control">
+                                                                <div class="poetheme-color-control__inputs">
+                                                                    <input
+                                                                        type="text"
+                                                                        class="poetheme-color-field"
+                                                                        id="<?php echo esc_attr( $field_id ); ?>"
+                                                                        name="<?php echo esc_attr( $field_name ); ?>"
+                                                                        value="<?php echo esc_attr( $value ); ?>"
+                                                                        data-default-color="<?php echo esc_attr( $default ); ?>"
+                                                                    />
+                                                                    <?php
+                                                                    $native_value   = $value ? $value : ( $default ? $default : '#000000' );
+                                                                    $native_classes = 'poetheme-color-native';
+                                                                    if ( '' === $value ) {
+                                                                        $native_classes .= ' poetheme-color-native--empty';
+                                                                    }
+                                                                    ?>
+                                                                    <input
+                                                                        type="color"
+                                                                        class="<?php echo esc_attr( $native_classes ); ?>"
+                                                                        value="<?php echo esc_attr( $native_value ); ?>"
+                                                                        data-default-color="<?php echo esc_attr( $default ); ?>"
+                                                                        aria-label="<?php echo esc_attr( sprintf( __( 'Selettore rapido per %s', 'poetheme' ), $field['label'] ) ); ?>"
+                                                                    />
+                                                                </div>
+                                                                <button type="button" class="button-link poetheme-color-clear" data-target="<?php echo esc_attr( $field_id ); ?>"><?php esc_html_e( 'Rimuovi colore', 'poetheme' ); ?></button>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                        <?php if ( ! empty( $field['description'] ) ) : ?>
+                                                            <p class="description"><?php echo esc_html( $field['description'] ); ?></p>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </section>
+                            <?php endforeach; ?>
+                        </div>
                     </section>
                 <?php endforeach; ?>
             </div>
@@ -1286,15 +1372,6 @@ function poetheme_options_admin_assets( $hook ) {
         wp_enqueue_style( 'poetheme-theme-options', POETHEME_URI . '/assets/css/theme-options.css', array(), POETHEME_VERSION );
     }
 
-    $media_screens = array(
-        'toplevel_page_poetheme-settings',
-        'poetheme_page_poetheme-logo',
-    );
-
-    if ( in_array( $hook, $media_screens, true ) ) {
-        wp_enqueue_media();
-    }
-
     $script_screens = array(
         'toplevel_page_poetheme-settings',
         'poetheme_page_poetheme-colors',
@@ -1302,6 +1379,7 @@ function poetheme_options_admin_assets( $hook ) {
     );
 
     if ( in_array( $hook, $script_screens, true ) ) {
+        wp_enqueue_media();
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_script( 'poetheme-theme-options', POETHEME_URI . '/assets/js/theme-options.js', array( 'jquery', 'wp-color-picker' ), POETHEME_VERSION, true );
