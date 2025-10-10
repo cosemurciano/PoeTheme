@@ -68,7 +68,85 @@ function poetheme_get_default_header_options() {
 /**
  * Register theme settings.
  */
+function poetheme_get_default_global_options() {
+    return array(
+        'layout_mode' => 'full',
+        'site_width'  => 1200,
+    );
+}
+
+/**
+ * Sanitize global layout options.
+ *
+ * @param array $input Raw option values.
+ * @return array
+ */
+function poetheme_sanitize_global_options( $input ) {
+    $defaults = poetheme_get_default_global_options();
+
+    if ( ! is_array( $input ) ) {
+        $input = array();
+    }
+
+    $layout_mode = isset( $input['layout_mode'] ) ? sanitize_key( $input['layout_mode'] ) : $defaults['layout_mode'];
+    if ( ! in_array( $layout_mode, array( 'full', 'boxed' ), true ) ) {
+        $layout_mode = $defaults['layout_mode'];
+    }
+
+    $width = isset( $input['site_width'] ) ? absint( $input['site_width'] ) : $defaults['site_width'];
+    $width = max( 960, min( 1920, $width ) );
+
+    return array(
+        'layout_mode' => $layout_mode,
+        'site_width'  => $width,
+    );
+}
+
+/**
+ * Retrieve global layout options with defaults.
+ *
+ * @return array
+ */
+function poetheme_get_global_options() {
+    $defaults = poetheme_get_default_global_options();
+    $options  = get_option( 'poetheme_global', array() );
+
+    if ( ! is_array( $options ) ) {
+        $options = array();
+    }
+
+    $options = wp_parse_args( $options, $defaults );
+
+    $options['layout_mode'] = in_array( $options['layout_mode'], array( 'full', 'boxed' ), true ) ? $options['layout_mode'] : $defaults['layout_mode'];
+    $options['site_width']  = max( 960, min( 1920, absint( $options['site_width'] ) ) );
+
+    return $options;
+}
+
+/**
+ * Retrieve default page settings meta values.
+ *
+ * @return array
+ */
+function poetheme_get_default_page_settings() {
+    return array(
+        'hide_breadcrumbs'   => false,
+        'hide_title'         => false,
+        'remove_top_padding' => false,
+    );
+}
+
 function poetheme_register_settings() {
+    register_setting(
+        'poetheme_global_group',
+        'poetheme_global',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'poetheme_sanitize_global_options',
+            'default'           => poetheme_get_default_global_options(),
+        )
+    );
+
     register_setting(
         'poetheme_logo_group',
         'poetheme_logo',
@@ -186,11 +264,76 @@ add_action( 'admin_menu', 'poetheme_add_options_pages' );
  * Render the global settings page.
  */
 function poetheme_render_global_page() {
+    $options      = poetheme_get_global_options();
+    $layout_mode  = isset( $options['layout_mode'] ) ? $options['layout_mode'] : 'full';
+    $site_width   = isset( $options['site_width'] ) ? absint( $options['site_width'] ) : 1200;
+    $width_id     = 'poetheme-global-site-width';
+    $layout_field = 'poetheme_global[layout_mode]';
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Globale', 'poetheme' ); ?></h1>
-        <p class="description"><?php esc_html_e( 'Le impostazioni globali saranno disponibili a breve.', 'poetheme' ); ?></p>
+
+        <form action="options.php" method="post">
+            <?php settings_fields( 'poetheme_global_group' ); ?>
+
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Layout', 'poetheme' ); ?></th>
+                        <td>
+                            <fieldset>
+                                <legend class="screen-reader-text"><?php esc_html_e( 'Layout', 'poetheme' ); ?></legend>
+                                <label>
+                                    <input type="radio" name="<?php echo esc_attr( $layout_field ); ?>" value="full" <?php checked( 'full', $layout_mode ); ?>>
+                                    <?php esc_html_e( 'Larghezza piena (100% della pagina)', 'poetheme' ); ?>
+                                </label>
+                                <br>
+                                <label>
+                                    <input type="radio" name="<?php echo esc_attr( $layout_field ); ?>" value="boxed" <?php checked( 'boxed', $layout_mode ); ?>>
+                                    <?php esc_html_e( 'Larghezza box', 'poetheme' ); ?>
+                                </label>
+                                <p class="description"><?php esc_html_e( 'Scegli come allineare l’intero sito, incluse testata e piè di pagina.', 'poetheme' ); ?></p>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <tr id="poetheme-global-width-row">
+                        <th scope="row"><label for="<?php echo esc_attr( $width_id ); ?>"><?php esc_html_e( 'Larghezza sito (px)', 'poetheme' ); ?></label></th>
+                        <td>
+                            <input type="number" name="poetheme_global[site_width]" id="<?php echo esc_attr( $width_id ); ?>" value="<?php echo esc_attr( $site_width ); ?>" min="960" max="1920" step="10" class="small-text">
+                            <p class="description"><?php esc_html_e( 'Imposta la larghezza massima del sito per il layout Box. Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <?php submit_button(); ?>
+        </form>
     </div>
+    <script>
+        (function() {
+            const layoutRadios = document.querySelectorAll('input[name="<?php echo esc_js( $layout_field ); ?>"]');
+            const widthRow = document.getElementById('poetheme-global-width-row');
+
+            function toggleWidthRow() {
+                if (!widthRow) {
+                    return;
+                }
+                let selected = 'full';
+                layoutRadios.forEach(function(radio) {
+                    if (radio.checked) {
+                        selected = radio.value;
+                    }
+                });
+                widthRow.style.display = selected === 'boxed' ? '' : 'none';
+            }
+
+            layoutRadios.forEach(function(radio) {
+                radio.addEventListener('change', toggleWidthRow);
+            });
+
+            toggleWidthRow();
+        })();
+    </script>
     <?php
 }
 
@@ -730,3 +873,97 @@ function poetheme_get_header_options() {
 
     return $options;
 }
+
+/**
+ * Register page settings meta box.
+ */
+function poetheme_register_page_settings_meta_box() {
+    add_meta_box(
+        'poetheme-page-settings',
+        __( 'Impostazioni pagina', 'poetheme' ),
+        'poetheme_render_page_settings_meta_box',
+        'page',
+        'side',
+        'default'
+    );
+}
+add_action( 'add_meta_boxes', 'poetheme_register_page_settings_meta_box' );
+
+/**
+ * Render page settings meta box content.
+ *
+ * @param WP_Post $post Current post object.
+ */
+function poetheme_render_page_settings_meta_box( $post ) {
+    $defaults = poetheme_get_default_page_settings();
+    $values   = get_post_meta( $post->ID, '_poetheme_page_settings', true );
+
+    if ( ! is_array( $values ) ) {
+        $values = array();
+    }
+
+    $settings = wp_parse_args( $values, $defaults );
+
+    wp_nonce_field( 'poetheme_save_page_settings', 'poetheme_page_settings_nonce' );
+    ?>
+    <p>
+        <label>
+            <input type="checkbox" name="poetheme_page_settings[hide_breadcrumbs]" value="1" <?php checked( ! empty( $settings['hide_breadcrumbs'] ) ); ?>>
+            <?php esc_html_e( 'Nascondi breadcrumbs', 'poetheme' ); ?>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input type="checkbox" name="poetheme_page_settings[hide_title]" value="1" <?php checked( ! empty( $settings['hide_title'] ) ); ?>>
+            <?php esc_html_e( 'Nascondi titolo pagina', 'poetheme' ); ?>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input type="checkbox" name="poetheme_page_settings[remove_top_padding]" value="1" <?php checked( ! empty( $settings['remove_top_padding'] ) ); ?>>
+            <?php esc_html_e( 'Rimuovi il padding superiore del contenuto', 'poetheme' ); ?>
+        </label>
+    </p>
+    <p class="description"><?php esc_html_e( 'Queste impostazioni influiscono solo su questa pagina.', 'poetheme' ); ?></p>
+    <?php
+}
+
+/**
+ * Save page settings meta box values.
+ *
+ * @param int $post_id Post ID.
+ */
+function poetheme_save_page_settings_meta_box( $post_id ) {
+    if ( ! isset( $_POST['poetheme_page_settings_nonce'] ) ) {
+        return;
+    }
+
+    if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['poetheme_page_settings_nonce'] ) ), 'poetheme_save_page_settings' ) ) {
+        return;
+    }
+
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    if ( isset( $_POST['post_type'] ) && 'page' === $_POST['post_type'] ) {
+        if ( ! current_user_can( 'edit_page', $post_id ) ) {
+            return;
+        }
+    } else {
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
+    }
+
+    $defaults = poetheme_get_default_page_settings();
+    $values   = isset( $_POST['poetheme_page_settings'] ) ? wp_unslash( (array) $_POST['poetheme_page_settings'] ) : array();
+    $sanitized = array();
+
+    foreach ( $defaults as $key => $default ) {
+        $sanitized[ $key ] = isset( $values[ $key ] ) && $values[ $key ] ? 1 : 0;
+    }
+
+    update_post_meta( $post_id, '_poetheme_page_settings', $sanitized );
+}
+add_action( 'save_post', 'poetheme_save_page_settings_meta_box' );

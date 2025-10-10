@@ -50,7 +50,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 <header class="relative bg-white shadow-md" role="banner" x-data="{ mobileOpen: false }">
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="bg-blue-600 text-white text-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
                     poetheme_render_top_bar_items(
@@ -102,7 +102,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     <?php endif; ?>
 
     <div class="border-b border-blue-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
             <div class="grid grid-cols-1 gap-6 md:grid-cols-[auto_1fr_auto] md:items-center">
                 <div class="flex items-center justify-between md:justify-start gap-4">
                     <?php poetheme_the_logo(); ?>

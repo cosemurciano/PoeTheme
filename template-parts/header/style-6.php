@@ -50,7 +50,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 <header class="sticky top-0 z-40" role="banner" x-data="{ mobileOpen: false, scrolled: false }" @scroll.window="scrolled = window.scrollY > 30">
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="bg-rose-600 text-white text-xs" x-show="!scrolled" x-transition.opacity>
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
                     poetheme_render_top_bar_items(
@@ -102,7 +102,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     <?php endif; ?>
 
     <div class="bg-white border-b border-rose-100 transition-all duration-200" :class="{ 'shadow-lg backdrop-blur bg-white/95': scrolled }">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes() ); ?>">
             <div class="flex items-center justify-between py-5 md:py-6">
                 <div class="flex items-center gap-4">
                     <button type="button" class="md:hidden text-rose-600" @click="mobileOpen = ! mobileOpen" aria-expanded="false">

@@ -50,7 +50,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 <header class="relative bg-white shadow-sm" role="banner" x-data="{ mobileOpen: false, promoOpen: true }">
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="bg-gray-900 text-white text-xs">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
                     poetheme_render_top_bar_items(
@@ -102,7 +102,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     <?php endif; ?>
 
     <div x-show="promoOpen" x-transition.opacity class="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white text-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'items-center', 'justify-between' ) ) ); ?>">
             <div class="flex items-center gap-2 font-semibold">
                 <i data-lucide="sparkles" class="w-4 h-4"></i>
                 <span><?php esc_html_e( 'Spedizione gratuita oltre 50€ per un tempo limitato!', 'poetheme' ); ?></span>
@@ -115,7 +115,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     </div>
 
     <div class="border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-4' ) ) ); ?>">
             <div class="flex items-center justify-between gap-6">
                 <div class="flex items-center gap-4">
                     <button type="button" class="md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" aria-expanded="false">
