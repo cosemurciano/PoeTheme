@@ -370,9 +370,7 @@ function poetheme_register_settings() {
         array(
             'type'              => 'array',
             'sanitize_callback' => 'poetheme_sanitize_logo_options',
-            'default'           => array(
-                'logo_id' => 0,
-            ),
+            'default'           => poetheme_get_default_logo_options(),
         )
     );
 
@@ -938,7 +936,8 @@ function poetheme_render_colors_page() {
  * Render the logo settings page.
  */
 function poetheme_render_logo_page() {
-    $options = poetheme_get_logo_options();
+    $options        = poetheme_get_logo_options();
+    $logo_defaults  = poetheme_get_default_logo_options();
     $logo_id         = $options['logo_id'];
     $logo            = $logo_id ? wp_get_attachment_image_src( $logo_id, 'medium' ) : false;
     $logo_height     = isset( $options['logo_height'] ) ? absint( $options['logo_height'] ) : 0;
@@ -1006,7 +1005,14 @@ function poetheme_render_logo_page() {
             <div class="poetheme-title-options"<?php echo $show_site_title ? '' : ' style="display:none;"'; ?>>
                 <p>
                     <label for="poetheme_logo_title_color"><?php esc_html_e( 'Colore del titolo', 'poetheme' ); ?></label><br />
-                    <input type="color" id="poetheme_logo_title_color" name="poetheme_logo[title_color]" value="<?php echo esc_attr( $title_color ); ?>" />
+                    <input
+                        type="text"
+                        class="poetheme-color-field"
+                        id="poetheme_logo_title_color"
+                        name="poetheme_logo[title_color]"
+                        value="<?php echo esc_attr( $title_color ); ?>"
+                        data-default-color="<?php echo esc_attr( $logo_defaults['title_color'] ); ?>"
+                    />
                 </p>
                 <p>
                     <label for="poetheme_logo_title_size"><?php esc_html_e( 'Dimensione del titolo (px)', 'poetheme' ); ?></label><br />
@@ -1206,16 +1212,19 @@ function poetheme_render_custom_css_page() {
  *
  * @return array
  */
-function poetheme_get_logo_options() {
-    $defaults = array(
+function poetheme_get_default_logo_options() {
+    return array(
         'logo_id'        => 0,
         'logo_height'    => 48,
         'show_site_title'=> false,
         'title_color'    => '#111827',
         'title_size'     => 32,
     );
+}
 
-    $options = get_option( 'poetheme_logo', array() );
+function poetheme_get_logo_options() {
+    $defaults = poetheme_get_default_logo_options();
+    $options  = get_option( 'poetheme_logo', array() );
 
     $options = wp_parse_args( $options, $defaults );
 
