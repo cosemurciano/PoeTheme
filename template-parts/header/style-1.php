@@ -54,7 +54,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
 >
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
-        <div class="bg-gray-900 text-white text-sm">
+        <div class="poetheme-top-bar bg-gray-900 text-white text-sm">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'items-center', 'gap-3', 'text-center', 'md:flex-row', 'md:items-center', 'md:justify-between', 'md:text-left' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
@@ -132,7 +132,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
                 <?php if ( $show_cta && '' !== $cta_text ) : ?>
                     <div class="hidden md:block">
-                        <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                        <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
                             <?php echo esc_html( $cta_text ); ?>
                         </a>
                     </div>
@@ -188,7 +188,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
                 <?php if ( $show_cta && '' !== $cta_text ) : ?>
                     <div>
-                        <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex w-full justify-center items-center px-5 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                        <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
                             <?php echo esc_html( $cta_text ); ?>
                         </a>
                     </div>

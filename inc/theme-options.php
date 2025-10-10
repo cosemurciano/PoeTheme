@@ -72,6 +72,43 @@ function poetheme_get_default_global_options() {
     return array(
         'layout_mode' => 'full',
         'site_width'  => 1200,
+        'background_image_id' => 0,
+        'background_position' => 'no-repeat;left top;;',
+        'background_size'     => 'auto',
+    );
+}
+
+function poetheme_get_default_color_options() {
+    return array(
+        'content_text_color'             => '#111827',
+        'content_link_color'             => '#2563eb',
+        'content_link_underline'         => false,
+        'content_strong_color'           => '#111827',
+        'page_background_color'          => '#f9fafb',
+        'content_background_color'       => '#ffffff',
+        'menu_link_color'                => '#374151',
+        'menu_link_background_color'     => '',
+        'menu_active_link_color'         => '#2563eb',
+        'menu_active_link_background'    => '',
+        'cta_background_color'           => '#2563eb',
+        'cta_text_color'                 => '#ffffff',
+        'top_bar_background_color'       => '#111827',
+        'top_bar_icon_color'             => '#ffffff',
+        'top_bar_text_color'             => '#ffffff',
+        'top_bar_link_color'             => '#ffffff',
+        'general_link_color'             => '#2563eb',
+        'heading_h1_color'               => '#111827',
+        'heading_h1_background'          => '',
+        'heading_h2_color'               => '#111827',
+        'heading_h2_background'          => '',
+        'heading_h3_color'               => '#111827',
+        'heading_h3_background'          => '',
+        'heading_h4_color'               => '#111827',
+        'heading_h4_background'          => '',
+        'heading_h5_color'               => '#111827',
+        'heading_h5_background'          => '',
+        'heading_h6_color'               => '#111827',
+        'heading_h6_background'          => '',
     );
 }
 
@@ -96,10 +133,88 @@ function poetheme_sanitize_global_options( $input ) {
     $width = isset( $input['site_width'] ) ? absint( $input['site_width'] ) : $defaults['site_width'];
     $width = max( 960, min( 1920, $width ) );
 
+    $background_image_id = isset( $input['background_image_id'] ) ? absint( $input['background_image_id'] ) : 0;
+
+    $allowed_positions = array(
+        '',
+        'no-repeat;left top;;',
+        'repeat;left top;;',
+        'no-repeat;left center;;',
+        'repeat;left center;;',
+        'no-repeat;left bottom;;',
+        'repeat;left bottom;;',
+        'no-repeat;center top;;',
+        'repeat;center top;;',
+        'repeat-x;center top;;',
+        'repeat-y;center top;;',
+        'no-repeat;center;;',
+        'repeat;center;;',
+        'no-repeat;center bottom;;',
+        'repeat;center bottom;;',
+        'repeat-x;center bottom;;',
+        'repeat-y;center bottom;;',
+        'no-repeat;right top;;',
+        'repeat;right top;;',
+        'no-repeat;right center;;',
+        'repeat;right center;;',
+        'no-repeat;right bottom;;',
+        'repeat;right bottom;;',
+        'no-repeat;center top;fixed;;',
+        'no-repeat;center;fixed;cover',
+    );
+
+    $background_position = isset( $input['background_position'] ) ? sanitize_text_field( $input['background_position'] ) : $defaults['background_position'];
+    if ( ! in_array( $background_position, $allowed_positions, true ) ) {
+        $background_position = $defaults['background_position'];
+    }
+
+    $allowed_sizes = array( '', 'auto', 'contain', 'cover', 'cover-ultrawide' );
+    $background_size = isset( $input['background_size'] ) ? sanitize_text_field( $input['background_size'] ) : $defaults['background_size'];
+    if ( ! in_array( $background_size, $allowed_sizes, true ) ) {
+        $background_size = $defaults['background_size'];
+    }
+
     return array(
         'layout_mode' => $layout_mode,
         'site_width'  => $width,
+        'background_image_id' => $background_image_id,
+        'background_position' => $background_position,
+        'background_size'     => $background_size,
     );
+}
+
+function poetheme_sanitize_color_options( $input ) {
+    $defaults = poetheme_get_default_color_options();
+    $output   = array();
+
+    if ( ! is_array( $input ) ) {
+        $input = array();
+    }
+
+    foreach ( $defaults as $key => $default_value ) {
+        if ( 'content_link_underline' === $key ) {
+            $output[ $key ] = ! empty( $input[ $key ] );
+            continue;
+        }
+
+        if ( ! isset( $input[ $key ] ) ) {
+            $output[ $key ] = $default_value;
+            continue;
+        }
+
+        $raw   = (string) $input[ $key ];
+        $color = sanitize_hex_color( $raw );
+
+        if ( '' === $raw ) {
+            $output[ $key ] = '';
+        } elseif ( $color ) {
+            $output[ $key ] = $color;
+        } else {
+            $output[ $key ] = $default_value;
+        }
+    }
+
+    return $output;
 }
 
 /**
@@ -119,6 +234,71 @@ function poetheme_get_global_options() {
 
     $options['layout_mode'] = in_array( $options['layout_mode'], array( 'full', 'boxed' ), true ) ? $options['layout_mode'] : $defaults['layout_mode'];
     $options['site_width']  = max( 960, min( 1920, absint( $options['site_width'] ) ) );
+    $options['background_image_id'] = isset( $options['background_image_id'] ) ? absint( $options['background_image_id'] ) : $defaults['background_image_id'];
+
+    $allowed_positions = array(
+        '',
+        'no-repeat;left top;;',
+        'repeat;left top;;',
+        'no-repeat;left center;;',
+        'repeat;left center;;',
+        'no-repeat;left bottom;;',
+        'repeat;left bottom;;',
+        'no-repeat;center top;;',
+        'repeat;center top;;',
+        'repeat-x;center top;;',
+        'repeat-y;center top;;',
+        'no-repeat;center;;',
+        'repeat;center;;',
+        'no-repeat;center bottom;;',
+        'repeat;center bottom;;',
+        'repeat-x;center bottom;;',
+        'repeat-y;center bottom;;',
+        'no-repeat;right top;;',
+        'repeat;right top;;',
+        'no-repeat;right center;;',
+        'repeat;right center;;',
+        'no-repeat;right bottom;;',
+        'repeat;right bottom;;',
+        'no-repeat;center top;fixed;;',
+        'no-repeat;center;fixed;cover',
+    );
+
+    if ( ! in_array( $options['background_position'], $allowed_positions, true ) ) {
+        $options['background_position'] = $defaults['background_position'];
+    }
+
+    $allowed_sizes = array( '', 'auto', 'contain', 'cover', 'cover-ultrawide' );
+    if ( ! in_array( $options['background_size'], $allowed_sizes, true ) ) {
+        $options['background_size'] = $defaults['background_size'];
+    }
+
+    return $options;
+}
+
+function poetheme_get_color_options() {
+    $defaults = poetheme_get_default_color_options();
+    $options  = get_option( 'poetheme_colors', array() );
+
+    if ( ! is_array( $options ) ) {
+        $options = array();
+    }
+
+    $options = wp_parse_args( $options, $defaults );
+
+    foreach ( $defaults as $key => $default_value ) {
+        if ( 'content_link_underline' === $key ) {
+            $options[ $key ] = ! empty( $options[ $key ] );
+            continue;
+        }
+
+        $color = isset( $options[ $key ] ) ? sanitize_hex_color( $options[ $key ] ) : '';
+        if ( $color ) {
+            $options[ $key ] = $color;
+        } else {
+            $options[ $key ] = '' === $default_value ? '' : $default_value;
+        }
+    }
 
     return $options;
 }
@@ -144,6 +324,16 @@ function poetheme_register_settings() {
             'type'              => 'array',
             'sanitize_callback' => 'poetheme_sanitize_global_options',
             'default'           => poetheme_get_default_global_options(),
+        )
+    );
+
+    register_setting(
+        'poetheme_colors_group',
+        'poetheme_colors',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'poetheme_sanitize_color_options',
+            'default'           => poetheme_get_default_color_options(),
         )
     );
 
@@ -206,6 +396,15 @@ function poetheme_add_options_pages() {
 
     add_submenu_page(
         'poetheme-settings',
+        __( 'Gestione Colori', 'poetheme' ),
+        __( 'Gestione Colori', 'poetheme' ),
+        'manage_options',
+        'poetheme-colors',
+        'poetheme_render_colors_page'
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
         __( 'Logo', 'poetheme' ),
         __( 'Logo', 'poetheme' ),
         'manage_options',
@@ -264,11 +463,50 @@ add_action( 'admin_menu', 'poetheme_add_options_pages' );
  * Render the global settings page.
  */
 function poetheme_render_global_page() {
-    $options      = poetheme_get_global_options();
-    $layout_mode  = isset( $options['layout_mode'] ) ? $options['layout_mode'] : 'full';
-    $site_width   = isset( $options['site_width'] ) ? absint( $options['site_width'] ) : 1200;
-    $width_id     = 'poetheme-global-site-width';
-    $layout_field = 'poetheme_global[layout_mode]';
+    $options              = poetheme_get_global_options();
+    $layout_mode          = isset( $options['layout_mode'] ) ? $options['layout_mode'] : 'full';
+    $site_width           = isset( $options['site_width'] ) ? absint( $options['site_width'] ) : 1200;
+    $background_image_id  = isset( $options['background_image_id'] ) ? absint( $options['background_image_id'] ) : 0;
+    $background_image     = $background_image_id ? wp_get_attachment_image_src( $background_image_id, 'large' ) : false;
+    $background_position  = isset( $options['background_position'] ) ? $options['background_position'] : '';
+    $background_size      = isset( $options['background_size'] ) ? $options['background_size'] : 'auto';
+    $width_id             = 'poetheme-global-site-width';
+    $layout_field         = 'poetheme_global[layout_mode]';
+    $background_positions = array(
+        ''                              => __( 'Predefinito', 'poetheme' ),
+        'no-repeat;left top;;'          => __( 'Sinistra Alto | no-repeat', 'poetheme' ),
+        'repeat;left top;;'             => __( 'Sinistra Alto | repeat', 'poetheme' ),
+        'no-repeat;left center;;'       => __( 'Sinistra Centro | no-repeat', 'poetheme' ),
+        'repeat;left center;;'          => __( 'Sinistra Centro | repeat', 'poetheme' ),
+        'no-repeat;left bottom;;'       => __( 'Sinistra Basso | no-repeat', 'poetheme' ),
+        'repeat;left bottom;;'          => __( 'Sinistra Basso | repeat', 'poetheme' ),
+        'no-repeat;center top;;'        => __( 'Centro Alto | no-repeat', 'poetheme' ),
+        'repeat;center top;;'           => __( 'Centro Alto | repeat', 'poetheme' ),
+        'repeat-x;center top;;'         => __( 'Centro Alto | repeat-x', 'poetheme' ),
+        'repeat-y;center top;;'         => __( 'Centro Alto | repeat-y', 'poetheme' ),
+        'no-repeat;center;;'            => __( 'Centro Centro | no-repeat', 'poetheme' ),
+        'repeat;center;;'               => __( 'Centro Centro | repeat', 'poetheme' ),
+        'no-repeat;center bottom;;'     => __( 'Centro Basso | no-repeat', 'poetheme' ),
+        'repeat;center bottom;;'        => __( 'Centro Basso | repeat', 'poetheme' ),
+        'repeat-x;center bottom;;'      => __( 'Centro Basso | repeat-x', 'poetheme' ),
+        'repeat-y;center bottom;;'      => __( 'Centro Basso | repeat-y', 'poetheme' ),
+        'no-repeat;right top;;'         => __( 'Destra Alto | no-repeat', 'poetheme' ),
+        'repeat;right top;;'            => __( 'Destra Alto | repeat', 'poetheme' ),
+        'no-repeat;right center;;'      => __( 'Destra Centro | no-repeat', 'poetheme' ),
+        'repeat;right center;;'         => __( 'Destra Centro | repeat', 'poetheme' ),
+        'no-repeat;right bottom;;'      => __( 'Destra Basso | no-repeat', 'poetheme' ),
+        'repeat;right bottom;;'         => __( 'Destra Basso | repeat', 'poetheme' ),
+        'no-repeat;center top;fixed;;'  => __( 'Centro | no-repeat | fisso', 'poetheme' ),
+        'no-repeat;center;fixed;cover'  => __( 'Centro | no-repeat | fisso | copri', 'poetheme' ),
+    );
+
+    $background_sizes = array(
+        ''               => __( 'Predefinito', 'poetheme' ),
+        'auto'           => __( 'Automatico', 'poetheme' ),
+        'contain'        => __( 'Contenere', 'poetheme' ),
+        'cover'          => __( 'Coprire', 'poetheme' ),
+        'cover-ultrawide'=> __( 'Coprire, solo su schermi ultra larghi > 1920px', 'poetheme' ),
+    );
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Globale', 'poetheme' ); ?></h1>
@@ -303,6 +541,48 @@ function poetheme_render_global_page() {
                             <p class="description"><?php esc_html_e( 'Imposta la larghezza massima del sito per il layout Box. Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Immagine di sfondo della pagina', 'poetheme' ); ?></th>
+                        <td>
+                            <div class="poetheme-background-control">
+                                <div id="poetheme-background-preview" class="poetheme-background-preview">
+                                    <?php if ( $background_image ) : ?>
+                                        <img src="<?php echo esc_url( $background_image[0] ); ?>" alt="" />
+                                    <?php else : ?>
+                                        <p class="description"><?php esc_html_e( 'Nessuna immagine selezionata.', 'poetheme' ); ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <input type="hidden" id="poetheme_global_background_image_id" name="poetheme_global[background_image_id]" value="<?php echo esc_attr( $background_image_id ); ?>">
+                                <p class="poetheme-background-actions">
+                                    <button type="button" class="button button-secondary" id="poetheme-background-upload"><?php esc_html_e( 'Scegli immagine', 'poetheme' ); ?></button>
+                                    <button type="button" class="button" id="poetheme-background-remove" <?php disabled( 0 === $background_image_id ); ?>><?php esc_html_e( 'Rimuovi immagine', 'poetheme' ); ?></button>
+                                </p>
+                                <p class="description"><?php esc_html_e( 'Dimensioni consigliate: 1920x1080 px.', 'poetheme' ); ?></p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="poetheme-background-position"><?php esc_html_e( 'Posizione e ripetizione', 'poetheme' ); ?></label></th>
+                        <td>
+                            <select id="poetheme-background-position" name="poetheme_global[background_position]">
+                                <?php foreach ( $background_positions as $value => $label ) : ?>
+                                    <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $background_position ); ?>><?php echo esc_html( $label ); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description"><?php esc_html_e( 'Seleziona la combinazione desiderata di ripetizione, posizione e (se disponibile) fissaggio.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="poetheme-background-size"><?php esc_html_e( 'Dimensione', 'poetheme' ); ?></label></th>
+                        <td>
+                            <select id="poetheme-background-size" name="poetheme_global[background_size]">
+                                <?php foreach ( $background_sizes as $value => $label ) : ?>
+                                    <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $background_size ); ?>><?php echo esc_html( $label ); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description"><?php esc_html_e( 'Questa opzione non è compatibile con la posizione fissa nei browser meno recenti.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -334,6 +614,240 @@ function poetheme_render_global_page() {
             toggleWidthRow();
         })();
     </script>
+    <?php
+}
+
+function poetheme_render_colors_page() {
+    $options  = poetheme_get_color_options();
+    $defaults = poetheme_get_default_color_options();
+
+    $sections = array(
+        'content' => array(
+            'title'  => __( 'Contenuto', 'poetheme' ),
+            'fields' => array(
+                'content_text_color'       => array(
+                    'label'       => __( 'Colore del testo del contenuto', 'poetheme' ),
+                    'description' => __( 'Si applica ai testi principali all’interno del contenuto.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'content_link_color'       => array(
+                    'label'       => __( 'Colore dei link nel contenuto', 'poetheme' ),
+                    'description' => __( 'Personalizza il colore dei collegamenti nel corpo dei contenuti.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'content_link_underline'   => array(
+                    'label'       => __( 'Sottolinea i link del contenuto', 'poetheme' ),
+                    'description' => __( 'Attiva o disattiva la sottolineatura per i link nel contenuto.', 'poetheme' ),
+                    'type'        => 'toggle',
+                ),
+                'content_strong_color'     => array(
+                    'label'       => __( 'Colore del testo evidenziato (strong)', 'poetheme' ),
+                    'description' => __( 'Imposta il colore per i testi marcati in grassetto.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'page_background_color'    => array(
+                    'label'       => __( 'Colore di sfondo dell’intera pagina', 'poetheme' ),
+                    'description' => __( 'Utilizza questo colore assieme o in alternativa all’immagine di sfondo.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'content_background_color' => array(
+                    'label'       => __( 'Colore di sfondo del contenuto', 'poetheme' ),
+                    'description' => __( 'Colore applicato alle aree principali del contenuto.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+            ),
+        ),
+        'menu' => array(
+            'title'  => __( 'Menù principale', 'poetheme' ),
+            'fields' => array(
+                'menu_link_color'             => array(
+                    'label'       => __( 'Colore link', 'poetheme' ),
+                    'description' => __( 'Colore base dei link del menù principale.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'menu_link_background_color'  => array(
+                    'label'       => __( 'Colore sfondo link', 'poetheme' ),
+                    'description' => __( 'Sfondo dei link del menù principale (desktop e mobile).', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'menu_active_link_color'      => array(
+                    'label'       => __( 'Colore del link attivo', 'poetheme' ),
+                    'description' => __( 'Colore per la voce di menù attiva o al passaggio del mouse.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'menu_active_link_background' => array(
+                    'label'       => __( 'Colore sfondo link attivo', 'poetheme' ),
+                    'description' => __( 'Sfondo della voce di menù attiva.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+            ),
+        ),
+        'cta' => array(
+            'title'  => __( 'Call to Action', 'poetheme' ),
+            'fields' => array(
+                'cta_background_color' => array(
+                    'label'       => __( 'Colore di sfondo', 'poetheme' ),
+                    'description' => __( 'Colore del pulsante principale di invito all’azione.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'cta_text_color'       => array(
+                    'label'       => __( 'Colore del testo', 'poetheme' ),
+                    'description' => __( 'Colore del testo all’interno del pulsante.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+            ),
+        ),
+        'top_bar' => array(
+            'title'  => __( 'Barra superiore', 'poetheme' ),
+            'fields' => array(
+                'top_bar_background_color' => array(
+                    'label'       => __( 'Colore di sfondo della barra', 'poetheme' ),
+                    'description' => __( 'Colore dello sfondo dell’intera barra superiore.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'top_bar_icon_color'       => array(
+                    'label'       => __( 'Colore delle icone', 'poetheme' ),
+                    'description' => __( 'Si applica alle icone social e di contatto.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'top_bar_text_color'       => array(
+                    'label'       => __( 'Colore del testo', 'poetheme' ),
+                    'description' => __( 'Colore del testo nella barra superiore.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'top_bar_link_color'       => array(
+                    'label'       => __( 'Colore dei link', 'poetheme' ),
+                    'description' => __( 'Colore dei collegamenti testuali della barra.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+            ),
+        ),
+        'general' => array(
+            'title'  => __( 'Colori generali', 'poetheme' ),
+            'fields' => array(
+                'general_link_color' => array(
+                    'label'       => __( 'Colore link generale', 'poetheme' ),
+                    'description' => __( 'Colore applicato ai link generici del sito (intestazione, piè di pagina, ecc.).', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+            ),
+        ),
+        'headings' => array(
+            'title'  => __( 'Intestazioni (H1–H6)', 'poetheme' ),
+            'fields' => array(
+                'heading_h1_color'      => array(
+                    'label'       => __( 'Colore H1', 'poetheme' ),
+                    'description' => __( 'Colore applicato alle intestazioni H1.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h1_background' => array(
+                    'label'       => __( 'Sfondo H1', 'poetheme' ),
+                    'description' => __( 'Colore di sfondo per le intestazioni H1.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h2_color'      => array(
+                    'label'       => __( 'Colore H2', 'poetheme' ),
+                    'description' => __( 'Colore applicato alle intestazioni H2.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h2_background' => array(
+                    'label'       => __( 'Sfondo H2', 'poetheme' ),
+                    'description' => __( 'Colore di sfondo per le intestazioni H2.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h3_color'      => array(
+                    'label'       => __( 'Colore H3', 'poetheme' ),
+                    'description' => __( 'Colore applicato alle intestazioni H3.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h3_background' => array(
+                    'label'       => __( 'Sfondo H3', 'poetheme' ),
+                    'description' => __( 'Colore di sfondo per le intestazioni H3.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h4_color'      => array(
+                    'label'       => __( 'Colore H4', 'poetheme' ),
+                    'description' => __( 'Colore applicato alle intestazioni H4.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h4_background' => array(
+                    'label'       => __( 'Sfondo H4', 'poetheme' ),
+                    'description' => __( 'Colore di sfondo per le intestazioni H4.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h5_color'      => array(
+                    'label'       => __( 'Colore H5', 'poetheme' ),
+                    'description' => __( 'Colore applicato alle intestazioni H5.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h5_background' => array(
+                    'label'       => __( 'Sfondo H5', 'poetheme' ),
+                    'description' => __( 'Colore di sfondo per le intestazioni H5.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h6_color'      => array(
+                    'label'       => __( 'Colore H6', 'poetheme' ),
+                    'description' => __( 'Colore applicato alle intestazioni H6.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+                'heading_h6_background' => array(
+                    'label'       => __( 'Sfondo H6', 'poetheme' ),
+                    'description' => __( 'Colore di sfondo per le intestazioni H6.', 'poetheme' ),
+                    'type'        => 'color',
+                ),
+            ),
+        ),
+    );
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e( 'Gestione Colori', 'poetheme' ); ?></h1>
+        <form action="options.php" method="post">
+            <?php settings_fields( 'poetheme_colors_group' ); ?>
+            <div class="poetheme-options-sections">
+                <?php foreach ( $sections as $section_key => $section ) : ?>
+                    <section class="poetheme-options-section" id="poetheme-section-<?php echo esc_attr( $section_key ); ?>">
+                        <h2><?php echo esc_html( $section['title'] ); ?></h2>
+                        <table class="form-table" role="presentation">
+                            <tbody>
+                                <?php foreach ( $section['fields'] as $field_key => $field ) :
+                                    $value        = isset( $options[ $field_key ] ) ? $options[ $field_key ] : '';
+                                    $default      = isset( $defaults[ $field_key ] ) ? $defaults[ $field_key ] : '';
+                                    $field_id     = 'poetheme-colors-' . $field_key;
+                                    $field_name   = 'poetheme_colors[' . $field_key . ']';
+                                    ?>
+                                    <tr>
+                                        <th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
+                                        <td>
+                                            <?php if ( 'toggle' === $field['type'] ) : ?>
+                                                <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
+                                                    <option value="0" <?php selected( false, ! empty( $options[ $field_key ] ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
+                                                    <option value="1" <?php selected( true, ! empty( $options[ $field_key ] ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
+                                                </select>
+                                            <?php else : ?>
+                                                <input
+                                                    type="text"
+                                                    class="poetheme-color-field"
+                                                    id="<?php echo esc_attr( $field_id ); ?>"
+                                                    name="<?php echo esc_attr( $field_name ); ?>"
+                                                    value="<?php echo esc_attr( $value ); ?>"
+                                                    data-default-color="<?php echo esc_attr( $default ); ?>"
+                                                />
+                                            <?php endif; ?>
+                                            <?php if ( ! empty( $field['description'] ) ) : ?>
+                                                <p class="description"><?php echo esc_html( $field['description'] ); ?></p>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </section>
+                <?php endforeach; ?>
+            </div>
+
+            <?php submit_button(); ?>
+        </form>
+    </div>
     <?php
 }
 
@@ -758,8 +1272,9 @@ function poetheme_sanitize_header_options( $input ) {
  * @param string $hook Current admin page hook.
  */
 function poetheme_options_admin_assets( $hook ) {
-    $screens = array(
+    $style_screens = array(
         'toplevel_page_poetheme-settings',
+        'poetheme_page_poetheme-colors',
         'poetheme_page_poetheme-logo',
         'poetheme_page_poetheme-header',
         'poetheme_page_poetheme-subheader',
@@ -767,20 +1282,39 @@ function poetheme_options_admin_assets( $hook ) {
         'poetheme_page_poetheme-custom-css',
     );
 
-    if ( in_array( $hook, $screens, true ) ) {
+    if ( in_array( $hook, $style_screens, true ) ) {
         wp_enqueue_style( 'poetheme-theme-options', POETHEME_URI . '/assets/css/theme-options.css', array(), POETHEME_VERSION );
     }
 
-    if ( 'poetheme_page_poetheme-logo' === $hook ) {
+    $media_screens = array(
+        'toplevel_page_poetheme-settings',
+        'poetheme_page_poetheme-logo',
+    );
+
+    if ( in_array( $hook, $media_screens, true ) ) {
         wp_enqueue_media();
-        wp_enqueue_script( 'poetheme-theme-options', POETHEME_URI . '/assets/js/theme-options.js', array( 'jquery' ), POETHEME_VERSION, true );
+    }
+
+    $script_screens = array(
+        'toplevel_page_poetheme-settings',
+        'poetheme_page_poetheme-colors',
+        'poetheme_page_poetheme-logo',
+    );
+
+    if ( in_array( $hook, $script_screens, true ) ) {
+        wp_enqueue_style( 'wp-color-picker' );
+        wp_enqueue_script( 'wp-color-picker' );
+        wp_enqueue_script( 'poetheme-theme-options', POETHEME_URI . '/assets/js/theme-options.js', array( 'jquery', 'wp-color-picker' ), POETHEME_VERSION, true );
         wp_localize_script(
             'poetheme-theme-options',
             'poethemeThemeOptions',
             array(
-                'chooseLogo' => __( 'Scegli un logo', 'poetheme' ),
-                'selectLogo' => __( 'Usa questo logo', 'poetheme' ),
-                'noLogo'     => __( 'Nessun logo selezionato.', 'poetheme' ),
+                'chooseLogo'          => __( 'Scegli un logo', 'poetheme' ),
+                'selectLogo'          => __( 'Usa questo logo', 'poetheme' ),
+                'noLogo'              => __( 'Nessun logo selezionato.', 'poetheme' ),
+                'chooseBackground'    => __( 'Scegli un’immagine di sfondo', 'poetheme' ),
+                'selectBackground'    => __( 'Usa questa immagine', 'poetheme' ),
+                'noBackground'        => __( 'Nessuna immagine selezionata.', 'poetheme' ),
             )
         );
     }
