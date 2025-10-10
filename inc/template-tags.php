@@ -10,6 +10,114 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Retrieve settings for the current page.
+ *
+ * @param int|null $post_id Optional post ID.
+ * @return array
+ */
+function poetheme_get_page_settings( $post_id = null ) {
+    $defaults = poetheme_get_default_page_settings();
+
+    if ( null === $post_id ) {
+        $post_id = get_queried_object_id();
+    }
+
+    if ( ! $post_id ) {
+        return $defaults;
+    }
+
+    $stored = get_post_meta( $post_id, '_poetheme_page_settings', true );
+
+    if ( ! is_array( $stored ) ) {
+        $stored = array();
+    }
+
+    $normalized = array();
+    foreach ( $defaults as $key => $default ) {
+        $normalized[ $key ] = ! empty( $stored[ $key ] );
+    }
+
+    return $normalized;
+}
+
+/**
+ * Helper to retrieve a specific page setting flag.
+ *
+ * @param string   $key     Setting key.
+ * @param int|null $post_id Optional post ID.
+ * @return bool
+ */
+function poetheme_get_page_setting_flag( $key, $post_id = null ) {
+    $settings = poetheme_get_page_settings( $post_id );
+
+    return isset( $settings[ $key ] ) ? (bool) $settings[ $key ] : false;
+}
+
+/**
+ * Determine if the current page removes top padding.
+ *
+ * @param int|null $post_id Optional post ID.
+ * @return bool
+ */
+function poetheme_page_has_no_top_padding( $post_id = null ) {
+    return poetheme_get_page_setting_flag( 'remove_top_padding', $post_id );
+}
+
+/**
+ * Determine if the current page should display the title.
+ *
+ * @param int|null $post_id Optional post ID.
+ * @return bool
+ */
+function poetheme_should_display_page_title( $post_id = null ) {
+    return ! poetheme_get_page_setting_flag( 'hide_title', $post_id );
+}
+
+/**
+ * Retrieve base container classes with optional additions.
+ *
+ * @param array|string $additional Additional classes.
+ * @return string
+ */
+function poetheme_get_layout_container_classes( $additional = array() ) {
+    $classes = array( 'poetheme-container', 'px-4', 'sm:px-6', 'lg:px-8' );
+
+    if ( is_string( $additional ) ) {
+        $additional = preg_split( '/\s+/', trim( $additional ) );
+    }
+
+    if ( ! is_array( $additional ) ) {
+        $additional = array();
+    }
+
+    foreach ( $additional as $class ) {
+        if ( '' === $class ) {
+            continue;
+        }
+        $classes[] = $class;
+    }
+
+    $classes = array_unique( array_filter( $classes ) );
+
+    return implode( ' ', $classes );
+}
+
+/**
+ * Retrieve main element classes accounting for page settings.
+ *
+ * @return string
+ */
+function poetheme_get_main_classes() {
+    $additional = array( 'pt-10', 'pb-10' );
+
+    if ( poetheme_page_has_no_top_padding() ) {
+        $additional = array_diff( $additional, array( 'pt-10' ) );
+    }
+
+    return poetheme_get_layout_container_classes( $additional );
+}
+
+/**
  * Get breadcrumbs items.
  *
  * @return array
@@ -18,6 +126,10 @@ function poetheme_get_breadcrumbs_items() {
     $options = poetheme_get_options();
 
     if ( ! $options['enable_breadcrumbs'] ) {
+        return array();
+    }
+
+    if ( is_page() && poetheme_get_page_setting_flag( 'hide_breadcrumbs' ) ) {
         return array();
     }
 

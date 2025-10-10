@@ -101,6 +101,18 @@ function poetheme_widgets_init() {
             'after_title'   => '</h2>',
         )
     );
+
+    register_sidebar(
+        array(
+            'name'          => __( 'Page Widgets', 'poetheme' ),
+            'id'            => 'page-widgets',
+            'description'   => __( 'Widgets displayed in page templates with a sidebar.', 'poetheme' ),
+            'before_widget' => '<section id="%1$s" class="widget %2$s">',
+            'after_widget'  => '</section>',
+            'before_title'  => '<h2 class="widget-title">',
+            'after_title'   => '</h2>',
+        )
+    );
 }
 add_action( 'widgets_init', 'poetheme_widgets_init' );
 
@@ -159,11 +171,28 @@ function poetheme_output_custom_css() {
 add_action( 'wp_head', 'poetheme_output_custom_css', 120 );
 
 /**
+ * Output layout CSS variables based on global settings.
+ */
+function poetheme_output_layout_settings() {
+    $options = poetheme_get_global_options();
+    $width   = isset( $options['site_width'] ) ? absint( $options['site_width'] ) : 1200;
+    $width   = max( 960, min( 1920, $width ) );
+
+    printf( '<style id="poetheme-layout-settings">:root{--poetheme-site-width:%dpx;}</style>', $width );
+}
+add_action( 'wp_head', 'poetheme_output_layout_settings', 90 );
+
+/**
  * Add body classes.
  */
 function poetheme_body_classes( $classes ) {
     if ( is_rtl() ) {
         $classes[] = 'rtl';
+    }
+
+    $layout_options = poetheme_get_global_options();
+    if ( isset( $layout_options['layout_mode'] ) ) {
+        $classes[] = 'poetheme-layout-' . sanitize_html_class( $layout_options['layout_mode'] );
     }
 
     return $classes;

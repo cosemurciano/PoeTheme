@@ -15,6 +15,19 @@ Tags: blog, accessibility-ready, custom-logo, custom-menu, rtl-language-support,
 
 :root {
   --poetheme-focus-color: #1e40af;
+  --poetheme-site-width: 1200px;
+}
+
+.poetheme-container {
+  width: min(var(--poetheme-site-width), 100%);
+  max-width: var(--poetheme-site-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.poetheme-layout-full .poetheme-container {
+  width: 100%;
+  max-width: none;
 }
 
 [x-cloak] {

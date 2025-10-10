@@ -50,7 +50,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 <header class="relative bg-white shadow-sm" role="banner" x-data="{ mobileOpen: false, searchOpen: false }">
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="bg-indigo-900 text-white text-xs">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
                     poetheme_render_top_bar_items(
@@ -102,7 +102,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     <?php endif; ?>
 
     <div class="border-b border-indigo-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-6">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-4', 'flex', 'items-center', 'gap-6' ) ) ); ?>">
             <button type="button" class="md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" aria-expanded="false">
                 <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
                 <i data-lucide="menu" class="w-6 h-6"></i>
@@ -144,7 +144,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     </div>
 
     <div class="hidden md:block border-b border-indigo-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes() ); ?>">
             <nav class="nav-primary flex items-center gap-6 text-sm font-medium text-gray-700 py-3" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                 <?php
                 poetheme_render_navigation_menu(
@@ -161,7 +161,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     </div>
 
     <div x-show="searchOpen" x-cloak class="md:hidden border-b border-indigo-100 bg-indigo-50" @keydown.escape.window="searchOpen = false">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-3' ) ) ); ?>">
             <form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
                 <label for="poetheme-header-search-mobile" class="sr-only"><?php esc_html_e( 'Cerca prodotti', 'poetheme' ); ?></label>
                 <div class="relative">

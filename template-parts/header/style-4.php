@@ -50,7 +50,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 <header class="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white" role="banner" x-data="{ mobileOpen: false }">
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="bg-black bg-opacity-20 text-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
                     poetheme_render_top_bar_items(
@@ -102,7 +102,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     <?php endif; ?>
 
     <div class="backdrop-blur-sm bg-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
             <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex items-center justify-between w-full lg:w-auto gap-4">
                     <?php poetheme_the_logo(); ?>
