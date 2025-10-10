@@ -49,7 +49,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 ?>
 <header class="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white" role="banner" x-data="{ mobileOpen: false }">
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
-        <div class="bg-black bg-opacity-20 text-sm">
+        <div class="poetheme-top-bar bg-black bg-opacity-20 text-sm">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
@@ -127,7 +127,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
                 <?php if ( $show_cta && '' !== $cta_text ) : ?>
                     <div class="hidden lg:block">
-                        <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-indigo-700 font-semibold shadow-lg shadow-indigo-900/30 hover:bg-indigo-50 transition">
+                        <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex items-center px-6 py-3 rounded-xl bg-white text-indigo-700 font-semibold shadow-lg shadow-indigo-900/30 hover:bg-indigo-50 transition">
                             <?php echo esc_html( $cta_text ); ?>
                         </a>
                     </div>
@@ -152,7 +152,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
             </nav>
 
             <?php if ( $show_cta && '' !== $cta_text ) : ?>
-                <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex w-full justify-center items-center px-5 py-3 rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 transition">
+                <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 transition">
                     <?php echo esc_html( $cta_text ); ?>
                 </a>
             <?php endif; ?>

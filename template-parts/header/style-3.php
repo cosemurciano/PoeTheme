@@ -49,7 +49,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 ?>
 <header class="relative bg-white border-b border-gray-200" role="banner" x-data="{ mobileOpen: false }">
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
-        <div class="bg-gray-50 text-xs text-gray-600 border-b border-gray-200">
+        <div class="poetheme-top-bar bg-gray-50 text-xs text-gray-600 border-b border-gray-200">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
@@ -126,7 +126,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
             <?php if ( $show_cta && '' !== $cta_text ) : ?>
                 <div class="hidden md:block">
-                    <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex items-center px-4 py-2 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] text-[11px] hover:bg-gray-900 hover:text-white transition">
+                    <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex items-center px-4 py-2 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] text-[11px] hover:bg-gray-900 hover:text-white transition">
                         <?php echo esc_html( $cta_text ); ?>
                     </a>
                 </div>
@@ -150,7 +150,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
             </nav>
 
             <?php if ( $show_cta && '' !== $cta_text ) : ?>
-                <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="inline-flex w-full justify-center items-center px-5 py-3 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] hover:bg-gray-900 hover:text-white transition">
+                <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] hover:bg-gray-900 hover:text-white transition">
                     <?php echo esc_html( $cta_text ); ?>
                 </a>
             <?php endif; ?>
