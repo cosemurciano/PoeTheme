@@ -903,31 +903,14 @@ function poetheme_render_colors_page() {
                                                             </select>
                                                         <?php else : ?>
                                                             <div class="poetheme-color-control">
-                                                                <div class="poetheme-color-control__inputs">
-                                                                    <input
-                                                                        type="text"
-                                                                        class="poetheme-color-field"
-                                                                        id="<?php echo esc_attr( $field_id ); ?>"
-                                                                        name="<?php echo esc_attr( $field_name ); ?>"
-                                                                        value="<?php echo esc_attr( $value ); ?>"
-                                                                        data-default-color="<?php echo esc_attr( $default ); ?>"
-                                                                    />
-                                                                    <?php
-                                                                    $native_value   = $value ? $value : ( $default ? $default : '#000000' );
-                                                                    $native_classes = 'poetheme-color-native';
-                                                                    if ( '' === $value ) {
-                                                                        $native_classes .= ' poetheme-color-native--empty';
-                                                                    }
-                                                                    ?>
-                                                                    <input
-                                                                        type="color"
-                                                                        class="<?php echo esc_attr( $native_classes ); ?>"
-                                                                        value="<?php echo esc_attr( $native_value ); ?>"
-                                                                        data-default-color="<?php echo esc_attr( $default ); ?>"
-                                                                        aria-label="<?php echo esc_attr( sprintf( __( 'Selettore rapido per %s', 'poetheme' ), $field['label'] ) ); ?>"
-                                                                    />
-                                                                </div>
-                                                                <button type="button" class="button-link poetheme-color-clear" data-target="<?php echo esc_attr( $field_id ); ?>"><?php esc_html_e( 'Rimuovi colore', 'poetheme' ); ?></button>
+                                                                <input
+                                                                    type="text"
+                                                                    class="poetheme-color-field"
+                                                                    id="<?php echo esc_attr( $field_id ); ?>"
+                                                                    name="<?php echo esc_attr( $field_name ); ?>"
+                                                                    value="<?php echo esc_attr( $value ); ?>"
+                                                                    data-default-color="<?php echo esc_attr( $default ); ?>"
+                                                                />
                                                             </div>
                                                         <?php endif; ?>
                                                         <?php if ( ! empty( $field['description'] ) ) : ?>
