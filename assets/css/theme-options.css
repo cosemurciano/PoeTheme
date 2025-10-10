@@ -76,14 +76,14 @@
     font-size: 22px;
 }
 
-.poetheme-options-sections {
+.poetheme-color-group__sections {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 24px;
     margin-top: 24px;
 }
 
-.poetheme-options-section {
+.poetheme-color-section {
     background: #fff;
     border: 1px solid #e5e7eb;
     border-radius: 10px;
@@ -91,17 +91,45 @@
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
-.poetheme-options-section > h3 {
+.poetheme-color-section__title {
     margin: 0 0 12px;
     font-size: 18px;
 }
 
-.poetheme-options-section .form-table {
-    margin-top: 0;
+.poetheme-color-section__description {
+    margin-top: -4px;
+}
+
+.poetheme-color-section__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.poetheme-color-section__field {
+    display: grid;
+    grid-template-columns: minmax(120px, 160px) 1fr;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.poetheme-color-section__label {
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.poetheme-color-section__control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .poetheme-color-control {
-    max-width: 280px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 320px;
 }
 
 .poetheme-color-control .wp-picker-container {
@@ -113,4 +141,31 @@
 
 .poetheme-color-control .wp-picker-input-wrap {
     flex: 1 1 auto;
+}
+
+.poetheme-color-preview {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #d1d5db;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+}
+
+.poetheme-color-preview::before,
+.poetheme-color-preview::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+}
+
+.poetheme-color-preview::before {
+    background-image: linear-gradient(45deg, #f3f4f6 25%, transparent 25%), linear-gradient(-45deg, #f3f4f6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f3f4f6 75%), linear-gradient(-45deg, transparent 75%, #f3f4f6 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+}
+
+.poetheme-color-preview::after {
+    background-color: var(--poetheme-preview-color, transparent);
 }
