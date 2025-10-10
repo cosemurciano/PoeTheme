@@ -286,30 +286,44 @@ function poetheme_get_global_options() {
 
 function poetheme_get_color_options() {
     $defaults = poetheme_get_default_color_options();
-    $options  = get_option( 'poetheme_colors', array() );
+    $raw      = get_option( 'poetheme_colors', array() );
     $boolean_keys = array(
         'content_link_underline',
         'header_background_transparent',
         'header_disable_shadow',
     );
 
-    if ( ! is_array( $options ) ) {
-        $options = array();
+    if ( ! is_array( $raw ) ) {
+        $raw = array();
     }
 
-    $options = wp_parse_args( $options, $defaults );
+    $options = array();
 
     foreach ( $defaults as $key => $default_value ) {
         if ( in_array( $key, $boolean_keys, true ) ) {
-            $options[ $key ] = ! empty( $options[ $key ] );
+            $options[ $key ] = ! empty( $raw[ $key ] );
             continue;
         }
 
-        $color = isset( $options[ $key ] ) ? sanitize_hex_color( $options[ $key ] ) : '';
-        if ( $color ) {
-            $options[ $key ] = $color;
-        } else {
-            $options[ $key ] = '' === $default_value ? '' : $default_value;
+        if ( array_key_exists( $key, $raw ) ) {
+            $raw_value = (string) $raw[ $key ];
+
+            if ( '' === $raw_value ) {
+                $options[ $key ] = '';
+                continue;
+            }
+
+            $sanitized = sanitize_hex_color( $raw_value );
+            if ( $sanitized ) {
+                $options[ $key ] = $sanitized;
+                continue;
+            }
+        }
+
+        $options[ $key ] = '' === $default_value ? '' : sanitize_hex_color( $default_value );
+
+        if ( '' !== $default_value && ! $options[ $key ] ) {
+            $options[ $key ] = $default_value;
         }
     }
 
@@ -1360,6 +1374,7 @@ function poetheme_sanitize_header_options( $input ) {
 function poetheme_options_admin_assets( $hook ) {
     $style_screens = array(
         'toplevel_page_poetheme-settings',
+        'poetheme_page_poetheme-settings',
         'poetheme_page_poetheme-colors',
         'poetheme_page_poetheme-logo',
         'poetheme_page_poetheme-header',
@@ -1374,6 +1389,7 @@ function poetheme_options_admin_assets( $hook ) {
 
     $script_screens = array(
         'toplevel_page_poetheme-settings',
+        'poetheme_page_poetheme-settings',
         'poetheme_page_poetheme-colors',
         'poetheme_page_poetheme-logo',
     );
