@@ -56,25 +56,96 @@
     flex-wrap: wrap;
 }
 
+.poetheme-color-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.poetheme-color-group {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.poetheme-color-group__header > h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
 .poetheme-options-sections {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 24px;
+    margin-top: 24px;
 }
 
 .poetheme-options-section {
     background: #fff;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 16px;
+    border-radius: 10px;
+    padding: 20px;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
-.poetheme-options-section > h2 {
-    margin-top: 0;
+.poetheme-options-section > h3 {
+    margin: 0 0 12px;
     font-size: 18px;
 }
 
 .poetheme-options-section .form-table {
-    margin-top: 12px;
+    margin-top: 0;
+}
+
+.poetheme-color-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.poetheme-color-control__inputs {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.poetheme-color-control__inputs .poetheme-color-field {
+    flex: 1 1 auto;
+}
+
+.poetheme-color-native {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.poetheme-color-native--empty {
+    background-image:
+        linear-gradient(45deg, rgba(148, 163, 184, 0.4) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(148, 163, 184, 0.4) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(148, 163, 184, 0.4) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(148, 163, 184, 0.4) 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+}
+
+.poetheme-color-clear {
+    align-self: flex-start;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #2563eb;
+    cursor: pointer;
+}
+
+.poetheme-color-clear:hover,
+.poetheme-color-clear:focus {
+    text-decoration: underline;
 }

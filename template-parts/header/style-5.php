@@ -47,7 +47,7 @@ foreach ( $social_links as $link ) {
 $has_top_menu = has_nav_menu( 'top-info' );
 
 ?>
-<header class="relative text-white" role="banner" x-data="{ mobileOpen: false }">
+<header class="poetheme-site-header relative text-white" role="banner" x-data="{ mobileOpen: false }">
     <div class="absolute inset-0 bg-gradient-to-r from-indigo-700 via-purple-600 to-blue-500"></div>
     <div class="absolute inset-0 opacity-30 bg-cover bg-center" style="background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent);"></div>
 

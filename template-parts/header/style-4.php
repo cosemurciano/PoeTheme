@@ -47,7 +47,7 @@ foreach ( $social_links as $link ) {
 $has_top_menu = has_nav_menu( 'top-info' );
 
 ?>
-<header class="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white" role="banner" x-data="{ mobileOpen: false }">
+<header class="poetheme-site-header relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white" role="banner" x-data="{ mobileOpen: false }">
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="poetheme-top-bar bg-black bg-opacity-20 text-sm">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">

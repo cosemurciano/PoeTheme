@@ -183,8 +183,10 @@ function poetheme_output_layout_settings() {
 add_action( 'wp_head', 'poetheme_output_layout_settings', 90 );
 
 function poetheme_output_design_settings() {
-    $global_options = poetheme_get_global_options();
-    $color_options  = poetheme_get_color_options();
+    $global_options      = poetheme_get_global_options();
+    $color_options       = poetheme_get_color_options();
+    $raw_color_options   = get_option( 'poetheme_colors', array() );
+    $header_color_defined = is_array( $raw_color_options ) && array_key_exists( 'header_background_color', $raw_color_options );
     $styles         = '';
     $body_rule      = 'body.poetheme-has-color-settings';
     $body_css       = array();
@@ -238,12 +240,23 @@ function poetheme_output_design_settings() {
         $body_css[] = 'background-image:none';
     }
 
+    $header_background = ! empty( $color_options['header_background_color'] ) ? $color_options['header_background_color'] : '#ffffff';
+
+    if ( ! empty( $color_options['header_background_transparent'] ) ) {
+        $header_background = 'transparent';
+    }
+
+    $header_shadow_default = '0 1px 2px rgba(15, 23, 42, 0.08)';
+    $header_shadow_value   = ! empty( $color_options['header_disable_shadow'] ) ? 'none' : $header_shadow_default;
+
     $css_variables = array(
         '--poetheme-content-text-color'        => ! empty( $color_options['content_text_color'] ) ? $color_options['content_text_color'] : '#111827',
         '--poetheme-content-link-color'        => ! empty( $color_options['content_link_color'] ) ? $color_options['content_link_color'] : '#2563eb',
         '--poetheme-content-link-decoration'   => ! empty( $color_options['content_link_underline'] ) ? 'underline' : 'none',
         '--poetheme-content-strong-color'      => ! empty( $color_options['content_strong_color'] ) ? $color_options['content_strong_color'] : '#111827',
         '--poetheme-content-background-color'  => ! empty( $color_options['content_background_color'] ) ? $color_options['content_background_color'] : '#ffffff',
+        '--poetheme-header-background-color'   => $header_background,
+        '--poetheme-header-shadow'             => $header_shadow_value,
         '--poetheme-menu-link-color'           => ! empty( $color_options['menu_link_color'] ) ? $color_options['menu_link_color'] : '#374151',
         '--poetheme-menu-link-background'      => ! empty( $color_options['menu_link_background_color'] ) ? $color_options['menu_link_background_color'] : 'transparent',
         '--poetheme-menu-active-link-color'    => ! empty( $color_options['menu_active_link_color'] ) ? $color_options['menu_active_link_color'] : '#2563eb',
@@ -284,6 +297,10 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings main a:hover,body.poetheme-has-color-settings main a:focus{color:var(--poetheme-content-link-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings main,body.poetheme-has-color-settings main .poetheme-container,body.poetheme-has-color-settings main article,body.poetheme-has-color-settings main .widget,body.poetheme-has-color-settings main .comment-body{background-color:var(--poetheme-content-background-color) !important;}';
 
+    $styles .= 'body.poetheme-has-color-settings .poetheme-site-header{background-color:var(--poetheme-header-background-color) !important;box-shadow:var(--poetheme-header-shadow) !important;}';
+    if ( ! empty( $color_options['header_background_transparent'] ) || ( $header_color_defined && ! empty( $color_options['header_background_color'] ) ) ) {
+        $styles .= 'body.poetheme-has-color-settings .poetheme-site-header{background-image:none !important;}';
+    }
     $styles .= 'body.poetheme-has-color-settings .poetheme-nav--location-primary a{color:var(--poetheme-menu-link-color) !important;background-color:var(--poetheme-menu-link-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-nav--location-primary .current-menu-item > a,body.poetheme-has-color-settings .poetheme-nav--location-primary .current_page_item > a,body.poetheme-has-color-settings .poetheme-nav--location-primary a:hover,body.poetheme-has-color-settings .poetheme-nav--location-primary a:focus{color:var(--poetheme-menu-active-link-color) !important;background-color:var(--poetheme-menu-active-background) !important;}';
 

@@ -48,7 +48,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
 ?>
 <header
-    class="relative bg-white shadow-sm"
+    class="poetheme-site-header relative bg-white shadow-sm"
     role="banner"
     x-data="{ mobileOpen: false }"
     x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
