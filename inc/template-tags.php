@@ -264,7 +264,7 @@ function poetheme_the_logo() {
     $show_site_title = ! empty( $logo_options['show_site_title'] );
     $logo_height     = isset( $logo_options['logo_height'] ) ? absint( $logo_options['logo_height'] ) : 0;
     $title_color     = isset( $logo_options['title_color'] ) ? sanitize_hex_color( $logo_options['title_color'] ) : '';
-    $title_size      = isset( $logo_options['title_size'] ) ? absint( $logo_options['title_size'] ) : 0;
+    $title_size      = isset( $logo_options['title_size'] ) ? (float) $logo_options['title_size'] : 0;
 
     $site_title   = get_bloginfo( 'name' );
     $site_tagline = get_bloginfo( 'description', 'display' );
@@ -346,7 +346,7 @@ function poetheme_the_logo() {
         $title_styles[] = 'color:' . $title_color;
     }
     if ( $title_size > 0 ) {
-        $title_styles[] = 'font-size:' . $title_size . 'px';
+        $title_styles[] = 'font-size:' . poetheme_format_number_for_css( $title_size ) . 'rem';
     }
 
     $title_style_attr = $title_styles ? ' style="' . esc_attr( implode( ';', $title_styles ) ) . '"' : '';
