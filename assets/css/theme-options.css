@@ -229,7 +229,7 @@
 .poetheme-font-preview--button .poetheme-font-preview__sample {
     display: inline-block;
     padding: 10px 18px;
-    border-radius: 9999px;
+    border-radius: 12px;
     background-color: #2563eb;
     color: #fff;
     font-size: 16px;
@@ -238,6 +238,17 @@
 
 .poetheme-font-fallback {
     max-width: 320px;
+}
+
+.poetheme-font-size-label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+.poetheme-font-size-control {
+    width: 100%;
+    max-width: 120px;
 }
 
 .poetheme-font-collection {
