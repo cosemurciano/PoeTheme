@@ -28,7 +28,7 @@ if ( have_posts() ) :
                 <article id="post-<?php the_ID(); ?>" <?php post_class( 'bg-white rounded-lg shadow-sm p-6 space-y-6' ); ?> itemscope itemtype="https://schema.org/CreativeWork">
                     <?php if ( poetheme_should_display_page_title() ) : ?>
                         <header class="space-y-2">
-                            <h1 class="text-3xl font-bold" itemprop="headline"><?php the_title(); ?></h1>
+                            <h1 class="poetheme-page-title text-3xl font-bold" itemprop="headline"><?php the_title(); ?></h1>
                         </header>
                     <?php endif; ?>
 
