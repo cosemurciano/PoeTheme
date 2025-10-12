@@ -56,14 +56,16 @@
     flex-wrap: wrap;
 }
 
-.poetheme-color-groups {
+.poetheme-color-groups,
+.poetheme-font-groups {
     display: flex;
     flex-direction: column;
     gap: 32px;
     margin-top: 24px;
 }
 
-.poetheme-color-group {
+.poetheme-color-group,
+.poetheme-font-group {
     background: #f9fafb;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
@@ -71,19 +73,22 @@
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
-.poetheme-color-group__header > h2 {
+.poetheme-color-group__header > h2,
+.poetheme-font-group__header > h2 {
     margin: 0 0 8px;
     font-size: 22px;
 }
 
-.poetheme-color-group__sections {
+.poetheme-color-group__sections,
+.poetheme-font-group__sections {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 24px;
     margin-top: 24px;
 }
 
-.poetheme-color-section {
+.poetheme-color-section,
+.poetheme-font-section {
     background: #fff;
     border: 1px solid #e5e7eb;
     border-radius: 10px;
@@ -91,35 +96,41 @@
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
-.poetheme-color-section__title {
+.poetheme-color-section__title,
+.poetheme-font-section__title {
     margin: 0 0 12px;
     font-size: 18px;
 }
 
-.poetheme-color-section__description {
+.poetheme-color-section__description,
+.poetheme-font-section__description {
     margin-top: -4px;
 }
 
-.poetheme-color-section__fields {
+.poetheme-color-section__fields,
+.poetheme-font-section__fields {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-top: 16px;
 }
 
-.poetheme-color-section__field {
+.poetheme-color-section__field,
+.poetheme-font-section__field {
     display: grid;
     grid-template-columns: minmax(120px, 160px) 1fr;
     gap: 16px;
     align-items: flex-start;
 }
 
-.poetheme-color-section__label {
+.poetheme-color-section__label,
+.poetheme-font-section__label {
     font-weight: 600;
     margin-top: 4px;
 }
 
-.poetheme-color-section__control {
+.poetheme-color-section__control,
+.poetheme-font-section__control {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -168,4 +179,78 @@
 
 .poetheme-color-preview::after {
     background-color: var(--poetheme-preview-color, transparent);
+}
+
+.poetheme-font-select {
+    max-width: 320px;
+}
+
+.poetheme-font-preview {
+    margin-top: 8px;
+    padding: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #f9fafb;
+}
+
+.poetheme-font-preview__label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #4b5563;
+}
+
+.poetheme-font-preview__sample {
+    display: block;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #1f2937;
+}
+
+.poetheme-font-preview--text .poetheme-font-preview__sample {
+    font-size: 18px;
+}
+
+.poetheme-font-preview--heading .poetheme-font-preview__sample {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.poetheme-font-preview--link .poetheme-font-preview__sample {
+    font-size: 18px;
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.poetheme-font-preview--button .poetheme-font-preview__sample {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    background-color: #2563eb;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.poetheme-font-fallback {
+    max-width: 320px;
+}
+
+.poetheme-font-collection {
+    margin-top: 24px;
+}
+
+.poetheme-font-collection ul {
+    columns: 2;
+    column-gap: 24px;
+    margin: 0;
+    padding-left: 18px;
+}
+
+.poetheme-font-collection li {
+    margin-bottom: 8px;
 }
