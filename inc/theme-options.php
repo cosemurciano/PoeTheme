@@ -116,6 +116,376 @@ function poetheme_get_default_color_options() {
 }
 
 /**
+ * Retrieve the directory containing custom theme fonts.
+ *
+ * @return string
+ */
+function poetheme_get_font_directory() {
+    return apply_filters( 'poetheme_font_directory', trailingslashit( get_template_directory() ) . 'theme-font' );
+}
+
+/**
+ * Retrieve the URI pointing to the custom theme fonts directory.
+ *
+ * @return string
+ */
+function poetheme_get_font_directory_uri() {
+    return apply_filters( 'poetheme_font_directory_uri', trailingslashit( get_template_directory_uri() ) . 'theme-font' );
+}
+
+/**
+ * Map a font file extension to a CSS format value.
+ *
+ * @param string $extension File extension.
+ * @return string
+ */
+function poetheme_map_font_format( $extension ) {
+    switch ( strtolower( $extension ) ) {
+        case 'woff2':
+            return 'woff2';
+        case 'woff':
+            return 'woff';
+        case 'ttf':
+            return 'truetype';
+        case 'otf':
+        default:
+            return 'opentype';
+    }
+}
+
+/**
+ * Attempt to detect the font weight from a filename.
+ *
+ * @param string $filename Font filename without extension.
+ * @return int
+ */
+function poetheme_detect_font_weight( $filename ) {
+    $lookup = array(
+        'thin'       => 100,
+        'extralight' => 200,
+        'ultralight' => 200,
+        'light'      => 300,
+        'regular'    => 400,
+        'book'       => 400,
+        'medium'     => 500,
+        'semibold'   => 600,
+        'demibold'   => 600,
+        'bold'       => 700,
+        'extrabold'  => 800,
+        'ultrabold'  => 800,
+        'black'      => 900,
+        'heavy'      => 900,
+    );
+
+    $filename = strtolower( $filename );
+
+    foreach ( $lookup as $keyword => $weight ) {
+        if ( false !== strpos( $filename, $keyword ) ) {
+            return $weight;
+        }
+    }
+
+    if ( preg_match( '/(\d{3})/', $filename, $matches ) ) {
+        $weight = (int) $matches[1];
+        return min( 900, max( 100, $weight ) );
+    }
+
+    return 400;
+}
+
+/**
+ * Detect the font style from a filename.
+ *
+ * @param string $filename Font filename without extension.
+ * @return string
+ */
+function poetheme_detect_font_style( $filename ) {
+    $filename = strtolower( $filename );
+
+    if ( false !== strpos( $filename, 'italic' ) || false !== strpos( $filename, 'oblique' ) ) {
+        return 'italic';
+    }
+
+    return 'normal';
+}
+
+/**
+ * Retrieve a sanitized list of custom fonts stored in the theme-font directory.
+ *
+ * @return array
+ */
+function poetheme_get_available_fonts() {
+    static $fonts = null;
+
+    if ( null !== $fonts ) {
+        return $fonts;
+    }
+
+    $fonts     = array();
+    $directory = poetheme_get_font_directory();
+
+    if ( ! is_dir( $directory ) ) {
+        return $fonts;
+    }
+
+    $pattern = trailingslashit( $directory ) . '*.{woff2,woff,ttf,otf}';
+    $files   = glob( $pattern, GLOB_BRACE );
+
+    if ( ! $files ) {
+        return $fonts;
+    }
+
+    foreach ( $files as $file ) {
+        $pathinfo = pathinfo( $file );
+
+        if ( empty( $pathinfo['filename'] ) || empty( $pathinfo['extension'] ) ) {
+            continue;
+        }
+
+        $slug = sanitize_title( $pathinfo['filename'] );
+
+        if ( isset( $fonts[ $slug ] ) ) {
+            continue;
+        }
+
+        $family = preg_replace( '/[^a-zA-Z0-9\-\s]/', ' ', $pathinfo['filename'] );
+        $family = trim( preg_replace( '/[\s_-]+/', ' ', $family ) );
+        $family = $family ? ucwords( $family ) : 'Font ' . strtoupper( $slug );
+
+        $fonts[ $slug ] = array(
+            'slug'   => $slug,
+            'family' => $family,
+            'file'   => $pathinfo['basename'],
+            'format' => poetheme_map_font_format( $pathinfo['extension'] ),
+            'style'  => poetheme_detect_font_style( $pathinfo['filename'] ),
+            'weight' => poetheme_detect_font_weight( $pathinfo['filename'] ),
+            'url'    => esc_url_raw( trailingslashit( poetheme_get_font_directory_uri() ) . rawurlencode( $pathinfo['basename'] ) ),
+        );
+    }
+
+    ksort( $fonts );
+
+    return $fonts;
+}
+
+/**
+ * Generate @font-face rules for the provided font slugs.
+ *
+ * @param array|null $font_slugs Font slugs to include. Null includes all available fonts.
+ * @return string
+ */
+function poetheme_generate_font_face_css( $font_slugs = null ) {
+    $available_fonts = poetheme_get_available_fonts();
+
+    if ( empty( $available_fonts ) ) {
+        return '';
+    }
+
+    if ( null === $font_slugs ) {
+        $selected_fonts = $available_fonts;
+    } else {
+        $selected_fonts = array();
+        foreach ( (array) $font_slugs as $slug ) {
+            $slug = sanitize_title( $slug );
+            if ( isset( $available_fonts[ $slug ] ) ) {
+                $selected_fonts[ $slug ] = $available_fonts[ $slug ];
+            }
+        }
+    }
+
+    if ( empty( $selected_fonts ) ) {
+        return '';
+    }
+
+    $rules = '';
+
+    foreach ( $selected_fonts as $font ) {
+        $family = preg_replace( '/[^a-zA-Z0-9\s\-]/', '', $font['family'] );
+        $style  = in_array( $font['style'], array( 'normal', 'italic' ), true ) ? $font['style'] : 'normal';
+        $weight = (int) $font['weight'];
+        $weight = $weight ? $weight : 400;
+        $url    = esc_url_raw( $font['url'] );
+        $format = $font['format'];
+
+        $rules .= "@font-face{font-family:'{$family}';font-style:{$style};font-weight:{$weight};font-display:swap;src:url('{$url}') format('{$format}');}";
+    }
+
+    return $rules;
+}
+
+/**
+ * Sanitize a font stack string.
+ *
+ * @param string $value Raw value.
+ * @return string
+ */
+function poetheme_sanitize_font_stack( $value ) {
+    $value = wp_strip_all_tags( $value );
+    $value = preg_replace( "/[^a-zA-Z0-9,\-\s\"']+/", '', $value );
+    return trim( preg_replace( '/\s+/', ' ', $value ) );
+}
+
+/**
+ * Default font options.
+ *
+ * @return array
+ */
+function poetheme_get_default_font_options() {
+    return array(
+        'body_font'      => '',
+        'body_fallback'  => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        'heading_font'   => '',
+        'heading_fallback' => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    );
+}
+
+/**
+ * Retrieve saved font options merged with defaults.
+ *
+ * @return array
+ */
+function poetheme_get_font_options() {
+    $options = get_option( 'poetheme_fonts', array() );
+
+    if ( ! is_array( $options ) ) {
+        $options = array();
+    }
+
+    return wp_parse_args( $options, poetheme_get_default_font_options() );
+}
+
+/**
+ * Sanitize font options before saving.
+ *
+ * @param array $input Raw input.
+ * @return array
+ */
+function poetheme_sanitize_font_options( $input ) {
+    $input   = is_array( $input ) ? $input : array();
+    $fonts   = poetheme_get_available_fonts();
+    $default = poetheme_get_default_font_options();
+
+    $body_font = isset( $input['body_font'] ) ? sanitize_title( $input['body_font'] ) : '';
+    if ( $body_font && ! isset( $fonts[ $body_font ] ) ) {
+        $body_font = '';
+    }
+
+    $heading_font = isset( $input['heading_font'] ) ? sanitize_title( $input['heading_font'] ) : '';
+    if ( $heading_font && ! isset( $fonts[ $heading_font ] ) ) {
+        $heading_font = '';
+    }
+
+    $body_fallback    = isset( $input['body_fallback'] ) ? poetheme_sanitize_font_stack( $input['body_fallback'] ) : $default['body_fallback'];
+    $heading_fallback = isset( $input['heading_fallback'] ) ? poetheme_sanitize_font_stack( $input['heading_fallback'] ) : $default['heading_fallback'];
+
+    return array(
+        'body_font'        => $body_font,
+        'body_fallback'    => $body_fallback ? $body_fallback : $default['body_fallback'],
+        'heading_font'     => $heading_font,
+        'heading_fallback' => $heading_fallback ? $heading_fallback : $default['heading_fallback'],
+    );
+}
+
+/**
+ * Build a font-family stack combining the custom font and fallback values.
+ *
+ * @param string $font_slug Selected font slug.
+ * @param string $fallback  Fallback stack.
+ * @param array  $available_fonts Optional cached fonts list.
+ * @return string
+ */
+function poetheme_build_font_stack( $font_slug, $fallback, $available_fonts = null ) {
+    if ( null === $available_fonts ) {
+        $available_fonts = poetheme_get_available_fonts();
+    }
+
+    $families = array();
+    $font_slug = $font_slug ? sanitize_title( $font_slug ) : '';
+
+    if ( $font_slug && isset( $available_fonts[ $font_slug ] ) ) {
+        $family_name = preg_replace( '/[^a-zA-Z0-9\s\-]/', '', $available_fonts[ $font_slug ]['family'] );
+        if ( $family_name ) {
+            $families[] = "'{$family_name}'";
+        }
+    }
+
+    if ( $fallback ) {
+        $fallback_parts = array_map( 'trim', explode( ',', $fallback ) );
+        foreach ( $fallback_parts as $part ) {
+            if ( '' === $part ) {
+                continue;
+            }
+
+            if ( preg_match( '/^(["\']).*\1$/', $part ) ) {
+                $families[] = $part;
+            } elseif ( false !== strpos( $part, ' ' ) ) {
+                $families[] = "'{$part}'";
+            } else {
+                $families[] = $part;
+            }
+        }
+    }
+
+    $families = array_values( array_unique( array_filter( $families ) ) );
+
+    return implode( ', ', $families );
+}
+
+/**
+ * Prepare font styles (font-face rules and CSS stacks).
+ *
+ * @return array
+ */
+function poetheme_prepare_font_styles() {
+    static $cache = null;
+
+    if ( null !== $cache ) {
+        return $cache;
+    }
+
+    $options         = poetheme_get_font_options();
+    $available_fonts = poetheme_get_available_fonts();
+
+    $body_font    = ! empty( $options['body_font'] ) ? $options['body_font'] : '';
+    $heading_font = ! empty( $options['heading_font'] ) ? $options['heading_font'] : '';
+
+    $used_fonts = array_values( array_unique( array_filter( array( $body_font, $heading_font ) ) ) );
+
+    $font_faces = poetheme_generate_font_face_css( $used_fonts );
+
+    $body_stack    = '';
+    $heading_stack = '';
+
+    if ( $body_font ) {
+        $body_stack = poetheme_build_font_stack( $body_font, $options['body_fallback'], $available_fonts );
+    }
+
+    if ( $heading_font ) {
+        $heading_stack = poetheme_build_font_stack( $heading_font, $options['heading_fallback'], $available_fonts );
+    }
+
+    $css_rules = '';
+
+    if ( $body_stack ) {
+        $css_rules .= 'body,button,input,select,textarea{font-family:' . $body_stack . ';}';
+    }
+
+    if ( $heading_stack ) {
+        $css_rules .= 'h1,h2,h3,h4,h5,h6{font-family:' . $heading_stack . ';}';
+    }
+
+    $cache = array(
+        'font_faces'    => $font_faces,
+        'css_rules'     => $css_rules,
+        'body_stack'    => $body_stack,
+        'heading_stack' => $heading_stack,
+        'used_fonts'    => $used_fonts,
+    );
+
+    return $cache;
+}
+
+/**
  * Sanitize global layout options.
  *
  * @param array $input Raw option values.
@@ -365,6 +735,16 @@ function poetheme_register_settings() {
     );
 
     register_setting(
+        'poetheme_fonts_group',
+        'poetheme_fonts',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'poetheme_sanitize_font_options',
+            'default'           => poetheme_get_default_font_options(),
+        )
+    );
+
+    register_setting(
         'poetheme_logo_group',
         'poetheme_logo',
         array(
@@ -426,6 +806,15 @@ function poetheme_add_options_pages() {
         'manage_options',
         'poetheme-colors',
         'poetheme_render_colors_page'
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'Gestione Font', 'poetheme' ),
+        __( 'Gestione Font', 'poetheme' ),
+        'manage_options',
+        'poetheme-fonts',
+        'poetheme_render_fonts_page'
     );
 
     add_submenu_page(
@@ -859,6 +1248,214 @@ function poetheme_get_color_section_groups() {
         ),
     );
 }
+
+function poetheme_render_fonts_page() {
+    $options          = poetheme_get_font_options();
+    $available_fonts  = poetheme_get_available_fonts();
+    $font_faces       = poetheme_generate_font_face_css();
+    $body_font        = isset( $options['body_font'] ) ? $options['body_font'] : '';
+    $heading_font     = isset( $options['heading_font'] ) ? $options['heading_font'] : '';
+    $body_stack       = poetheme_build_font_stack( $body_font, $options['body_fallback'], $available_fonts );
+    $heading_stack    = poetheme_build_font_stack( $heading_font, $options['heading_fallback'], $available_fonts );
+    $fonts_for_script = array();
+
+    foreach ( $available_fonts as $font ) {
+        $fonts_for_script[ $font['slug'] ] = $font['family'];
+    }
+    ?>
+    <div class="wrap poetheme-font-settings">
+        <h1><?php esc_html_e( 'Gestione Font', 'poetheme' ); ?></h1>
+
+        <?php if ( $font_faces ) : ?>
+            <style id="poetheme-font-settings-admin">
+                <?php echo $font_faces; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+            </style>
+        <?php endif; ?>
+
+        <style>
+            .poetheme-font-preview {
+                margin-top: 12px;
+                padding: 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 4px;
+                background-color: #f9fafb;
+            }
+
+            .poetheme-font-preview__label {
+                display: block;
+                margin-bottom: 8px;
+                font-size: 0.8125rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #4b5563;
+            }
+
+            .poetheme-font-preview__sample {
+                display: block;
+                font-size: 1.125rem;
+                line-height: 1.6;
+                color: #1f2937;
+            }
+
+            .poetheme-font-collection {
+                margin-top: 24px;
+            }
+
+            .poetheme-font-collection ul {
+                columns: 2;
+                column-gap: 24px;
+                margin: 0;
+                padding-left: 18px;
+            }
+
+            .poetheme-font-collection li {
+                margin-bottom: 8px;
+            }
+        </style>
+
+        <?php if ( empty( $available_fonts ) ) : ?>
+            <div class="notice notice-warning">
+                <p><?php esc_html_e( 'Non sono stati trovati font personalizzati nella cartella theme-font. Carica file .woff2, .woff, .ttf o .otf per renderli disponibili.', 'poetheme' ); ?></p>
+            </div>
+        <?php endif; ?>
+
+        <form action="options.php" method="post">
+            <?php settings_fields( 'poetheme_fonts_group' ); ?>
+
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><label for="poetheme-font-body"><?php esc_html_e( 'Font testo principale', 'poetheme' ); ?></label></th>
+                        <td>
+                            <select id="poetheme-font-body" name="poetheme_fonts[body_font]" <?php disabled( empty( $available_fonts ) ); ?>>
+                                <option value="" <?php selected( '', $body_font ); ?>><?php esc_html_e( 'Usa il font di sistema predefinito', 'poetheme' ); ?></option>
+                                <?php foreach ( $available_fonts as $font ) : ?>
+                                    <option value="<?php echo esc_attr( $font['slug'] ); ?>" <?php selected( $body_font, $font['slug'] ); ?> data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
+                                        <?php echo esc_html( $font['family'] ); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description"><?php esc_html_e( 'Seleziona il font da utilizzare per il contenuto testuale principale.', 'poetheme' ); ?></p>
+
+                            <div class="poetheme-font-preview" id="poetheme-font-preview-body" style="<?php echo $body_stack ? 'font-family:' . esc_attr( $body_stack ) . ';' : ''; ?>">
+                                <span class="poetheme-font-preview__label"><?php esc_html_e( 'Anteprima', 'poetheme' ); ?></span>
+                                <span class="poetheme-font-preview__sample"><?php esc_html_e( 'Questo è un esempio di paragrafo con il font selezionato.', 'poetheme' ); ?></span>
+                            </div>
+
+                            <label for="poetheme-font-body-fallback" class="poetheme-font-fallback-label"><?php esc_html_e( 'Font di fallback', 'poetheme' ); ?></label><br />
+                            <input type="text" id="poetheme-font-body-fallback" name="poetheme_fonts[body_fallback]" value="<?php echo esc_attr( $options['body_fallback'] ); ?>" class="regular-text" />
+                            <p class="description"><?php esc_html_e( 'Elenca i font alternativi da usare se il font principale non è disponibile.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="poetheme-font-heading"><?php esc_html_e( 'Font titoli e intestazioni', 'poetheme' ); ?></label></th>
+                        <td>
+                            <select id="poetheme-font-heading" name="poetheme_fonts[heading_font]" <?php disabled( empty( $available_fonts ) ); ?>>
+                                <option value="" <?php selected( '', $heading_font ); ?>><?php esc_html_e( 'Usa lo stesso font del testo', 'poetheme' ); ?></option>
+                                <?php foreach ( $available_fonts as $font ) : ?>
+                                    <option value="<?php echo esc_attr( $font['slug'] ); ?>" <?php selected( $heading_font, $font['slug'] ); ?> data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
+                                        <?php echo esc_html( $font['family'] ); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description"><?php esc_html_e( 'Applica un font dedicato a titoli e intestazioni.', 'poetheme' ); ?></p>
+
+                            <div class="poetheme-font-preview" id="poetheme-font-preview-heading" style="<?php echo $heading_stack ? 'font-family:' . esc_attr( $heading_stack ) . ';' : ''; ?>">
+                                <span class="poetheme-font-preview__label"><?php esc_html_e( 'Anteprima', 'poetheme' ); ?></span>
+                                <span class="poetheme-font-preview__sample" style="font-size:1.5rem;">
+                                    <?php esc_html_e( 'Titolo di esempio con il font selezionato.', 'poetheme' ); ?>
+                                </span>
+                            </div>
+
+                            <label for="poetheme-font-heading-fallback" class="poetheme-font-fallback-label"><?php esc_html_e( 'Font di fallback', 'poetheme' ); ?></label><br />
+                            <input type="text" id="poetheme-font-heading-fallback" name="poetheme_fonts[heading_fallback]" value="<?php echo esc_attr( $options['heading_fallback'] ); ?>" class="regular-text" />
+                            <p class="description"><?php esc_html_e( 'Specifica i font alternativi per titoli e intestazioni.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <?php submit_button(); ?>
+        </form>
+
+        <?php if ( ! empty( $available_fonts ) ) : ?>
+            <div class="poetheme-font-collection">
+                <h2><?php esc_html_e( 'Font disponibili', 'poetheme' ); ?></h2>
+                <p class="description"><?php esc_html_e( "L'elenco seguente mostra i font caricati nella cartella theme-font.", 'poetheme' ); ?></p>
+                <ul>
+                    <?php foreach ( $available_fonts as $font ) : ?>
+                        <li><?php echo esc_html( $font['family'] ); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $fonts_for_script ) ) : ?>
+            <script>
+                ( function () {
+                    const fontMap = <?php echo wp_json_encode( $fonts_for_script ); ?>;
+
+                    const bodySelect = document.getElementById( 'poetheme-font-body' );
+                    const bodyFallback = document.getElementById( 'poetheme-font-body-fallback' );
+                    const bodyPreview = document.getElementById( 'poetheme-font-preview-body' );
+
+                    const headingSelect = document.getElementById( 'poetheme-font-heading' );
+                    const headingFallback = document.getElementById( 'poetheme-font-heading-fallback' );
+                    const headingPreview = document.getElementById( 'poetheme-font-preview-heading' );
+
+                    function buildStack( slug, fallback ) {
+                        const parts = [];
+
+                        if ( slug && fontMap[ slug ] ) {
+                            parts.push( "'" + fontMap[ slug ].replace(/'/g, "\'") + "'" );
+                        }
+
+                        if ( fallback ) {
+                            parts.push( fallback );
+                        }
+
+                        return parts.join( ', ' );
+                    }
+
+                    function updatePreview( select, fallbackInput, preview ) {
+                        if ( ! preview ) {
+                            return;
+                        }
+
+                        const stack = buildStack( select ? select.value : '', fallbackInput ? fallbackInput.value : '' );
+                        preview.style.fontFamily = stack;
+                    }
+
+                    if ( bodySelect && bodyPreview ) {
+                        const updateBody = function () {
+                            updatePreview( bodySelect, bodyFallback, bodyPreview );
+                        };
+                        bodySelect.addEventListener( 'change', updateBody );
+                        if ( bodyFallback ) {
+                            bodyFallback.addEventListener( 'input', updateBody );
+                        }
+                        updateBody();
+                    }
+
+                    if ( headingSelect && headingPreview ) {
+                        const updateHeading = function () {
+                            updatePreview( headingSelect, headingFallback, headingPreview );
+                        };
+                        headingSelect.addEventListener( 'change', updateHeading );
+                        if ( headingFallback ) {
+                            headingFallback.addEventListener( 'input', updateHeading );
+                        }
+                        updateHeading();
+                    }
+                }() );
+            </script>
+        <?php endif; ?>
+    </div>
+    <?php
+}
+
 
 function poetheme_render_colors_page() {
     $options  = poetheme_get_color_options();
