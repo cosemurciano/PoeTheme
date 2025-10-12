@@ -353,7 +353,7 @@ function poetheme_get_default_font_options() {
             $size_key = $field['size']['option_key'];
 
             if ( ! isset( $defaults[ $size_key ] ) ) {
-                $defaults[ $size_key ] = '';
+                $defaults[ $size_key ] = isset( $field['size']['default'] ) ? $field['size']['default'] : '';
             }
         }
     }
@@ -423,7 +423,8 @@ function poetheme_sanitize_font_options( $input ) {
         $raw_value = isset( $input[ $size_key ] ) ? trim( (string) $input[ $size_key ] ) : '';
 
         if ( '' === $raw_value ) {
-            $output[ $size_key ] = '';
+            $default_value       = isset( $size_config['default'] ) ? $size_config['default'] : ( isset( $default[ $size_key ] ) ? $default[ $size_key ] : '' );
+            $output[ $size_key ] = $default_value;
             continue;
         }
 
@@ -592,7 +593,7 @@ function poetheme_prepare_font_styles() {
             continue;
         }
 
-        $size_rules .= implode( ',', $size_selectors ) . '{font-size:' . (float) $size_val . 'em;}';
+        $size_rules .= implode( ',', $size_selectors ) . '{font-size:' . poetheme_format_number_for_css( $size_val ) . 'rem;}';
     }
 
     $selected_fonts = array_values( array_unique( array_filter( $selected_fonts ) ) );
@@ -1407,11 +1408,12 @@ function poetheme_get_font_field_config() {
             ),
             'size'            => array(
                 'option_key'  => 'body_font_size',
-                'label'       => __( 'Dimensione testo (em)', 'poetheme' ),
-                'description' => __( 'Imposta la dimensione base del font per il contenuto.', 'poetheme' ),
+                'label'       => __( 'Dimensione testo (rem)', 'poetheme' ),
+                'description' => __( 'Imposta la dimensione base del font per il contenuto usando i rem.', 'poetheme' ),
                 'min'         => 0.5,
                 'max'         => 3,
                 'step'        => 0.05,
+                'default'     => 1,
             ),
         ),
         'cta_text_color' => array(
@@ -1427,8 +1429,8 @@ function poetheme_get_font_field_config() {
             ),
             'size'            => array(
                 'option_key'  => 'cta_text_font_size',
-                'label'       => __( 'Dimensione pulsante (em)', 'poetheme' ),
-                'description' => __( 'Definisce la dimensione del testo del pulsante Call to Action.', 'poetheme' ),
+                'label'       => __( 'Dimensione pulsante (rem)', 'poetheme' ),
+                'description' => __( 'Definisce la dimensione del testo del pulsante Call to Action in rem.', 'poetheme' ),
                 'min'         => 0.5,
                 'max'         => 3,
                 'step'        => 0.05,
@@ -1450,8 +1452,8 @@ function poetheme_get_font_field_config() {
             ),
             'size'            => array(
                 'option_key'  => 'top_bar_text_font_size',
-                'label'       => __( 'Dimensione barra superiore (em)', 'poetheme' ),
-                'description' => __( 'Regola la dimensione del testo mostrato nella barra superiore.', 'poetheme' ),
+                'label'       => __( 'Dimensione barra superiore (rem)', 'poetheme' ),
+                'description' => __( 'Regola la dimensione del testo mostrato nella barra superiore in rem.', 'poetheme' ),
                 'min'         => 0.5,
                 'max'         => 2,
                 'step'        => 0.05,
@@ -1480,8 +1482,8 @@ function poetheme_get_font_field_config() {
             ),
             'size'            => array(
                 'option_key'  => 'heading_font_size',
-                'label'       => __( 'Dimensione titolo H1 (em)', 'poetheme' ),
-                'description' => __( 'Applica una dimensione personalizzata al titolo H1.', 'poetheme' ),
+                'label'       => __( 'Dimensione titolo H1 (rem)', 'poetheme' ),
+                'description' => __( 'Applica una dimensione personalizzata al titolo H1 misurata in rem.', 'poetheme' ),
                 'min'         => 0.8,
                 'max'         => 4,
                 'step'        => 0.05,
@@ -1499,8 +1501,8 @@ function poetheme_get_font_field_config() {
             'selectors'       => array( 'h2' ),
             'size'            => array(
                 'option_key'  => 'heading_h2_font_size',
-                'label'       => __( 'Dimensione titolo H2 (em)', 'poetheme' ),
-                'description' => __( 'Personalizza la dimensione dei titoli H2.', 'poetheme' ),
+                'label'       => __( 'Dimensione titolo H2 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H2 in rem.', 'poetheme' ),
                 'min'         => 0.8,
                 'max'         => 4,
                 'step'        => 0.05,
@@ -1517,8 +1519,8 @@ function poetheme_get_font_field_config() {
             'selectors'       => array( 'h3' ),
             'size'            => array(
                 'option_key'  => 'heading_h3_font_size',
-                'label'       => __( 'Dimensione titolo H3 (em)', 'poetheme' ),
-                'description' => __( 'Personalizza la dimensione dei titoli H3.', 'poetheme' ),
+                'label'       => __( 'Dimensione titolo H3 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H3 in rem.', 'poetheme' ),
                 'min'         => 0.8,
                 'max'         => 4,
                 'step'        => 0.05,
@@ -1535,8 +1537,8 @@ function poetheme_get_font_field_config() {
             'selectors'       => array( 'h4' ),
             'size'            => array(
                 'option_key'  => 'heading_h4_font_size',
-                'label'       => __( 'Dimensione titolo H4 (em)', 'poetheme' ),
-                'description' => __( 'Personalizza la dimensione dei titoli H4.', 'poetheme' ),
+                'label'       => __( 'Dimensione titolo H4 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H4 in rem.', 'poetheme' ),
                 'min'         => 0.8,
                 'max'         => 4,
                 'step'        => 0.05,
@@ -1553,8 +1555,8 @@ function poetheme_get_font_field_config() {
             'selectors'       => array( 'h5' ),
             'size'            => array(
                 'option_key'  => 'heading_h5_font_size',
-                'label'       => __( 'Dimensione titolo H5 (em)', 'poetheme' ),
-                'description' => __( 'Personalizza la dimensione dei titoli H5.', 'poetheme' ),
+                'label'       => __( 'Dimensione titolo H5 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H5 in rem.', 'poetheme' ),
                 'min'         => 0.8,
                 'max'         => 4,
                 'step'        => 0.05,
@@ -1571,8 +1573,8 @@ function poetheme_get_font_field_config() {
             'selectors'       => array( 'h6' ),
             'size'            => array(
                 'option_key'  => 'heading_h6_font_size',
-                'label'       => __( 'Dimensione titolo H6 (em)', 'poetheme' ),
-                'description' => __( 'Personalizza la dimensione dei titoli H6.', 'poetheme' ),
+                'label'       => __( 'Dimensione titolo H6 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H6 in rem.', 'poetheme' ),
                 'min'         => 0.8,
                 'max'         => 4,
                 'step'        => 0.05,
@@ -1704,7 +1706,7 @@ function poetheme_render_fonts_page() {
                                                     $size_value = isset( $options[ $size_key ] ) ? $options[ $size_key ] : '';
 
                                                     if ( '' !== $size_value && is_numeric( $size_value ) ) {
-                                                        $preview_style .= 'font-size:' . (float) $size_value . 'em;';
+                                                        $preview_style .= 'font-size:' . poetheme_format_number_for_css( $size_value ) . 'rem;';
                                                     }
                                                 }
 
@@ -1731,7 +1733,7 @@ function poetheme_render_fonts_page() {
                                                         <?php if ( ! empty( $size_config ) && ! empty( $size_config['option_key'] ) ) :
                                                             $size_key        = $size_config['option_key'];
                                                             $size_id         = 'poetheme-font-' . $size_key;
-                                                            $size_value_attr = ( '' !== $size_value && is_numeric( $size_value ) ) ? (string) (float) $size_value : '';
+                                                            $size_value_attr = ( '' !== $size_value && is_numeric( $size_value ) ) ? poetheme_format_number_for_css( $size_value ) : '';
                                                             $size_step       = isset( $size_config['step'] ) ? $size_config['step'] : '0.1';
                                                             $size_attrs      = '';
 
@@ -1752,7 +1754,7 @@ function poetheme_render_fonts_page() {
                                                                 value="<?php echo esc_attr( $size_value_attr ); ?>"
                                                                 step="<?php echo esc_attr( $size_step ); ?>"<?php echo $size_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                                                 data-preview="<?php echo esc_attr( $preview_id ); ?>"
-                                                                data-unit="em"
+                                                                data-unit="rem"
                                                                 data-property="fontSize"
                                                             />
                                                             <?php if ( ! empty( $size_config['description'] ) ) : ?>
@@ -2028,7 +2030,7 @@ function poetheme_render_logo_page() {
     $logo_height     = isset( $options['logo_height'] ) ? absint( $options['logo_height'] ) : 0;
     $show_site_title = ! empty( $options['show_site_title'] );
     $title_color     = isset( $options['title_color'] ) ? $options['title_color'] : '#111827';
-    $title_size      = isset( $options['title_size'] ) ? absint( $options['title_size'] ) : 0;
+    $title_size      = isset( $options['title_size'] ) ? (float) $options['title_size'] : 0;
     $site_title      = get_bloginfo( 'name' );
     $site_tagline    = get_bloginfo( 'description', 'display' );
 
@@ -2042,7 +2044,7 @@ function poetheme_render_logo_page() {
     }
 
     if ( $title_size > 0 ) {
-        $title_style_attr .= 'font-size:' . $title_size . 'px;';
+        $title_style_attr .= 'font-size:' . poetheme_format_number_for_css( $title_size ) . 'rem;';
     }
 
     $title_style_attr   = $title_style_attr ? ' style="' . esc_attr( $title_style_attr ) . '"' : '';
@@ -2100,8 +2102,8 @@ function poetheme_render_logo_page() {
                     />
                 </p>
                 <p>
-                    <label for="poetheme_logo_title_size"><?php esc_html_e( 'Dimensione del titolo (px)', 'poetheme' ); ?></label><br />
-                    <input type="number" min="16" step="1" id="poetheme_logo_title_size" name="poetheme_logo[title_size]" value="<?php echo esc_attr( $title_size ); ?>" class="small-text" />
+                    <label for="poetheme_logo_title_size"><?php esc_html_e( 'Dimensione del titolo (rem)', 'poetheme' ); ?></label><br />
+                    <input type="number" min="0.5" step="0.05" id="poetheme_logo_title_size" name="poetheme_logo[title_size]" value="<?php echo esc_attr( poetheme_format_number_for_css( $title_size ) ); ?>" class="small-text" />
                 </p>
             </div>
 
@@ -2303,7 +2305,7 @@ function poetheme_get_default_logo_options() {
         'logo_height'    => 48,
         'show_site_title'=> false,
         'title_color'    => '#111827',
-        'title_size'     => 32,
+        'title_size'     => 2,
     );
 }
 
@@ -2320,7 +2322,7 @@ function poetheme_get_logo_options() {
     $color = isset( $options['title_color'] ) ? sanitize_hex_color( $options['title_color'] ) : '';
     $options['title_color'] = $color ? $color : $defaults['title_color'];
 
-    $size = isset( $options['title_size'] ) ? absint( $options['title_size'] ) : 0;
+    $size = isset( $options['title_size'] ) ? (float) $options['title_size'] : 0;
     $options['title_size'] = $size > 0 ? $size : $defaults['title_size'];
 
     return $options;
@@ -2358,7 +2360,9 @@ function poetheme_sanitize_logo_options( $input ) {
     }
 
     if ( isset( $input['title_size'] ) ) {
-        $size = absint( $input['title_size'] );
+        $size = str_replace( ',', '.', trim( (string) $input['title_size'] ) );
+        $size = is_numeric( $size ) ? (float) $size : 0;
+
         if ( $size > 0 ) {
             $output['title_size'] = $size;
         }

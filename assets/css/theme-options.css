@@ -19,12 +19,12 @@
 
 .poetheme-logo-preview__title {
     font-weight: 700;
-    font-size: 32px;
+    font-size: 2rem;
     line-height: 1.1;
 }
 
 .poetheme-logo-preview__tagline {
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .poetheme-background-control {
@@ -76,7 +76,7 @@
 .poetheme-color-group__header > h2,
 .poetheme-font-group__header > h2 {
     margin: 0 0 8px;
-    font-size: 22px;
+    font-size: 1.375rem;
 }
 
 .poetheme-color-group__sections,
@@ -99,7 +99,7 @@
 .poetheme-color-section__title,
 .poetheme-font-section__title {
     margin: 0 0 12px;
-    font-size: 18px;
+    font-size: 1.125rem;
 }
 
 .poetheme-color-section__description,
@@ -196,7 +196,7 @@
 .poetheme-font-preview__label {
     display: block;
     margin-bottom: 6px;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -205,23 +205,23 @@
 
 .poetheme-font-preview__sample {
     display: block;
-    font-size: 18px;
+    font-size: 1.125rem;
     line-height: 1.6;
     color: #1f2937;
 }
 
 .poetheme-font-preview--text .poetheme-font-preview__sample {
-    font-size: 18px;
+    font-size: 1.125rem;
 }
 
 .poetheme-font-preview--heading .poetheme-font-preview__sample {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.2;
 }
 
 .poetheme-font-preview--link .poetheme-font-preview__sample {
-    font-size: 18px;
+    font-size: 1.125rem;
     color: #2563eb;
     text-decoration: underline;
 }
@@ -232,7 +232,7 @@
     border-radius: 12px;
     background-color: #2563eb;
     color: #fff;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
 }
 

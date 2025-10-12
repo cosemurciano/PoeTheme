@@ -7,6 +7,22 @@
 
 define( 'POETHEME_VERSION', '1.0.0' );
 
+if ( ! function_exists( 'poetheme_format_number_for_css' ) ) {
+    /**
+     * Format a numeric value for CSS output by trimming unnecessary trailing zeros.
+     *
+     * @param float|int|string $value     Raw numeric value.
+     * @param int              $precision Number of decimal places to keep.
+     * @return string
+     */
+    function poetheme_format_number_for_css( $value, $precision = 4 ) {
+        $formatted = number_format( (float) $value, (int) $precision, '.', '' );
+        $trimmed   = rtrim( rtrim( $formatted, '0' ), '.' );
+
+        return '' === $trimmed ? '0' : $trimmed;
+    }
+}
+
 define( 'POETHEME_DIR', get_template_directory() );
 define( 'POETHEME_URI', get_template_directory_uri() );
 

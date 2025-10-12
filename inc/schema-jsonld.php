@@ -503,13 +503,13 @@ function tsg_render_options_page(){
     .tsg-schema-page .tsg-top-link { margin:8px 0 24px; }
     .tsg-schema-page .tsg-top-link a { font-weight:600; }
     .tsg-schema-page .tsg-inline { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-    .tsg-schema-page .tsg-subtitle { margin-top:32px; margin-bottom:8px; font-size:16px; }
+    .tsg-schema-page .tsg-subtitle { margin-top:32px; margin-bottom:8px; font-size:1rem; }
     .tsg-schema-page .tsg-repeater { margin-top:12px; }
     .tsg-schema-page .tsg-publisher-types { display:grid; gap:16px; margin:16px 0 24px; }
     .tsg-schema-page .tsg-publisher-types .tsg-panel { margin:0; }
     .tsg-schema-page .tsg-card { border:1px solid #dcdcde; border-radius:6px; padding:16px; background:#fafafa; margin-bottom:16px; }
     .tsg-schema-page .tsg-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-    .tsg-schema-page .tsg-card-title { font-size:15px; margin:0; }
+    .tsg-schema-page .tsg-card-title { font-size:0.9375rem; margin:0; }
     .tsg-schema-page .tsg-field { margin-bottom:12px; }
     .tsg-schema-page .tsg-field label { font-weight:600; display:block; margin-bottom:4px; }
     .tsg-schema-page .tsg-field textarea.widefat { min-height:80px; }
@@ -518,7 +518,7 @@ function tsg_render_options_page(){
     .tsg-schema-page .tsg-hour-row .tsg-day-list { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
     .tsg-schema-page .tsg-hour-row .tsg-day-list label { display:flex; gap:4px; align-items:center; }
     .tsg-schema-page .tsg-hour-row .tsg-inline { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
-    .tsg-schema-page .tsg-hour-row .tsg-hour-input { display:flex; flex-direction:column; font-weight:600; font-size:12px; }
+    .tsg-schema-page .tsg-hour-row .tsg-hour-input { display:flex; flex-direction:column; font-weight:600; font-size:0.75rem; }
     .tsg-schema-page .tsg-hour-row .tsg-hour-input span { margin-bottom:4px; }
     .tsg-schema-page .tsg-hour-row .tsg-hour-remove { align-self:flex-start; }
     @media (max-width:782px) {
