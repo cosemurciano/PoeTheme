@@ -112,6 +112,9 @@ function poetheme_get_default_color_options() {
         'heading_h5_background'          => '',
         'heading_h6_color'               => '#111827',
         'heading_h6_background'          => '',
+        'page_title_color'               => '#111827',
+        'post_title_color'               => '#111827',
+        'category_title_color'           => '#111827',
     );
 }
 
@@ -331,12 +334,34 @@ function poetheme_sanitize_font_stack( $value ) {
  * @return array
  */
 function poetheme_get_default_font_options() {
-    return array(
-        'body_font'      => '',
-        'body_fallback'  => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-        'heading_font'   => '',
+    $defaults = array(
+        'body_font'        => '',
+        'body_fallback'    => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        'heading_font'     => '',
         'heading_fallback' => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     );
+
+    foreach ( poetheme_get_font_field_config() as $field ) {
+        if ( empty( $field['option_key'] ) ) {
+            continue;
+        }
+
+        $key = $field['option_key'];
+
+        if ( ! isset( $defaults[ $key ] ) ) {
+            $defaults[ $key ] = '';
+        }
+
+        if ( ! empty( $field['size'] ) && ! empty( $field['size']['option_key'] ) ) {
+            $size_key = $field['size']['option_key'];
+
+            if ( ! isset( $defaults[ $size_key ] ) ) {
+                $defaults[ $size_key ] = isset( $field['size']['default'] ) ? $field['size']['default'] : '';
+            }
+        }
+    }
+
+    return $defaults;
 }
 
 /**
@@ -364,26 +389,75 @@ function poetheme_sanitize_font_options( $input ) {
     $input   = is_array( $input ) ? $input : array();
     $fonts   = poetheme_get_available_fonts();
     $default = poetheme_get_default_font_options();
+    $output  = poetheme_get_font_options();
 
-    $body_font = isset( $input['body_font'] ) ? sanitize_title( $input['body_font'] ) : '';
-    if ( $body_font && ! isset( $fonts[ $body_font ] ) ) {
-        $body_font = '';
+    foreach ( poetheme_get_font_field_config() as $field ) {
+        if ( empty( $field['option_key'] ) ) {
+            continue;
+        }
+
+        $key   = $field['option_key'];
+        $value = isset( $input[ $key ] ) ? sanitize_title( $input[ $key ] ) : '';
+
+        if ( $value && ! isset( $fonts[ $value ] ) ) {
+            $value = '';
+        }
+
+        $output[ $key ] = $value;
     }
 
-    $heading_font = isset( $input['heading_font'] ) ? sanitize_title( $input['heading_font'] ) : '';
-    if ( $heading_font && ! isset( $fonts[ $heading_font ] ) ) {
-        $heading_font = '';
+    $size_fields = array();
+
+    foreach ( poetheme_get_font_field_config() as $field ) {
+        if ( empty( $field['size'] ) || empty( $field['size']['option_key'] ) ) {
+            continue;
+        }
+
+        $size_key = $field['size']['option_key'];
+
+        if ( isset( $size_fields[ $size_key ] ) ) {
+            continue;
+        }
+
+        $size_fields[ $size_key ] = $field['size'];
+    }
+
+    foreach ( $size_fields as $size_key => $size_config ) {
+        $raw_value = isset( $input[ $size_key ] ) ? trim( (string) $input[ $size_key ] ) : '';
+
+        if ( '' === $raw_value ) {
+            $default_value       = isset( $size_config['default'] ) ? $size_config['default'] : ( isset( $default[ $size_key ] ) ? $default[ $size_key ] : '' );
+            $output[ $size_key ] = $default_value;
+            continue;
+        }
+
+        $normalized = str_replace( ',', '.', $raw_value );
+
+        if ( ! is_numeric( $normalized ) ) {
+            $output[ $size_key ] = '';
+            continue;
+        }
+
+        $value = (float) $normalized;
+
+        if ( isset( $size_config['min'] ) ) {
+            $value = max( (float) $size_config['min'], $value );
+        }
+
+        if ( isset( $size_config['max'] ) ) {
+            $value = min( (float) $size_config['max'], $value );
+        }
+
+        $output[ $size_key ] = $value > 0 ? $value : '';
     }
 
     $body_fallback    = isset( $input['body_fallback'] ) ? poetheme_sanitize_font_stack( $input['body_fallback'] ) : $default['body_fallback'];
     $heading_fallback = isset( $input['heading_fallback'] ) ? poetheme_sanitize_font_stack( $input['heading_fallback'] ) : $default['heading_fallback'];
 
-    return array(
-        'body_font'        => $body_font,
-        'body_fallback'    => $body_fallback ? $body_fallback : $default['body_fallback'],
-        'heading_font'     => $heading_font,
-        'heading_fallback' => $heading_fallback ? $heading_fallback : $default['heading_fallback'],
-    );
+    $output['body_fallback']    = $body_fallback ? $body_fallback : $default['body_fallback'];
+    $output['heading_fallback'] = $heading_fallback ? $heading_fallback : $default['heading_fallback'];
+
+    return $output;
 }
 
 /**
@@ -446,32 +520,91 @@ function poetheme_prepare_font_styles() {
     $options         = poetheme_get_font_options();
     $available_fonts = poetheme_get_available_fonts();
 
-    $body_font    = ! empty( $options['body_font'] ) ? $options['body_font'] : '';
-    $heading_font = ! empty( $options['heading_font'] ) ? $options['heading_font'] : '';
+    $config = poetheme_get_font_field_config();
 
-    $used_fonts = array_values( array_unique( array_filter( array( $body_font, $heading_font ) ) ) );
+    $selected_fonts = array();
+    $css_rules      = '';
+    $body_stack     = '';
+    $heading_stack  = '';
 
-    $font_faces = poetheme_generate_font_face_css( $used_fonts );
+    foreach ( $config as $field ) {
+        if ( empty( $field['option_key'] ) ) {
+            continue;
+        }
 
-    $body_stack    = '';
-    $heading_stack = '';
+        $key           = $field['option_key'];
+        $value         = isset( $options[ $key ] ) ? $options[ $key ] : '';
+        $fallback_key  = ! empty( $field['fallback_key'] ) ? $field['fallback_key'] : '';
+        $fallback_value = $fallback_key && isset( $options[ $fallback_key ] ) ? $options[ $fallback_key ] : '';
 
-    if ( $body_font ) {
-        $body_stack = poetheme_build_font_stack( $body_font, $options['body_fallback'], $available_fonts );
+        if ( $value ) {
+            $selected_fonts[] = $value;
+        }
+
+        if ( empty( $value ) && empty( $fallback_value ) ) {
+            continue;
+        }
+
+        $stack = poetheme_build_font_stack( $value, $fallback_value, $available_fonts );
+
+        if ( ! $stack ) {
+            continue;
+        }
+
+        if ( 'body_font' === $key ) {
+            $body_stack = $stack;
+        }
+
+        if ( 'heading_font' === $key ) {
+            $heading_stack = $stack;
+        }
+
+        if ( ! empty( $field['selectors'] ) ) {
+            $selectors = array_filter( array_map( 'trim', (array) $field['selectors'] ) );
+
+            if ( $selectors ) {
+                $css_rules .= implode( ',', $selectors ) . '{font-family:' . $stack . ';}';
+            }
+        }
     }
 
-    if ( $heading_font ) {
-        $heading_stack = poetheme_build_font_stack( $heading_font, $options['heading_fallback'], $available_fonts );
+    $size_rules = '';
+
+    foreach ( $config as $field ) {
+        if ( empty( $field['size'] ) || empty( $field['size']['option_key'] ) ) {
+            continue;
+        }
+
+        $size_key = $field['size']['option_key'];
+        $size_val = isset( $options[ $size_key ] ) ? $options[ $size_key ] : '';
+
+        if ( '' === $size_val || ! is_numeric( $size_val ) ) {
+            continue;
+        }
+
+        $size_selectors = array();
+
+        if ( ! empty( $field['size']['selectors'] ) ) {
+            $size_selectors = (array) $field['size']['selectors'];
+        } elseif ( ! empty( $field['selectors'] ) ) {
+            $size_selectors = (array) $field['selectors'];
+        }
+
+        $size_selectors = array_filter( array_map( 'trim', $size_selectors ) );
+
+        if ( empty( $size_selectors ) ) {
+            continue;
+        }
+
+        $size_rules .= implode( ',', $size_selectors ) . '{font-size:' . poetheme_format_number_for_css( $size_val ) . 'rem;}';
     }
 
-    $css_rules = '';
+    $selected_fonts = array_values( array_unique( array_filter( $selected_fonts ) ) );
 
-    if ( $body_stack ) {
-        $css_rules .= 'body,button,input,select,textarea{font-family:' . $body_stack . ';}';
-    }
+    $font_faces = poetheme_generate_font_face_css( $selected_fonts );
 
-    if ( $heading_stack ) {
-        $css_rules .= 'h1,h2,h3,h4,h5,h6{font-family:' . $heading_stack . ';}';
+    if ( $size_rules ) {
+        $css_rules .= $size_rules;
     }
 
     $cache = array(
@@ -479,7 +612,7 @@ function poetheme_prepare_font_styles() {
         'css_rules'     => $css_rules,
         'body_stack'    => $body_stack,
         'heading_stack' => $heading_stack,
-        'used_fonts'    => $used_fonts,
+        'used_fonts'    => $selected_fonts,
     );
 
     return $cache;
@@ -1244,6 +1377,285 @@ function poetheme_get_color_section_groups() {
                         ),
                     ),
                 ),
+                'page_titles' => array(
+                    'title'       => __( 'Titoli pagine e archivi', 'poetheme' ),
+                    'description' => __( 'Personalizza i colori dei titoli principali di pagine, articoli e categorie.', 'poetheme' ),
+                    'fields'      => array(
+                        'page_title_color'     => array(
+                            'label'       => __( 'Colore titolo pagina', 'poetheme' ),
+                            'description' => __( 'Colore applicato al titolo delle pagine statiche.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'post_title_color'     => array(
+                            'label'       => __( 'Colore titolo articolo', 'poetheme' ),
+                            'description' => __( 'Colore del titolo degli articoli singoli.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'category_title_color' => array(
+                            'label'       => __( 'Colore titolo categoria', 'poetheme' ),
+                            'description' => __( 'Colore per i titoli delle pagine categoria e tassonomie.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    );
+}
+
+/**
+ * Configuration for the font selectors shown in the Gestione Font page.
+ *
+ * @return array
+ */
+function poetheme_get_font_field_config() {
+    return array(
+        'content_text_color' => array(
+            'option_key'      => 'body_font',
+            'label'           => __( 'Font testo del contenuto', 'poetheme' ),
+            'description'     => __( 'Scegli il font principale per paragrafi e testi di base.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font di sistema predefinito', 'poetheme' ),
+            'fallback_key'    => 'body_fallback',
+            'fallback'        => array(
+                'key'         => 'body_fallback',
+                'label'       => __( 'Font di fallback', 'poetheme' ),
+                'description' => __( 'Elenca i font alternativi da usare se il font principale non è disponibile.', 'poetheme' ),
+            ),
+            'preview_variant' => 'text',
+            'sample'          => __( 'Questo è un esempio di paragrafo con il font selezionato.', 'poetheme' ),
+            'selectors'       => array(
+                'body',
+                'button',
+                'input',
+                'select',
+                'textarea',
+            ),
+            'size'            => array(
+                'option_key'  => 'body_font_size',
+                'label'       => __( 'Dimensione testo (rem)', 'poetheme' ),
+                'description' => __( 'Imposta la dimensione base del font per il contenuto usando i rem.', 'poetheme' ),
+                'min'         => 0.5,
+                'max'         => 3,
+                'step'        => 0.05,
+                'default'     => 1,
+            ),
+        ),
+        'cta_text_color' => array(
+            'option_key'      => 'cta_text_font',
+            'label'           => __( 'Font testo Call to Action', 'poetheme' ),
+            'description'     => __( 'Font del testo all’interno del pulsante di invito all’azione.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font del testo principale', 'poetheme' ),
+            'fallback_key'    => 'body_fallback',
+            'preview_variant' => 'button',
+            'sample'          => __( 'Call to action di esempio', 'poetheme' ),
+            'selectors'       => array(
+                '.poetheme-cta-button',
+            ),
+            'size'            => array(
+                'option_key'  => 'cta_text_font_size',
+                'label'       => __( 'Dimensione pulsante (rem)', 'poetheme' ),
+                'description' => __( 'Definisce la dimensione del testo del pulsante Call to Action in rem.', 'poetheme' ),
+                'min'         => 0.5,
+                'max'         => 3,
+                'step'        => 0.05,
+            ),
+        ),
+        'top_bar_text_color' => array(
+            'option_key'      => 'top_bar_text_font',
+            'label'           => __( 'Font testo barra superiore', 'poetheme' ),
+            'description'     => __( 'Font delle informazioni mostrate nella barra superiore.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font del testo principale', 'poetheme' ),
+            'fallback_key'    => 'body_fallback',
+            'preview_variant' => 'text',
+            'sample'          => __( 'Testo della barra superiore di esempio.', 'poetheme' ),
+            'selectors'       => array(
+                '.poetheme-top-bar',
+                '.poetheme-top-bar p',
+                '.poetheme-top-bar span',
+                '.poetheme-top-bar a',
+            ),
+            'size'            => array(
+                'option_key'  => 'top_bar_text_font_size',
+                'label'       => __( 'Dimensione barra superiore (rem)', 'poetheme' ),
+                'description' => __( 'Regola la dimensione del testo mostrato nella barra superiore in rem.', 'poetheme' ),
+                'min'         => 0.5,
+                'max'         => 2,
+                'step'        => 0.05,
+            ),
+        ),
+        'heading_h1_color' => array(
+            'option_key'      => 'heading_font',
+            'label'           => __( 'Font titolo H1', 'poetheme' ),
+            'description'     => __( 'Font del titolo principale della pagina.', 'poetheme' ),
+            'default_label'   => __( 'Usa lo stesso font del testo', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'fallback'        => array(
+                'key'         => 'heading_fallback',
+                'label'       => __( 'Font di fallback titoli', 'poetheme' ),
+                'description' => __( 'Specifica i font alternativi per titoli e intestazioni.', 'poetheme' ),
+            ),
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di esempio H1', 'poetheme' ),
+            'selectors'       => array(
+                'h1',
+                'h2',
+                'h3',
+                'h4',
+                'h5',
+                'h6',
+            ),
+            'size'            => array(
+                'option_key'  => 'heading_font_size',
+                'label'       => __( 'Dimensione titolo H1 (rem)', 'poetheme' ),
+                'description' => __( 'Applica una dimensione personalizzata al titolo H1 misurata in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 4,
+                'step'        => 0.05,
+                'selectors'   => array( 'h1' ),
+            ),
+        ),
+        'heading_h2_color' => array(
+            'option_key'      => 'heading_h2_font',
+            'label'           => __( 'Font titolo H2', 'poetheme' ),
+            'description'     => __( 'Font per i titoli di secondo livello.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font generale dei titoli', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di esempio H2', 'poetheme' ),
+            'selectors'       => array( 'h2' ),
+            'size'            => array(
+                'option_key'  => 'heading_h2_font_size',
+                'label'       => __( 'Dimensione titolo H2 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H2 in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 4,
+                'step'        => 0.05,
+            ),
+        ),
+        'heading_h3_color' => array(
+            'option_key'      => 'heading_h3_font',
+            'label'           => __( 'Font titolo H3', 'poetheme' ),
+            'description'     => __( 'Font per i titoli di terzo livello.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font generale dei titoli', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di esempio H3', 'poetheme' ),
+            'selectors'       => array( 'h3' ),
+            'size'            => array(
+                'option_key'  => 'heading_h3_font_size',
+                'label'       => __( 'Dimensione titolo H3 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H3 in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 4,
+                'step'        => 0.05,
+            ),
+        ),
+        'heading_h4_color' => array(
+            'option_key'      => 'heading_h4_font',
+            'label'           => __( 'Font titolo H4', 'poetheme' ),
+            'description'     => __( 'Font per i titoli di quarto livello.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font generale dei titoli', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di esempio H4', 'poetheme' ),
+            'selectors'       => array( 'h4' ),
+            'size'            => array(
+                'option_key'  => 'heading_h4_font_size',
+                'label'       => __( 'Dimensione titolo H4 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H4 in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 4,
+                'step'        => 0.05,
+            ),
+        ),
+        'heading_h5_color' => array(
+            'option_key'      => 'heading_h5_font',
+            'label'           => __( 'Font titolo H5', 'poetheme' ),
+            'description'     => __( 'Font per i titoli di quinto livello.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font generale dei titoli', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di esempio H5', 'poetheme' ),
+            'selectors'       => array( 'h5' ),
+            'size'            => array(
+                'option_key'  => 'heading_h5_font_size',
+                'label'       => __( 'Dimensione titolo H5 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H5 in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 4,
+                'step'        => 0.05,
+            ),
+        ),
+        'heading_h6_color' => array(
+            'option_key'      => 'heading_h6_font',
+            'label'           => __( 'Font titolo H6', 'poetheme' ),
+            'description'     => __( 'Font per i titoli di sesto livello.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font generale dei titoli', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di esempio H6', 'poetheme' ),
+            'selectors'       => array( 'h6' ),
+            'size'            => array(
+                'option_key'  => 'heading_h6_font_size',
+                'label'       => __( 'Dimensione titolo H6 (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione dei titoli H6 in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 4,
+                'step'        => 0.05,
+            ),
+        ),
+        'page_title_color' => array(
+            'option_key'      => 'page_title_font',
+            'label'           => __( 'Font titolo pagina', 'poetheme' ),
+            'description'     => __( 'Scegli il font per il titolo principale delle pagine.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font generale dei titoli', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di pagina di esempio', 'poetheme' ),
+            'selectors'       => array( '.poetheme-page-title' ),
+            'size'            => array(
+                'option_key'  => 'page_title_font_size',
+                'label'       => __( 'Dimensione titolo pagina (rem)', 'poetheme' ),
+                'description' => __( 'Imposta la dimensione del titolo delle pagine in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 6,
+                'step'        => 0.05,
+            ),
+        ),
+        'post_title_color' => array(
+            'option_key'      => 'post_title_font',
+            'label'           => __( 'Font titolo articolo', 'poetheme' ),
+            'description'     => __( 'Definisci il font utilizzato per il titolo degli articoli singoli.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font generale dei titoli', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di articolo di esempio', 'poetheme' ),
+            'selectors'       => array( '.poetheme-post-title' ),
+            'size'            => array(
+                'option_key'  => 'post_title_font_size',
+                'label'       => __( 'Dimensione titolo articolo (rem)', 'poetheme' ),
+                'description' => __( 'Personalizza la dimensione del titolo degli articoli in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 6,
+                'step'        => 0.05,
+            ),
+        ),
+        'category_title_color' => array(
+            'option_key'      => 'category_title_font',
+            'label'           => __( 'Font titolo categoria', 'poetheme' ),
+            'description'     => __( 'Imposta il font per i titoli delle categorie e delle tassonomie.', 'poetheme' ),
+            'default_label'   => __( 'Usa il font generale dei titoli', 'poetheme' ),
+            'fallback_key'    => 'heading_fallback',
+            'preview_variant' => 'heading',
+            'sample'          => __( 'Titolo di categoria di esempio', 'poetheme' ),
+            'selectors'       => array( '.poetheme-category-title' ),
+            'size'            => array(
+                'option_key'  => 'category_title_font_size',
+                'label'       => __( 'Dimensione titolo categoria (rem)', 'poetheme' ),
+                'description' => __( 'Regola la dimensione del titolo delle pagine categoria in rem.', 'poetheme' ),
+                'min'         => 0.8,
+                'max'         => 6,
+                'step'        => 0.05,
             ),
         ),
     );
@@ -1253,14 +1665,51 @@ function poetheme_render_fonts_page() {
     $options          = poetheme_get_font_options();
     $available_fonts  = poetheme_get_available_fonts();
     $font_faces       = poetheme_generate_font_face_css();
-    $body_font        = isset( $options['body_font'] ) ? $options['body_font'] : '';
-    $heading_font     = isset( $options['heading_font'] ) ? $options['heading_font'] : '';
-    $body_stack       = poetheme_build_font_stack( $body_font, $options['body_fallback'], $available_fonts );
-    $heading_stack    = poetheme_build_font_stack( $heading_font, $options['heading_fallback'], $available_fonts );
+    $color_groups     = poetheme_get_color_section_groups();
+    $font_fields      = poetheme_get_font_field_config();
     $fonts_for_script = array();
+
+    if ( isset( $color_groups['surfaces'] ) ) {
+        $color_groups['surfaces']['title']       = __( 'Tipi di carattere', 'poetheme' );
+        $color_groups['surfaces']['description'] = __( 'Gestisci i font principali del sito.', 'poetheme' );
+    }
 
     foreach ( $available_fonts as $font ) {
         $fonts_for_script[ $font['slug'] ] = $font['family'];
+    }
+
+    $prepared_groups = array();
+
+    foreach ( $color_groups as $group_key => $group ) {
+        $prepared_sections = array();
+
+        foreach ( $group['sections'] as $section_key => $section ) {
+            $prepared_fields = array();
+
+            foreach ( $section['fields'] as $field_key => $field ) {
+                if ( ! isset( $font_fields[ $field_key ] ) ) {
+                    continue;
+                }
+
+                $prepared_fields[ $field_key ] = $font_fields[ $field_key ];
+            }
+
+            if ( $prepared_fields ) {
+                $prepared_sections[ $section_key ] = array(
+                    'title'       => $section['title'],
+                    'description' => isset( $section['description'] ) ? $section['description'] : '',
+                    'fields'      => $prepared_fields,
+                );
+            }
+        }
+
+        if ( $prepared_sections ) {
+            $prepared_groups[ $group_key ] = array(
+                'title'       => $group['title'],
+                'description' => isset( $group['description'] ) ? $group['description'] : '',
+                'sections'    => $prepared_sections,
+            );
+        }
     }
     ?>
     <div class="wrap poetheme-font-settings">
@@ -1272,48 +1721,6 @@ function poetheme_render_fonts_page() {
             </style>
         <?php endif; ?>
 
-        <style>
-            .poetheme-font-preview {
-                margin-top: 12px;
-                padding: 16px;
-                border: 1px solid #d1d5db;
-                border-radius: 4px;
-                background-color: #f9fafb;
-            }
-
-            .poetheme-font-preview__label {
-                display: block;
-                margin-bottom: 8px;
-                font-size: 0.8125rem;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-                color: #4b5563;
-            }
-
-            .poetheme-font-preview__sample {
-                display: block;
-                font-size: 1.125rem;
-                line-height: 1.6;
-                color: #1f2937;
-            }
-
-            .poetheme-font-collection {
-                margin-top: 24px;
-            }
-
-            .poetheme-font-collection ul {
-                columns: 2;
-                column-gap: 24px;
-                margin: 0;
-                padding-left: 18px;
-            }
-
-            .poetheme-font-collection li {
-                margin-bottom: 8px;
-            }
-        </style>
-
         <?php if ( empty( $available_fonts ) ) : ?>
             <div class="notice notice-warning">
                 <p><?php esc_html_e( 'Non sono stati trovati font personalizzati nella cartella theme-font. Carica file .woff2, .woff, .ttf o .otf per renderli disponibili.', 'poetheme' ); ?></p>
@@ -1323,59 +1730,135 @@ function poetheme_render_fonts_page() {
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_fonts_group' ); ?>
 
-            <table class="form-table" role="presentation">
-                <tbody>
-                    <tr>
-                        <th scope="row"><label for="poetheme-font-body"><?php esc_html_e( 'Font testo principale', 'poetheme' ); ?></label></th>
-                        <td>
-                            <select id="poetheme-font-body" name="poetheme_fonts[body_font]" <?php disabled( empty( $available_fonts ) ); ?>>
-                                <option value="" <?php selected( '', $body_font ); ?>><?php esc_html_e( 'Usa il font di sistema predefinito', 'poetheme' ); ?></option>
-                                <?php foreach ( $available_fonts as $font ) : ?>
-                                    <option value="<?php echo esc_attr( $font['slug'] ); ?>" <?php selected( $body_font, $font['slug'] ); ?> data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
-                                        <?php echo esc_html( $font['family'] ); ?>
-                                    </option>
+            <?php if ( ! empty( $prepared_groups ) ) : ?>
+                <div class="poetheme-font-groups">
+                    <?php foreach ( $prepared_groups as $group_key => $group ) : ?>
+                        <section class="poetheme-font-group" id="poetheme-font-group-<?php echo esc_attr( $group_key ); ?>">
+                            <header class="poetheme-font-group__header">
+                                <h2><?php echo esc_html( $group['title'] ); ?></h2>
+                                <?php if ( ! empty( $group['description'] ) ) : ?>
+                                    <p class="description"><?php echo esc_html( $group['description'] ); ?></p>
+                                <?php endif; ?>
+                            </header>
+
+                            <div class="poetheme-font-group__sections">
+                                <?php foreach ( $group['sections'] as $section_key => $section ) : ?>
+                                    <fieldset class="poetheme-font-section" id="poetheme-font-section-<?php echo esc_attr( $section_key ); ?>">
+                                        <legend class="poetheme-font-section__title"><?php echo esc_html( $section['title'] ); ?></legend>
+                                        <?php if ( ! empty( $section['description'] ) ) : ?>
+                                            <p class="description poetheme-font-section__description"><?php echo esc_html( $section['description'] ); ?></p>
+                                        <?php endif; ?>
+
+                                        <div class="poetheme-font-section__fields">
+                                            <?php foreach ( $section['fields'] as $field_key => $field ) :
+                                                $option_key     = $field['option_key'];
+                                                $value          = isset( $options[ $option_key ] ) ? $options[ $option_key ] : '';
+                                                $field_id       = 'poetheme-font-' . $option_key;
+                                                $field_name     = 'poetheme_fonts[' . $option_key . ']';
+                                                $preview_id     = $field_id . '-preview';
+                                                $fallback_id    = '';
+                                                $fallback_value = '';
+                                                $preview_class  = 'poetheme-font-preview';
+                                                $size_config    = isset( $field['size'] ) ? $field['size'] : array();
+                                                $size_value     = '';
+
+                                                if ( ! empty( $field['preview_variant'] ) ) {
+                                                    $preview_class .= ' poetheme-font-preview--' . sanitize_html_class( $field['preview_variant'] );
+                                                }
+
+                                                if ( ! empty( $field['fallback_key'] ) ) {
+                                                    $fallback_id    = 'poetheme-font-' . $field['fallback_key'];
+                                                    $fallback_value = isset( $options[ $field['fallback_key'] ] ) ? $options[ $field['fallback_key'] ] : '';
+                                                }
+
+                                                $preview_style = '';
+                                                if ( $value || $fallback_value ) {
+                                                    $stack = poetheme_build_font_stack( $value, $fallback_value, $available_fonts );
+                                                    if ( $stack ) {
+                                                        $preview_style = 'font-family:' . $stack . ';';
+                                                    }
+                                                }
+
+                                                if ( ! empty( $size_config['option_key'] ) ) {
+                                                    $size_key   = $size_config['option_key'];
+                                                    $size_value = isset( $options[ $size_key ] ) ? $options[ $size_key ] : '';
+
+                                                    if ( '' !== $size_value && is_numeric( $size_value ) ) {
+                                                        $preview_style .= 'font-size:' . poetheme_format_number_for_css( $size_value ) . 'rem;';
+                                                    }
+                                                }
+
+                                                $fallback_attr = $fallback_id ? ' data-fallback="' . esc_attr( $fallback_id ) . '"' : '';
+                                            ?>
+                                                <div class="poetheme-font-section__field">
+                                                    <label class="poetheme-font-section__label" for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+                                                    <div class="poetheme-font-section__control">
+                                                        <select class="poetheme-font-select" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" data-preview="<?php echo esc_attr( $preview_id ); ?>"<?php echo $fallback_attr; ?> <?php disabled( empty( $available_fonts ) ); ?>>
+                                                            <option value="" <?php selected( '', $value ); ?>><?php echo esc_html( $field['default_label'] ); ?></option>
+                                                            <?php foreach ( $available_fonts as $font ) : ?>
+                                                                <option value="<?php echo esc_attr( $font['slug'] ); ?>" <?php selected( $value, $font['slug'] ); ?> data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
+                                                                    <?php echo esc_html( $font['family'] ); ?>
+                                                                </option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                        <?php if ( ! empty( $field['description'] ) ) : ?>
+                                                            <p class="description"><?php echo esc_html( $field['description'] ); ?></p>
+                                                        <?php endif; ?>
+                                                        <div class="<?php echo esc_attr( $preview_class ); ?>" id="<?php echo esc_attr( $preview_id ); ?>" style="<?php echo esc_attr( $preview_style ); ?>">
+                                                            <span class="poetheme-font-preview__label"><?php esc_html_e( 'Anteprima', 'poetheme' ); ?></span>
+                                                            <span class="poetheme-font-preview__sample"><?php echo esc_html( $field['sample'] ); ?></span>
+                                                        </div>
+                                                        <?php if ( ! empty( $size_config ) && ! empty( $size_config['option_key'] ) ) :
+                                                            $size_key        = $size_config['option_key'];
+                                                            $size_id         = 'poetheme-font-' . $size_key;
+                                                            $size_value_attr = ( '' !== $size_value && is_numeric( $size_value ) ) ? poetheme_format_number_for_css( $size_value ) : '';
+                                                            $size_step       = isset( $size_config['step'] ) ? $size_config['step'] : '0.1';
+                                                            $size_attrs      = '';
+
+                                                            if ( isset( $size_config['min'] ) ) {
+                                                                $size_attrs .= ' min="' . esc_attr( $size_config['min'] ) . '"';
+                                                            }
+
+                                                            if ( isset( $size_config['max'] ) ) {
+                                                                $size_attrs .= ' max="' . esc_attr( $size_config['max'] ) . '"';
+                                                            }
+                                                        ?>
+                                                            <label class="poetheme-font-size-label" for="<?php echo esc_attr( $size_id ); ?>"><?php echo esc_html( $size_config['label'] ); ?></label>
+                                                            <input
+                                                                type="number"
+                                                                class="small-text poetheme-font-size-control"
+                                                                id="<?php echo esc_attr( $size_id ); ?>"
+                                                                name="poetheme_fonts[<?php echo esc_attr( $size_key ); ?>]"
+                                                                value="<?php echo esc_attr( $size_value_attr ); ?>"
+                                                                step="<?php echo esc_attr( $size_step ); ?>"<?php echo $size_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                                                data-preview="<?php echo esc_attr( $preview_id ); ?>"
+                                                                data-unit="rem"
+                                                                data-property="fontSize"
+                                                            />
+                                                            <?php if ( ! empty( $size_config['description'] ) ) : ?>
+                                                                <p class="description"><?php echo esc_html( $size_config['description'] ); ?></p>
+                                                            <?php endif; ?>
+                                                        <?php endif; ?>
+                                                        <?php if ( ! empty( $field['fallback'] ) ) :
+                                                            $fallback_config = $field['fallback'];
+                                                        ?>
+                                                            <label class="poetheme-font-fallback-label" for="<?php echo esc_attr( $fallback_id ); ?>"><?php echo esc_html( $fallback_config['label'] ); ?></label>
+                                                            <input type="text" class="regular-text poetheme-font-fallback" id="<?php echo esc_attr( $fallback_id ); ?>" name="poetheme_fonts[<?php echo esc_attr( $fallback_config['key'] ); ?>]" value="<?php echo esc_attr( $fallback_value ); ?>" />
+                                                            <p class="description"><?php echo esc_html( $fallback_config['description'] ); ?></p>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </fieldset>
                                 <?php endforeach; ?>
-                            </select>
-                            <p class="description"><?php esc_html_e( 'Seleziona il font da utilizzare per il contenuto testuale principale.', 'poetheme' ); ?></p>
-
-                            <div class="poetheme-font-preview" id="poetheme-font-preview-body" style="<?php echo $body_stack ? 'font-family:' . esc_attr( $body_stack ) . ';' : ''; ?>">
-                                <span class="poetheme-font-preview__label"><?php esc_html_e( 'Anteprima', 'poetheme' ); ?></span>
-                                <span class="poetheme-font-preview__sample"><?php esc_html_e( 'Questo è un esempio di paragrafo con il font selezionato.', 'poetheme' ); ?></span>
                             </div>
-
-                            <label for="poetheme-font-body-fallback" class="poetheme-font-fallback-label"><?php esc_html_e( 'Font di fallback', 'poetheme' ); ?></label><br />
-                            <input type="text" id="poetheme-font-body-fallback" name="poetheme_fonts[body_fallback]" value="<?php echo esc_attr( $options['body_fallback'] ); ?>" class="regular-text" />
-                            <p class="description"><?php esc_html_e( 'Elenca i font alternativi da usare se il font principale non è disponibile.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row"><label for="poetheme-font-heading"><?php esc_html_e( 'Font titoli e intestazioni', 'poetheme' ); ?></label></th>
-                        <td>
-                            <select id="poetheme-font-heading" name="poetheme_fonts[heading_font]" <?php disabled( empty( $available_fonts ) ); ?>>
-                                <option value="" <?php selected( '', $heading_font ); ?>><?php esc_html_e( 'Usa lo stesso font del testo', 'poetheme' ); ?></option>
-                                <?php foreach ( $available_fonts as $font ) : ?>
-                                    <option value="<?php echo esc_attr( $font['slug'] ); ?>" <?php selected( $heading_font, $font['slug'] ); ?> data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
-                                        <?php echo esc_html( $font['family'] ); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <p class="description"><?php esc_html_e( 'Applica un font dedicato a titoli e intestazioni.', 'poetheme' ); ?></p>
-
-                            <div class="poetheme-font-preview" id="poetheme-font-preview-heading" style="<?php echo $heading_stack ? 'font-family:' . esc_attr( $heading_stack ) . ';' : ''; ?>">
-                                <span class="poetheme-font-preview__label"><?php esc_html_e( 'Anteprima', 'poetheme' ); ?></span>
-                                <span class="poetheme-font-preview__sample" style="font-size:1.5rem;">
-                                    <?php esc_html_e( 'Titolo di esempio con il font selezionato.', 'poetheme' ); ?>
-                                </span>
-                            </div>
-
-                            <label for="poetheme-font-heading-fallback" class="poetheme-font-fallback-label"><?php esc_html_e( 'Font di fallback', 'poetheme' ); ?></label><br />
-                            <input type="text" id="poetheme-font-heading-fallback" name="poetheme_fonts[heading_fallback]" value="<?php echo esc_attr( $options['heading_fallback'] ); ?>" class="regular-text" />
-                            <p class="description"><?php esc_html_e( 'Specifica i font alternativi per titoli e intestazioni.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        </section>
+                    <?php endforeach; ?>
+                </div>
+            <?php else : ?>
+                <p><?php esc_html_e( 'Non sono disponibili sezioni font da configurare.', 'poetheme' ); ?></p>
+            <?php endif; ?>
 
             <?php submit_button(); ?>
         </form>
@@ -1392,66 +1875,134 @@ function poetheme_render_fonts_page() {
             </div>
         <?php endif; ?>
 
-        <?php if ( ! empty( $fonts_for_script ) ) : ?>
-            <script>
-                ( function () {
-                    const fontMap = <?php echo wp_json_encode( $fonts_for_script ); ?>;
+        <script>
+            ( function () {
+                const fontMap = <?php echo wp_json_encode( $fonts_for_script ); ?>;
 
-                    const bodySelect = document.getElementById( 'poetheme-font-body' );
-                    const bodyFallback = document.getElementById( 'poetheme-font-body-fallback' );
-                    const bodyPreview = document.getElementById( 'poetheme-font-preview-body' );
+                function buildStack( slug, fallback ) {
+                    const parts = [];
 
-                    const headingSelect = document.getElementById( 'poetheme-font-heading' );
-                    const headingFallback = document.getElementById( 'poetheme-font-heading-fallback' );
-                    const headingPreview = document.getElementById( 'poetheme-font-preview-heading' );
-
-                    function buildStack( slug, fallback ) {
-                        const parts = [];
-
-                        if ( slug && fontMap[ slug ] ) {
-                            parts.push( "'" + fontMap[ slug ].replace(/'/g, "\'") + "'" );
-                        }
-
-                        if ( fallback ) {
-                            parts.push( fallback );
-                        }
-
-                        return parts.join( ', ' );
+                    if ( slug && fontMap[ slug ] ) {
+                        parts.push( '\'' + fontMap[ slug ].replace(/'/g, '\\'') + '\'' );
                     }
 
-                    function updatePreview( select, fallbackInput, preview ) {
-                        if ( ! preview ) {
-                            return;
-                        }
+                    if ( fallback ) {
+                        fallback.split( ',' ).forEach( function ( item ) {
+                            const trimmed = item.trim();
 
-                        const stack = buildStack( select ? select.value : '', fallbackInput ? fallbackInput.value : '' );
-                        preview.style.fontFamily = stack;
+                            if ( ! trimmed ) {
+                                return;
+                            }
+
+                            if ( /^(\'|\").*(\1)$/.test( trimmed ) ) {
+                                parts.push( trimmed );
+                            } else if ( trimmed.indexOf( ' ' ) !== -1 ) {
+                                parts.push( '\'' + trimmed.replace(/'/g, '\\'') + '\'' );
+                            } else {
+                                parts.push( trimmed );
+                            }
+                        } );
                     }
 
-                    if ( bodySelect && bodyPreview ) {
-                        const updateBody = function () {
-                            updatePreview( bodySelect, bodyFallback, bodyPreview );
-                        };
-                        bodySelect.addEventListener( 'change', updateBody );
-                        if ( bodyFallback ) {
-                            bodyFallback.addEventListener( 'input', updateBody );
-                        }
-                        updateBody();
+                    return parts.join( ', ' );
+                }
+
+                function updatePreviewForSelect( select ) {
+                    if ( ! select ) {
+                        return;
                     }
 
-                    if ( headingSelect && headingPreview ) {
-                        const updateHeading = function () {
-                            updatePreview( headingSelect, headingFallback, headingPreview );
-                        };
-                        headingSelect.addEventListener( 'change', updateHeading );
-                        if ( headingFallback ) {
-                            headingFallback.addEventListener( 'input', updateHeading );
-                        }
-                        updateHeading();
+                    const previewId = select.getAttribute( 'data-preview' );
+
+                    if ( ! previewId ) {
+                        return;
                     }
-                }() );
-            </script>
-        <?php endif; ?>
+
+                    const preview = document.getElementById( previewId );
+
+                    if ( ! preview ) {
+                        return;
+                    }
+
+                    const fallbackId = select.getAttribute( 'data-fallback' );
+                    let fallbackValue = '';
+
+                    if ( fallbackId ) {
+                        const fallbackInput = document.getElementById( fallbackId );
+
+                        if ( fallbackInput ) {
+                            fallbackValue = fallbackInput.value;
+                        }
+                    }
+
+                    const stack = buildStack( select.value, fallbackValue );
+                    preview.style.fontFamily = stack || '';
+                }
+
+                function updatePreviewSize( input ) {
+                    if ( ! input ) {
+                        return;
+                    }
+
+                    const previewId = input.getAttribute( 'data-preview' );
+
+                    if ( ! previewId ) {
+                        return;
+                    }
+
+                    const preview = document.getElementById( previewId );
+
+                    if ( ! preview ) {
+                        return;
+                    }
+
+                    const property = input.getAttribute( 'data-property' ) || 'fontSize';
+                    const unit = input.getAttribute( 'data-unit' ) || '';
+                    const rawValue = input.value ? input.value.trim() : '';
+
+                    if ( '' === rawValue ) {
+                        preview.style[ property ] = '';
+                        return;
+                    }
+
+                    const numeric = parseFloat( rawValue.replace( ',', '.' ) );
+
+                    if ( Number.isFinite( numeric ) ) {
+                        preview.style[ property ] = numeric + unit;
+                    } else {
+                        preview.style[ property ] = '';
+                    }
+                }
+
+                const fontSelects = document.querySelectorAll( '.poetheme-font-select' );
+                fontSelects.forEach( function ( select ) {
+                    select.addEventListener( 'change', function () {
+                        updatePreviewForSelect( select );
+                    } );
+
+                    updatePreviewForSelect( select );
+                } );
+
+                const fallbackInputs = document.querySelectorAll( '.poetheme-font-fallback' );
+                fallbackInputs.forEach( function ( input ) {
+                    input.addEventListener( 'input', function () {
+                        const fallbackId = input.id;
+                        document.querySelectorAll( '.poetheme-font-select[data-fallback="' + fallbackId + '"]' ).forEach( function ( select ) {
+                            updatePreviewForSelect( select );
+                        } );
+                    } );
+                } );
+
+                const sizeInputs = document.querySelectorAll( '.poetheme-font-size-control' );
+                sizeInputs.forEach( function ( input ) {
+                    input.addEventListener( 'input', function () {
+                        updatePreviewSize( input );
+                    } );
+
+                    updatePreviewSize( input );
+                } );
+            }() );
+        </script>
     </div>
     <?php
 }
@@ -1557,7 +2108,7 @@ function poetheme_render_logo_page() {
     $logo_height     = isset( $options['logo_height'] ) ? absint( $options['logo_height'] ) : 0;
     $show_site_title = ! empty( $options['show_site_title'] );
     $title_color     = isset( $options['title_color'] ) ? $options['title_color'] : '#111827';
-    $title_size      = isset( $options['title_size'] ) ? absint( $options['title_size'] ) : 0;
+    $title_size      = isset( $options['title_size'] ) ? (float) $options['title_size'] : 0;
     $site_title      = get_bloginfo( 'name' );
     $site_tagline    = get_bloginfo( 'description', 'display' );
 
@@ -1571,7 +2122,7 @@ function poetheme_render_logo_page() {
     }
 
     if ( $title_size > 0 ) {
-        $title_style_attr .= 'font-size:' . $title_size . 'px;';
+        $title_style_attr .= 'font-size:' . poetheme_format_number_for_css( $title_size ) . 'rem;';
     }
 
     $title_style_attr   = $title_style_attr ? ' style="' . esc_attr( $title_style_attr ) . '"' : '';
@@ -1629,8 +2180,8 @@ function poetheme_render_logo_page() {
                     />
                 </p>
                 <p>
-                    <label for="poetheme_logo_title_size"><?php esc_html_e( 'Dimensione del titolo (px)', 'poetheme' ); ?></label><br />
-                    <input type="number" min="16" step="1" id="poetheme_logo_title_size" name="poetheme_logo[title_size]" value="<?php echo esc_attr( $title_size ); ?>" class="small-text" />
+                    <label for="poetheme_logo_title_size"><?php esc_html_e( 'Dimensione del titolo (rem)', 'poetheme' ); ?></label><br />
+                    <input type="number" min="0.5" step="0.05" id="poetheme_logo_title_size" name="poetheme_logo[title_size]" value="<?php echo esc_attr( poetheme_format_number_for_css( $title_size ) ); ?>" class="small-text" />
                 </p>
             </div>
 
@@ -1832,7 +2383,7 @@ function poetheme_get_default_logo_options() {
         'logo_height'    => 48,
         'show_site_title'=> false,
         'title_color'    => '#111827',
-        'title_size'     => 32,
+        'title_size'     => 2,
     );
 }
 
@@ -1849,7 +2400,7 @@ function poetheme_get_logo_options() {
     $color = isset( $options['title_color'] ) ? sanitize_hex_color( $options['title_color'] ) : '';
     $options['title_color'] = $color ? $color : $defaults['title_color'];
 
-    $size = isset( $options['title_size'] ) ? absint( $options['title_size'] ) : 0;
+    $size = isset( $options['title_size'] ) ? (float) $options['title_size'] : 0;
     $options['title_size'] = $size > 0 ? $size : $defaults['title_size'];
 
     return $options;
@@ -1887,7 +2438,9 @@ function poetheme_sanitize_logo_options( $input ) {
     }
 
     if ( isset( $input['title_size'] ) ) {
-        $size = absint( $input['title_size'] );
+        $size = str_replace( ',', '.', trim( (string) $input['title_size'] ) );
+        $size = is_numeric( $size ) ? (float) $size : 0;
+
         if ( $size > 0 ) {
             $output['title_size'] = $size;
         }
@@ -1982,6 +2535,7 @@ function poetheme_options_admin_assets( $hook ) {
         'toplevel_page_poetheme-settings',
         'poetheme_page_poetheme-settings',
         'poetheme_page_poetheme-colors',
+        'poetheme_page_poetheme-fonts',
         'poetheme_page_poetheme-logo',
         'poetheme_page_poetheme-header',
         'poetheme_page_poetheme-subheader',

@@ -96,14 +96,14 @@
 
             var defaultColor = $titleColor.data('default-color') || '#111827';
             var color = $titleColor.val() || defaultColor;
-            var size = parseInt($titleSize.val(), 10);
+            var size = parseFloat($titleSize.val());
             var $title = $titleWrapper.find('.poetheme-logo-preview__title');
             var $tagline = $titleWrapper.find('.poetheme-logo-preview__tagline');
 
             if ($title.length) {
                 $title.css('color', color);
-                if (size > 0) {
-                    $title.css('font-size', size + 'px');
+                if (Number.isFinite(size) && size > 0) {
+                    $title.css('font-size', size + 'rem');
                 } else {
                     $title.css('font-size', '');
                 }

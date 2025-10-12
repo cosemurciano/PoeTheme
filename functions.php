@@ -7,6 +7,22 @@
 
 define( 'POETHEME_VERSION', '1.0.0' );
 
+if ( ! function_exists( 'poetheme_format_number_for_css' ) ) {
+    /**
+     * Format a numeric value for CSS output by trimming unnecessary trailing zeros.
+     *
+     * @param float|int|string $value     Raw numeric value.
+     * @param int              $precision Number of decimal places to keep.
+     * @return string
+     */
+    function poetheme_format_number_for_css( $value, $precision = 4 ) {
+        $formatted = number_format( (float) $value, (int) $precision, '.', '' );
+        $trimmed   = rtrim( rtrim( $formatted, '0' ), '.' );
+
+        return '' === $trimmed ? '0' : $trimmed;
+    }
+}
+
 define( 'POETHEME_DIR', get_template_directory() );
 define( 'POETHEME_URI', get_template_directory_uri() );
 
@@ -300,6 +316,9 @@ function poetheme_output_design_settings() {
         '--poetheme-heading-h5-background'     => ! empty( $color_options['heading_h5_background'] ) ? $color_options['heading_h5_background'] : 'transparent',
         '--poetheme-heading-h6-color'          => ! empty( $color_options['heading_h6_color'] ) ? $color_options['heading_h6_color'] : '#111827',
         '--poetheme-heading-h6-background'     => ! empty( $color_options['heading_h6_background'] ) ? $color_options['heading_h6_background'] : 'transparent',
+        '--poetheme-page-title-color'          => ! empty( $color_options['page_title_color'] ) ? $color_options['page_title_color'] : '#111827',
+        '--poetheme-post-title-color'          => ! empty( $color_options['post_title_color'] ) ? $color_options['post_title_color'] : '#111827',
+        '--poetheme-category-title-color'      => ! empty( $color_options['category_title_color'] ) ? $color_options['category_title_color'] : '#111827',
     );
 
     $body_css[] = implode( ';', array_map( function ( $key, $value ) {
@@ -340,6 +359,12 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings main h5{color:var(--poetheme-heading-h5-color) !important;background-color:var(--poetheme-heading-h5-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings main h6{color:var(--poetheme-heading-h6-color) !important;background-color:var(--poetheme-heading-h6-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings main h1 a,body.poetheme-has-color-settings main h2 a,body.poetheme-has-color-settings main h3 a,body.poetheme-has-color-settings main h4 a,body.poetheme-has-color-settings main h5 a,body.poetheme-has-color-settings main h6 a{color:inherit !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-page-title{color:var(--poetheme-page-title-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-page-title a{color:inherit !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-post-title{color:var(--poetheme-post-title-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-post-title a{color:inherit !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-category-title{color:var(--poetheme-category-title-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-category-title a{color:inherit !important;}';
 
     if ( $styles ) {
         echo '<style id="poetheme-design-settings">' . $styles . '</style>';
