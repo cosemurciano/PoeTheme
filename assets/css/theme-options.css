@@ -87,6 +87,16 @@
     margin-top: 24px;
 }
 
+.poetheme-color-group--header .poetheme-color-group__sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+    .poetheme-color-group--header .poetheme-color-group__sections {
+        grid-template-columns: 1fr;
+    }
+}
+
 .poetheme-color-section,
 .poetheme-font-section {
     background: #fff;

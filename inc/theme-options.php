@@ -2253,8 +2253,11 @@ function poetheme_render_colors_page() {
             <?php settings_fields( 'poetheme_colors_group' ); ?>
 
             <div class="poetheme-color-groups">
-                <?php foreach ( $groups as $group_key => $group ) : ?>
-                    <section class="poetheme-color-group" id="poetheme-color-group-<?php echo esc_attr( $group_key ); ?>">
+                <?php foreach ( $groups as $group_key => $group ) :
+                    $group_classes = array( 'poetheme-color-group' );
+                    $group_classes[] = 'poetheme-color-group--' . sanitize_html_class( $group_key );
+                    ?>
+                    <section class="<?php echo esc_attr( implode( ' ', $group_classes ) ); ?>" id="poetheme-color-group-<?php echo esc_attr( $group_key ); ?>">
                         <header class="poetheme-color-group__header">
                             <h2><?php echo esc_html( $group['title'] ); ?></h2>
                             <?php if ( ! empty( $group['description'] ) ) : ?>

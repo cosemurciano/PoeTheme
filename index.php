@@ -38,9 +38,9 @@ get_header();
                         <?php if ( is_singular() && ! poetheme_subheader_is_enabled() ) : ?>
                             <h1 class="poetheme-post-title text-3xl font-bold mb-2" itemprop="headline"><?php the_title(); ?></h1>
                         <?php else : ?>
-                            <h2 class="text-2xl font-semibold mb-2">
+                            <h2 class="text-2xl font-semibold mb-2" itemprop="headline">
                                 <a class="text-gray-900 hover:text-indigo-600 focus:text-indigo-600" href="<?php the_permalink(); ?>" rel="bookmark" itemprop="url">
-                                    <span itemprop="headline"><?php the_title(); ?></span>
+                                    <?php the_title(); ?>
                                 </a>
                             </h2>
                         <?php endif; ?>
