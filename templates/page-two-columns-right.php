@@ -15,7 +15,7 @@ if ( have_posts() ) :
         <div class="grid gap-8 lg:grid-cols-12">
             <div class="lg:col-span-10 space-y-6">
                 <article id="post-<?php the_ID(); ?>" <?php post_class( 'bg-white rounded-lg shadow-sm p-6 space-y-6' ); ?> itemscope itemtype="https://schema.org/CreativeWork">
-                    <?php if ( poetheme_should_display_page_title() ) : ?>
+                    <?php if ( poetheme_should_display_page_title() && ! poetheme_subheader_is_enabled() ) : ?>
                         <header class="space-y-2">
                             <h1 class="poetheme-page-title text-3xl font-bold" itemprop="headline"><?php the_title(); ?></h1>
                         </header>

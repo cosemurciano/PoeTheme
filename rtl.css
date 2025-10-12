@@ -5,11 +5,16 @@ body {
 
 .nav-primary,
 .breadcrumbs,
+.poetheme-breadcrumbs,
 .widget,
 footer nav {
   text-align: right;
 }
 
-.breadcrumbs .mx-2 {
+.poetheme-subheader__inner {
+  direction: rtl;
+}
+
+.breadcrumbs__separator-text {
   transform: scaleX(-1);
 }
