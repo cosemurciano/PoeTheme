@@ -113,8 +113,11 @@ function poetheme_get_default_color_options() {
         'heading_h6_color'               => '#111827',
         'heading_h6_background'          => '',
         'page_title_color'               => '#111827',
+        'page_title_background'          => '',
         'post_title_color'               => '#111827',
+        'post_title_background'          => '',
         'category_title_color'           => '#111827',
+        'category_title_background'      => '',
     );
 }
 
@@ -689,6 +692,86 @@ function poetheme_sanitize_global_options( $input ) {
     );
 }
 
+function poetheme_is_valid_css_color( $color ) {
+    if ( '' === $color ) {
+        return true;
+    }
+
+    $color = trim( (string) $color );
+
+    if ( '' === $color ) {
+        return true;
+    }
+
+    if ( 'transparent' === strtolower( $color ) ) {
+        return true;
+    }
+
+    if ( sanitize_hex_color( $color ) ) {
+        return true;
+    }
+
+    if ( preg_match( '/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i', $color, $matches ) ) {
+        $components = array_slice( $matches, 1 );
+        $red        = (int) $components[0];
+        $green      = (int) $components[1];
+        $blue       = (int) $components[2];
+
+        if ( $red > 255 || $green > 255 || $blue > 255 ) {
+            return false;
+        }
+
+        if ( isset( $components[3] ) ) {
+            $alpha = (float) $components[3];
+            if ( $alpha < 0 || $alpha > 1 ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    if ( preg_match( '/^hsla?\(/i', $color ) ) {
+        // Basic sanity check for HSLA strings.
+        return (bool) preg_match( '/^hsla?\(\s*\d{1,3}(deg|grad|rad|turn)?\s*,\s*\d{1,3}%\s*,\s*\d{1,3}%(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i', $color );
+    }
+
+    return false;
+}
+
+function poetheme_normalize_color_value( $color, $default = '' ) {
+    $color = trim( (string) $color );
+
+    if ( '' === $color ) {
+        return '';
+    }
+
+    if ( 'transparent' === strtolower( $color ) ) {
+        return 'transparent';
+    }
+
+    $hex = sanitize_hex_color( $color );
+    if ( $hex ) {
+        return $hex;
+    }
+
+    if ( preg_match( '/^rgba?\(/i', $color ) ) {
+        // Normalize spacing.
+        if ( poetheme_is_valid_css_color( $color ) ) {
+            $color = strtolower( preg_replace( '/\s+/', '', $color ) );
+            $color = str_replace( array( 'rgba(', 'rgb(' ), array( 'rgba(', 'rgb(' ), $color );
+            return $color;
+        }
+    }
+
+    if ( preg_match( '/^hsla?\(/i', $color ) && poetheme_is_valid_css_color( $color ) ) {
+        $color = strtolower( preg_replace( '/\s+/', '', $color ) );
+        return $color;
+    }
+
+    return '' === $default ? '' : poetheme_normalize_color_value( $default, '' );
+}
+
 function poetheme_sanitize_color_options( $input ) {
     $defaults = poetheme_get_default_color_options();
     $output   = array();
@@ -713,16 +796,19 @@ function poetheme_sanitize_color_options( $input ) {
             continue;
         }
 
-        $raw   = (string) $input[ $key ];
-        $color = sanitize_hex_color( $raw );
+        $raw = (string) $input[ $key ];
 
         if ( '' === $raw ) {
             $output[ $key ] = '';
-        } elseif ( $color ) {
-            $output[ $key ] = $color;
-        } else {
-            $output[ $key ] = $default_value;
+            continue;
         }
+
+        if ( poetheme_is_valid_css_color( $raw ) ) {
+            $output[ $key ] = poetheme_normalize_color_value( $raw, $default_value );
+            continue;
+        }
+
+        $output[ $key ] = poetheme_normalize_color_value( $default_value, '' );
     }
 
     return $output;
@@ -816,21 +902,143 @@ function poetheme_get_color_options() {
                 continue;
             }
 
-            $sanitized = sanitize_hex_color( $raw_value );
-            if ( $sanitized ) {
-                $options[ $key ] = $sanitized;
+            if ( poetheme_is_valid_css_color( $raw_value ) ) {
+                $options[ $key ] = poetheme_normalize_color_value( $raw_value, $default_value );
                 continue;
             }
         }
 
-        $options[ $key ] = '' === $default_value ? '' : sanitize_hex_color( $default_value );
-
-        if ( '' !== $default_value && ! $options[ $key ] ) {
-            $options[ $key ] = $default_value;
-        }
+        $options[ $key ] = poetheme_normalize_color_value( $default_value, '' );
     }
 
     return $options;
+}
+
+/**
+ * Retrieve default subheader options.
+ *
+ * @return array
+ */
+function poetheme_get_default_subheader_options() {
+    return array(
+        'enable_subheader'      => true,
+        'show_title'            => true,
+        'show_breadcrumbs'      => true,
+        'layout'                => 'stack-center',
+        'title_tag'             => 'h1',
+        'breadcrumbs_separator' => '/',
+    );
+}
+
+/**
+ * Retrieve registered subheader layouts.
+ *
+ * @return array
+ */
+function poetheme_get_subheader_layout_choices() {
+    return array(
+        'stack-center'    => __( 'Titolo e Breadcrumbs centrati (uno sotto l’altro)', 'poetheme' ),
+        'stack-left'      => __( 'Titolo e Breadcrumbs a sinistra (uno sotto l’altro)', 'poetheme' ),
+        'stack-right'     => __( 'Titolo e Breadcrumbs a destra (uno sotto l’altro)', 'poetheme' ),
+        'title-left-only' => __( 'Titolo a sinistra (Breadcrumbs nascosto)', 'poetheme' ),
+        'title-right-only'=> __( 'Titolo a destra (Breadcrumbs nascosto)', 'poetheme' ),
+        'title-center-only'=> __( 'Titolo al centro (Breadcrumbs nascosto)', 'poetheme' ),
+        'split-title-left'=> __( 'Titolo a sinistra e Breadcrumbs a destra su unico rigo (60% / 40%)', 'poetheme' ),
+        'split-title-right'=> __( 'Titolo a destra e Breadcrumbs a sinistra su unico rigo (40% / 60%)', 'poetheme' ),
+    );
+}
+
+/**
+ * Retrieve stored subheader options with defaults.
+ *
+ * @return array
+ */
+function poetheme_get_subheader_options() {
+    $defaults = poetheme_get_default_subheader_options();
+    $options  = get_option( 'poetheme_subheader', array() );
+
+    if ( ! is_array( $options ) ) {
+        $options = array();
+    }
+
+    $options = wp_parse_args( $options, $defaults );
+
+    $options['enable_subheader'] = ! empty( $options['enable_subheader'] );
+    $options['show_title']       = ! empty( $options['show_title'] );
+    $options['show_breadcrumbs'] = ! empty( $options['show_breadcrumbs'] );
+
+    $layouts = array_keys( poetheme_get_subheader_layout_choices() );
+    if ( ! in_array( $options['layout'], $layouts, true ) ) {
+        $options['layout'] = $defaults['layout'];
+    }
+
+    $allowed_tags = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
+    if ( ! in_array( strtolower( $options['title_tag'] ), $allowed_tags, true ) ) {
+        $options['title_tag'] = $defaults['title_tag'];
+    }
+
+    $separator = isset( $options['breadcrumbs_separator'] ) ? (string) $options['breadcrumbs_separator'] : $defaults['breadcrumbs_separator'];
+    $separator = wp_strip_all_tags( $separator );
+    $separator = trim( $separator );
+    if ( '' === $separator ) {
+        $separator = $defaults['breadcrumbs_separator'];
+    }
+    if ( function_exists( 'mb_substr' ) ) {
+        $separator = mb_substr( $separator, 0, 10 );
+    } else {
+        $separator = substr( $separator, 0, 10 );
+    }
+    $options['breadcrumbs_separator'] = $separator;
+
+    return $options;
+}
+
+/**
+ * Sanitize subheader options on save.
+ *
+ * @param array $input Raw values.
+ * @return array
+ */
+function poetheme_sanitize_subheader_options( $input ) {
+    $defaults = poetheme_get_default_subheader_options();
+
+    if ( ! is_array( $input ) ) {
+        $input = array();
+    }
+
+    $output = array();
+
+    $output['enable_subheader'] = ! empty( $input['enable_subheader'] );
+    $output['show_title']       = ! empty( $input['show_title'] );
+    $output['show_breadcrumbs'] = ! empty( $input['show_breadcrumbs'] );
+
+    $layouts = array_keys( poetheme_get_subheader_layout_choices() );
+    $layout  = isset( $input['layout'] ) ? sanitize_key( $input['layout'] ) : $defaults['layout'];
+    if ( ! in_array( $layout, $layouts, true ) ) {
+        $layout = $defaults['layout'];
+    }
+    $output['layout'] = $layout;
+
+    $allowed_tags = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
+    $title_tag     = isset( $input['title_tag'] ) ? strtolower( sanitize_text_field( $input['title_tag'] ) ) : $defaults['title_tag'];
+    if ( ! in_array( $title_tag, $allowed_tags, true ) ) {
+        $title_tag = $defaults['title_tag'];
+    }
+    $output['title_tag'] = $title_tag;
+
+    $separator = isset( $input['breadcrumbs_separator'] ) ? wp_strip_all_tags( (string) $input['breadcrumbs_separator'] ) : $defaults['breadcrumbs_separator'];
+    $separator = trim( $separator );
+    if ( '' === $separator ) {
+        $separator = $defaults['breadcrumbs_separator'];
+    }
+    if ( function_exists( 'mb_substr' ) ) {
+        $separator = mb_substr( $separator, 0, 10 );
+    } else {
+        $separator = substr( $separator, 0, 10 );
+    }
+    $output['breadcrumbs_separator'] = $separator;
+
+    return $output;
 }
 
 /**
@@ -884,6 +1092,16 @@ function poetheme_register_settings() {
             'type'              => 'array',
             'sanitize_callback' => 'poetheme_sanitize_logo_options',
             'default'           => poetheme_get_default_logo_options(),
+        )
+    );
+
+    register_setting(
+        'poetheme_subheader_group',
+        'poetheme_subheader',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'poetheme_sanitize_subheader_options',
+            'default'           => poetheme_get_default_subheader_options(),
         )
     );
 
@@ -1386,14 +1604,29 @@ function poetheme_get_color_section_groups() {
                             'description' => __( 'Colore applicato al titolo delle pagine statiche.', 'poetheme' ),
                             'type'        => 'color',
                         ),
+                        'page_title_background' => array(
+                            'label'       => __( 'Sfondo titolo pagina', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo per il titolo delle pagine statiche.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
                         'post_title_color'     => array(
                             'label'       => __( 'Colore titolo articolo', 'poetheme' ),
                             'description' => __( 'Colore del titolo degli articoli singoli.', 'poetheme' ),
                             'type'        => 'color',
                         ),
+                        'post_title_background' => array(
+                            'label'       => __( 'Sfondo titolo articolo', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo per il titolo degli articoli singoli.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
                         'category_title_color' => array(
                             'label'       => __( 'Colore titolo categoria', 'poetheme' ),
                             'description' => __( 'Colore per i titoli delle pagine categoria e tassonomie.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'category_title_background' => array(
+                            'label'       => __( 'Sfondo titolo categoria', 'poetheme' ),
+                            'description' => __( 'Colore di sfondo dei titoli di categorie, archivi e tassonomie.', 'poetheme' ),
                             'type'        => 'color',
                         ),
                     ),
@@ -2072,6 +2305,7 @@ function poetheme_render_colors_page() {
                                                                 name="<?php echo esc_attr( $field_name ); ?>"
                                                                 value="<?php echo esc_attr( $value ); ?>"
                                                                 data-default-color="<?php echo esc_attr( $default ); ?>"
+                                                                data-supports-alpha="true"
                                                             />
                                                             <span class="poetheme-color-preview" data-preview-for="<?php echo esc_attr( $field_id ); ?>" style="--poetheme-preview-color: <?php echo esc_attr( $preview_color ); ?>;"></span>
                                                         </div>
@@ -2334,11 +2568,108 @@ function poetheme_render_header_page() {
  * Render the subheader settings page.
  */
 function poetheme_render_subheader_page() {
+    $options      = poetheme_get_subheader_options();
+    $layouts      = poetheme_get_subheader_layout_choices();
+    $tags         = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
+    $suggested_sep = array( '/', '>', '»', '›', '|' );
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Sottointestazione', 'poetheme' ); ?></h1>
-        <p class="description"><?php esc_html_e( 'Le impostazioni della sottointestazione saranno disponibili a breve.', 'poetheme' ); ?></p>
+        <form action="options.php" method="post" class="poetheme-options-form">
+            <?php settings_fields( 'poetheme_subheader_group' ); ?>
+
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Mostra sottointestazione', 'poetheme' ); ?></th>
+                        <td>
+                            <label for="poetheme_subheader_enable">
+                                <input type="checkbox" id="poetheme_subheader_enable" name="poetheme_subheader[enable_subheader]" value="1" <?php checked( $options['enable_subheader'] ); ?> />
+                                <?php esc_html_e( 'Abilita la sezione con titolo pagina e breadcrumbs.', 'poetheme' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'Se disattivata, titolo e breadcrumbs non verranno mostrati globalmente.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <fieldset id="poetheme-subheader-settings" <?php disabled( ! $options['enable_subheader'] ); ?>>
+                <legend class="screen-reader-text"><?php esc_html_e( 'Impostazioni sottointestazione', 'poetheme' ); ?></legend>
+                <table class="form-table" role="presentation">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><?php esc_html_e( 'Elementi visibili', 'poetheme' ); ?></th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="poetheme_subheader[show_title]" value="1" <?php checked( $options['show_title'] ); ?> />
+                                    <?php esc_html_e( 'Mostra il titolo della pagina', 'poetheme' ); ?>
+                                </label>
+                                <br />
+                                <label>
+                                    <input type="checkbox" name="poetheme_subheader[show_breadcrumbs]" value="1" <?php checked( $options['show_breadcrumbs'] ); ?> />
+                                    <?php esc_html_e( 'Mostra i breadcrumbs', 'poetheme' ); ?>
+                                </label>
+                                <p class="description"><?php esc_html_e( 'Le impostazioni della singola pagina possono comunque nascondere questi elementi.', 'poetheme' ); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="poetheme_subheader_layout"><?php esc_html_e( 'Layout', 'poetheme' ); ?></label></th>
+                            <td>
+                                <select id="poetheme_subheader_layout" name="poetheme_subheader[layout]">
+                                    <?php foreach ( $layouts as $layout_key => $label ) : ?>
+                                        <option value="<?php echo esc_attr( $layout_key ); ?>" <?php selected( $options['layout'], $layout_key ); ?>><?php echo esc_html( $label ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <p class="description"><?php esc_html_e( 'Scegli come posizionare titolo e breadcrumbs nella sottointestazione.', 'poetheme' ); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="poetheme_subheader_title_tag"><?php esc_html_e( 'Tag del titolo', 'poetheme' ); ?></label></th>
+                            <td>
+                                <select id="poetheme_subheader_title_tag" name="poetheme_subheader[title_tag]">
+                                    <?php foreach ( $tags as $tag ) : ?>
+                                        <option value="<?php echo esc_attr( $tag ); ?>" <?php selected( $options['title_tag'], $tag ); ?>><?php echo esc_html( strtoupper( $tag ) ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <p class="description"><?php esc_html_e( 'Seleziona il tag HTML utilizzato per il titolo principale.', 'poetheme' ); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="poetheme_subheader_separator"><?php esc_html_e( 'Separatore breadcrumbs', 'poetheme' ); ?></label></th>
+                            <td>
+                                <input type="text" id="poetheme_subheader_separator" name="poetheme_subheader[breadcrumbs_separator]" value="<?php echo esc_attr( $options['breadcrumbs_separator'] ); ?>" maxlength="10" class="regular-text" list="poetheme-subheader-separators" />
+                                <datalist id="poetheme-subheader-separators">
+                                    <?php foreach ( $suggested_sep as $separator ) : ?>
+                                        <option value="<?php echo esc_attr( $separator ); ?>"></option>
+                                    <?php endforeach; ?>
+                                </datalist>
+                                <p class="description"><?php esc_html_e( 'Suggerimenti: /, >, », ›, | oppure qualsiasi stringa entro 10 caratteri.', 'poetheme' ); ?></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+
+            <?php submit_button(); ?>
+        </form>
     </div>
+    <script>
+        (function() {
+            const toggle = document.getElementById('poetheme_subheader_enable');
+            const fieldset = document.getElementById('poetheme-subheader-settings');
+
+            if (!toggle || !fieldset) {
+                return;
+            }
+
+            function updateState() {
+                fieldset.disabled = !toggle.checked;
+            }
+
+            toggle.addEventListener('change', updateState);
+            updateState();
+        })();
+    </script>
     <?php
 }
 
@@ -2569,6 +2900,8 @@ function poetheme_options_admin_assets( $hook ) {
                 'chooseBackground'    => __( 'Scegli un’immagine di sfondo', 'poetheme' ),
                 'selectBackground'    => __( 'Usa questa immagine', 'poetheme' ),
                 'noBackground'        => __( 'Nessuna immagine selezionata.', 'poetheme' ),
+                'alphaLabel'          => __( 'Trasparenza', 'poetheme' ),
+                'alphaSuffix'         => '%',
             )
         );
     }

@@ -34,4 +34,4 @@ get_template_part( $template_slug, null, $header_context );
 ?>
 
 <main id="primary-content" class="<?php echo esc_attr( poetheme_get_main_classes() ); ?>" tabindex="-1">
-    <?php poetheme_the_breadcrumbs(); ?>
+    <?php poetheme_render_subheader(); ?>

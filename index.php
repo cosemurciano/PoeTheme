@@ -9,14 +9,23 @@ get_header();
 ?>
 <section class="grid gap-10 lg:grid-cols-[2fr,1fr]">
     <div>
-        <?php if ( is_category() || is_tag() || is_tax() ) : ?>
+        <?php
+        $showing_term_archive = is_category() || is_tag() || is_tax();
+        $archive_description  = get_the_archive_description();
+        $display_archive_title = $showing_term_archive && ! poetheme_subheader_is_enabled();
+
+        if ( $display_archive_title || $archive_description ) :
+            ?>
             <header class="poetheme-archive-header mb-8">
-                <h1 class="poetheme-category-title text-3xl font-bold">
-                    <?php echo esc_html( single_term_title( '', false ) ); ?>
-                </h1>
-                <?php if ( get_the_archive_description() ) : ?>
+                <?php if ( $display_archive_title ) : ?>
+                    <h1 class="poetheme-category-title text-3xl font-bold">
+                        <?php echo esc_html( single_term_title( '', false ) ); ?>
+                    </h1>
+                <?php endif; ?>
+
+                <?php if ( $archive_description ) : ?>
                     <div class="mt-2 text-gray-600 leading-relaxed">
-                        <?php echo wp_kses_post( get_the_archive_description() ); ?>
+                        <?php echo wp_kses_post( $archive_description ); ?>
                     </div>
                 <?php endif; ?>
             </header>
@@ -26,7 +35,7 @@ get_header();
             <?php while ( have_posts() ) : the_post(); ?>
                 <article id="post-<?php the_ID(); ?>" <?php post_class( 'bg-white rounded-lg shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500' ); ?> itemscope itemtype="https://schema.org/Article">
                     <header class="mb-4">
-                        <?php if ( is_singular() ) : ?>
+                        <?php if ( is_singular() && ! poetheme_subheader_is_enabled() ) : ?>
                             <h1 class="poetheme-post-title text-3xl font-bold mb-2" itemprop="headline"><?php the_title(); ?></h1>
                         <?php else : ?>
                             <h2 class="text-2xl font-semibold mb-2">

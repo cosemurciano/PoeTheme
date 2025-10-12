@@ -102,8 +102,126 @@ textarea:focus {
   text-decoration: underline;
 }
 
+.poetheme-subheader {
+  padding: 1.5rem 0;
+}
+
+.poetheme-subheader__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.poetheme-subheader--stack .poetheme-subheader__inner,
+.poetheme-subheader--title-only .poetheme-subheader__inner {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.poetheme-subheader--align-center .poetheme-subheader__inner {
+  align-items: center;
+  text-align: center;
+}
+
+.poetheme-subheader--align-right .poetheme-subheader__inner {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.poetheme-subheader__breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.poetheme-subheader--align-center .poetheme-subheader__breadcrumbs {
+  justify-content: center;
+}
+
+.poetheme-subheader--align-right .poetheme-subheader__breadcrumbs {
+  justify-content: flex-end;
+}
+
+.poetheme-subheader--split .poetheme-subheader__inner {
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .poetheme-subheader--split .poetheme-subheader__inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .poetheme-subheader--split.poetheme-subheader--title-left .poetheme-subheader__title {
+    flex: 0 1 60%;
+    text-align: left;
+  }
+
+  .poetheme-subheader--split.poetheme-subheader--title-left .poetheme-subheader__breadcrumbs {
+    flex: 0 1 40%;
+    justify-content: flex-end;
+  }
+
+  .poetheme-subheader--split.poetheme-subheader--title-right .poetheme-subheader__title {
+    order: 2;
+    flex: 0 1 40%;
+    text-align: right;
+  }
+
+  .poetheme-subheader--split.poetheme-subheader--title-right .poetheme-subheader__breadcrumbs {
+    order: 1;
+    flex: 0 1 60%;
+    justify-content: flex-start;
+  }
+}
+
+.poetheme-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.poetheme-breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.poetheme-breadcrumbs__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.poetheme-breadcrumbs__link:hover,
+.poetheme-breadcrumbs__link:focus {
+  text-decoration: underline;
+}
+
+.poetheme-breadcrumbs__current {
+  color: inherit;
+}
+
+.breadcrumbs__separator {
+  display: inline-flex;
+  align-items: center;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  margin: 0 0.25rem;
+}
+
+.breadcrumbs__separator-text {
+  display: inline-block;
+}
+
 article {
   margin-bottom: 3rem;
+  padding: 1.5rem 0;
 }
 
 article header h1,

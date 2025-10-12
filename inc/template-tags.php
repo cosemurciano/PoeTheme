@@ -74,6 +74,253 @@ function poetheme_should_display_page_title( $post_id = null ) {
 }
 
 /**
+ * Determine if the subheader is enabled globally.
+ *
+ * @return bool
+ */
+function poetheme_subheader_is_enabled() {
+    $options = poetheme_get_subheader_options();
+    return ! empty( $options['enable_subheader'] );
+}
+
+/**
+ * Determine if the current view should display the subheader title.
+ *
+ * @return bool
+ */
+function poetheme_subheader_should_display_title() {
+    if ( ! poetheme_subheader_is_enabled() ) {
+        return false;
+    }
+
+    $options = poetheme_get_subheader_options();
+
+    if ( empty( $options['show_title'] ) ) {
+        return false;
+    }
+
+    if ( is_page() && ! poetheme_should_display_page_title() ) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Determine if the current layout hides breadcrumbs regardless of settings.
+ *
+ * @param string $layout Layout key.
+ * @return bool
+ */
+function poetheme_subheader_layout_hides_breadcrumbs( $layout ) {
+    return in_array( $layout, array( 'title-left-only', 'title-right-only', 'title-center-only' ), true );
+}
+
+/**
+ * Determine if breadcrumbs should be displayed in the subheader for current view.
+ *
+ * @return bool
+ */
+function poetheme_subheader_should_display_breadcrumbs() {
+    if ( ! poetheme_subheader_is_enabled() ) {
+        return false;
+    }
+
+    $options = poetheme_get_subheader_options();
+
+    if ( empty( $options['show_breadcrumbs'] ) ) {
+        return false;
+    }
+
+    if ( poetheme_subheader_layout_hides_breadcrumbs( $options['layout'] ) ) {
+        return false;
+    }
+
+    if ( is_page() && poetheme_get_page_setting_flag( 'hide_breadcrumbs' ) ) {
+        return false;
+    }
+
+    if ( is_front_page() ) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Retrieve the configured breadcrumbs separator.
+ *
+ * @return string
+ */
+function poetheme_get_breadcrumbs_separator() {
+    $options   = poetheme_get_subheader_options();
+    $separator = isset( $options['breadcrumbs_separator'] ) ? trim( (string) $options['breadcrumbs_separator'] ) : '/';
+
+    if ( '' === $separator ) {
+        $separator = '/';
+    }
+
+    return $separator;
+}
+
+/**
+ * Retrieve the CSS classes to apply to the subheader wrapper based on layout.
+ *
+ * @param string $layout Layout key.
+ * @return array
+ */
+function poetheme_get_subheader_layout_classes( $layout ) {
+    $classes = array( 'poetheme-subheader' );
+
+    switch ( $layout ) {
+        case 'stack-left':
+            $classes[] = 'poetheme-subheader--stack';
+            $classes[] = 'poetheme-subheader--align-left';
+            break;
+        case 'stack-right':
+            $classes[] = 'poetheme-subheader--stack';
+            $classes[] = 'poetheme-subheader--align-right';
+            break;
+        case 'stack-center':
+            $classes[] = 'poetheme-subheader--stack';
+            $classes[] = 'poetheme-subheader--align-center';
+            break;
+        case 'title-left-only':
+            $classes[] = 'poetheme-subheader--title-only';
+            $classes[] = 'poetheme-subheader--align-left';
+            break;
+        case 'title-right-only':
+            $classes[] = 'poetheme-subheader--title-only';
+            $classes[] = 'poetheme-subheader--align-right';
+            break;
+        case 'title-center-only':
+            $classes[] = 'poetheme-subheader--title-only';
+            $classes[] = 'poetheme-subheader--align-center';
+            break;
+        case 'split-title-right':
+            $classes[] = 'poetheme-subheader--split';
+            $classes[] = 'poetheme-subheader--title-right';
+            break;
+        case 'split-title-left':
+        default:
+            $classes[] = 'poetheme-subheader--split';
+            $classes[] = 'poetheme-subheader--title-left';
+            break;
+    }
+
+    return $classes;
+}
+
+/**
+ * Retrieve the list of classes for the subheader title based on context.
+ *
+ * @return array
+ */
+function poetheme_get_subheader_title_classes() {
+    $classes = array( 'poetheme-subheader__title' );
+
+    if ( is_singular( 'post' ) ) {
+        $classes[] = 'poetheme-post-title';
+    } elseif ( is_singular() ) {
+        $classes[] = 'poetheme-page-title';
+    } elseif ( is_category() || is_tag() || is_tax() || is_post_type_archive() ) {
+        $classes[] = 'poetheme-category-title';
+    } else {
+        $classes[] = 'poetheme-page-title';
+    }
+
+    return $classes;
+}
+
+/**
+ * Retrieve the human readable title for the current view.
+ *
+ * @return string
+ */
+function poetheme_get_subheader_title_text() {
+    if ( is_singular() ) {
+        return get_the_title();
+    }
+
+    if ( is_home() ) {
+        $posts_page_id = (int) get_option( 'page_for_posts' );
+        if ( $posts_page_id ) {
+            return get_the_title( $posts_page_id );
+        }
+        return get_bloginfo( 'name' );
+    }
+
+    if ( is_search() ) {
+        return sprintf( __( 'Risultati della ricerca per "%s"', 'poetheme' ), get_search_query() );
+    }
+
+    if ( is_404() ) {
+        return __( 'Pagina non trovata', 'poetheme' );
+    }
+
+    if ( is_archive() ) {
+        return get_the_archive_title();
+    }
+
+    return get_bloginfo( 'name' );
+}
+
+/**
+ * Render the page subheader containing title and breadcrumbs.
+ */
+function poetheme_render_subheader() {
+    if ( ! poetheme_subheader_is_enabled() ) {
+        return;
+    }
+
+    $options            = poetheme_get_subheader_options();
+    $show_title         = poetheme_subheader_should_display_title();
+    $show_breadcrumbs   = poetheme_subheader_should_display_breadcrumbs();
+    $breadcrumbs_items  = $show_breadcrumbs ? poetheme_get_breadcrumbs_items() : array();
+
+    if ( $show_title ) {
+        $title_text = poetheme_get_subheader_title_text();
+        if ( '' === trim( $title_text ) ) {
+            $show_title = false;
+        }
+    }
+
+    if ( ! $show_title && empty( $breadcrumbs_items ) ) {
+        return;
+    }
+
+    $layout_classes = poetheme_get_subheader_layout_classes( $options['layout'] );
+    $wrapper_class  = implode( ' ', array_map( 'sanitize_html_class', $layout_classes ) );
+    $title_classes  = implode( ' ', array_map( 'sanitize_html_class', poetheme_get_subheader_title_classes() ) );
+    $breadcrumbs_class = 'poetheme-subheader__breadcrumbs';
+    $tag            = isset( $options['title_tag'] ) ? strtolower( $options['title_tag'] ) : 'h1';
+    $allowed_tags   = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
+
+    if ( ! in_array( $tag, $allowed_tags, true ) ) {
+        $tag = 'h1';
+    }
+
+    $container_classes = poetheme_get_layout_container_classes( array( 'poetheme-subheader__inner' ) );
+    ?>
+    <section class="<?php echo esc_attr( $wrapper_class ); ?>">
+        <div class="<?php echo esc_attr( $container_classes ); ?>">
+            <?php if ( $show_title ) : ?>
+                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $title_classes ); ?>" itemprop="headline">
+                    <?php echo esc_html( $title_text ); ?>
+                </<?php echo tag_escape( $tag ); ?>>
+            <?php endif; ?>
+
+            <?php if ( ! empty( $breadcrumbs_items ) ) : ?>
+                <nav class="<?php echo esc_attr( $breadcrumbs_class ); ?>" aria-label="<?php esc_attr_e( 'Breadcrumb', 'poetheme' ); ?>">
+                    <?php echo poetheme_get_breadcrumbs_markup( $breadcrumbs_items, poetheme_get_breadcrumbs_separator() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                </nav>
+            <?php endif; ?>
+        </div>
+    </section>
+    <?php
+}
+
+/**
  * Retrieve base container classes with optional additions.
  *
  * @param array|string $additional Additional classes.
@@ -123,13 +370,7 @@ function poetheme_get_main_classes() {
  * @return array
  */
 function poetheme_get_breadcrumbs_items() {
-    $options = poetheme_get_options();
-
-    if ( ! $options['enable_breadcrumbs'] ) {
-        return array();
-    }
-
-    if ( is_page() && poetheme_get_page_setting_flag( 'hide_breadcrumbs' ) ) {
+    if ( ! poetheme_subheader_should_display_breadcrumbs() ) {
         return array();
     }
 
@@ -233,27 +474,77 @@ function poetheme_the_breadcrumbs() {
     if ( empty( $items ) ) {
         return;
     }
-    ?>
-    <nav class="breadcrumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'poetheme' ); ?>">
-        <ol class="flex space-x-2" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <?php foreach ( $items as $index => $item ) : ?>
-                <li class="flex items-center" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                    <?php if ( ! empty( $item['url'] ) ) : ?>
-                        <a href="<?php echo esc_url( $item['url'] ); ?>" itemprop="item">
-                            <span itemprop="name"><?php echo esc_html( $item['label'] ); ?></span>
-                        </a>
-                    <?php else : ?>
-                        <span itemprop="name"><?php echo esc_html( $item['label'] ); ?></span>
-                    <?php endif; ?>
-                    <meta itemprop="position" content="<?php echo esc_attr( $index + 1 ); ?>" />
-                    <?php if ( $index < count( $items ) - 1 ) : ?>
-                        <span class="mx-2" aria-hidden="true">/</span>
-                    <?php endif; ?>
-                </li>
-            <?php endforeach; ?>
-        </ol>
-    </nav>
-    <?php
+    echo '<nav class="breadcrumbs" aria-label="' . esc_attr__( 'Breadcrumb', 'poetheme' ) . '">';
+    echo poetheme_get_breadcrumbs_markup( $items, poetheme_get_breadcrumbs_separator() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo '</nav>';
+}
+
+/**
+ * Build breadcrumbs markup.
+ *
+ * @param array  $items      Breadcrumb items.
+ * @param string $separator  Separator string.
+ * @return string
+ */
+function poetheme_get_breadcrumbs_markup( $items, $separator ) {
+    if ( empty( $items ) ) {
+        return '';
+    }
+
+    $separator_text = $separator;
+    $count          = count( $items );
+    $output         = '<ol class="poetheme-breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">';
+
+    foreach ( $items as $index => $item ) {
+        $output .= '<li class="poetheme-breadcrumbs__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+
+        $is_last = ( $index === $count - 1 );
+
+        if ( ! empty( $item['url'] ) ) {
+            $title = sprintf( __( 'Vai a %s', 'poetheme' ), $item['label'] );
+            $attributes = array(
+                'href'     => $item['url'],
+                'class'    => 'poetheme-breadcrumbs__link',
+                'itemprop' => 'item',
+                'title'    => $title,
+            );
+
+            if ( $is_last ) {
+                $attributes['aria-current'] = 'page';
+            }
+
+            $attr_string = '';
+            foreach ( $attributes as $attr_key => $attr_value ) {
+                if ( 'href' === $attr_key ) {
+                    $attr_string .= ' href="' . esc_url( $attr_value ) . '"';
+                } else {
+                    $attr_string .= ' ' . $attr_key . '="' . esc_attr( $attr_value ) . '"';
+                }
+            }
+
+            $output .= '<a' . $attr_string . '><span itemprop="name">' . esc_html( $item['label'] ) . '</span></a>';
+        } else {
+            $current_attrs = 'class="poetheme-breadcrumbs__current" itemprop="name"';
+
+            if ( $is_last ) {
+                $current_attrs .= ' aria-current="page"';
+            }
+
+            $output .= '<span ' . $current_attrs . '>' . esc_html( $item['label'] ) . '</span>';
+        }
+
+        $output .= '<meta itemprop="position" content="' . esc_attr( $index + 1 ) . '" />';
+
+        if ( $index < $count - 1 ) {
+            $output .= '<span class="breadcrumbs__separator" aria-hidden="true"><span class="breadcrumbs__separator-text">' . esc_html( $separator_text ) . '</span></span>';
+        }
+
+        $output .= '</li>';
+    }
+
+    $output .= '</ol>';
+
+    return $output;
 }
 
 /**

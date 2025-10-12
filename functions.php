@@ -317,8 +317,11 @@ function poetheme_output_design_settings() {
         '--poetheme-heading-h6-color'          => ! empty( $color_options['heading_h6_color'] ) ? $color_options['heading_h6_color'] : '#111827',
         '--poetheme-heading-h6-background'     => ! empty( $color_options['heading_h6_background'] ) ? $color_options['heading_h6_background'] : 'transparent',
         '--poetheme-page-title-color'          => ! empty( $color_options['page_title_color'] ) ? $color_options['page_title_color'] : '#111827',
+        '--poetheme-page-title-background'     => ! empty( $color_options['page_title_background'] ) ? $color_options['page_title_background'] : 'transparent',
         '--poetheme-post-title-color'          => ! empty( $color_options['post_title_color'] ) ? $color_options['post_title_color'] : '#111827',
+        '--poetheme-post-title-background'     => ! empty( $color_options['post_title_background'] ) ? $color_options['post_title_background'] : 'transparent',
         '--poetheme-category-title-color'      => ! empty( $color_options['category_title_color'] ) ? $color_options['category_title_color'] : '#111827',
+        '--poetheme-category-title-background' => ! empty( $color_options['category_title_background'] ) ? $color_options['category_title_background'] : 'transparent',
     );
 
     $body_css[] = implode( ';', array_map( function ( $key, $value ) {
@@ -359,11 +362,11 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings main h5{color:var(--poetheme-heading-h5-color) !important;background-color:var(--poetheme-heading-h5-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings main h6{color:var(--poetheme-heading-h6-color) !important;background-color:var(--poetheme-heading-h6-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings main h1 a,body.poetheme-has-color-settings main h2 a,body.poetheme-has-color-settings main h3 a,body.poetheme-has-color-settings main h4 a,body.poetheme-has-color-settings main h5 a,body.poetheme-has-color-settings main h6 a{color:inherit !important;}';
-    $styles .= 'body.poetheme-has-color-settings .poetheme-page-title{color:var(--poetheme-page-title-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-page-title{color:var(--poetheme-page-title-color) !important;background-color:var(--poetheme-page-title-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-page-title a{color:inherit !important;}';
-    $styles .= 'body.poetheme-has-color-settings .poetheme-post-title{color:var(--poetheme-post-title-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-post-title{color:var(--poetheme-post-title-color) !important;background-color:var(--poetheme-post-title-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-post-title a{color:inherit !important;}';
-    $styles .= 'body.poetheme-has-color-settings .poetheme-category-title{color:var(--poetheme-category-title-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-category-title{color:var(--poetheme-category-title-color) !important;background-color:var(--poetheme-category-title-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-category-title a{color:inherit !important;}';
 
     if ( $styles ) {

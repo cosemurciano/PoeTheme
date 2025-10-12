@@ -21,6 +21,124 @@
         var $backgroundUpload = $('#poetheme-background-upload');
         var $backgroundRemove = $('#poetheme-background-remove');
         var $colorFields = $('.poetheme-color-field');
+        var alphaLabel = options.alphaLabel || 'Transparency';
+        var alphaSuffix = options.alphaSuffix || '%';
+
+        function clamp(value, min, max) {
+            value = Number(value);
+            if (Number.isNaN(value)) {
+                return min;
+            }
+            return Math.min(Math.max(value, min), max);
+        }
+
+        function componentToHex(component) {
+            var hex = clamp(component, 0, 255).toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+            return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        }
+
+        function parseColor(value, fallback) {
+            var state = {
+                r: 17,
+                g: 24,
+                b: 39,
+                a: 1,
+                format: 'hex'
+            };
+
+            if (fallback && typeof fallback === 'object') {
+                state = $.extend({}, state, fallback);
+            }
+
+            var stringValue = (value || '').toString().trim();
+
+            if (!stringValue) {
+                return state;
+            }
+
+            if (stringValue.toLowerCase() === 'transparent') {
+                state.a = 0;
+                state.format = 'rgba';
+                return state;
+            }
+
+            if (typeof window.Color !== 'undefined') {
+                try {
+                    var colorObj = window.Color(stringValue);
+                    if (colorObj && colorObj.toRgb) {
+                        var rgb = colorObj.toRgb();
+                        if (rgb) {
+                            state.r = clamp(rgb.r, 0, 255);
+                            state.g = clamp(rgb.g, 0, 255);
+                            state.b = clamp(rgb.b, 0, 255);
+                            state.a = typeof rgb.a === 'number' ? clamp(rgb.a, 0, 1) : 1;
+                            state.format = state.a < 1 ? 'rgba' : (stringValue.indexOf('#') === 0 ? 'hex' : 'rgb');
+                            return state;
+                        }
+                    }
+                } catch (e) {
+                    // Fallback to manual parsing.
+                }
+            }
+
+            var hexMatch = stringValue.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+            if (hexMatch) {
+                var hex = hexMatch[1];
+                if (hex.length === 3) {
+                    state.r = parseInt(hex.charAt(0) + hex.charAt(0), 16);
+                    state.g = parseInt(hex.charAt(1) + hex.charAt(1), 16);
+                    state.b = parseInt(hex.charAt(2) + hex.charAt(2), 16);
+                } else {
+                    state.r = parseInt(hex.substr(0, 2), 16);
+                    state.g = parseInt(hex.substr(2, 2), 16);
+                    state.b = parseInt(hex.substr(4, 2), 16);
+                }
+                state.format = 'hex';
+                return state;
+            }
+
+            var rgbaMatch = stringValue.match(/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i);
+            if (rgbaMatch) {
+                state.r = clamp(parseInt(rgbaMatch[1], 10), 0, 255);
+                state.g = clamp(parseInt(rgbaMatch[2], 10), 0, 255);
+                state.b = clamp(parseInt(rgbaMatch[3], 10), 0, 255);
+                state.a = rgbaMatch[4] !== undefined ? clamp(parseFloat(rgbaMatch[4]), 0, 1) : 1;
+                state.format = state.a < 1 ? 'rgba' : 'rgb';
+                return state;
+            }
+
+            return state;
+        }
+
+        function formatColor(state) {
+            var alpha = clamp(state.a, 0, 1);
+            if (alpha < 1) {
+                var alphaString = alpha === 0 || alpha === 1 ? String(alpha) : alpha.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+                return 'rgba(' + clamp(state.r, 0, 255) + ',' + clamp(state.g, 0, 255) + ',' + clamp(state.b, 0, 255) + ',' + alphaString + ')';
+            }
+
+            return rgbToHex(state.r, state.g, state.b);
+        }
+
+        function updateAlphaDisplay($field, state) {
+            var $slider = $field.data('poethemeAlphaSlider');
+            var $value = $field.data('poethemeAlphaValue');
+
+            if (!$slider || !$slider.length) {
+                return;
+            }
+
+            var percentage = Math.round(clamp(state.a, 0, 1) * 100);
+            $slider.val(percentage);
+
+            if ($value && $value.length) {
+                $value.text(percentage + alphaSuffix);
+            }
+        }
 
         function updateColorPreview($field) {
             if (!$field || !$field.length) {
@@ -121,23 +239,85 @@
             $colorFields.each(function () {
                 var $field = $(this);
                 var defaultColor = $field.data('default-color');
+                var supportsAlpha = $field.data('supports-alpha');
+                var initialState = parseColor($field.val() || defaultColor || '', null);
 
                 $field.wpColorPicker({
                     defaultColor: defaultColor || false,
                     change: function (event, ui) {
                         if (ui && ui.color) {
-                            var colorValue = ui.color.toString();
-                            $(event.target).val(colorValue).trigger('change');
-                            updateColorPreview($(event.target));
+                            var $target = $(event.target);
+                            var currentState = parseColor(ui.color.toString(), $target.data('poethemeColorState'));
+                            var hasAlpha = !!$target.data('poethemeSupportsAlpha');
+                            if (hasAlpha) {
+                                currentState.a = ($target.data('poethemeColorState') || currentState).a;
+                            }
+                            $target.data('poethemeColorState', currentState);
+                            var formatted = hasAlpha ? formatColor(currentState) : ui.color.toString();
+                            $target.val(formatted).trigger('change');
+                            if (hasAlpha) {
+                                updateAlphaDisplay($target, currentState);
+                            }
+                            updateColorPreview($target);
                         }
                     },
                     clear: function (event) {
-                        $(event.target).val('').trigger('change');
-                        updateColorPreview($(event.target));
+                        var $target = $(event.target);
+                        $target.val('').trigger('change');
+                        if ($target.data('poethemeSupportsAlpha')) {
+                            var defaultState = parseColor($target.data('default-color') || '', null);
+                            $target.data('poethemeColorState', defaultState);
+                            updateAlphaDisplay($target, defaultState);
+                        }
+                        updateColorPreview($target);
                     }
                 });
 
+                $field.data('poethemeColorState', initialState);
+                $field.data('poethemeSupportsAlpha', !!supportsAlpha);
+
+                if (supportsAlpha) {
+                    var $container = $field.closest('.wp-picker-container');
+                    var $alphaControl = $('<div class="poetheme-alpha-control"></div>');
+                    var $alphaLabel = $('<span class="poetheme-alpha-label"></span>').text(alphaLabel);
+                    var $alphaSliderWrap = $('<div class="poetheme-alpha-slider-wrap"></div>');
+                    var $alphaSlider = $('<input type="range" min="0" max="100" step="1" class="poetheme-alpha-slider" />');
+                    var $alphaValue = $('<span class="poetheme-alpha-value"></span>');
+
+                    $alphaSliderWrap.append($alphaSlider);
+                    $alphaSliderWrap.append($alphaValue);
+                    $alphaControl.append($alphaLabel);
+                    $alphaControl.append($alphaSliderWrap);
+
+                    if ($container.length) {
+                        $container.append($alphaControl);
+                    } else {
+                        $field.after($alphaControl);
+                    }
+
+                    $field.data('poethemeAlphaSlider', $alphaSlider);
+                    $field.data('poethemeAlphaValue', $alphaValue);
+
+                    $alphaSlider.on('input change', function () {
+                        var sliderValue = clamp(parseInt(this.value, 10), 0, 100) / 100;
+                        var state = $field.data('poethemeColorState') || initialState;
+                        state = $.extend({}, state, { a: sliderValue, format: sliderValue < 1 ? 'rgba' : state.format });
+                        $field.data('poethemeColorState', state);
+                        var formatted = formatColor(state);
+                        $field.val(formatted);
+                        updateAlphaDisplay($field, state);
+                        updateColorPreview($field);
+                    });
+
+                    updateAlphaDisplay($field, initialState);
+                }
+
                 $field.on('input change', function () {
+                    var state = parseColor($field.val(), $field.data('poethemeColorState'));
+                    $field.data('poethemeColorState', state);
+                    if ($field.data('poethemeSupportsAlpha')) {
+                        updateAlphaDisplay($field, state);
+                    }
                     updateColorPreview($field);
                 });
 
