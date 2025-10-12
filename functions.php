@@ -147,8 +147,28 @@ function poetheme_block_editor_assets() {
     wp_enqueue_style( 'poetheme-editor-style', POETHEME_URI . '/assets/css/editor.css', array( 'poetheme-editor-tailwind' ), POETHEME_VERSION );
     wp_enqueue_script( 'poetheme-editor-alpine', 'https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js', array(), POETHEME_VERSION, true );
     wp_script_add_data( 'poetheme-editor-alpine', 'defer', true );
+
+    $font_styles = poetheme_prepare_font_styles();
+
+    if ( ! empty( $font_styles['font_faces'] ) || ! empty( $font_styles['css_rules'] ) ) {
+        wp_add_inline_style( 'poetheme-editor-style', $font_styles['font_faces'] . $font_styles['css_rules'] );
+    }
 }
 add_action( 'enqueue_block_editor_assets', 'poetheme_block_editor_assets' );
+
+/**
+ * Output custom fonts selected within the theme options.
+ */
+function poetheme_output_font_settings() {
+    $font_styles = poetheme_prepare_font_styles();
+
+    if ( empty( $font_styles['font_faces'] ) && empty( $font_styles['css_rules'] ) ) {
+        return;
+    }
+
+    echo '<style id="poetheme-font-settings">' . $font_styles['font_faces'] . $font_styles['css_rules'] . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action( 'wp_head', 'poetheme_output_font_settings', 85 );
 
 /**
  * Output custom CSS defined in the theme options.
@@ -345,6 +365,23 @@ function poetheme_body_classes( $classes ) {
     return $classes;
 }
 add_filter( 'body_class', 'poetheme_body_classes' );
+
+/**
+ * Add a body class when custom fonts are active.
+ *
+ * @param array $classes Existing body classes.
+ * @return array
+ */
+function poetheme_font_body_class( $classes ) {
+    $font_styles = poetheme_prepare_font_styles();
+
+    if ( ! empty( $font_styles['used_fonts'] ) ) {
+        $classes[] = 'poetheme-has-font-settings';
+    }
+
+    return $classes;
+}
+add_filter( 'body_class', 'poetheme_font_body_class' );
 
 /**
  * Ensure images have alt text.
