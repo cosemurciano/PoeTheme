@@ -18,7 +18,7 @@ if ( have_posts() ) :
                 </header>
             <?php endif; ?>
 
-            <div class="space-y-6 leading-relaxed" itemprop="text">
+            <div class="entry-content space-y-6 leading-relaxed" itemprop="text">
                 <?php
                 the_content();
                 wp_link_pages(

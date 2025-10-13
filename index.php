@@ -59,7 +59,7 @@ get_header();
                         </p>
                     </header>
 
-                    <div class="space-y-4 leading-relaxed" itemprop="articleBody">
+                    <div class="entry-content space-y-4 leading-relaxed" itemprop="articleBody">
                         <?php
                         if ( is_singular() ) {
                             the_content();

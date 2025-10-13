@@ -363,7 +363,7 @@ function poetheme_output_design_settings() {
 
     $styles .= $body_rule . '{' . implode( ';', $body_css ) . ';}';
 
-    $styles .= 'body.poetheme-has-color-settings a{color:var(--poetheme-general-link-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings #primary-content .entry-content a{color:var(--poetheme-general-link-color) !important;}';
 
     $styles .= 'body.poetheme-has-color-settings main{color:var(--poetheme-content-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings main p,body.poetheme-has-color-settings main li,body.poetheme-has-color-settings main span,body.poetheme-has-color-settings main td,body.poetheme-has-color-settings main th,body.poetheme-has-color-settings main dd,body.poetheme-has-color-settings main dt{color:var(--poetheme-content-text-color) !important;}';
