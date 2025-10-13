@@ -291,3 +291,299 @@ body.admin-bar #wpadminbar * {
   transform: rotate(180deg);
 }
 
+/* --------------------------------------------------------------
+ * Contenuti multimediali e allineamenti
+ * -------------------------------------------------------------- */
+
+.entry-content img,
+.entry-content figure img,
+.entry-summary img,
+.entry-summary figure img,
+.page-content img,
+.page-content figure img,
+.wp-block-image img,
+.gallery img,
+.wp-block-gallery img {
+  max-width: 100%;
+  height: auto;
+}
+
+.entry-content figure,
+.entry-summary figure,
+.page-content figure,
+.wp-block-image,
+.wp-block-image figure {
+  margin: 0 0 1.5rem;
+}
+
+.entry-content .alignleft,
+.entry-summary .alignleft,
+.page-content .alignleft,
+.wp-block-image .alignleft,
+.wp-caption.alignleft {
+  float: left;
+  margin: 0 1.5rem 1rem 0;
+  clear: left;
+}
+
+.entry-content .alignright,
+.entry-summary .alignright,
+.page-content .alignright,
+.wp-block-image .alignright,
+.wp-caption.alignright {
+  float: right;
+  margin: 0 0 1rem 1.5rem;
+  clear: right;
+}
+
+.entry-content .aligncenter,
+.entry-summary .aligncenter,
+.page-content .aligncenter,
+.wp-block-image .aligncenter,
+.wp-caption.aligncenter {
+  display: block;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+  clear: both;
+}
+
+.entry-content .aligncenter img,
+.entry-summary .aligncenter img,
+.page-content .aligncenter img,
+.wp-block-image .aligncenter img,
+.wp-caption.aligncenter img {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wp-caption {
+  max-width: 100%;
+  text-align: center;
+}
+
+.wp-caption-text,
+.gallery-caption,
+.blocks-gallery-item figcaption {
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.4;
+  margin-top: 0.5rem;
+}
+
+.entry-content::after,
+.entry-summary::after,
+.page-content::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+@media (max-width: 640px) {
+  .entry-content .alignleft,
+  .entry-summary .alignleft,
+  .page-content .alignleft,
+  .wp-block-image .alignleft,
+  .wp-caption.alignleft,
+  .entry-content .alignright,
+  .entry-summary .alignright,
+  .page-content .alignright,
+  .wp-block-image .alignright,
+  .wp-caption.alignright {
+    float: none;
+    margin: 0 auto 1.25rem;
+    display: block;
+  }
+}
+
+/* --------------------------------------------------------------
+ * Gallerie di WordPress
+ * -------------------------------------------------------------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery.gallery-columns-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.gallery.gallery-columns-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.gallery.gallery-columns-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gallery.gallery-columns-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.gallery.gallery-columns-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.gallery.gallery-columns-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.gallery.gallery-columns-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.gallery.gallery-columns-8 {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.gallery.gallery-columns-9 {
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.gallery-item {
+  margin: 0;
+}
+
+.gallery-icon img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+}
+
+.wp-block-gallery,
+.wp-block-gallery .blocks-gallery-grid {
+  margin: 0 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.wp-block-gallery .blocks-gallery-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.wp-block-gallery.columns-1 .blocks-gallery-grid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.wp-block-gallery.columns-2 .blocks-gallery-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wp-block-gallery.columns-3 .blocks-gallery-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wp-block-gallery.columns-4 .blocks-gallery-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.wp-block-gallery.columns-5 .blocks-gallery-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.wp-block-gallery.columns-6 .blocks-gallery-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.wp-block-gallery .blocks-gallery-item,
+.wp-block-gallery figure {
+  margin: 0;
+}
+
+.wp-block-gallery .blocks-gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+}
+
+/* --------------------------------------------------------------
+ * Modale lightbox immagini
+ * -------------------------------------------------------------- */
+
+.poetheme-lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+}
+
+.poetheme-lightbox.is-active {
+  display: flex;
+}
+
+.poetheme-lightbox__content {
+  position: relative;
+  max-width: min(1024px, 100%);
+  max-height: 100%;
+  outline: none;
+}
+
+.poetheme-lightbox__image {
+  display: block;
+  max-width: min(1024px, calc(100vw - 3rem));
+  max-height: calc(100vh - 3rem);
+  width: auto;
+  height: auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.poetheme-lightbox__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: none;
+  background: rgba(17, 24, 39, 0.85);
+  color: #f9fafb;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.poetheme-lightbox__close:hover,
+.poetheme-lightbox__close:focus {
+  background: rgba(30, 64, 175, 0.95);
+  color: #ffffff;
+}
+
+body.poetheme-lightbox-open {
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .poetheme-lightbox {
+    padding: 1rem;
+  }
+
+  .poetheme-lightbox__image {
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100vh - 4rem);
+    border-radius: 0.5rem;
+  }
+
+  .poetheme-lightbox__close {
+    top: 0.25rem;
+    right: 0.25rem;
+  }
+}
+

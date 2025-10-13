@@ -149,6 +149,7 @@ function poetheme_get_default_global_options() {
         'background_image_id' => 0,
         'background_position' => 'no-repeat;left top;;',
         'background_size'     => 'auto',
+        'enable_media_lightbox' => false,
     );
 }
 
@@ -867,12 +868,15 @@ function poetheme_sanitize_global_options( $input ) {
         $background_size = $defaults['background_size'];
     }
 
+    $enable_media_lightbox = ! empty( $input['enable_media_lightbox'] );
+
     return array(
         'layout_mode' => $layout_mode,
         'site_width'  => $width,
         'background_image_id' => $background_image_id,
         'background_position' => $background_position,
         'background_size'     => $background_size,
+        'enable_media_lightbox' => $enable_media_lightbox,
     );
 }
 
@@ -1054,6 +1058,8 @@ function poetheme_get_global_options() {
     if ( ! in_array( $options['background_size'], $allowed_sizes, true ) ) {
         $options['background_size'] = $defaults['background_size'];
     }
+
+    $options['enable_media_lightbox'] = ! empty( $options['enable_media_lightbox'] );
 
     return $options;
 }
@@ -1526,6 +1532,7 @@ function poetheme_render_global_page() {
     $background_image     = $background_image_id ? wp_get_attachment_image_src( $background_image_id, 'large' ) : false;
     $background_position  = isset( $options['background_position'] ) ? $options['background_position'] : '';
     $background_size      = isset( $options['background_size'] ) ? $options['background_size'] : 'auto';
+    $enable_media_lightbox = ! empty( $options['enable_media_lightbox'] );
     $width_id             = 'poetheme-global-site-width';
     $layout_field         = 'poetheme_global[layout_mode]';
     $background_positions = array(
@@ -1595,6 +1602,16 @@ function poetheme_render_global_page() {
                         <td>
                             <input type="number" name="poetheme_global[site_width]" id="<?php echo esc_attr( $width_id ); ?>" value="<?php echo esc_attr( $site_width ); ?>" min="960" max="1920" step="10" class="small-text">
                             <p class="description"><?php esc_html_e( 'Imposta la larghezza massima del sito per il layout Box. Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Lightbox immagini', 'poetheme' ); ?></th>
+                        <td>
+                            <label for="poetheme-enable-media-lightbox">
+                                <input type="checkbox" name="poetheme_global[enable_media_lightbox]" id="poetheme-enable-media-lightbox" value="1" <?php checked( $enable_media_lightbox ); ?>>
+                                <?php esc_html_e( 'Apri le immagini dei contenuti in una modale al clic.', 'poetheme' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'La modale mostra il file multimediale fino a 1024 pixel di larghezza e supporta anche le gallerie create con l’editor.', 'poetheme' ); ?></p>
                         </td>
                     </tr>
                     <tr>
@@ -3286,7 +3303,7 @@ function poetheme_render_footer_page() {
                                 array(
                                     'textarea_name' => 'poetheme_footer[credits_content]',
                                     'textarea_rows' => 6,
-                                    'media_buttons' => false,
+                                    'media_buttons' => true,
                                 )
                             );
                             ?>
@@ -3573,6 +3590,7 @@ function poetheme_options_admin_assets( $hook ) {
         'poetheme_page_poetheme-settings',
         'poetheme_page_poetheme-colors',
         'poetheme_page_poetheme-logo',
+        'poetheme_page_poetheme-footer',
     );
 
     if ( in_array( $hook, $script_screens, true ) ) {
