@@ -240,7 +240,9 @@
                 var $field = $(this);
                 var defaultColor = $field.data('default-color');
                 var supportsAlpha = $field.data('supports-alpha');
+                var initialRawValue = $field.val();
                 var initialState = parseColor($field.val() || defaultColor || '', null);
+                var shouldTriggerInitialChange = false;
 
                 $field.wpColorPicker({
                     defaultColor: defaultColor || false,
@@ -309,6 +311,19 @@
                         updateColorPreview($field);
                     });
 
+                    if (initialRawValue && typeof initialRawValue === 'string' && initialRawValue.toLowerCase() === 'transparent') {
+                        if ($field.val() !== 'transparent') {
+                            $field.val('transparent');
+                            shouldTriggerInitialChange = true;
+                        }
+                    } else if (initialState.a < 1) {
+                        var formattedInitial = formatColor(initialState);
+                        if (formattedInitial && $field.val() !== formattedInitial) {
+                            $field.val(formattedInitial);
+                            shouldTriggerInitialChange = true;
+                        }
+                    }
+
                     updateAlphaDisplay($field, initialState);
                 }
 
@@ -321,7 +336,11 @@
                     updateColorPreview($field);
                 });
 
-                updateColorPreview($field);
+                if (shouldTriggerInitialChange) {
+                    $field.trigger('change');
+                } else {
+                    updateColorPreview($field);
+                }
             });
         }
 
