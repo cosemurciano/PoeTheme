@@ -103,6 +103,8 @@ function poetheme_get_footer_layout_choices() {
 function poetheme_get_default_footer_options() {
     return array(
         'display_footer' => true,
+        'display_footer_credits' => true,
+        'credits_content' => '',
         'rows'        => 1,
         'row_layouts' => array(
             1 => 'four-equal',
@@ -131,6 +133,8 @@ function poetheme_get_footer_options() {
     }
 
     $options['display_footer'] = ! empty( $options['display_footer'] );
+    $options['display_footer_credits'] = ! empty( $options['display_footer_credits'] );
+    $options['credits_content'] = isset( $options['credits_content'] ) ? (string) $options['credits_content'] : '';
 
     return $options;
 }
@@ -188,12 +192,12 @@ function poetheme_get_default_color_options() {
         'post_title_background'          => '',
         'category_title_color'           => '#111827',
         'category_title_background'      => '',
-        'sidebar_widget_heading_color'      => '',
-        'sidebar_widget_heading_background' => '',
-        'sidebar_widget_text_color'         => '',
-        'sidebar_widget_link_color'         => '',
-        'sidebar_container_background_color'=> '',
-        'sidebar_container_background_transparent' => false,
+        'footer_widget_heading_color'      => '',
+        'footer_widget_heading_background' => '',
+        'footer_widget_text_color'         => '',
+        'footer_widget_link_color'         => '',
+        'footer_widget_background_color'   => '',
+        'footer_widget_background_transparent' => false,
     );
 }
 
@@ -956,11 +960,26 @@ function poetheme_get_color_options() {
         'content_link_underline',
         'header_background_transparent',
         'header_disable_shadow',
-        'sidebar_container_background_transparent',
+        'footer_widget_background_transparent',
     );
 
     if ( ! is_array( $raw ) ) {
         $raw = array();
+    }
+
+    $legacy_keys = array(
+        'sidebar_widget_heading_color'      => 'footer_widget_heading_color',
+        'sidebar_widget_heading_background' => 'footer_widget_heading_background',
+        'sidebar_widget_text_color'         => 'footer_widget_text_color',
+        'sidebar_widget_link_color'         => 'footer_widget_link_color',
+        'sidebar_container_background_color'=> 'footer_widget_background_color',
+        'sidebar_container_background_transparent' => 'footer_widget_background_transparent',
+    );
+
+    foreach ( $legacy_keys as $legacy_key => $current_key ) {
+        if ( ! isset( $raw[ $current_key ] ) && isset( $raw[ $legacy_key ] ) ) {
+            $raw[ $current_key ] = $raw[ $legacy_key ];
+        }
     }
 
     $options = array();
@@ -1157,6 +1176,11 @@ function poetheme_sanitize_footer_options( $input ) {
     }
 
     $output['display_footer'] = ! empty( $input['display_footer'] );
+    $output['display_footer_credits'] = ! empty( $input['display_footer_credits'] );
+
+    if ( isset( $input['credits_content'] ) ) {
+        $output['credits_content'] = wp_kses_post( (string) $input['credits_content'] );
+    }
 
     return $output;
 }
@@ -1656,6 +1680,48 @@ function poetheme_get_color_section_groups() {
                 ),
             ),
         ),
+        'footer' => array(
+            'title'       => __( 'Piè di pagina', 'poetheme' ),
+            'description' => __( 'Personalizza i colori delle aree widget del piè di pagina.', 'poetheme' ),
+            'sections'    => array(
+                'footer_widgets' => array(
+                    'title'       => __( 'Widget Footer', 'poetheme' ),
+                    'description' => __( 'Gestisci i colori dei widget mostrati nelle aree del piè di pagina.', 'poetheme' ),
+                    'fields'      => array(
+                        'footer_widget_heading_color' => array(
+                            'label'       => __( 'Colore titolo widget (H)', 'poetheme' ),
+                            'description' => __( 'Imposta il colore dei titoli (H) dei widget nel footer.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'footer_widget_heading_background' => array(
+                            'label'       => __( 'Sfondo titolo widget', 'poetheme' ),
+                            'description' => __( 'Definisci uno sfondo dedicato per il titolo dei widget del footer.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'footer_widget_text_color' => array(
+                            'label'       => __( 'Colore testo widget', 'poetheme' ),
+                            'description' => __( 'Personalizza il colore del testo dei widget posizionati nel footer.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'footer_widget_link_color' => array(
+                            'label'       => __( 'Colore link widget', 'poetheme' ),
+                            'description' => __( 'Imposta il colore dei link all’interno dei widget del footer.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'footer_widget_background_color' => array(
+                            'label'       => __( 'Colore sfondo area widget', 'poetheme' ),
+                            'description' => __( 'Scegli il colore di sfondo per l’intero blocco dei widget nel footer.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'footer_widget_background_transparent' => array(
+                            'label'       => __( 'Sfondo area widget trasparente', 'poetheme' ),
+                            'description' => __( 'Attiva per rimuovere qualsiasi colore di sfondo dal blocco widget del footer.', 'poetheme' ),
+                            'type'        => 'toggle',
+                        ),
+                    ),
+                ),
+            ),
+        ),
         'typography' => array(
             'title'       => __( 'Tipografia', 'poetheme' ),
             'description' => __( 'Imposta i colori delle intestazioni principali delle pagine (H1–H6).', 'poetheme' ),
@@ -1758,42 +1824,6 @@ function poetheme_get_color_section_groups() {
                             'label'       => __( 'Sfondo titolo categoria', 'poetheme' ),
                             'description' => __( 'Colore di sfondo dei titoli di categorie, archivi e tassonomie.', 'poetheme' ),
                             'type'        => 'color',
-                        ),
-                    ),
-                ),
-                'sidebar_widgets' => array(
-                    'title'       => __( 'Widget barra laterale', 'poetheme' ),
-                    'description' => __( 'Gestisci i colori dei widget mostrati nelle barre laterali e nelle aree pagina.', 'poetheme' ),
-                    'fields'      => array(
-                        'sidebar_widget_heading_color' => array(
-                            'label'       => __( 'Colore titolo widget (H)', 'poetheme' ),
-                            'description' => __( 'Imposta il colore dei titoli (H) dei widget nella barra laterale.', 'poetheme' ),
-                            'type'        => 'color',
-                        ),
-                        'sidebar_widget_heading_background' => array(
-                            'label'       => __( 'Sfondo titolo widget', 'poetheme' ),
-                            'description' => __( 'Definisci uno sfondo dedicato per il titolo dei widget.', 'poetheme' ),
-                            'type'        => 'color',
-                        ),
-                        'sidebar_widget_text_color' => array(
-                            'label'       => __( 'Colore testo widget', 'poetheme' ),
-                            'description' => __( 'Personalizza il colore del testo semplice dei widget.', 'poetheme' ),
-                            'type'        => 'color',
-                        ),
-                        'sidebar_widget_link_color' => array(
-                            'label'       => __( 'Colore link widget', 'poetheme' ),
-                            'description' => __( 'Imposta il colore dei link all’interno dei widget.', 'poetheme' ),
-                            'type'        => 'color',
-                        ),
-                        'sidebar_container_background_color' => array(
-                            'label'       => __( 'Colore sfondo barra laterale', 'poetheme' ),
-                            'description' => __( 'Scegli il colore di sfondo dell’intero aside (barra laterale).', 'poetheme' ),
-                            'type'        => 'color',
-                        ),
-                        'sidebar_container_background_transparent' => array(
-                            'label'       => __( 'Sfondo barra laterale trasparente', 'poetheme' ),
-                            'description' => __( 'Attiva per rimuovere qualsiasi colore di sfondo e rendere trasparente l’aside.', 'poetheme' ),
-                            'type'        => 'toggle',
                         ),
                     ),
                 ),
@@ -2855,6 +2885,8 @@ function poetheme_render_footer_page() {
         $rows = $defaults['rows'];
     }
     $display_footer = ! empty( $options['display_footer'] );
+    $display_footer_credits = ! empty( $options['display_footer_credits'] );
+    $credits_content = isset( $options['credits_content'] ) ? $options['credits_content'] : '';
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Piè di pagina', 'poetheme' ); ?></h1>
@@ -2869,12 +2901,22 @@ function poetheme_render_footer_page() {
                         <td>
                             <label for="poetheme-footer-display">
                                 <input type="checkbox" id="poetheme-footer-display" name="poetheme_footer[display_footer]" value="1" <?php checked( $display_footer ); ?> />
-                                <?php esc_html_e( 'Visualizza l’intera area footer, inclusi widget e credits.', 'poetheme' ); ?>
+                                <?php esc_html_e( 'Visualizza l’intera area footer.', 'poetheme' ); ?>
                             </label>
                             <p class="description"><?php esc_html_e( 'Disattiva per nascondere completamente i widget del piè di pagina e la sezione finale.', 'poetheme' ); ?></p>
                         </td>
                     </tr>
                     <tr>
+                        <th scope="row"><?php esc_html_e( 'Credits', 'poetheme' ); ?></th>
+                        <td>
+                            <label for="poetheme-footer-display-credits">
+                                <input type="checkbox" id="poetheme-footer-display-credits" name="poetheme_footer[display_footer_credits]" value="1" <?php checked( $display_footer_credits ); ?> />
+                                <?php esc_html_e( 'Visualizza i credits.', 'poetheme' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'Disattiva per nascondere la sezione con i credits nel piè di pagina.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                    <tr class="poetheme-footer-dependent">
                         <th scope="row"><label for="poetheme-footer-rows"><?php esc_html_e( 'Numero di righe', 'poetheme' ); ?></label></th>
                         <td>
                             <select id="poetheme-footer-rows" name="poetheme_footer[rows]">
@@ -2892,7 +2934,7 @@ function poetheme_render_footer_page() {
                             $selected = $defaults['row_layouts'][ $row ];
                         }
                         ?>
-                        <tr class="poetheme-footer-layout-row" data-footer-row="<?php echo esc_attr( $row ); ?>">
+                        <tr class="poetheme-footer-layout-row poetheme-footer-dependent" data-footer-row="<?php echo esc_attr( $row ); ?>">
                             <th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php printf( esc_html__( 'Layout riga %d', 'poetheme' ), $row ); ?></label></th>
                             <td>
                                 <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
@@ -2904,6 +2946,23 @@ function poetheme_render_footer_page() {
                             </td>
                         </tr>
                     <?php endfor; ?>
+                    <tr class="poetheme-footer-dependent poetheme-footer-credits-dependent">
+                        <th scope="row"><label for="poetheme-footer-credits-content"><?php esc_html_e( 'Testo credits', 'poetheme' ); ?></label></th>
+                        <td>
+                            <?php
+                            wp_editor(
+                                $credits_content,
+                                'poetheme-footer-credits-content',
+                                array(
+                                    'textarea_name' => 'poetheme_footer[credits_content]',
+                                    'textarea_rows' => 6,
+                                    'media_buttons' => false,
+                                )
+                            );
+                            ?>
+                            <p class="description"><?php esc_html_e( 'Inserisci testo o HTML per personalizzare i credits del sito.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -2914,12 +2973,23 @@ function poetheme_render_footer_page() {
         (function() {
             const rowsSelect = document.getElementById('poetheme-footer-rows');
             const layoutRows = document.querySelectorAll('.poetheme-footer-layout-row');
-
-            if (!rowsSelect || !layoutRows.length) {
-                return;
-            }
+            const footerToggle = document.getElementById('poetheme-footer-display');
+            const footerDependentRows = document.querySelectorAll('.poetheme-footer-dependent');
+            const creditsToggle = document.getElementById('poetheme-footer-display-credits');
+            const creditsDependentRows = document.querySelectorAll('.poetheme-footer-credits-dependent');
 
             function toggleLayoutRows() {
+                if (!rowsSelect || !layoutRows.length) {
+                    return;
+                }
+
+                if (footerToggle && !footerToggle.checked) {
+                    layoutRows.forEach(function(row) {
+                        row.style.display = 'none';
+                    });
+                    return;
+                }
+
                 const rows = parseInt(rowsSelect.value, 10) || 1;
 
                 layoutRows.forEach(function(row) {
@@ -2928,8 +2998,48 @@ function poetheme_render_footer_page() {
                 });
             }
 
-            rowsSelect.addEventListener('change', toggleLayoutRows);
-            toggleLayoutRows();
+            function toggleCreditsRows() {
+                const shouldShowFooter = !footerToggle || footerToggle.checked;
+                const shouldShowCredits = !creditsToggle || creditsToggle.checked;
+
+                creditsDependentRows.forEach(function(row) {
+                    row.style.display = shouldShowFooter && shouldShowCredits ? '' : 'none';
+                });
+            }
+
+            function toggleFooterRows() {
+                const shouldShowFooter = !footerToggle || footerToggle.checked;
+
+                footerDependentRows.forEach(function(row) {
+                    row.style.display = shouldShowFooter ? '' : 'none';
+                });
+
+                if (shouldShowFooter) {
+                    toggleLayoutRows();
+                    toggleCreditsRows();
+                }
+            }
+
+            if (rowsSelect) {
+                rowsSelect.addEventListener('change', function() {
+                    toggleLayoutRows();
+                });
+            }
+
+            if (footerToggle) {
+                footerToggle.addEventListener('change', function() {
+                    toggleFooterRows();
+                });
+            }
+
+            if (creditsToggle) {
+                creditsToggle.addEventListener('change', function() {
+                    toggleCreditsRows();
+                });
+            }
+
+            toggleFooterRows();
+            toggleCreditsRows();
         })();
     </script>
     <?php
