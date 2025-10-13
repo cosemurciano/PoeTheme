@@ -161,6 +161,13 @@ function poetheme_scripts() {
 
     wp_enqueue_script( 'poetheme-navigation', POETHEME_URI . '/assets/js/navigation.js', array(), POETHEME_VERSION, true );
     wp_script_add_data( 'poetheme-navigation', 'defer', true );
+
+    $global_options = poetheme_get_global_options();
+
+    if ( ! empty( $global_options['enable_media_lightbox'] ) ) {
+        wp_enqueue_script( 'poetheme-media-lightbox', POETHEME_URI . '/assets/js/media-lightbox.js', array(), POETHEME_VERSION, true );
+        wp_script_add_data( 'poetheme-media-lightbox', 'defer', true );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'poetheme_scripts' );
 
