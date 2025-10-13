@@ -442,6 +442,14 @@ function poetheme_get_default_font_options() {
                 $defaults[ $size_key ] = isset( $field['size']['default'] ) ? $field['size']['default'] : '';
             }
         }
+
+        if ( ! empty( $field['border_radius'] ) && ! empty( $field['border_radius']['option_key'] ) ) {
+            $radius_key = $field['border_radius']['option_key'];
+
+            if ( ! isset( $defaults[ $radius_key ] ) ) {
+                $defaults[ $radius_key ] = isset( $field['border_radius']['default'] ) ? $field['border_radius']['default'] : '';
+            }
+        }
     }
 
     return $defaults;
@@ -532,6 +540,55 @@ function poetheme_sanitize_font_options( $input ) {
         }
 
         $output[ $size_key ] = $value > 0 ? $value : '';
+    }
+
+    $radius_fields = array();
+
+    foreach ( poetheme_get_font_field_config() as $field ) {
+        if ( empty( $field['border_radius'] ) || empty( $field['border_radius']['option_key'] ) ) {
+            continue;
+        }
+
+        $radius_key = $field['border_radius']['option_key'];
+
+        if ( isset( $radius_fields[ $radius_key ] ) ) {
+            continue;
+        }
+
+        $radius_fields[ $radius_key ] = $field['border_radius'];
+    }
+
+    foreach ( $radius_fields as $radius_key => $radius_config ) {
+        $raw_value = isset( $input[ $radius_key ] ) ? trim( (string) $input[ $radius_key ] ) : '';
+
+        if ( '' === $raw_value ) {
+            $default_value        = isset( $radius_config['default'] ) ? $radius_config['default'] : ( isset( $default[ $radius_key ] ) ? $default[ $radius_key ] : '' );
+            $output[ $radius_key ] = $default_value;
+            continue;
+        }
+
+        $normalized = str_replace( ',', '.', $raw_value );
+
+        if ( ! is_numeric( $normalized ) ) {
+            $output[ $radius_key ] = '';
+            continue;
+        }
+
+        $value = (float) $normalized;
+
+        if ( isset( $radius_config['min'] ) ) {
+            $value = max( (float) $radius_config['min'], $value );
+        }
+
+        if ( isset( $radius_config['max'] ) ) {
+            $value = min( (float) $radius_config['max'], $value );
+        }
+
+        if ( $value < 0 ) {
+            $value = 0;
+        }
+
+        $output[ $radius_key ] = $value;
     }
 
     $body_fallback    = isset( $input['body_fallback'] ) ? poetheme_sanitize_font_stack( $input['body_fallback'] ) : $default['body_fallback'];
@@ -682,12 +739,53 @@ function poetheme_prepare_font_styles() {
         $size_rules .= implode( ',', $size_selectors ) . '{font-size:' . poetheme_format_number_for_css( $size_val ) . 'rem;}';
     }
 
+    $radius_rules = '';
+
+    foreach ( $config as $field ) {
+        if ( empty( $field['border_radius'] ) || empty( $field['border_radius']['option_key'] ) ) {
+            continue;
+        }
+
+        $radius_key = $field['border_radius']['option_key'];
+        $radius_val = isset( $options[ $radius_key ] ) ? $options[ $radius_key ] : '';
+
+        if ( '' === $radius_val && '0' !== $radius_val ) {
+            continue;
+        }
+
+        if ( ! is_numeric( $radius_val ) ) {
+            continue;
+        }
+
+        $radius_selectors = array();
+
+        if ( ! empty( $field['border_radius']['selectors'] ) ) {
+            $radius_selectors = (array) $field['border_radius']['selectors'];
+        } elseif ( ! empty( $field['selectors'] ) ) {
+            $radius_selectors = (array) $field['selectors'];
+        }
+
+        $radius_selectors = array_filter( array_map( 'trim', $radius_selectors ) );
+
+        if ( empty( $radius_selectors ) ) {
+            continue;
+        }
+
+        $unit = ! empty( $field['border_radius']['unit'] ) ? $field['border_radius']['unit'] : 'px';
+
+        $radius_rules .= implode( ',', $radius_selectors ) . '{border-radius:' . poetheme_format_number_for_css( $radius_val ) . $unit . ';}';
+    }
+
     $selected_fonts = array_values( array_unique( array_filter( $selected_fonts ) ) );
 
     $font_faces = poetheme_generate_font_face_css( $selected_fonts );
 
     if ( $size_rules ) {
         $css_rules .= $size_rules;
+    }
+
+    if ( $radius_rules ) {
+        $css_rules .= $radius_rules;
     }
 
     $cache = array(
@@ -1888,6 +1986,16 @@ function poetheme_get_font_field_config() {
                 'max'         => 3,
                 'step'        => 0.05,
             ),
+            'border_radius'   => array(
+                'option_key'  => 'cta_button_border_radius',
+                'label'       => __( 'Raggio angoli pulsante (px)', 'poetheme' ),
+                'description' => __( 'Imposta un raggio uniforme per tutti gli angoli del pulsante Call to Action.', 'poetheme' ),
+                'min'         => 0,
+                'max'         => 200,
+                'step'        => 1,
+                'unit'        => 'px',
+                'default'     => '',
+            ),
         ),
         'footer_widget_heading_color' => array(
             'option_key'      => 'footer_widget_heading_font',
@@ -2316,6 +2424,41 @@ function poetheme_render_fonts_page() {
                                                             />
                                                             <?php if ( ! empty( $size_config['description'] ) ) : ?>
                                                                 <p class="description"><?php echo esc_html( $size_config['description'] ); ?></p>
+                                                            <?php endif; ?>
+                                                        <?php endif; ?>
+                                                        <?php if ( ! empty( $field['border_radius'] ) && ! empty( $field['border_radius']['option_key'] ) ) :
+                                                            $radius_config   = $field['border_radius'];
+                                                            $radius_key      = $radius_config['option_key'];
+                                                            $radius_id       = 'poetheme-font-' . $radius_key;
+                                                            $radius_value    = isset( $options[ $radius_key ] ) ? $options[ $radius_key ] : '';
+                                                            $radius_value_attr = ( '' !== $radius_value || '0' === (string) $radius_value ) && is_numeric( $radius_value ) ? poetheme_format_number_for_css( $radius_value ) : '';
+                                                            $radius_step     = isset( $radius_config['step'] ) ? $radius_config['step'] : '1';
+                                                            $radius_attrs    = '';
+
+                                                            if ( isset( $radius_config['min'] ) ) {
+                                                                $radius_attrs .= ' min="' . esc_attr( $radius_config['min'] ) . '"';
+                                                            }
+
+                                                            if ( isset( $radius_config['max'] ) ) {
+                                                                $radius_attrs .= ' max="' . esc_attr( $radius_config['max'] ) . '"';
+                                                            }
+
+                                                            $radius_unit = isset( $radius_config['unit'] ) ? $radius_config['unit'] : 'px';
+                                                        ?>
+                                                            <label class="poetheme-font-size-label" for="<?php echo esc_attr( $radius_id ); ?>"><?php echo esc_html( $radius_config['label'] ); ?></label>
+                                                            <input
+                                                                type="number"
+                                                                class="small-text poetheme-font-size-control poetheme-font-radius-control"
+                                                                id="<?php echo esc_attr( $radius_id ); ?>"
+                                                                name="poetheme_fonts[<?php echo esc_attr( $radius_key ); ?>]"
+                                                                value="<?php echo esc_attr( $radius_value_attr ); ?>"
+                                                                step="<?php echo esc_attr( $radius_step ); ?>"<?php echo $radius_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                                                data-preview="<?php echo esc_attr( $preview_id ); ?>"
+                                                                data-unit="<?php echo esc_attr( $radius_unit ); ?>"
+                                                                data-property="borderRadius"
+                                                            />
+                                                            <?php if ( ! empty( $radius_config['description'] ) ) : ?>
+                                                                <p class="description"><?php echo esc_html( $radius_config['description'] ); ?></p>
                                                             <?php endif; ?>
                                                         <?php endif; ?>
                                                         <?php if ( ! empty( $field['fallback'] ) ) :
