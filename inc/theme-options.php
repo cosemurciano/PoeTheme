@@ -102,6 +102,7 @@ function poetheme_get_footer_layout_choices() {
  */
 function poetheme_get_default_footer_options() {
     return array(
+        'display_footer' => true,
         'rows'        => 1,
         'row_layouts' => array(
             1 => 'four-equal',
@@ -128,6 +129,8 @@ function poetheme_get_footer_options() {
     if ( ! isset( $options['row_layouts'] ) || ! is_array( $options['row_layouts'] ) ) {
         $options['row_layouts'] = $defaults['row_layouts'];
     }
+
+    $options['display_footer'] = ! empty( $options['display_footer'] );
 
     return $options;
 }
@@ -185,6 +188,12 @@ function poetheme_get_default_color_options() {
         'post_title_background'          => '',
         'category_title_color'           => '#111827',
         'category_title_background'      => '',
+        'sidebar_widget_heading_color'      => '',
+        'sidebar_widget_heading_background' => '',
+        'sidebar_widget_text_color'         => '',
+        'sidebar_widget_link_color'         => '',
+        'sidebar_container_background_color'=> '',
+        'sidebar_container_background_transparent' => false,
     );
 }
 
@@ -947,6 +956,7 @@ function poetheme_get_color_options() {
         'content_link_underline',
         'header_background_transparent',
         'header_disable_shadow',
+        'sidebar_container_background_transparent',
     );
 
     if ( ! is_array( $raw ) ) {
@@ -1145,6 +1155,8 @@ function poetheme_sanitize_footer_options( $input ) {
 
         $output['row_layouts'][ $row ] = $value;
     }
+
+    $output['display_footer'] = ! empty( $input['display_footer'] );
 
     return $output;
 }
@@ -1746,6 +1758,42 @@ function poetheme_get_color_section_groups() {
                             'label'       => __( 'Sfondo titolo categoria', 'poetheme' ),
                             'description' => __( 'Colore di sfondo dei titoli di categorie, archivi e tassonomie.', 'poetheme' ),
                             'type'        => 'color',
+                        ),
+                    ),
+                ),
+                'sidebar_widgets' => array(
+                    'title'       => __( 'Widget barra laterale', 'poetheme' ),
+                    'description' => __( 'Gestisci i colori dei widget mostrati nelle barre laterali e nelle aree pagina.', 'poetheme' ),
+                    'fields'      => array(
+                        'sidebar_widget_heading_color' => array(
+                            'label'       => __( 'Colore titolo widget (H)', 'poetheme' ),
+                            'description' => __( 'Imposta il colore dei titoli (H) dei widget nella barra laterale.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'sidebar_widget_heading_background' => array(
+                            'label'       => __( 'Sfondo titolo widget', 'poetheme' ),
+                            'description' => __( 'Definisci uno sfondo dedicato per il titolo dei widget.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'sidebar_widget_text_color' => array(
+                            'label'       => __( 'Colore testo widget', 'poetheme' ),
+                            'description' => __( 'Personalizza il colore del testo semplice dei widget.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'sidebar_widget_link_color' => array(
+                            'label'       => __( 'Colore link widget', 'poetheme' ),
+                            'description' => __( 'Imposta il colore dei link all’interno dei widget.', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'sidebar_container_background_color' => array(
+                            'label'       => __( 'Colore sfondo barra laterale', 'poetheme' ),
+                            'description' => __( 'Scegli il colore di sfondo dell’intero aside (barra laterale).', 'poetheme' ),
+                            'type'        => 'color',
+                        ),
+                        'sidebar_container_background_transparent' => array(
+                            'label'       => __( 'Sfondo barra laterale trasparente', 'poetheme' ),
+                            'description' => __( 'Attiva per rimuovere qualsiasi colore di sfondo e rendere trasparente l’aside.', 'poetheme' ),
+                            'type'        => 'toggle',
                         ),
                     ),
                 ),
@@ -2806,6 +2854,7 @@ function poetheme_render_footer_page() {
     if ( $rows < 1 || $rows > 2 ) {
         $rows = $defaults['rows'];
     }
+    $display_footer = ! empty( $options['display_footer'] );
     ?>
     <div class="wrap">
         <h1><?php esc_html_e( 'Piè di pagina', 'poetheme' ); ?></h1>
@@ -2815,6 +2864,16 @@ function poetheme_render_footer_page() {
 
             <table class="form-table" role="presentation">
                 <tbody>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Mostra il piè di pagina', 'poetheme' ); ?></th>
+                        <td>
+                            <label for="poetheme-footer-display">
+                                <input type="checkbox" id="poetheme-footer-display" name="poetheme_footer[display_footer]" value="1" <?php checked( $display_footer ); ?> />
+                                <?php esc_html_e( 'Visualizza l’intera area footer, inclusi widget e credits.', 'poetheme' ); ?>
+                            </label>
+                            <p class="description"><?php esc_html_e( 'Disattiva per nascondere completamente i widget del piè di pagina e la sezione finale.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
                     <tr>
                         <th scope="row"><label for="poetheme-footer-rows"><?php esc_html_e( 'Numero di righe', 'poetheme' ); ?></label></th>
                         <td>

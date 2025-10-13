@@ -13,9 +13,11 @@
     $max_columns    = 4;
     $rows_to_show   = isset( $footer_options['rows'] ) ? (int) $footer_options['rows'] : 1;
     $rows_to_show   = max( 1, min( 2, $rows_to_show ) );
+    $show_footer    = ! empty( $footer_options['display_footer'] );
 
     $has_widgets = false;
     ?>
+    <?php if ( $show_footer ) : ?>
     <aside class="bg-gray-100 border-t border-gray-200" aria-label="<?php esc_attr_e( 'Footer widgets', 'poetheme' ); ?>">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-8', 'flex', 'flex-col', 'gap-10' ) ) ); ?>">
             <?php for ( $row = 1; $row <= $rows_to_show; $row++ ) :
@@ -95,6 +97,7 @@
             </nav>
         </div>
     </footer>
+    <?php endif; ?>
 
     <?php wp_footer(); ?>
 </body>
