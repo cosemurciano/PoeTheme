@@ -18,9 +18,15 @@
     $credits_text   = isset( $footer_options['credits_content'] ) ? $footer_options['credits_content'] : '';
 
     $has_widgets = false;
+    $color_options = poetheme_get_color_options();
+    $footer_widget_classes = array( 'poetheme-footer-widgets', 'bg-gray-100', 'border-t', 'border-gray-200' );
+
+    if ( ! empty( $color_options['footer_widget_background_transparent'] ) ) {
+        $footer_widget_classes = array( 'poetheme-footer-widgets' );
+    }
     ?>
     <?php if ( $show_footer ) : ?>
-    <aside class="poetheme-footer-widgets bg-gray-100 border-t border-gray-200" aria-label="<?php esc_attr_e( 'Footer widgets', 'poetheme' ); ?>">
+    <aside class="<?php echo esc_attr( implode( ' ', $footer_widget_classes ) ); ?>" aria-label="<?php esc_attr_e( 'Footer widgets', 'poetheme' ); ?>">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-8', 'flex', 'flex-col', 'gap-10' ) ) ); ?>">
             <?php for ( $row = 1; $row <= $rows_to_show; $row++ ) :
                 $layout_key = isset( $footer_options['row_layouts'][ $row ] ) ? $footer_options['row_layouts'][ $row ] : '';

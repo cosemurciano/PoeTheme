@@ -192,8 +192,14 @@ function poetheme_get_default_color_options() {
         'post_title_background'          => '',
         'category_title_color'           => '#111827',
         'category_title_background'      => '',
-        'footer_widget_heading_color'      => '',
-        'footer_widget_heading_background' => '',
+        'footer_widget_heading_h2_color'      => '',
+        'footer_widget_heading_h2_background' => '',
+        'footer_widget_heading_h3_color'      => '',
+        'footer_widget_heading_h3_background' => '',
+        'footer_widget_heading_h4_color'      => '',
+        'footer_widget_heading_h4_background' => '',
+        'footer_widget_heading_h5_color'      => '',
+        'footer_widget_heading_h5_background' => '',
         'footer_widget_text_color'         => '',
         'footer_widget_link_color'         => '',
         'footer_widget_background_color'   => '',
@@ -957,6 +963,7 @@ function poetheme_sanitize_color_options( $input ) {
         'content_link_underline',
         'header_background_transparent',
         'header_disable_shadow',
+        'footer_widget_background_transparent',
     );
 
     if ( ! is_array( $input ) ) {
@@ -1066,8 +1073,6 @@ function poetheme_get_color_options() {
     }
 
     $legacy_keys = array(
-        'sidebar_widget_heading_color'      => 'footer_widget_heading_color',
-        'sidebar_widget_heading_background' => 'footer_widget_heading_background',
         'sidebar_widget_text_color'         => 'footer_widget_text_color',
         'sidebar_widget_link_color'         => 'footer_widget_link_color',
         'sidebar_container_background_color'=> 'footer_widget_background_color',
@@ -1077,6 +1082,40 @@ function poetheme_get_color_options() {
     foreach ( $legacy_keys as $legacy_key => $current_key ) {
         if ( ! isset( $raw[ $current_key ] ) && isset( $raw[ $legacy_key ] ) ) {
             $raw[ $current_key ] = $raw[ $legacy_key ];
+        }
+    }
+
+    $legacy_heading_sources = array(
+        'sidebar_widget_heading_color',
+        'footer_widget_heading_color',
+    );
+
+    foreach ( $legacy_heading_sources as $legacy_key ) {
+        if ( empty( $raw[ $legacy_key ] ) ) {
+            continue;
+        }
+
+        foreach ( array( 'footer_widget_heading_h2_color', 'footer_widget_heading_h3_color', 'footer_widget_heading_h4_color', 'footer_widget_heading_h5_color' ) as $target_key ) {
+            if ( empty( $raw[ $target_key ] ) ) {
+                $raw[ $target_key ] = $raw[ $legacy_key ];
+            }
+        }
+    }
+
+    $legacy_heading_background_sources = array(
+        'sidebar_widget_heading_background',
+        'footer_widget_heading_background',
+    );
+
+    foreach ( $legacy_heading_background_sources as $legacy_key ) {
+        if ( empty( $raw[ $legacy_key ] ) ) {
+            continue;
+        }
+
+        foreach ( array( 'footer_widget_heading_h2_background', 'footer_widget_heading_h3_background', 'footer_widget_heading_h4_background', 'footer_widget_heading_h5_background' ) as $target_key ) {
+            if ( empty( $raw[ $target_key ] ) ) {
+                $raw[ $target_key ] = $raw[ $legacy_key ];
+            }
         }
     }
 
@@ -1786,35 +1825,77 @@ function poetheme_get_color_section_groups() {
                     'title'       => __( 'Widget Footer', 'poetheme' ),
                     'description' => __( 'Gestisci i colori dei widget mostrati nelle aree del piè di pagina.', 'poetheme' ),
                     'fields'      => array(
-                        'footer_widget_heading_color' => array(
-                            'label'       => __( 'Colore titolo widget (H)', 'poetheme' ),
-                            'description' => __( 'Imposta il colore dei titoli (H) dei widget nel footer.', 'poetheme' ),
-                            'type'        => 'color',
-                        ),
-                        'footer_widget_heading_background' => array(
-                            'label'       => __( 'Sfondo titolo widget', 'poetheme' ),
-                            'description' => __( 'Definisci uno sfondo dedicato per il titolo dei widget del footer.', 'poetheme' ),
-                            'type'        => 'color',
-                        ),
                         'footer_widget_text_color' => array(
                             'label'       => __( 'Colore testo widget', 'poetheme' ),
                             'description' => __( 'Personalizza il colore del testo dei widget posizionati nel footer.', 'poetheme' ),
                             'type'        => 'color',
+                            'column'      => 'left',
                         ),
                         'footer_widget_link_color' => array(
                             'label'       => __( 'Colore link widget', 'poetheme' ),
                             'description' => __( 'Imposta il colore dei link all’interno dei widget del footer.', 'poetheme' ),
                             'type'        => 'color',
+                            'column'      => 'left',
                         ),
                         'footer_widget_background_color' => array(
                             'label'       => __( 'Colore sfondo area widget', 'poetheme' ),
                             'description' => __( 'Scegli il colore di sfondo per l’intero blocco dei widget nel footer.', 'poetheme' ),
                             'type'        => 'color',
+                            'column'      => 'left',
                         ),
                         'footer_widget_background_transparent' => array(
                             'label'       => __( 'Sfondo area widget trasparente', 'poetheme' ),
                             'description' => __( 'Attiva per rimuovere qualsiasi colore di sfondo dal blocco widget del footer.', 'poetheme' ),
                             'type'        => 'toggle',
+                            'column'      => 'left',
+                        ),
+                        'footer_widget_heading_h2_color' => array(
+                            'label'       => __( 'Colore titolo H2', 'poetheme' ),
+                            'description' => __( 'Imposta il colore dei titoli H2 dei widget del footer.', 'poetheme' ),
+                            'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h2_background' => array(
+                            'label'       => __( 'Sfondo titolo H2', 'poetheme' ),
+                            'description' => __( 'Definisci uno sfondo, anche con trasparenza, per i titoli H2.', 'poetheme' ),
+                            'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h3_color' => array(
+                            'label'       => __( 'Colore titolo H3', 'poetheme' ),
+                            'description' => __( 'Personalizza il colore dei titoli H3 presenti nei widget del footer.', 'poetheme' ),
+                            'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h3_background' => array(
+                            'label'       => __( 'Sfondo titolo H3', 'poetheme' ),
+                            'description' => __( 'Scegli uno sfondo con supporto alla trasparenza per i titoli H3.', 'poetheme' ),
+                            'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h4_color' => array(
+                            'label'       => __( 'Colore titolo H4', 'poetheme' ),
+                            'description' => __( 'Imposta il colore dei titoli H4 nei widget del footer.', 'poetheme' ),
+                            'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h4_background' => array(
+                            'label'       => __( 'Sfondo titolo H4', 'poetheme' ),
+                            'description' => __( 'Definisci uno sfondo con trasparenza dedicato ai titoli H4.', 'poetheme' ),
+                            'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h5_color' => array(
+                            'label'       => __( 'Colore titolo H5', 'poetheme' ),
+                            'description' => __( 'Personalizza il colore dei titoli H5 dei widget del footer.', 'poetheme' ),
+                            'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h5_background' => array(
+                            'label'       => __( 'Sfondo titolo H5', 'poetheme' ),
+                            'description' => __( 'Scegli uno sfondo con supporto alla trasparenza per i titoli H5.', 'poetheme' ),
+                            'type'        => 'color',
+                            'column'      => 'right',
                         ),
                     ),
                 ),
@@ -2006,12 +2087,10 @@ function poetheme_get_font_field_config() {
             'preview_variant' => 'heading',
             'sample'          => __( 'Titolo widget di esempio', 'poetheme' ),
             'selectors'       => array(
-                '.poetheme-footer-widgets h1',
                 '.poetheme-footer-widgets h2',
                 '.poetheme-footer-widgets h3',
                 '.poetheme-footer-widgets h4',
                 '.poetheme-footer-widgets h5',
-                '.poetheme-footer-widgets h6',
             ),
             'size'            => array(
                 'option_key'  => 'footer_widget_heading_font_size',
@@ -2634,6 +2713,46 @@ function poetheme_render_colors_page() {
     $options  = poetheme_get_color_options();
     $defaults = poetheme_get_default_color_options();
     $groups   = poetheme_get_color_section_groups();
+    $render_color_field = static function ( $entry ) {
+        $field       = $entry['field'];
+        $field_id    = $entry['id'];
+        $field_name  = $entry['name'];
+        $type        = $entry['type'];
+        $value       = $entry['value'];
+        $default     = $entry['default'];
+        $preview     = $entry['preview'];
+        ?>
+        <div class="poetheme-color-section__field">
+            <label class="poetheme-color-section__label" for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+
+            <div class="poetheme-color-section__control">
+                <?php if ( 'toggle' === $type ) : ?>
+                    <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
+                        <option value="0" <?php selected( false, ! empty( $value ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
+                        <option value="1" <?php selected( true, ! empty( $value ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
+                    </select>
+                <?php else : ?>
+                    <div class="poetheme-color-control">
+                        <input
+                            type="text"
+                            class="poetheme-color-field"
+                            id="<?php echo esc_attr( $field_id ); ?>"
+                            name="<?php echo esc_attr( $field_name ); ?>"
+                            value="<?php echo esc_attr( $value ); ?>"
+                            data-default-color="<?php echo esc_attr( $default ); ?>"
+                            data-supports-alpha="true"
+                        />
+                        <span class="poetheme-color-preview" data-preview-for="<?php echo esc_attr( $field_id ); ?>" style="--poetheme-preview-color: <?php echo esc_attr( $preview ); ?>;"></span>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $field['description'] ) ) : ?>
+                    <p class="description poetheme-color-section__help"><?php echo esc_html( $field['description'] ); ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php
+    };
     ?>
     <div class="wrap poetheme-color-settings">
         <h1><?php esc_html_e( 'Gestione Colori', 'poetheme' ); ?></h1>
@@ -2662,54 +2781,72 @@ function poetheme_render_colors_page() {
                                         <p class="description poetheme-color-section__description"><?php echo esc_html( $section['description'] ); ?></p>
                                     <?php endif; ?>
 
-                                    <div class="poetheme-color-section__fields">
-                                        <?php foreach ( $section['fields'] as $field_key => $field ) :
-                                            $value        = isset( $options[ $field_key ] ) ? $options[ $field_key ] : '';
-                                            $default      = isset( $defaults[ $field_key ] ) ? $defaults[ $field_key ] : '';
-                                            $field_id     = 'poetheme-colors-' . $field_key;
-                                            $field_name   = 'poetheme_colors[' . $field_key . ']';
-                                            $type         = isset( $field['type'] ) ? $field['type'] : 'color';
-                                            $preview_color = $value;
+                                    <?php
+                                    $field_entries      = array();
+                                    $has_right_column   = false;
 
-                                            if ( '' === $preview_color && '' !== $default ) {
-                                                $preview_color = $default;
+                                    foreach ( $section['fields'] as $field_key => $field ) {
+                                        $value        = isset( $options[ $field_key ] ) ? $options[ $field_key ] : '';
+                                        $default      = isset( $defaults[ $field_key ] ) ? $defaults[ $field_key ] : '';
+                                        $field_id     = 'poetheme-colors-' . $field_key;
+                                        $field_name   = 'poetheme_colors[' . $field_key . ']';
+                                        $type         = isset( $field['type'] ) ? $field['type'] : 'color';
+                                        $preview_color = $value;
+                                        $column       = isset( $field['column'] ) ? $field['column'] : '';
+
+                                        if ( '' === $preview_color && '' !== $default ) {
+                                            $preview_color = $default;
+                                        }
+
+                                        if ( '' === $preview_color ) {
+                                            $preview_color = 'transparent';
+                                        }
+
+                                        if ( 'right' === $column ) {
+                                            $has_right_column = true;
+                                        }
+
+                                        $field_entries[] = array(
+                                            'field'   => $field,
+                                            'id'      => $field_id,
+                                            'name'    => $field_name,
+                                            'type'    => $type,
+                                            'value'   => $value,
+                                            'default' => $default,
+                                            'preview' => $preview_color,
+                                            'column'  => in_array( $column, array( 'left', 'right' ), true ) ? $column : '',
+                                        );
+                                    }
+
+                                    if ( $has_right_column ) {
+                                        $left_entries  = array();
+                                        $right_entries = array();
+
+                                        foreach ( $field_entries as $entry ) {
+                                            if ( 'right' === $entry['column'] ) {
+                                                $right_entries[] = $entry;
+                                            } else {
+                                                $left_entries[] = $entry;
                                             }
-
-                                            if ( '' === $preview_color ) {
-                                                $preview_color = 'transparent';
-                                            }
-                                            ?>
-                                            <div class="poetheme-color-section__field">
-                                                <label class="poetheme-color-section__label" for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
-
-                                                <div class="poetheme-color-section__control">
-                                                    <?php if ( 'toggle' === $type ) : ?>
-                                                        <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
-                                                            <option value="0" <?php selected( false, ! empty( $value ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
-                                                            <option value="1" <?php selected( true, ! empty( $value ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
-                                                        </select>
-                                                    <?php else : ?>
-                                                        <div class="poetheme-color-control">
-                                                            <input
-                                                                type="text"
-                                                                class="poetheme-color-field"
-                                                                id="<?php echo esc_attr( $field_id ); ?>"
-                                                                name="<?php echo esc_attr( $field_name ); ?>"
-                                                                value="<?php echo esc_attr( $value ); ?>"
-                                                                data-default-color="<?php echo esc_attr( $default ); ?>"
-                                                                data-supports-alpha="true"
-                                                            />
-                                                            <span class="poetheme-color-preview" data-preview-for="<?php echo esc_attr( $field_id ); ?>" style="--poetheme-preview-color: <?php echo esc_attr( $preview_color ); ?>;"></span>
-                                                        </div>
-                                                    <?php endif; ?>
-
-                                                    <?php if ( ! empty( $field['description'] ) ) : ?>
-                                                        <p class="description poetheme-color-section__help"><?php echo esc_html( $field['description'] ); ?></p>
-                                                    <?php endif; ?>
-                                                </div>
+                                        }
+                                        ?>
+                                        <div class="poetheme-color-section__fields poetheme-color-section__fields--columns">
+                                            <div class="poetheme-color-section__column poetheme-color-section__column--left">
+                                                <?php foreach ( $left_entries as $entry ) { $render_color_field( $entry ); } ?>
                                             </div>
-                                        <?php endforeach; ?>
-                                    </div>
+                                            <div class="poetheme-color-section__column poetheme-color-section__column--right">
+                                                <?php foreach ( $right_entries as $entry ) { $render_color_field( $entry ); } ?>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <div class="poetheme-color-section__fields">
+                                            <?php foreach ( $field_entries as $entry ) { $render_color_field( $entry ); } ?>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
                                 </fieldset>
                             <?php endforeach; ?>
                         </div>

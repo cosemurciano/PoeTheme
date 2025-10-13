@@ -337,8 +337,14 @@ function poetheme_output_design_settings() {
         '--poetheme-post-title-background'     => ! empty( $color_options['post_title_background'] ) ? $color_options['post_title_background'] : 'transparent',
         '--poetheme-category-title-color'      => ! empty( $color_options['category_title_color'] ) ? $color_options['category_title_color'] : '#111827',
         '--poetheme-category-title-background' => ! empty( $color_options['category_title_background'] ) ? $color_options['category_title_background'] : 'transparent',
-        '--poetheme-footer-widget-heading-color'      => ! empty( $color_options['footer_widget_heading_color'] ) ? $color_options['footer_widget_heading_color'] : 'inherit',
-        '--poetheme-footer-widget-heading-background' => ! empty( $color_options['footer_widget_heading_background'] ) ? $color_options['footer_widget_heading_background'] : 'transparent',
+        '--poetheme-footer-widget-heading-h2-color'      => ! empty( $color_options['footer_widget_heading_h2_color'] ) ? $color_options['footer_widget_heading_h2_color'] : 'inherit',
+        '--poetheme-footer-widget-heading-h2-background' => ! empty( $color_options['footer_widget_heading_h2_background'] ) ? $color_options['footer_widget_heading_h2_background'] : 'transparent',
+        '--poetheme-footer-widget-heading-h3-color'      => ! empty( $color_options['footer_widget_heading_h3_color'] ) ? $color_options['footer_widget_heading_h3_color'] : 'inherit',
+        '--poetheme-footer-widget-heading-h3-background' => ! empty( $color_options['footer_widget_heading_h3_background'] ) ? $color_options['footer_widget_heading_h3_background'] : 'transparent',
+        '--poetheme-footer-widget-heading-h4-color'      => ! empty( $color_options['footer_widget_heading_h4_color'] ) ? $color_options['footer_widget_heading_h4_color'] : 'inherit',
+        '--poetheme-footer-widget-heading-h4-background' => ! empty( $color_options['footer_widget_heading_h4_background'] ) ? $color_options['footer_widget_heading_h4_background'] : 'transparent',
+        '--poetheme-footer-widget-heading-h5-color'      => ! empty( $color_options['footer_widget_heading_h5_color'] ) ? $color_options['footer_widget_heading_h5_color'] : 'inherit',
+        '--poetheme-footer-widget-heading-h5-background' => ! empty( $color_options['footer_widget_heading_h5_background'] ) ? $color_options['footer_widget_heading_h5_background'] : 'transparent',
         '--poetheme-footer-widget-text-color'         => ! empty( $color_options['footer_widget_text_color'] ) ? $color_options['footer_widget_text_color'] : 'inherit',
         '--poetheme-footer-widget-link-color'         => ! empty( $color_options['footer_widget_link_color'] ) ? $color_options['footer_widget_link_color'] : 'inherit',
         '--poetheme-footer-widget-background'         => $footer_widget_background,
@@ -390,8 +396,15 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-category-title a{color:inherit !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets{background-color:var(--poetheme-footer-widget-background) !important;color:var(--poetheme-footer-widget-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget,body.poetheme-has-color-settings .poetheme-footer-widgets .widget p,body.poetheme-has-color-settings .poetheme-footer-widgets .widget li,body.poetheme-has-color-settings .poetheme-footer-widgets .widget span{color:var(--poetheme-footer-widget-text-color) !important;}';
-    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget-title,body.poetheme-has-color-settings .poetheme-footer-widgets .widgettitle,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h2,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h3,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h4,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h5{color:var(--poetheme-footer-widget-heading-color) !important;background-color:var(--poetheme-footer-widget-heading-background) !important;}';
-    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget-title a,body.poetheme-has-color-settings .poetheme-footer-widgets .widgettitle a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h2 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h3 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h4 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h5 a{color:inherit !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget-title,body.poetheme-has-color-settings .poetheme-footer-widgets .widgettitle{color:var(--poetheme-footer-widget-heading-h2-color) !important;background-color:var(--poetheme-footer-widget-heading-h2-background) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h2{color:var(--poetheme-footer-widget-heading-h2-color) !important;background-color:var(--poetheme-footer-widget-heading-h2-background) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h3{color:var(--poetheme-footer-widget-heading-h3-color) !important;background-color:var(--poetheme-footer-widget-heading-h3-background) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h4{color:var(--poetheme-footer-widget-heading-h4-color) !important;background-color:var(--poetheme-footer-widget-heading-h4-background) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h5{color:var(--poetheme-footer-widget-heading-h5-color) !important;background-color:var(--poetheme-footer-widget-heading-h5-background) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h2 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h3 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h4 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h5 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget-title a,body.poetheme-has-color-settings .poetheme-footer-widgets .widgettitle a{color:inherit !important;}';
+    if ( ! empty( $color_options['footer_widget_background_transparent'] ) ) {
+        $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets{border-top:0 !important;}';
+    }
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets a{color:var(--poetheme-footer-widget-link-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets a:hover,body.poetheme-has-color-settings .poetheme-footer-widgets a:focus{color:var(--poetheme-footer-widget-link-color) !important;}';
 
