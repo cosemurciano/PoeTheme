@@ -131,7 +131,19 @@
     gap: 24px;
 }
 
+.poetheme-font-section__fields--columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
 .poetheme-color-section__column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.poetheme-font-section__column {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -143,6 +155,10 @@
 
 @media (max-width: 960px) {
     .poetheme-color-section__fields--columns {
+        grid-template-columns: 1fr;
+    }
+
+    .poetheme-font-section__fields--columns {
         grid-template-columns: 1fr;
     }
 }

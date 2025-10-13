@@ -117,7 +117,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     </button>
                 </div>
 
-                <nav class="nav-primary hidden md:flex flex-1 items-center justify-center gap-6 text-sm font-medium text-gray-700" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
+                <nav class="nav-primary hidden md:flex flex-1 items-center justify-center gap-6 text-sm font-medium text-gray-700 px-2.5 py-2" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                     <?php
                     poetheme_render_navigation_menu(
                         'primary',
