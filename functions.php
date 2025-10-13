@@ -294,6 +294,12 @@ function poetheme_output_design_settings() {
     $header_shadow_default = '0 1px 2px rgba(15, 23, 42, 0.08)';
     $header_shadow_value   = ! empty( $color_options['header_disable_shadow'] ) ? 'none' : $header_shadow_default;
 
+    $sidebar_container_background = ! empty( $color_options['sidebar_container_background_color'] ) ? $color_options['sidebar_container_background_color'] : 'transparent';
+
+    if ( ! empty( $color_options['sidebar_container_background_transparent'] ) ) {
+        $sidebar_container_background = 'transparent';
+    }
+
     $css_variables = array(
         '--poetheme-content-text-color'        => ! empty( $color_options['content_text_color'] ) ? $color_options['content_text_color'] : '#111827',
         '--poetheme-content-link-color'        => ! empty( $color_options['content_link_color'] ) ? $color_options['content_link_color'] : '#2563eb',
@@ -331,6 +337,11 @@ function poetheme_output_design_settings() {
         '--poetheme-post-title-background'     => ! empty( $color_options['post_title_background'] ) ? $color_options['post_title_background'] : 'transparent',
         '--poetheme-category-title-color'      => ! empty( $color_options['category_title_color'] ) ? $color_options['category_title_color'] : '#111827',
         '--poetheme-category-title-background' => ! empty( $color_options['category_title_background'] ) ? $color_options['category_title_background'] : 'transparent',
+        '--poetheme-sidebar-heading-color'     => ! empty( $color_options['sidebar_widget_heading_color'] ) ? $color_options['sidebar_widget_heading_color'] : 'inherit',
+        '--poetheme-sidebar-heading-background'=> ! empty( $color_options['sidebar_widget_heading_background'] ) ? $color_options['sidebar_widget_heading_background'] : 'transparent',
+        '--poetheme-sidebar-text-color'        => ! empty( $color_options['sidebar_widget_text_color'] ) ? $color_options['sidebar_widget_text_color'] : 'inherit',
+        '--poetheme-sidebar-link-color'        => ! empty( $color_options['sidebar_widget_link_color'] ) ? $color_options['sidebar_widget_link_color'] : 'inherit',
+        '--poetheme-sidebar-container-background' => $sidebar_container_background,
     );
 
     $body_css[] = implode( ';', array_map( function ( $key, $value ) {
@@ -377,6 +388,11 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-post-title a{color:inherit !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-category-title{color:var(--poetheme-category-title-color) !important;background-color:var(--poetheme-category-title-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-category-title a{color:inherit !important;}';
+    $styles .= 'body.poetheme-has-color-settings main aside{background-color:var(--poetheme-sidebar-container-background) !important;color:var(--poetheme-sidebar-text-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings main aside .widget-title,body.poetheme-has-color-settings main aside .widgettitle{color:var(--poetheme-sidebar-heading-color) !important;background-color:var(--poetheme-sidebar-heading-background) !important;}';
+    $styles .= 'body.poetheme-has-color-settings main aside .widget-title a,body.poetheme-has-color-settings main aside .widgettitle a{color:inherit !important;}';
+    $styles .= 'body.poetheme-has-color-settings main aside a{color:var(--poetheme-sidebar-link-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings main aside a:hover,body.poetheme-has-color-settings main aside a:focus{color:var(--poetheme-sidebar-link-color) !important;}';
 
     if ( $styles ) {
         echo '<style id="poetheme-design-settings">' . $styles . '</style>';
