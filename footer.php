@@ -14,11 +14,13 @@
     $rows_to_show   = isset( $footer_options['rows'] ) ? (int) $footer_options['rows'] : 1;
     $rows_to_show   = max( 1, min( 2, $rows_to_show ) );
     $show_footer    = ! empty( $footer_options['display_footer'] );
+    $show_credits   = ! empty( $footer_options['display_footer_credits'] );
+    $credits_text   = isset( $footer_options['credits_content'] ) ? $footer_options['credits_content'] : '';
 
     $has_widgets = false;
     ?>
     <?php if ( $show_footer ) : ?>
-    <aside class="bg-gray-100 border-t border-gray-200" aria-label="<?php esc_attr_e( 'Footer widgets', 'poetheme' ); ?>">
+    <aside class="poetheme-footer-widgets bg-gray-100 border-t border-gray-200" aria-label="<?php esc_attr_e( 'Footer widgets', 'poetheme' ); ?>">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-8', 'flex', 'flex-col', 'gap-10' ) ) ); ?>">
             <?php for ( $row = 1; $row <= $rows_to_show; $row++ ) :
                 $layout_key = isset( $footer_options['row_layouts'][ $row ] ) ? $footer_options['row_layouts'][ $row ] : '';
@@ -79,10 +81,16 @@
             <?php endif; ?>
         </div>
     </aside>
-
-    <footer class="bg-white border-t border-gray-200" role="contentinfo">
+    <?php if ( $show_credits ) : ?>
+    <footer class="poetheme-footer-credits bg-white border-t border-gray-200" role="contentinfo">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-6', 'flex', 'flex-col', 'gap-4', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
-            <p class="text-sm text-gray-600">&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?></p>
+            <div class="poetheme-footer-credits__content text-sm text-gray-600">
+                <?php if ( $credits_text ) : ?>
+                    <?php echo wp_kses_post( $credits_text ); ?>
+                <?php else : ?>
+                    <p>&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?></p>
+                <?php endif; ?>
+            </div>
             <nav aria-label="<?php esc_attr_e( 'Footer navigation', 'poetheme' ); ?>">
                 <?php
                 wp_nav_menu(
@@ -97,6 +105,7 @@
             </nav>
         </div>
     </footer>
+    <?php endif; ?>
     <?php endif; ?>
 
     <?php wp_footer(); ?>
