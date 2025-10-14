@@ -198,6 +198,62 @@
     align-items: center;
 }
 
+.poetheme-spacing-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
+}
+
+.poetheme-spacing-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 8px;
+    align-items: center;
+}
+
+.poetheme-spacing-row__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #4b5563;
+}
+
+.poetheme-spacing-row__inputs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.poetheme-spacing-input {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.poetheme-spacing-input__label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.poetheme-spacing-input input {
+    width: 100%;
+    padding: 4px 6px;
+    font-size: 0.8125rem;
+}
+
+@media (max-width: 640px) {
+    .poetheme-spacing-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .poetheme-spacing-row__inputs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 .poetheme-color-control .wp-picker-input-wrap {
     flex: 1 1 auto;
 }

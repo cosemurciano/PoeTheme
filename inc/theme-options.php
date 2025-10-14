@@ -150,7 +150,116 @@ function poetheme_get_default_global_options() {
         'background_position' => 'no-repeat;left top;;',
         'background_size'     => 'auto',
         'enable_media_lightbox' => false,
+        'default_font' => '',
+        'default_font_fallback' => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     );
+}
+
+function poetheme_get_default_spacing_group() {
+    $sides = array(
+        'top'    => '',
+        'right'  => '',
+        'bottom' => '',
+        'left'   => '',
+    );
+
+    return array(
+        'margin'  => $sides,
+        'padding' => $sides,
+    );
+}
+
+function poetheme_sanitize_spacing_value( $value, $allow_auto = false, $allow_negative = false ) {
+    $value = trim( (string) $value );
+
+    if ( '' === $value ) {
+        return '';
+    }
+
+    if ( $allow_auto && 'auto' === strtolower( $value ) ) {
+        return 'auto';
+    }
+
+    $unit = '';
+    if ( preg_match( '/(px|rem|em|%|vh|vw)$/i', $value, $unit_match ) ) {
+        $unit        = strtolower( $unit_match[1] );
+        $numeric_part = substr( $value, 0, -strlen( $unit_match[1] ) );
+    } else {
+        $numeric_part = $value;
+    }
+
+    $numeric_part = trim( str_replace( ',', '.', $numeric_part ) );
+
+    if ( '' === $numeric_part ) {
+        return '';
+    }
+
+    if ( ! is_numeric( $numeric_part ) ) {
+        return '';
+    }
+
+    $number = (float) $numeric_part;
+
+    if ( ! $allow_negative && $number < 0 ) {
+        return '';
+    }
+
+    if ( 0.0 === $number ) {
+        return '0';
+    }
+
+    if ( '' === $unit ) {
+        $unit = 'px';
+    }
+
+    $formatted = poetheme_format_number_for_css( $number );
+
+    if ( '' === $formatted ) {
+        $formatted = '0';
+    }
+
+    return $formatted . $unit;
+}
+
+function poetheme_sanitize_spacing_group( $value, $default = array() ) {
+    $default_group = poetheme_get_default_spacing_group();
+
+    if ( ! is_array( $default ) || empty( $default ) ) {
+        $default = $default_group;
+    } else {
+        $default = wp_parse_args( $default, $default_group );
+        $default['margin']  = wp_parse_args( is_array( $default['margin'] ) ? $default['margin'] : array(), $default_group['margin'] );
+        $default['padding'] = wp_parse_args( is_array( $default['padding'] ) ? $default['padding'] : array(), $default_group['padding'] );
+    }
+
+    $value  = is_array( $value ) ? $value : array();
+    $result = $default;
+
+    $segments = array(
+        'margin'  => array(
+            'allow_auto'     => true,
+            'allow_negative' => true,
+        ),
+        'padding' => array(
+            'allow_auto'     => false,
+            'allow_negative' => false,
+        ),
+    );
+
+    foreach ( $segments as $segment => $rules ) {
+        $segment_values = isset( $value[ $segment ] ) && is_array( $value[ $segment ] ) ? $value[ $segment ] : array();
+
+        foreach ( $default[ $segment ] as $side => $default_side_value ) {
+            $raw_value = isset( $segment_values[ $side ] ) ? $segment_values[ $side ] : '';
+            $result[ $segment ][ $side ] = poetheme_sanitize_spacing_value(
+                $raw_value,
+                $rules['allow_auto'],
+                $rules['allow_negative']
+            );
+        }
+    }
+
+    return $result;
 }
 
 function poetheme_get_default_color_options() {
@@ -177,16 +286,22 @@ function poetheme_get_default_color_options() {
         'general_link_color'             => '#2563eb',
         'heading_h1_color'               => '#111827',
         'heading_h1_background'          => '',
+        'heading_h1_spacing'             => poetheme_get_default_spacing_group(),
         'heading_h2_color'               => '#111827',
         'heading_h2_background'          => '',
+        'heading_h2_spacing'             => poetheme_get_default_spacing_group(),
         'heading_h3_color'               => '#111827',
         'heading_h3_background'          => '',
+        'heading_h3_spacing'             => poetheme_get_default_spacing_group(),
         'heading_h4_color'               => '#111827',
         'heading_h4_background'          => '',
+        'heading_h4_spacing'             => poetheme_get_default_spacing_group(),
         'heading_h5_color'               => '#111827',
         'heading_h5_background'          => '',
+        'heading_h5_spacing'             => poetheme_get_default_spacing_group(),
         'heading_h6_color'               => '#111827',
         'heading_h6_background'          => '',
+        'heading_h6_spacing'             => poetheme_get_default_spacing_group(),
         'page_title_color'               => '#111827',
         'page_title_background'          => '',
         'post_title_color'               => '#111827',
@@ -195,12 +310,16 @@ function poetheme_get_default_color_options() {
         'category_title_background'      => '',
         'footer_widget_heading_h2_color'      => '',
         'footer_widget_heading_h2_background' => '',
+        'footer_widget_heading_h2_spacing'    => poetheme_get_default_spacing_group(),
         'footer_widget_heading_h3_color'      => '',
         'footer_widget_heading_h3_background' => '',
+        'footer_widget_heading_h3_spacing'    => poetheme_get_default_spacing_group(),
         'footer_widget_heading_h4_color'      => '',
         'footer_widget_heading_h4_background' => '',
+        'footer_widget_heading_h4_spacing'    => poetheme_get_default_spacing_group(),
         'footer_widget_heading_h5_color'      => '',
         'footer_widget_heading_h5_background' => '',
+        'footer_widget_heading_h5_spacing'    => poetheme_get_default_spacing_group(),
         'footer_widget_text_color'         => '',
         'footer_widget_link_color'         => '',
         'footer_widget_background_color'   => '',
@@ -669,7 +788,20 @@ function poetheme_prepare_font_styles() {
 
     $config = poetheme_get_font_field_config();
 
+    $global_options      = poetheme_get_global_options();
+    $global_font_slug    = isset( $global_options['default_font'] ) ? $global_options['default_font'] : '';
+    $global_font_fallback = isset( $global_options['default_font_fallback'] ) ? $global_options['default_font_fallback'] : '';
+    $global_font_stack   = '';
+
+    if ( $global_font_slug || $global_font_fallback ) {
+        $global_font_stack = poetheme_build_font_stack( $global_font_slug, $global_font_fallback, $available_fonts );
+    }
+
     $selected_fonts = array();
+    if ( $global_font_slug ) {
+        $selected_fonts[] = $global_font_slug;
+    }
+
     $css_rules      = '';
     $body_stack     = '';
     $heading_stack  = '';
@@ -783,6 +915,17 @@ function poetheme_prepare_font_styles() {
         $radius_rules .= implode( ',', $radius_selectors ) . '{border-radius:' . poetheme_format_number_for_css( $radius_val ) . $unit . ';}';
     }
 
+    $global_rules = '';
+
+    if ( $global_font_stack && ! $body_stack ) {
+        $body_stack   = $global_font_stack;
+        $global_rules = 'body,button,input,select,textarea{font-family:' . $global_font_stack . ';}';
+    }
+
+    if ( $global_rules ) {
+        $css_rules = $global_rules . $css_rules;
+    }
+
     $selected_fonts = array_values( array_unique( array_filter( $selected_fonts ) ) );
 
     $font_faces = poetheme_generate_font_face_css( $selected_fonts );
@@ -870,6 +1013,18 @@ function poetheme_sanitize_global_options( $input ) {
 
     $enable_media_lightbox = ! empty( $input['enable_media_lightbox'] );
 
+    $fonts            = poetheme_get_available_fonts();
+    $default_font     = '';
+    $font_slug        = isset( $input['default_font'] ) ? sanitize_title( $input['default_font'] ) : '';
+    if ( $font_slug && isset( $fonts[ $font_slug ] ) ) {
+        $default_font = $font_slug;
+    }
+
+    $default_fallback = isset( $input['default_font_fallback'] ) ? poetheme_sanitize_font_stack( $input['default_font_fallback'] ) : $defaults['default_font_fallback'];
+    if ( '' === $default_fallback ) {
+        $default_fallback = $defaults['default_font_fallback'];
+    }
+
     return array(
         'layout_mode' => $layout_mode,
         'site_width'  => $width,
@@ -877,6 +1032,8 @@ function poetheme_sanitize_global_options( $input ) {
         'background_position' => $background_position,
         'background_size'     => $background_size,
         'enable_media_lightbox' => $enable_media_lightbox,
+        'default_font' => $default_font,
+        'default_font_fallback' => $default_fallback,
     );
 }
 
@@ -980,6 +1137,12 @@ function poetheme_sanitize_color_options( $input ) {
             continue;
         }
 
+        if ( is_array( $default_value ) ) {
+            $raw_value = isset( $input[ $key ] ) ? $input[ $key ] : array();
+            $output[ $key ] = poetheme_sanitize_spacing_group( $raw_value, $default_value );
+            continue;
+        }
+
         if ( ! isset( $input[ $key ] ) ) {
             $output[ $key ] = $default_value;
             continue;
@@ -1061,6 +1224,16 @@ function poetheme_get_global_options() {
 
     $options['enable_media_lightbox'] = ! empty( $options['enable_media_lightbox'] );
 
+    $fonts = poetheme_get_available_fonts();
+    $font_slug = isset( $options['default_font'] ) ? sanitize_title( $options['default_font'] ) : '';
+    $options['default_font'] = ( $font_slug && isset( $fonts[ $font_slug ] ) ) ? $font_slug : $defaults['default_font'];
+
+    $fallback = isset( $options['default_font_fallback'] ) ? poetheme_sanitize_font_stack( $options['default_font_fallback'] ) : '';
+    if ( '' === $fallback ) {
+        $fallback = $defaults['default_font_fallback'];
+    }
+    $options['default_font_fallback'] = $fallback;
+
     return $options;
 }
 
@@ -1130,6 +1303,12 @@ function poetheme_get_color_options() {
     foreach ( $defaults as $key => $default_value ) {
         if ( in_array( $key, $boolean_keys, true ) ) {
             $options[ $key ] = ! empty( $raw[ $key ] );
+            continue;
+        }
+
+        if ( is_array( $default_value ) ) {
+            $raw_value       = isset( $raw[ $key ] ) ? $raw[ $key ] : array();
+            $options[ $key ] = poetheme_sanitize_spacing_group( $raw_value, $default_value );
             continue;
         }
 
@@ -1533,6 +1712,11 @@ function poetheme_render_global_page() {
     $background_position  = isset( $options['background_position'] ) ? $options['background_position'] : '';
     $background_size      = isset( $options['background_size'] ) ? $options['background_size'] : 'auto';
     $enable_media_lightbox = ! empty( $options['enable_media_lightbox'] );
+    $default_font         = isset( $options['default_font'] ) ? $options['default_font'] : '';
+    $default_font_fallback = isset( $options['default_font_fallback'] ) ? $options['default_font_fallback'] : '';
+    $available_fonts      = poetheme_get_available_fonts();
+    $default_font_id      = 'poetheme-global-default-font';
+    $default_fallback_id  = 'poetheme-global-default-font-fallback';
     $width_id             = 'poetheme-global-site-width';
     $layout_field         = 'poetheme_global[layout_mode]';
     $background_positions = array(
@@ -1602,6 +1786,21 @@ function poetheme_render_global_page() {
                         <td>
                             <input type="number" name="poetheme_global[site_width]" id="<?php echo esc_attr( $width_id ); ?>" value="<?php echo esc_attr( $site_width ); ?>" min="960" max="1920" step="10" class="small-text">
                             <p class="description"><?php esc_html_e( 'Imposta la larghezza massima del sito per il layout Box. Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="<?php echo esc_attr( $default_font_id ); ?>"><?php esc_html_e( 'Font globale predefinito', 'poetheme' ); ?></label></th>
+                        <td>
+                            <select id="<?php echo esc_attr( $default_font_id ); ?>" name="poetheme_global[default_font]">
+                                <option value="">&mdash; <?php esc_html_e( 'Usa il font di sistema', 'poetheme' ); ?> &mdash;</option>
+                                <?php foreach ( $available_fonts as $slug => $font_data ) : ?>
+                                    <option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $default_font, $slug ); ?>><?php echo esc_html( $font_data['family'] ); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <p class="description"><?php esc_html_e( 'Questo font verrà usato in tutto il sito se non ne imposti uno specifico nelle sezioni dedicate.', 'poetheme' ); ?></p>
+                            <label class="screen-reader-text" for="<?php echo esc_attr( $default_fallback_id ); ?>"><?php esc_html_e( 'Font alternativi', 'poetheme' ); ?></label>
+                            <input type="text" class="regular-text" id="<?php echo esc_attr( $default_fallback_id ); ?>" name="poetheme_global[default_font_fallback]" value="<?php echo esc_attr( $default_font_fallback ); ?>" placeholder="Arial, Helvetica, sans-serif" />
+                            <p class="description"><?php esc_html_e( 'Elenca i font alternativi da usare se il font principale non è disponibile (esempio: "Arial, Helvetica, sans-serif").', 'poetheme' ); ?></p>
                         </td>
                     </tr>
                     <tr>
@@ -1878,6 +2077,12 @@ function poetheme_get_color_section_groups() {
                             'type'        => 'color',
                             'column'      => 'right',
                         ),
+                        'footer_widget_heading_h2_spacing' => array(
+                            'label'       => __( 'Spaziatura titolo H2', 'poetheme' ),
+                            'description' => __( 'Definisci margini e padding per i titoli H2 nei widget del piè di pagina.', 'poetheme' ),
+                            'type'        => 'spacing',
+                            'column'      => 'right',
+                        ),
                         'footer_widget_heading_h3_color' => array(
                             'label'       => __( 'Colore titolo H3', 'poetheme' ),
                             'description' => __( 'Personalizza il colore dei titoli H3 presenti nei widget del footer.', 'poetheme' ),
@@ -1888,6 +2093,12 @@ function poetheme_get_color_section_groups() {
                             'label'       => __( 'Sfondo titolo H3', 'poetheme' ),
                             'description' => __( 'Scegli uno sfondo con supporto alla trasparenza per i titoli H3.', 'poetheme' ),
                             'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h3_spacing' => array(
+                            'label'       => __( 'Spaziatura titolo H3', 'poetheme' ),
+                            'description' => __( 'Imposta margini e padding dedicati ai titoli H3 dei widget del footer.', 'poetheme' ),
+                            'type'        => 'spacing',
                             'column'      => 'right',
                         ),
                         'footer_widget_heading_h4_color' => array(
@@ -1902,6 +2113,12 @@ function poetheme_get_color_section_groups() {
                             'type'        => 'color',
                             'column'      => 'right',
                         ),
+                        'footer_widget_heading_h4_spacing' => array(
+                            'label'       => __( 'Spaziatura titolo H4', 'poetheme' ),
+                            'description' => __( 'Personalizza margini e padding dei titoli H4 nei widget del footer.', 'poetheme' ),
+                            'type'        => 'spacing',
+                            'column'      => 'right',
+                        ),
                         'footer_widget_heading_h5_color' => array(
                             'label'       => __( 'Colore titolo H5', 'poetheme' ),
                             'description' => __( 'Personalizza il colore dei titoli H5 dei widget del footer.', 'poetheme' ),
@@ -1912,6 +2129,12 @@ function poetheme_get_color_section_groups() {
                             'label'       => __( 'Sfondo titolo H5', 'poetheme' ),
                             'description' => __( 'Scegli uno sfondo con supporto alla trasparenza per i titoli H5.', 'poetheme' ),
                             'type'        => 'color',
+                            'column'      => 'right',
+                        ),
+                        'footer_widget_heading_h5_spacing' => array(
+                            'label'       => __( 'Spaziatura titolo H5', 'poetheme' ),
+                            'description' => __( 'Gestisci margini e padding dei titoli H5 mostrati nel footer.', 'poetheme' ),
+                            'type'        => 'spacing',
                             'column'      => 'right',
                         ),
                     ),
@@ -1935,6 +2158,11 @@ function poetheme_get_color_section_groups() {
                             'description' => __( 'Colore di sfondo per le intestazioni H1.', 'poetheme' ),
                             'type'        => 'color',
                         ),
+                        'heading_h1_spacing' => array(
+                            'label'       => __( 'Spaziatura H1', 'poetheme' ),
+                            'description' => __( 'Definisci margini e padding personalizzati per i titoli H1 (accetta valori come px, rem o %).', 'poetheme' ),
+                            'type'        => 'spacing',
+                        ),
                         'heading_h2_color'      => array(
                             'label'       => __( 'Colore H2', 'poetheme' ),
                             'description' => __( 'Colore applicato alle intestazioni H2.', 'poetheme' ),
@@ -1944,6 +2172,11 @@ function poetheme_get_color_section_groups() {
                             'label'       => __( 'Sfondo H2', 'poetheme' ),
                             'description' => __( 'Colore di sfondo per le intestazioni H2.', 'poetheme' ),
                             'type'        => 'color',
+                        ),
+                        'heading_h2_spacing' => array(
+                            'label'       => __( 'Spaziatura H2', 'poetheme' ),
+                            'description' => __( 'Imposta margini e padding dedicati per i titoli H2.', 'poetheme' ),
+                            'type'        => 'spacing',
                         ),
                         'heading_h3_color'      => array(
                             'label'       => __( 'Colore H3', 'poetheme' ),
@@ -1955,6 +2188,11 @@ function poetheme_get_color_section_groups() {
                             'description' => __( 'Colore di sfondo per le intestazioni H3.', 'poetheme' ),
                             'type'        => 'color',
                         ),
+                        'heading_h3_spacing' => array(
+                            'label'       => __( 'Spaziatura H3', 'poetheme' ),
+                            'description' => __( 'Personalizza margini e padding dei titoli H3.', 'poetheme' ),
+                            'type'        => 'spacing',
+                        ),
                         'heading_h4_color'      => array(
                             'label'       => __( 'Colore H4', 'poetheme' ),
                             'description' => __( 'Colore applicato alle intestazioni H4.', 'poetheme' ),
@@ -1964,6 +2202,11 @@ function poetheme_get_color_section_groups() {
                             'label'       => __( 'Sfondo H4', 'poetheme' ),
                             'description' => __( 'Colore di sfondo per le intestazioni H4.', 'poetheme' ),
                             'type'        => 'color',
+                        ),
+                        'heading_h4_spacing' => array(
+                            'label'       => __( 'Spaziatura H4', 'poetheme' ),
+                            'description' => __( 'Regola margini e padding dei titoli H4.', 'poetheme' ),
+                            'type'        => 'spacing',
                         ),
                         'heading_h5_color'      => array(
                             'label'       => __( 'Colore H5', 'poetheme' ),
@@ -1975,6 +2218,11 @@ function poetheme_get_color_section_groups() {
                             'description' => __( 'Colore di sfondo per le intestazioni H5.', 'poetheme' ),
                             'type'        => 'color',
                         ),
+                        'heading_h5_spacing' => array(
+                            'label'       => __( 'Spaziatura H5', 'poetheme' ),
+                            'description' => __( 'Gestisci margini e padding dei titoli H5.', 'poetheme' ),
+                            'type'        => 'spacing',
+                        ),
                         'heading_h6_color'      => array(
                             'label'       => __( 'Colore H6', 'poetheme' ),
                             'description' => __( 'Colore applicato alle intestazioni H6.', 'poetheme' ),
@@ -1984,6 +2232,11 @@ function poetheme_get_color_section_groups() {
                             'label'       => __( 'Sfondo H6', 'poetheme' ),
                             'description' => __( 'Colore di sfondo per le intestazioni H6.', 'poetheme' ),
                             'type'        => 'color',
+                        ),
+                        'heading_h6_spacing' => array(
+                            'label'       => __( 'Spaziatura H6', 'poetheme' ),
+                            'description' => __( 'Imposta margini e padding per i titoli H6.', 'poetheme' ),
+                            'type'        => 'spacing',
                         ),
                     ),
                 ),
@@ -2044,7 +2297,7 @@ function poetheme_get_font_field_config() {
             'fallback'        => array(
                 'key'         => 'body_fallback',
                 'label'       => __( 'Font di fallback', 'poetheme' ),
-                'description' => __( 'Elenca i font alternativi da usare se il font principale non è disponibile.', 'poetheme' ),
+                'description' => __( 'Elenca i font alternativi da usare se il font principale non è disponibile (esempio: "Arial, Helvetica, sans-serif").', 'poetheme' ),
             ),
             'preview_variant' => 'text',
             'sample'          => __( 'Questo è un esempio di paragrafo con il font selezionato.', 'poetheme' ),
@@ -2893,6 +3146,47 @@ function poetheme_render_colors_page() {
                         <option value="0" <?php selected( false, ! empty( $value ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
                         <option value="1" <?php selected( true, ! empty( $value ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
                     </select>
+                <?php elseif ( 'spacing' === $type ) : ?>
+                    <?php
+                    $segments   = array(
+                        'margin'  => __( 'Margine', 'poetheme' ),
+                        'padding' => __( 'Padding', 'poetheme' ),
+                    );
+                    $directions = array(
+                        'top'    => __( 'Alto', 'poetheme' ),
+                        'right'  => __( 'Destra', 'poetheme' ),
+                        'bottom' => __( 'Basso', 'poetheme' ),
+                        'left'   => __( 'Sinistra', 'poetheme' ),
+                    );
+                    $value = is_array( $value ) ? $value : array();
+                    ?>
+                    <div class="poetheme-spacing-control" role="group" aria-labelledby="<?php echo esc_attr( $field_id ); ?>">
+                        <?php foreach ( $segments as $segment_key => $segment_label ) :
+                            $segment_values = isset( $value[ $segment_key ] ) && is_array( $value[ $segment_key ] ) ? $value[ $segment_key ] : array();
+                            ?>
+                            <div class="poetheme-spacing-row">
+                                <span class="poetheme-spacing-row__label"><?php echo esc_html( $segment_label ); ?></span>
+                                <div class="poetheme-spacing-row__inputs">
+                                    <?php foreach ( $directions as $direction_key => $direction_label ) :
+                                        $input_id    = $field_id . '-' . $segment_key . '-' . $direction_key;
+                                        $input_name  = $field_name . '[' . $segment_key . '][' . $direction_key . ']';
+                                        $input_value = isset( $segment_values[ $direction_key ] ) ? $segment_values[ $direction_key ] : '';
+                                        ?>
+                                        <label class="poetheme-spacing-input" for="<?php echo esc_attr( $input_id ); ?>">
+                                            <span class="poetheme-spacing-input__label"><?php echo esc_html( $direction_label ); ?></span>
+                                            <input
+                                                type="text"
+                                                id="<?php echo esc_attr( $input_id ); ?>"
+                                                name="<?php echo esc_attr( $input_name ); ?>"
+                                                value="<?php echo esc_attr( $input_value ); ?>"
+                                                placeholder="0"
+                                            />
+                                        </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 <?php else : ?>
                     <div class="poetheme-color-control">
                         <input
@@ -2956,12 +3250,16 @@ function poetheme_render_colors_page() {
                                         $preview_color = $value;
                                         $column       = isset( $field['column'] ) ? $field['column'] : '';
 
-                                        if ( '' === $preview_color && '' !== $default ) {
-                                            $preview_color = $default;
-                                        }
-
-                                        if ( '' === $preview_color ) {
+                                        if ( 'spacing' === $type ) {
                                             $preview_color = 'transparent';
+                                        } else {
+                                            if ( '' === $preview_color && '' !== $default ) {
+                                                $preview_color = $default;
+                                            }
+
+                                            if ( '' === $preview_color ) {
+                                                $preview_color = 'transparent';
+                                            }
                                         }
 
                                         if ( 'right' === $column ) {
