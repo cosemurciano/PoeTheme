@@ -23,6 +23,62 @@ if ( ! function_exists( 'poetheme_format_number_for_css' ) ) {
     }
 }
 
+if ( ! function_exists( 'poetheme_compile_spacing_css' ) ) {
+    /**
+     * Convert a spacing option array into CSS declarations.
+     *
+     * @param array $spacing Spacing values.
+     * @return string
+     */
+    function poetheme_compile_spacing_css( $spacing ) {
+        if ( ! is_array( $spacing ) || empty( $spacing ) ) {
+            return '';
+        }
+
+        $declarations = array();
+        $sections     = array(
+            'margin'  => array(
+                'top'    => 'margin-top',
+                'right'  => 'margin-right',
+                'bottom' => 'margin-bottom',
+                'left'   => 'margin-left',
+            ),
+            'padding' => array(
+                'top'    => 'padding-top',
+                'right'  => 'padding-right',
+                'bottom' => 'padding-bottom',
+                'left'   => 'padding-left',
+            ),
+        );
+
+        foreach ( $sections as $section => $properties ) {
+            if ( empty( $spacing[ $section ] ) || ! is_array( $spacing[ $section ] ) ) {
+                continue;
+            }
+
+            foreach ( $properties as $side => $property ) {
+                if ( ! array_key_exists( $side, $spacing[ $section ] ) ) {
+                    continue;
+                }
+
+                $value = $spacing[ $section ][ $side ];
+
+                if ( '' === $value ) {
+                    continue;
+                }
+
+                $declarations[] = $property . ':' . $value;
+            }
+        }
+
+        if ( empty( $declarations ) ) {
+            return '';
+        }
+
+        return implode( ';', $declarations ) . ';';
+    }
+}
+
 define( 'POETHEME_DIR', get_template_directory() );
 define( 'POETHEME_URI', get_template_directory_uri() );
 
@@ -395,6 +451,27 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings main h5{color:var(--poetheme-heading-h5-color) !important;background-color:var(--poetheme-heading-h5-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings main h6{color:var(--poetheme-heading-h6-color) !important;background-color:var(--poetheme-heading-h6-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings main h1 a,body.poetheme-has-color-settings main h2 a,body.poetheme-has-color-settings main h3 a,body.poetheme-has-color-settings main h4 a,body.poetheme-has-color-settings main h5 a,body.poetheme-has-color-settings main h6 a{color:inherit !important;}';
+
+    $heading_spacing_map = array(
+        'heading_h1_spacing' => 'body.poetheme-has-color-settings main h1',
+        'heading_h2_spacing' => 'body.poetheme-has-color-settings main h2',
+        'heading_h3_spacing' => 'body.poetheme-has-color-settings main h3',
+        'heading_h4_spacing' => 'body.poetheme-has-color-settings main h4',
+        'heading_h5_spacing' => 'body.poetheme-has-color-settings main h5',
+        'heading_h6_spacing' => 'body.poetheme-has-color-settings main h6',
+    );
+
+    foreach ( $heading_spacing_map as $spacing_key => $selector ) {
+        if ( empty( $color_options[ $spacing_key ] ) ) {
+            continue;
+        }
+
+        $spacing_css = poetheme_compile_spacing_css( $color_options[ $spacing_key ] );
+
+        if ( $spacing_css ) {
+            $styles .= $selector . '{' . $spacing_css . '}';
+        }
+    }
     $styles .= 'body.poetheme-has-color-settings .poetheme-page-title{color:var(--poetheme-page-title-color) !important;background-color:var(--poetheme-page-title-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-page-title a{color:inherit !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-post-title{color:var(--poetheme-post-title-color) !important;background-color:var(--poetheme-post-title-background) !important;}';
@@ -408,6 +485,25 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h3{color:var(--poetheme-footer-widget-heading-h3-color) !important;background-color:var(--poetheme-footer-widget-heading-h3-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h4{color:var(--poetheme-footer-widget-heading-h4-color) !important;background-color:var(--poetheme-footer-widget-heading-h4-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h5{color:var(--poetheme-footer-widget-heading-h5-color) !important;background-color:var(--poetheme-footer-widget-heading-h5-background) !important;}';
+
+    $footer_heading_spacing_map = array(
+        'footer_widget_heading_h2_spacing' => 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h2',
+        'footer_widget_heading_h3_spacing' => 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h3',
+        'footer_widget_heading_h4_spacing' => 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h4',
+        'footer_widget_heading_h5_spacing' => 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h5',
+    );
+
+    foreach ( $footer_heading_spacing_map as $spacing_key => $selector ) {
+        if ( empty( $color_options[ $spacing_key ] ) ) {
+            continue;
+        }
+
+        $spacing_css = poetheme_compile_spacing_css( $color_options[ $spacing_key ] );
+
+        if ( $spacing_css ) {
+            $styles .= $selector . '{' . $spacing_css . '}';
+        }
+    }
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget h2 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h3 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h4 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget h5 a,body.poetheme-has-color-settings .poetheme-footer-widgets .widget-title a,body.poetheme-has-color-settings .poetheme-footer-widgets .widgettitle a{color:inherit !important;}';
     if ( ! empty( $color_options['footer_widget_background_transparent'] ) ) {
         $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets{border-top:0 !important;}';
