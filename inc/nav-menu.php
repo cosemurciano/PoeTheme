@@ -294,6 +294,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
          */
         protected function get_link_classes( $depth, $has_children, $item ) {
             $classes = array( 'inline-flex', 'items-center', 'gap-2', 'transition', 'duration-150', 'ease-out' );
+            $is_primary_layout = ( 'primary' === $this->layout );
 
             if ( 'mobile' === $this->variant ) {
                 $classes = array( 'flex', 'items-center', 'gap-2', 'w-full', 'text-left', 'transition', 'duration-150' );
@@ -318,16 +319,25 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                 }
             } else {
                 if ( 0 === $depth ) {
-                    $classes[] = 'py-2';
                     $classes[] = 'text-sm';
                     $classes[] = 'text-gray-700';
                     $classes[] = 'hover:text-blue-600';
+                    if ( $is_primary_layout ) {
+                        $classes[] = 'poetheme-nav-link--level-0';
+                    } else {
+                        $classes[] = 'py-2';
+                    }
                 } else {
                     $classes[] = 'px-4';
                     $classes[] = 'py-2';
                     $classes[] = 'text-sm';
                     $classes[] = 'text-gray-700';
                     $classes[] = 'hover:bg-gray-100';
+                    if ( $is_primary_layout ) {
+                        $classes[] = 'flex';
+                        $classes[] = 'w-full';
+                        $classes[] = 'poetheme-nav-link--submenu';
+                    }
                 }
             }
 
