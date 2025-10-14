@@ -300,7 +300,7 @@ function poetheme_render_subheader() {
         $tag = 'h1';
     }
 
-    $container_classes = poetheme_get_layout_container_classes( array( 'poetheme-subheader__inner' ) );
+    $container_classes = poetheme_get_layout_container_classes( array( 'poetheme-subheader__inner' ), false );
     ?>
     <section class="<?php echo esc_attr( $wrapper_class ); ?>">
         <div class="<?php echo esc_attr( $container_classes ); ?>">
@@ -326,8 +326,14 @@ function poetheme_render_subheader() {
  * @param array|string $additional Additional classes.
  * @return string
  */
-function poetheme_get_layout_container_classes( $additional = array() ) {
-    $classes = array( 'poetheme-container', 'px-4', 'sm:px-6', 'lg:px-8' );
+function poetheme_get_layout_container_classes( $additional = array(), $include_horizontal_padding = true ) {
+    $classes = array( 'poetheme-container' );
+
+    if ( $include_horizontal_padding ) {
+        $classes[] = 'px-4';
+        $classes[] = 'sm:px-6';
+        $classes[] = 'lg:px-8';
+    }
 
     if ( is_string( $additional ) ) {
         $additional = preg_split( '/\s+/', trim( $additional ) );

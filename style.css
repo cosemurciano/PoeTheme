@@ -291,6 +291,23 @@ body.admin-bar #wpadminbar * {
   transform: rotate(180deg);
 }
 
+.poetheme-nav-link--level-0 {
+  padding: 7px 10px;
+}
+
+.poetheme-nav-link--submenu {
+  display: flex;
+  width: 100%;
+}
+
+.poetheme-nav--desktop .sub-menu > li {
+  width: 100%;
+}
+
+.poetheme-nav--desktop .sub-menu > li > a.poetheme-nav-link--submenu {
+  width: 100%;
+}
+
 /* --------------------------------------------------------------
  * Contenuti multimediali e allineamenti
  * -------------------------------------------------------------- */
