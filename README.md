@@ -2,6 +2,16 @@
 
 Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'editor a blocchi di Gutenberg.
 
+**Stato del tema:** Core Stable (release-ready).
+
+## Milestone completate (M1–M8)
+- M1–M3: architettura modulare e sicurezza.
+- M4: design system base con `theme.json`.
+- M5: asset strategy e performance.
+- M6: accessibilità WCAG 2.1 AA.
+- M7: SEO tecnico & Schema affidabile.
+- M8: hardening finale, i18n e release readiness.
+
 ## Caratteristiche principali
 - Integrazione con Tailwind CSS, Alpine.js e Lucide Icons tramite CDN versionati con SRI.
 - Layout semantico HTML5 con header, nav, main, article, aside e footer.
@@ -100,8 +110,19 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - Struttura attuale degli asset già predisposta per migrazione graduale.
 
 ## Requisiti
-- WordPress 6.0 o superiore.
+- WordPress 6.x o superiore.
 - PHP 7.4 o superiore.
+
+## Cosa include il core del tema
+- Architettura modulare con file `inc/` e helper riutilizzabili.
+- Design system base definito in `theme.json`.
+- Accessibilità WCAG 2.1 AA con focus visibile e navigazione da tastiera.
+- SEO tecnico & Schema JSON-LD con fallback e compatibilità plugin.
+
+## Cosa NON include (scope Fase 2)
+- Page builder integrato.
+- Blocchi custom avanzati.
+- UI kit avanzato o component library estesa.
 
 ## Inline CSS Architecture
 L'output CSS inline viene generato in un unico `<style>` con id `poetheme-inline-css` e separato in tre blocchi semantici:
