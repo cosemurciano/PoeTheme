@@ -1053,140 +1053,312 @@ function poetheme_schema_render_options_page(){
 // =============================
 // =  FRONTEND: OUTPUT JSON-LD =
 // =============================
-function poetheme_schema_output_jsonld() {
+function poetheme_schema_has_seo_plugin() {
+  return (
+    defined( 'WPSEO_VERSION' )
+    || class_exists( 'WPSEO_Frontend' )
+    || function_exists( 'wpseo_init' )
+    || defined( 'RANK_MATH_VERSION' )
+    || function_exists( 'rank_math' )
+    || class_exists( 'RankMath' )
+    || class_exists( 'RankMath\\Frontend\\Frontend' )
+    || defined( 'SEOPRESS_VERSION' )
+    || function_exists( 'seopress_get_service' )
+    || class_exists( 'SEOPress\\Main\\WP' )
+  );
+}
+
+function poetheme_schema_can_output_jsonld() {
   if ( is_admin() ) {
-    return;
+    return false;
   }
 
   $opt = poetheme_schema_get_options();
   if ( empty( $opt['enable'] ) ) {
-    return;
+    return false;
   }
 
+  if ( poetheme_schema_has_seo_plugin() ) {
+    return false;
+  }
+
+  return true;
+}
+
+function poetheme_schema_filter_empty_values( $data ) {
+  return array_filter( $data, function( $value ) {
+    return $value !== '' && $value !== null && $value !== array();
+  } );
+}
+
+function poetheme_schema_clean_item_values( $item ) {
+  if ( ! is_array( $item ) ) {
+    return array();
+  }
+
+  $clean = array();
+  foreach ( $item as $key => $value ) {
+    if ( is_string( $value ) ) {
+      $value = trim( $value );
+    }
+
+    if ( $value === '' || $value === null || $value === array() ) {
+      continue;
+    }
+
+    $clean[ $key ] = $value;
+  }
+
+  return $clean;
+}
+
+function poetheme_schema_get_canonical_url() {
   $canonical = function_exists( 'wp_get_canonical_url' ) ? wp_get_canonical_url() : '';
+
   if ( ! $canonical ) {
-    $canonical = is_singular() ? get_permalink() : home_url( add_query_arg( [] ) );
+    $canonical = is_singular() ? get_permalink() : home_url( add_query_arg( array() ) );
   }
 
-  $website = array_filter( [
-    '@type' => 'WebSite',
-    '@id'   => $opt['website_id'],
-    'url'   => $opt['website_url'],
-    'name'  => $opt['website_name'],
-    'alternateName' => $opt['website_alt'] ?: null,
-    'inLanguage' => $opt['website_lang'],
-    'description'=> $opt['website_desc'] ?: null,
-  ], function( $v ) { return $v !== '' && $v !== null; } );
+  return $canonical;
+}
 
-  $publisher = [
-    '@type' => $opt['publisher_type'],
-    '@id'   => $opt['pub_id'],
-    'name'  => $opt['pub_name'],
-    'url'   => $opt['pub_url'],
+function poetheme_schema_build_publisher( $opt ) {
+  $publisher = array(
+    '@type'       => $opt['publisher_type'],
+    '@id'         => $opt['pub_id'],
+    'name'        => $opt['pub_name'],
+    'url'         => $opt['pub_url'],
     'description' => $opt['pub_desc'] ?: null,
-    'logo'  => ( $opt['pub_logo_url'] ? array_filter( [
-      '@type'=>'ImageObject','url'=>$opt['pub_logo_url'],
-      'width' => $opt['pub_logo_w']? (int) $opt['pub_logo_w'] : null,
-      'height'=> $opt['pub_logo_h']? (int) $opt['pub_logo_h'] : null,
-    ] ) : null ),
-    'sameAs'=> (function( $txt ) {
+    'logo'        => ( $opt['pub_logo_url'] ? poetheme_schema_filter_empty_values( array(
+      '@type'  => 'ImageObject',
+      'url'    => $opt['pub_logo_url'],
+      'width'  => $opt['pub_logo_w'] ? (int) $opt['pub_logo_w'] : null,
+      'height' => $opt['pub_logo_h'] ? (int) $opt['pub_logo_h'] : null,
+    ) ) : null ),
+    'sameAs'      => ( function( $txt ) {
       $arr = array_filter( array_map( 'trim', preg_split( "/(\r?\n)+/", (string) $txt ) ) );
       return $arr ? array_values( $arr ) : null;
-    })($opt['pub_sameas']),
-  ];
+    } )( $opt['pub_sameas'] ),
+  );
 
-  // ContactPoint JSON
   $cps = json_decode( $opt['pub_contactpoints'] ?: '[]', true );
-  if ( json_last_error() !== JSON_ERROR_NONE ) {
-    $cps = [];
+  if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $cps ) ) {
+    $cps = array();
   }
-  $publisher['contactPoint'] = $cps ?: null;
+
+  $cps = array_values( array_filter( array_map( 'poetheme_schema_clean_item_values', $cps ) ) );
+  if ( $cps ) {
+    $publisher['contactPoint'] = $cps;
+  }
 
   if ( $opt['publisher_type'] !== 'Person' ) {
-    // Organization / Store fields
-    $addr = array_filter( [
-      '@type' => 'PostalAddress',
+    $addr = poetheme_schema_filter_empty_values( array(
+      '@type'           => 'PostalAddress',
       'streetAddress'   => $opt['org_addr_street'] ?: null,
       'addressLocality' => $opt['org_addr_city'] ?: null,
       'addressRegion'   => $opt['org_addr_region'] ?: null,
       'postalCode'      => $opt['org_addr_postal'] ?: null,
       'addressCountry'  => $opt['org_addr_country'] ?: null,
-    ], function( $v ) { return $v !== '' && $v !== null; } );
+    ) );
 
-    $publisher = array_filter( array_merge( $publisher, [
+    $publisher = array_merge( $publisher, poetheme_schema_filter_empty_values( array(
       'legalName'     => $opt['org_legal'] ?: null,
       'alternateName' => $opt['org_alt'] ?: null,
       'telephone'     => $opt['org_tel'] ?: null,
       'vatID'         => $opt['org_vat'] ?: null,
       'taxID'         => $opt['org_tax'] ?: null,
       'address'       => $addr ?: null,
-    ] ), function( $v ) { return $v !== '' && $v !== null; } );
+    ) ) );
 
     if ( $opt['publisher_type'] === 'LocalBusiness' ) {
-      // LB extras
       $imgs = array_filter( array_map( 'trim', preg_split( "/(\r?\n)+/", (string) $opt['lb_images'] ) ) );
-      $oh = json_decode( $opt['lb_openinghours'] ?: '[]', true );
-      if ( json_last_error() !== JSON_ERROR_NONE ) {
-        $oh = [];
+      $oh   = json_decode( $opt['lb_openinghours'] ?: '[]', true );
+      if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $oh ) ) {
+        $oh = array();
       }
-      $geo = ( $opt['lb_geo_lat'] !== '' && $opt['lb_geo_lng'] !== '' ) ? [
-        '@type' => 'GeoCoordinates',
-        'latitude' => (float) $opt['lb_geo_lat'],
-        'longitude'=> (float) $opt['lb_geo_lng'],
-      ] : null;
-      $publisher['priceRange'] = $opt['lb_pricerange'] ?: null;
+
+      $oh = array_values( array_filter( array_map( 'poetheme_schema_clean_item_values', $oh ) ) );
+      $geo = ( $opt['lb_geo_lat'] !== '' && $opt['lb_geo_lng'] !== '' ) ? array(
+        '@type'     => 'GeoCoordinates',
+        'latitude'  => (float) $opt['lb_geo_lat'],
+        'longitude' => (float) $opt['lb_geo_lng'],
+      ) : null;
+
+      if ( $opt['lb_pricerange'] ) {
+        $publisher['priceRange'] = $opt['lb_pricerange'];
+      }
+
       if ( $geo ) {
         $publisher['geo'] = $geo;
       }
+
       if ( $imgs ) {
-        $publisher['image'] = array_map( function( $u ) { return ['@type'=>'ImageObject','url'=>$u]; }, $imgs );
+        $publisher['image'] = array_map( function( $url ) {
+          return array(
+            '@type' => 'ImageObject',
+            'url'   => $url,
+          );
+        }, $imgs );
       }
+
       if ( $oh ) {
         $publisher['openingHoursSpecification'] = $oh;
       }
     }
   } else {
-    // Person extras
-    $img = ( $opt['person_image_url']? array_filter( [
-      '@type'=>'ImageObject','url'=>$opt['person_image_url'],
-      'width' => $opt['person_image_w']? (int) $opt['person_image_w'] : null,
-      'height'=> $opt['person_image_h']? (int) $opt['person_image_h'] : null,
-    ] ) : null );
-    $publisher = array_filter( array_merge( $publisher, [
+    $img = ( $opt['person_image_url'] ? poetheme_schema_filter_empty_values( array(
+      '@type'  => 'ImageObject',
+      'url'    => $opt['person_image_url'],
+      'width'  => $opt['person_image_w'] ? (int) $opt['person_image_w'] : null,
+      'height' => $opt['person_image_h'] ? (int) $opt['person_image_h'] : null,
+    ) ) : null );
+
+    $publisher = array_merge( $publisher, poetheme_schema_filter_empty_values( array(
       'image'    => $img ?: null,
       'jobTitle' => $opt['person_job'] ?: null,
       'worksFor' => $opt['person_worksfor'] ?: null,
       'email'    => $opt['person_email'] ?: null,
       'url'      => $opt['person_url'] ?: $publisher['url'],
-    ] ), function( $v ) { return $v !== '' && $v !== null; } );
+    ) ) );
   }
 
-  $webpage = array_filter( [
-    '@type' => 'WebPage',
-    '@id'   => trailingslashit( $canonical ) . '#webpage',
-    'url'   => $canonical,
-    'name'  => wp_get_document_title(),
-    'isPartOf' => [ '@id' => $website['@id'] ],
-    'inLanguage' => $opt['website_lang'],
-    'publisher'  => [ '@id' => $publisher['@id'] ],
-    'mainEntityOfPage' => $canonical,
-  ], function( $v ) { return $v !== '' && $v !== null; } );
+  return poetheme_schema_filter_empty_values( $publisher );
+}
 
-  // Breadcrumb semplice
-  $crumbs = [ [ '@type'=>'ListItem','position'=>1,'name'=>__( 'Home', 'poetheme' ),'item'=>home_url('/') ] ];
-  if ( ! is_front_page() ) {
-    $crumbs[] = [ '@type'=>'ListItem','position'=>2,'name'=>wp_get_document_title(),'item'=>$canonical ];
+function poetheme_schema_build_breadcrumb_list( $items, $canonical ) {
+  if ( empty( $items ) ) {
+    return array();
   }
-  $breadcrumb = [
-    '@type' => 'BreadcrumbList',
-    '@id'   => trailingslashit( $canonical ) . '#breadcrumb',
-    'itemListElement' => $crumbs,
-  ];
 
-  $graph = array_values( array_filter( [ $website, $publisher, $webpage, $breadcrumb ] ) );
-  $payload = [ '@context' => 'https://schema.org', '@graph' => $graph ];
+  $list_items = array();
+  foreach ( $items as $index => $item ) {
+    $crumb = array(
+      '@type'    => 'ListItem',
+      'position' => $index + 1,
+      'name'     => $item['label'],
+    );
 
-  echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+    if ( ! empty( $item['url'] ) ) {
+      $crumb['item'] = $item['url'];
+    } elseif ( $index === count( $items ) - 1 && $canonical ) {
+      $crumb['item'] = $canonical;
+    }
+
+    $list_items[] = poetheme_schema_filter_empty_values( $crumb );
+  }
+
+  if ( empty( $list_items ) ) {
+    return array();
+  }
+
+  return array(
+    '@type'           => 'BreadcrumbList',
+    '@id'             => trailingslashit( $canonical ) . '#breadcrumb',
+    'itemListElement' => $list_items,
+  );
+}
+
+function poetheme_schema_output_jsonld() {
+  if ( ! poetheme_schema_can_output_jsonld() ) {
+    return;
+  }
+
+  $opt          = poetheme_schema_get_options();
+  $canonical    = poetheme_schema_get_canonical_url();
+  $graph        = array();
+  $publisher    = poetheme_schema_build_publisher( $opt );
+  $publisher_id = isset( $publisher['@id'] ) ? $publisher['@id'] : '';
+
+  if ( is_front_page() ) {
+    $website = poetheme_schema_filter_empty_values( array(
+      '@type'         => 'WebSite',
+      '@id'           => $opt['website_id'],
+      'url'           => $opt['website_url'],
+      'name'          => $opt['website_name'],
+      'alternateName' => $opt['website_alt'] ?: null,
+      'inLanguage'    => $opt['website_lang'],
+      'description'   => $opt['website_desc'] ?: null,
+      'publisher'     => $publisher_id ? array( '@id' => $publisher_id ) : null,
+    ) );
+
+    $graph[] = $website;
+    if ( $publisher_id ) {
+      $graph[] = $publisher;
+    }
+  } elseif ( is_singular( 'post' ) ) {
+    $post = get_queried_object();
+    $image = '';
+    if ( $post instanceof WP_Post && has_post_thumbnail( $post ) ) {
+      $image = wp_get_attachment_image_url( get_post_thumbnail_id( $post ), 'full' );
+    }
+
+    $author_name = '';
+    if ( $post instanceof WP_Post ) {
+      $author_name = get_the_author_meta( 'display_name', $post->post_author );
+    }
+
+    $article = poetheme_schema_filter_empty_values( array(
+      '@type'            => 'Article',
+      '@id'              => trailingslashit( $canonical ) . '#article',
+      'headline'         => get_the_title(),
+      'datePublished'    => get_the_date( 'c' ),
+      'dateModified'     => get_the_modified_date( 'c' ),
+      'mainEntityOfPage' => $canonical,
+      'author'           => $author_name ? array(
+        '@type' => 'Person',
+        'name'  => $author_name,
+      ) : null,
+      'publisher'        => $publisher_id ? array( '@id' => $publisher_id ) : null,
+      'image'            => $image ? array(
+        '@type' => 'ImageObject',
+        'url'   => $image,
+      ) : null,
+    ) );
+
+    $graph[] = $article;
+    if ( $publisher_id ) {
+      $graph[] = $publisher;
+    }
+  } elseif ( is_page() ) {
+    $graph[] = poetheme_schema_filter_empty_values( array(
+      '@type' => 'WebPage',
+      '@id'   => trailingslashit( $canonical ) . '#webpage',
+      'url'   => $canonical,
+      'name'  => wp_get_document_title(),
+    ) );
+  } elseif ( is_archive() || is_home() ) {
+    $graph[] = poetheme_schema_filter_empty_values( array(
+      '@type' => 'CollectionPage',
+      '@id'   => trailingslashit( $canonical ) . '#collectionpage',
+      'url'   => $canonical,
+      'name'  => wp_get_document_title(),
+    ) );
+  } else {
+    $graph[] = poetheme_schema_filter_empty_values( array(
+      '@type' => 'WebPage',
+      '@id'   => trailingslashit( $canonical ) . '#webpage',
+      'url'   => $canonical,
+      'name'  => wp_get_document_title(),
+    ) );
+  }
+
+  $breadcrumbs_items = function_exists( 'poetheme_get_breadcrumbs_items' ) ? poetheme_get_breadcrumbs_items() : array();
+  $breadcrumb        = poetheme_schema_build_breadcrumb_list( $breadcrumbs_items, $canonical );
+  if ( ! empty( $breadcrumb ) ) {
+    $graph[] = $breadcrumb;
+  }
+
+  $graph = array_values( array_filter( $graph ) );
+  if ( empty( $graph ) ) {
+    return;
+  }
+
+  $payload = array(
+    '@context' => 'https://schema.org',
+    '@graph'   => $graph,
+  );
+
+  echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
 }
 
 // =============================

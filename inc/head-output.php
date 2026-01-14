@@ -178,7 +178,6 @@ function poetheme_get_design_settings_css() {
 
     $styles .= 'body.poetheme-has-color-settings #primary-content .entry-content a{color:var(--poetheme-general-link-color) !important;}';
 
-    // TODO: Consolidare i selettori ripetuti del contenuto in un asset CSS condiviso per ridurre il bloat inline.
     $styles .= 'body.poetheme-has-color-settings main{color:var(--poetheme-content-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings main p,body.poetheme-has-color-settings main li,body.poetheme-has-color-settings main span,body.poetheme-has-color-settings main td,body.poetheme-has-color-settings main th,body.poetheme-has-color-settings main dd,body.poetheme-has-color-settings main dt{color:var(--poetheme-content-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings main strong,body.poetheme-has-color-settings main b{color:var(--poetheme-content-strong-color) !important;}';
@@ -236,7 +235,6 @@ function poetheme_get_design_settings_css() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-post-title a{color:inherit !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-category-title{color:var(--poetheme-category-title-color) !important;background-color:var(--poetheme-category-title-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-category-title a{color:inherit !important;}';
-    // TODO: Accorpare le regole dei widget del footer in un foglio esterno per evitare duplicazioni inline.
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets{background-color:var(--poetheme-footer-widget-background) !important;color:var(--poetheme-footer-widget-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget,body.poetheme-has-color-settings .poetheme-footer-widgets .widget p,body.poetheme-has-color-settings .poetheme-footer-widgets .widget li,body.poetheme-has-color-settings .poetheme-footer-widgets .widget span{color:var(--poetheme-footer-widget-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget-title,body.poetheme-has-color-settings .poetheme-footer-widgets .widgettitle{color:var(--poetheme-footer-widget-heading-h2-color) !important;background-color:var(--poetheme-footer-widget-heading-h2-background) !important;}';
