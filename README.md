@@ -3,7 +3,7 @@
 Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'editor a blocchi di Gutenberg.
 
 ## Caratteristiche principali
-- Integrazione con Tailwind CSS, Alpine.js e Lucide Icons tramite CDN.
+- Integrazione con Tailwind CSS, Alpine.js e Lucide Icons tramite CDN versionati con SRI.
 - Layout semantico HTML5 con header, nav, main, article, aside e footer.
 - Breadcrumbs accessibili con markup Schema.org e JSON-LD per SEO avanzata.
 - Ottimizzato per l'accessibilità (skip link, focus visibili, alt text automatico, navigazione da tastiera).
@@ -26,6 +26,45 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 - `inc/` moduli del tema e logica di supporto, suddivisi per dominio.
 - `assets/css/` stili dedicati all'editor a blocchi.
 - `languages/` file di traduzione `.pot`.
+
+## Asset Policy (M5)
+- Preferire asset locali e versionati.
+- CDN ammessi solo se versionati, con SRI e `crossorigin="anonymous"`.
+- Versioning coerente: file locali con `filemtime()`, fallback a `POETHEME_VERSION`.
+
+## Asset Inventory / What loads where
+**Frontend styles**
+- `poetheme-tailwind` (CDN, Tailwind CSS 2.2.19)
+- `poetheme-style` (`style.css`)
+
+**Frontend scripts**
+- `poetheme-navigation` (`assets/js/navigation.js`, solo se è presente un menu primario)
+- `poetheme-alpine` (CDN, Alpine.js 3.13.5, interazioni header)
+- `poetheme-lucide` (CDN, Lucide 0.294.0, icone frontend)
+- `poetheme-media-lightbox` (`assets/js/media-lightbox.js`, solo se opzione abilitata e pagina singola/home)
+
+**Editor assets**
+- `poetheme-editor-tailwind` (CDN, Tailwind CSS 2.2.19)
+- `poetheme-editor-style` (`assets/css/editor.css`)
+- `poetheme-editor-alpine` (CDN, Alpine.js 3.13.5)
+
+**Admin assets**
+- `poetheme-theme-options` (`assets/css/theme-options.css`, `assets/js/theme-options.js`)
+- `poetheme-menu-icons` (`assets/css/menu-icons.css`, `assets/js/menu-icons.js`)
+- `poetheme-lucide-admin` (CDN, Lucide 0.294.0, picker icone menu)
+
+## CDN policy + SRI
+- CDN usati: jsDelivr (Tailwind, Alpine, Lucide).
+- Ogni asset CDN è pinnato a versione specifica con hash SRI e `crossorigin="anonymous"`.
+- Motivazione: evitare bundle tool in M5, mantenendo delivery controllata e sicura.
+
+## Debug (WP_DEBUG)
+- Log automatico degli asset enqueued (handle + src) per pagina.
+- Log della dimensione dell'inline CSS M3 (core/design/custom).
+
+## Future: build pipeline (non implementata ora)
+- Possibile introduzione di una pipeline per bundling/minificazione e vendor locale.
+- Struttura attuale degli asset già predisposta per migrazione graduale.
 
 ## Requisiti
 - WordPress 6.0 o superiore.

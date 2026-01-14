@@ -515,9 +515,13 @@ if ( ! function_exists( 'poetheme_admin_menu_assets' ) ) {
             return;
         }
 
-        wp_enqueue_style( 'poetheme-menu-icons', POETHEME_URI . '/assets/css/menu-icons.css', array(), POETHEME_VERSION );
-        wp_enqueue_script( 'poetheme-menu-icons', POETHEME_URI . '/assets/js/menu-icons.js', array( 'jquery' ), POETHEME_VERSION, true );
-        wp_enqueue_script( 'poetheme-lucide-admin', 'https://unpkg.com/lucide@latest/dist/umd/lucide.min.js', array(), POETHEME_VERSION, true );
+        wp_enqueue_style( 'poetheme-menu-icons', POETHEME_URI . '/assets/css/menu-icons.css', array(), poetheme_get_asset_version( 'assets/css/menu-icons.css' ) );
+        wp_enqueue_script( 'poetheme-menu-icons', POETHEME_URI . '/assets/js/menu-icons.js', array( 'jquery' ), poetheme_get_asset_version( 'assets/js/menu-icons.js' ), true );
+
+        $lucide = function_exists( 'poetheme_get_cdn_asset' ) ? poetheme_get_cdn_asset( 'poetheme-lucide-admin' ) : array();
+        $lucide_src = isset( $lucide['src'] ) ? $lucide['src'] : 'https://cdn.jsdelivr.net/npm/lucide@0.294.0/dist/umd/lucide.min.js';
+        $lucide_ver = isset( $lucide['version'] ) ? $lucide['version'] : POETHEME_VERSION;
+        wp_enqueue_script( 'poetheme-lucide-admin', $lucide_src, array(), $lucide_ver, true );
 
         wp_localize_script(
             'poetheme-menu-icons',

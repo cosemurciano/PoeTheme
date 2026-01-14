@@ -28,6 +28,28 @@ if ( ! function_exists( 'poetheme_format_number_for_css' ) ) {
     }
 }
 
+if ( ! function_exists( 'poetheme_get_asset_version' ) ) {
+    /**
+     * Return a version string for local assets.
+     *
+     * @param string $relative_path Path relative to theme root.
+     * @return string
+     */
+    function poetheme_get_asset_version( $relative_path = '' ) {
+        if ( '' === $relative_path ) {
+            return POETHEME_VERSION;
+        }
+
+        $path = trailingslashit( POETHEME_DIR ) . ltrim( $relative_path, '/' );
+
+        if ( file_exists( $path ) ) {
+            return (string) filemtime( $path );
+        }
+
+        return POETHEME_VERSION;
+    }
+}
+
 if ( ! function_exists( 'poetheme_compile_spacing_css' ) ) {
     /**
      * Convert a spacing option array into CSS declarations.

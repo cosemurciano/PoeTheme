@@ -4061,7 +4061,7 @@ function poetheme_options_admin_assets( $hook ) {
     );
 
     if ( in_array( $hook, $style_screens, true ) ) {
-        wp_enqueue_style( 'poetheme-theme-options', POETHEME_URI . '/assets/css/theme-options.css', array(), POETHEME_VERSION );
+        wp_enqueue_style( 'poetheme-theme-options', POETHEME_URI . '/assets/css/theme-options.css', array(), poetheme_get_asset_version( 'assets/css/theme-options.css' ) );
     }
 
     $script_screens = array(
@@ -4076,7 +4076,7 @@ function poetheme_options_admin_assets( $hook ) {
         wp_enqueue_media();
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_script( 'wp-color-picker' );
-        wp_enqueue_script( 'poetheme-theme-options', POETHEME_URI . '/assets/js/theme-options.js', array( 'jquery', 'wp-color-picker' ), POETHEME_VERSION, true );
+        wp_enqueue_script( 'poetheme-theme-options', POETHEME_URI . '/assets/js/theme-options.js', array( 'jquery', 'wp-color-picker' ), poetheme_get_asset_version( 'assets/js/theme-options.js' ), true );
         wp_localize_script(
             'poetheme-theme-options',
             'poethemeThemeOptions',
