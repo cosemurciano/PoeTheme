@@ -363,6 +363,15 @@ function poetheme_output_inline_css() {
             'custom' => strlen( $result['blocks']['custom'] ),
         );
 
+        error_log(
+            sprintf(
+                'PoeTheme inline CSS sizes (KB): core=%s, design=%s, custom=%s',
+                poetheme_format_inline_css_size( $sizes['core'] ),
+                poetheme_format_inline_css_size( $sizes['design'] ),
+                poetheme_format_inline_css_size( $sizes['custom'] )
+            )
+        );
+
         $output .= "/* PoeTheme Inline CSS\n";
         $output .= sprintf( " * core:   %s KB\n", poetheme_format_inline_css_size( $sizes['core'] ) );
         $output .= sprintf( " * design: %s KB\n", poetheme_format_inline_css_size( $sizes['design'] ) );
