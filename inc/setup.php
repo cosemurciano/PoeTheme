@@ -63,9 +63,6 @@ if ( ! function_exists( 'poetheme_setup' ) ) {
         add_theme_support( 'customize-selective-refresh-widgets' );
         add_theme_support( 'custom-spacing' );
 
-        add_theme_support( 'editor-color-palette', array() );
-        add_theme_support( 'editor-gradient-presets', array() );
-
         add_theme_support( 'rtl-language-support' );
     }
 }

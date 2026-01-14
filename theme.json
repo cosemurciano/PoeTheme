@@ -1,0 +1,184 @@
+{
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "primary",
+          "name": "Primary",
+          "color": "#2563eb"
+        },
+        {
+          "slug": "accent",
+          "name": "Accent",
+          "color": "#1e40af"
+        },
+        {
+          "slug": "text",
+          "name": "Text",
+          "color": "#111827"
+        },
+        {
+          "slug": "text-muted",
+          "name": "Text muted",
+          "color": "#4b5563"
+        },
+        {
+          "slug": "neutral-700",
+          "name": "Neutral 700",
+          "color": "#374151"
+        },
+        {
+          "slug": "background",
+          "name": "Background",
+          "color": "#f9fafb"
+        },
+        {
+          "slug": "surface",
+          "name": "Surface",
+          "color": "#ffffff"
+        }
+      ],
+      "custom": true,
+      "customGradient": true,
+      "defaultPalette": false,
+      "defaultGradients": false
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "slug": "system",
+          "name": "System UI",
+          "fontFamily": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+        },
+        {
+          "slug": "inter",
+          "name": "Inter",
+          "fontFamily": "\"Inter\", system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+        },
+        {
+          "slug": "bebas-neue",
+          "name": "Bebas Neue",
+          "fontFamily": "\"Bebas Neue\", \"Inter\", system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+        }
+      ],
+      "fontSizes": [
+        {
+          "slug": "xs",
+          "name": "XS",
+          "size": "0.75rem"
+        },
+        {
+          "slug": "sm",
+          "name": "S",
+          "size": "0.875rem"
+        },
+        {
+          "slug": "md",
+          "name": "M",
+          "size": "1rem"
+        },
+        {
+          "slug": "lg",
+          "name": "L",
+          "size": "1.125rem"
+        },
+        {
+          "slug": "xl",
+          "name": "XL",
+          "size": "1.25rem"
+        },
+        {
+          "slug": "2xl",
+          "name": "2XL",
+          "size": "1.5rem"
+        },
+        {
+          "slug": "3xl",
+          "name": "3XL",
+          "size": "1.875rem"
+        },
+        {
+          "slug": "4xl",
+          "name": "4XL",
+          "size": "2.25rem"
+        },
+        {
+          "slug": "5xl",
+          "name": "5XL",
+          "size": "3rem"
+        },
+        {
+          "slug": "6xl",
+          "name": "6XL",
+          "size": "3.75rem"
+        }
+      ],
+      "customFontSize": true,
+      "customLineHeight": true
+    },
+    "spacing": {
+      "spacingSizes": [
+        {
+          "slug": "xs",
+          "name": "XS",
+          "size": "0.25rem"
+        },
+        {
+          "slug": "sm",
+          "name": "S",
+          "size": "0.5rem"
+        },
+        {
+          "slug": "md",
+          "name": "M",
+          "size": "1rem"
+        },
+        {
+          "slug": "lg",
+          "name": "L",
+          "size": "1.5rem"
+        },
+        {
+          "slug": "xl",
+          "name": "XL",
+          "size": "2rem"
+        },
+        {
+          "slug": "2xl",
+          "name": "2XL",
+          "size": "3rem"
+        },
+        {
+          "slug": "3xl",
+          "name": "3XL",
+          "size": "4rem"
+        }
+      ],
+      "units": [ "px", "rem", "em", "%", "vw", "vh" ],
+      "customSpacingSize": true
+    },
+    "layout": {
+      "contentSize": "1200px",
+      "wideSize": "1400px"
+    },
+    "custom": {}
+  },
+  "styles": {
+    "typography": {
+      "fontFamily": "var:preset|font-family|system"
+    },
+    "elements": {
+      "heading": {
+        "typography": {
+          "fontFamily": "var:preset|font-family|system"
+        }
+      },
+      "link": {
+        "color": {
+          "text": "var:preset|color|primary"
+        }
+      }
+    }
+  }
+}

@@ -39,6 +39,35 @@ L'output CSS inline viene generato in un unico `<style>` con id `poetheme-inline
 
 Per motivi di sicurezza è applicata una soglia massima di dimensione (~20 KB). Se la soglia viene superata, il blocco **custom** viene escluso mantenendo **core** + **design** e l'evento viene loggato solo con `WP_DEBUG` attivo.
 
+## Theme.json tokens
+Il file `theme.json` è la fonte principale dei token del design system. I valori sono allineati ai default già utilizzati dal tema per mantenere la compatibilità visiva.
+
+**Palette colori (semantica):**
+- primary: `#2563eb`
+- accent: `#1e40af`
+- text: `#111827`
+- text-muted: `#4b5563`
+- neutral-700: `#374151`
+- background: `#f9fafb`
+- surface: `#ffffff`
+
+**Tipografia:**
+- Font family: System UI (default), Inter, Bebas Neue.
+- Scala font size: `xs` → `6xl` (0.75rem → 3.75rem).
+
+**Layout:**
+- content size: `1200px`
+- wide size: `1400px`
+
+**Spacing:**
+- Scala base: `xs` → `3xl` (0.25rem → 4rem)
+
+## Token precedence (theme.json vs opzioni tema)
+Per evitare duplicazioni e garantire retrocompatibilità:
+1. `theme.json` definisce i **default** del design system (colori, tipografia, layout).
+2. Le opzioni tema salvate in admin, se presenti, **sovrascrivono** i default tramite CSS inline deterministico (M3) in `inc/head-output.php`.
+3. Obiettivo futuro: migrazione progressiva delle opzioni verso preset e/o variations, riducendo l'inline CSS dinamico.
+
 ## Installazione
 1. Copia la cartella del tema in `wp-content/themes/poetheme`.
 2. Attiva il tema da **Aspetto → Temi**.
