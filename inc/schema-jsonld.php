@@ -17,14 +17,14 @@
 if (!defined('ABSPATH')) { exit; }
 
 add_action('admin_init', function(){
-  register_setting('tsg_schema_group', 'tsg_schema_options', [
+  register_setting('poetheme_schema_group', 'poetheme_schema_options', [
     'type' => 'array',
-    'sanitize_callback' => 'tsg_sanitize_options',
+    'sanitize_callback' => 'poetheme_schema_sanitize_options',
     'default' => []
   ]);
 });
 
-function tsg_default_options(){
+function poetheme_schema_default_options(){
   $site = home_url('/');
   return [
     'enable'         => 1,
@@ -82,13 +82,16 @@ function tsg_default_options(){
   ];
 }
 
-function tsg_get_options(){
-  $saved = get_option('tsg_schema_options', []);
-  return wp_parse_args($saved, tsg_default_options());
+function poetheme_schema_get_options(){
+  $saved = get_option('poetheme_schema_options', []);
+  return wp_parse_args($saved, poetheme_schema_default_options());
 }
 
-function tsg_sanitize_options($input){
-  $defaults = tsg_default_options();
+function poetheme_schema_sanitize_options($input){
+  $defaults = poetheme_schema_default_options();
+  if ( ! current_user_can('manage_options') ) {
+    return wp_parse_args( get_option('poetheme_schema_options', []), $defaults );
+  }
   $clean = [];
   foreach ($defaults as $k => $v) {
     $clean[$k] = isset($input[$k]) ? (is_string($input[$k]) ? trim(wp_kses_post($input[$k])) : $input[$k]) : $defaults[$k];
@@ -109,324 +112,324 @@ function tsg_sanitize_options($input){
 // =  ADMIN UI (OPTIONS PAGE)  =
 // =============================
 
-function tsg_render_options_page(){
+function poetheme_schema_render_options_page(){
   if (!current_user_can('manage_options')) return;
   wp_enqueue_media();
-  $opt = tsg_get_options();
+  $opt = poetheme_schema_get_options();
   $default_pub_base = trailingslashit( home_url() );
   $day_labels = [
-    'Monday'    => __('Lunedì', 'tsg'),
-    'Tuesday'   => __('Martedì', 'tsg'),
-    'Wednesday' => __('Mercoledì', 'tsg'),
-    'Thursday'  => __('Giovedì', 'tsg'),
-    'Friday'    => __('Venerdì', 'tsg'),
-    'Saturday'  => __('Sabato', 'tsg'),
-    'Sunday'    => __('Domenica', 'tsg'),
+    'Monday'    => __('Lunedì', 'poetheme'),
+    'Tuesday'   => __('Martedì', 'poetheme'),
+    'Wednesday' => __('Mercoledì', 'poetheme'),
+    'Thursday'  => __('Giovedì', 'poetheme'),
+    'Friday'    => __('Venerdì', 'poetheme'),
+    'Saturday'  => __('Sabato', 'poetheme'),
+    'Sunday'    => __('Domenica', 'poetheme'),
   ];
   $cp_config = [
-    'title_prefix' => __('Contatto', 'tsg'),
-    'add_label'    => __('Aggiungi contatto', 'tsg'),
-    'remove_label' => __('Rimuovi', 'tsg'),
-    'empty'        => __('Nessun contatto ancora configurato.', 'tsg'),
-    'help'         => __('Crea un blocco per ogni canale di contatto disponibile (telefono, email, form, ecc.).', 'tsg'),
+    'title_prefix' => __('Contatto', 'poetheme'),
+    'add_label'    => __('Aggiungi contatto', 'poetheme'),
+    'remove_label' => __('Rimuovi', 'poetheme'),
+    'empty'        => __('Nessun contatto ancora configurato.', 'poetheme'),
+    'help'         => __('Crea un blocco per ogni canale di contatto disponibile (telefono, email, form, ecc.).', 'poetheme'),
     'fields'       => [
       'contactType' => [
-        'label'       => __('Tipologia di contatto', 'tsg'),
-        'placeholder' => __('Esempio: customer service', 'tsg'),
-        'description' => __('Descrive la funzione del canale (es. assistenza clienti, vendite, prenotazioni).', 'tsg'),
+        'label'       => __('Tipologia di contatto', 'poetheme'),
+        'placeholder' => __('Esempio: customer service', 'poetheme'),
+        'description' => __('Descrive la funzione del canale (es. assistenza clienti, vendite, prenotazioni).', 'poetheme'),
         'type'        => 'text',
       ],
       'telephone' => [
-        'label'       => __('Telefono', 'tsg'),
-        'placeholder' => __('Esempio: +39 0123 456789', 'tsg'),
-        'description' => __('Inserisci il numero completo di prefisso internazionale.', 'tsg'),
+        'label'       => __('Telefono', 'poetheme'),
+        'placeholder' => __('Esempio: +39 0123 456789', 'poetheme'),
+        'description' => __('Inserisci il numero completo di prefisso internazionale.', 'poetheme'),
         'type'        => 'tel',
       ],
       'email' => [
-        'label'       => __('Email', 'tsg'),
-        'placeholder' => __('esempio@dominio.it', 'tsg'),
-        'description' => __('Indirizzo email dedicato al contatto.', 'tsg'),
+        'label'       => __('Email', 'poetheme'),
+        'placeholder' => __('esempio@dominio.it', 'poetheme'),
+        'description' => __('Indirizzo email dedicato al contatto.', 'poetheme'),
         'type'        => 'email',
       ],
       'areaServed' => [
-        'label'       => __('Aree servite', 'tsg'),
-        'placeholder' => __('Esempio: IT, CH', 'tsg'),
-        'description' => __('Elenco di paesi o regioni servite, separati da virgole.', 'tsg'),
+        'label'       => __('Aree servite', 'poetheme'),
+        'placeholder' => __('Esempio: IT, CH', 'poetheme'),
+        'description' => __('Elenco di paesi o regioni servite, separati da virgole.', 'poetheme'),
         'type'        => 'text',
       ],
       'availableLanguage' => [
-        'label'       => __('Lingue supportate', 'tsg'),
-        'placeholder' => __('Esempio: it, en', 'tsg'),
-        'description' => __('Lingue in cui il servizio risponde, separate da virgole.', 'tsg'),
+        'label'       => __('Lingue supportate', 'poetheme'),
+        'placeholder' => __('Esempio: it, en', 'poetheme'),
+        'description' => __('Lingue in cui il servizio risponde, separate da virgole.', 'poetheme'),
         'type'        => 'text',
       ],
       'url' => [
-        'label'       => __('URL di riferimento', 'tsg'),
-        'placeholder' => __('https://example.com/contatti', 'tsg'),
-        'description' => __('Pagina di supporto o modulo contatti (facoltativo).', 'tsg'),
+        'label'       => __('URL di riferimento', 'poetheme'),
+        'placeholder' => __('https://example.com/contatti', 'poetheme'),
+        'description' => __('Pagina di supporto o modulo contatti (facoltativo).', 'poetheme'),
         'type'        => 'url',
       ],
     ],
     'hours' => [
-      'title'        => __('Fasce orarie di disponibilità', 'tsg'),
-      'description'  => __('Seleziona i giorni e inserisci gli orari in cui questo canale è attivo. Lascia vuoto per omettere l&#39;informazione.', 'tsg'),
-      'add_label'    => __('Aggiungi fascia oraria', 'tsg'),
-      'remove_label' => __('Rimuovi fascia', 'tsg'),
-      'empty'        => __('Nessuna fascia oraria aggiunta.', 'tsg'),
+      'title'        => __('Fasce orarie di disponibilità', 'poetheme'),
+      'description'  => __('Seleziona i giorni e inserisci gli orari in cui questo canale è attivo. Lascia vuoto per omettere l&#39;informazione.', 'poetheme'),
+      'add_label'    => __('Aggiungi fascia oraria', 'poetheme'),
+      'remove_label' => __('Rimuovi fascia', 'poetheme'),
+      'empty'        => __('Nessuna fascia oraria aggiunta.', 'poetheme'),
       'fields'       => [
         'opens' => [
-          'label'       => __('Apre alle', 'tsg'),
+          'label'       => __('Apre alle', 'poetheme'),
           'placeholder' => '09:00',
           'type'        => 'time',
         ],
         'closes' => [
-          'label'       => __('Chiude alle', 'tsg'),
+          'label'       => __('Chiude alle', 'poetheme'),
           'placeholder' => '18:00',
           'type'        => 'time',
         ],
         'validFrom' => [
-          'label'       => __('Valido dal', 'tsg'),
+          'label'       => __('Valido dal', 'poetheme'),
           'type'        => 'date',
         ],
         'validThrough' => [
-          'label'       => __('Valido fino al', 'tsg'),
+          'label'       => __('Valido fino al', 'poetheme'),
           'type'        => 'date',
         ],
       ],
     ],
   ];
   $oh_config = [
-    'title_prefix' => __('Fascia oraria', 'tsg'),
-    'add_label'    => __('Aggiungi fascia oraria', 'tsg'),
-    'remove_label' => __('Rimuovi fascia', 'tsg'),
-    'empty'        => __('Nessuna fascia oraria configurata.', 'tsg'),
-    'description'  => __('Raggruppa i giorni con gli stessi orari di apertura. Aggiungi più fasce per orari differenti.', 'tsg'),
+    'title_prefix' => __('Fascia oraria', 'poetheme'),
+    'add_label'    => __('Aggiungi fascia oraria', 'poetheme'),
+    'remove_label' => __('Rimuovi fascia', 'poetheme'),
+    'empty'        => __('Nessuna fascia oraria configurata.', 'poetheme'),
+    'description'  => __('Raggruppa i giorni con gli stessi orari di apertura. Aggiungi più fasce per orari differenti.', 'poetheme'),
     'fields'       => $cp_config['hours']['fields'],
   ];
   ?>
-  <div class="wrap tsg-schema-page">
-    <h1><?php _e('SEO Schema (JSON-LD)','tsg'); ?></h1>
-    <p class="tsg-top-link"><a href="https://search.google.com/test/rich-results?hl=it" target="_blank" rel="noopener noreferrer"><?php _e('Verifica con il Test risultati multimediali di Google','tsg'); ?></a></p>
-    <form method="post" action="options.php" id="tsg-form">
-      <?php settings_fields('tsg_schema_group'); ?>
+  <div class="wrap poetheme-schema-page">
+    <h1><?php _e('SEO Schema (JSON-LD)','poetheme'); ?></h1>
+    <p class="poetheme-schema-top-link"><a href="https://search.google.com/test/rich-results?hl=it" target="_blank" rel="noopener noreferrer"><?php _e('Verifica con il Test risultati multimediali di Google','poetheme'); ?></a></p>
+    <form method="post" action="options.php" id="poetheme-schema-form">
+      <?php settings_fields('poetheme_schema_group'); ?>
 
-      <p class="description tsg-section-description"><?php _e('Compila i campi qui sotto per generare il markup JSON-LD senza scrivere codice. Ogni campo mostra suggerimenti utili per completare le informazioni richieste.', 'tsg'); ?></p>
+      <p class="description poetheme-schema-section-description"><?php _e('Compila i campi qui sotto per generare il markup JSON-LD senza scrivere codice. Ogni campo mostra suggerimenti utili per completare le informazioni richieste.', 'poetheme'); ?></p>
 
-      <div class="tsg-panel">
-        <h2 class="title"><?php _e('Impostazioni generali','tsg'); ?></h2>
+      <div class="poetheme-schema-panel">
+        <h2 class="title"><?php _e('Impostazioni generali','poetheme'); ?></h2>
         <table class="form-table" role="presentation">
           <tr>
-            <th scope="row"><label for="tsg_enable"><?php _e('Attiva output JSON-LD','tsg'); ?></label></th>
+            <th scope="row"><label for="poetheme_schema_enable"><?php _e('Attiva output JSON-LD','poetheme'); ?></label></th>
             <td>
               <label>
-                <input type="checkbox" id="tsg_enable" name="tsg_schema_options[enable]" value="1" <?php checked($opt['enable'],1); ?>>
-                <?php _e("Abilita l'inserimento automatico del markup nel front-end.", 'tsg'); ?>
+                <input type="checkbox" id="poetheme_schema_enable" name="poetheme_schema_options[enable]" value="1" <?php checked($opt['enable'],1); ?>>
+                <?php _e("Abilita l'inserimento automatico del markup nel front-end.", 'poetheme'); ?>
               </label>
-              <p class="description"><?php _e('Disattiva temporaneamente se stai testando altre implementazioni o plugin.', 'tsg'); ?></p>
+              <p class="description"><?php _e('Disattiva temporaneamente se stai testando altre implementazioni o plugin.', 'poetheme'); ?></p>
             </td>
           </tr>
         </table>
       </div>
 
-      <div class="tsg-panel">
+      <div class="poetheme-schema-panel">
         <h2 class="title">WebSite</h2>
         <table class="form-table" role="presentation">
           <tr>
-            <th scope="row"><label for="tsg_website_id">@id</label></th>
+            <th scope="row"><label for="poetheme_schema_website_id">@id</label></th>
             <td>
-              <input type="text" class="regular-text" id="tsg_website_id" name="tsg_schema_options[website_id]" value="<?php echo esc_attr($opt['website_id']); ?>" />
-              <p class="description"><?php _e('Identificatore stabile del sito. Consigliato un URL con anchor, es. https://example.com/#website.', 'tsg'); ?></p>
+              <input type="text" class="regular-text" id="poetheme_schema_website_id" name="poetheme_schema_options[website_id]" value="<?php echo esc_attr($opt['website_id']); ?>" />
+              <p class="description"><?php _e('Identificatore stabile del sito. Consigliato un URL con anchor, es. https://example.com/#website.', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_website_url">URL</label></th>
+            <th scope="row"><label for="poetheme_schema_website_url">URL</label></th>
             <td>
-              <input type="url" class="regular-text" id="tsg_website_url" name="tsg_schema_options[website_url]" value="<?php echo esc_attr($opt['website_url']); ?>" />
-              <p class="description"><?php _e('Indica la home page principale del sito.', 'tsg'); ?></p>
+              <input type="url" class="regular-text" id="poetheme_schema_website_url" name="poetheme_schema_options[website_url]" value="<?php echo esc_attr($opt['website_url']); ?>" />
+              <p class="description"><?php _e('Indica la home page principale del sito.', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_website_name">name</label></th>
+            <th scope="row"><label for="poetheme_schema_website_name">name</label></th>
             <td>
-              <input type="text" class="regular-text" id="tsg_website_name" name="tsg_schema_options[website_name]" value="<?php echo esc_attr($opt['website_name']); ?>" />
-              <p class="description"><?php _e('Nome ufficiale mostrato nei rich snippet.', 'tsg'); ?></p>
+              <input type="text" class="regular-text" id="poetheme_schema_website_name" name="poetheme_schema_options[website_name]" value="<?php echo esc_attr($opt['website_name']); ?>" />
+              <p class="description"><?php _e('Nome ufficiale mostrato nei rich snippet.', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_website_alt">alternateName</label></th>
+            <th scope="row"><label for="poetheme_schema_website_alt">alternateName</label></th>
             <td>
-              <input type="text" class="regular-text" id="tsg_website_alt" name="tsg_schema_options[website_alt]" value="<?php echo esc_attr($opt['website_alt']); ?>" />
-              <p class="description"><?php _e('Denominazione alternativa o payoff. Lascia vuoto se non serve.', 'tsg'); ?></p>
+              <input type="text" class="regular-text" id="poetheme_schema_website_alt" name="poetheme_schema_options[website_alt]" value="<?php echo esc_attr($opt['website_alt']); ?>" />
+              <p class="description"><?php _e('Denominazione alternativa o payoff. Lascia vuoto se non serve.', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_website_lang">inLanguage</label></th>
+            <th scope="row"><label for="poetheme_schema_website_lang">inLanguage</label></th>
             <td>
-              <input type="text" class="regular-text" id="tsg_website_lang" name="tsg_schema_options[website_lang]" value="<?php echo esc_attr($opt['website_lang']); ?>" placeholder="it-IT" />
-              <p class="description"><?php _e('Formato BCP47 (es. it-IT, en-US). Usa la lingua principale del sito.', 'tsg'); ?></p>
+              <input type="text" class="regular-text" id="poetheme_schema_website_lang" name="poetheme_schema_options[website_lang]" value="<?php echo esc_attr($opt['website_lang']); ?>" placeholder="it-IT" />
+              <p class="description"><?php _e('Formato BCP47 (es. it-IT, en-US). Usa la lingua principale del sito.', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_website_desc">description</label></th>
+            <th scope="row"><label for="poetheme_schema_website_desc">description</label></th>
             <td>
-              <textarea name="tsg_schema_options[website_desc]" id="tsg_website_desc" rows="3" class="large-text"><?php echo esc_textarea($opt['website_desc']); ?></textarea>
-              <p class="description"><?php _e('Breve descrizione del sito (150-200 caratteri consigliati).', 'tsg'); ?></p>
+              <textarea name="poetheme_schema_options[website_desc]" id="poetheme_schema_website_desc" rows="3" class="large-text"><?php echo esc_textarea($opt['website_desc']); ?></textarea>
+              <p class="description"><?php _e('Breve descrizione del sito (150-200 caratteri consigliati).', 'poetheme'); ?></p>
             </td>
           </tr>
         </table>
       </div>
 
-      <div class="tsg-panel">
+      <div class="poetheme-schema-panel">
         <h2 class="title">Publisher</h2>
         <table class="form-table" role="presentation">
           <tr>
-            <th scope="row"><label for="tsg_publisher_type"><?php _e('Tipologia di publisher','tsg'); ?></label></th>
+            <th scope="row"><label for="poetheme_schema_publisher_type"><?php _e('Tipologia di publisher','poetheme'); ?></label></th>
             <td>
-              <select name="tsg_schema_options[publisher_type]" id="tsg_publisher_type">
-                <?php foreach ([ 'Organization' => __('Organization','tsg'), 'OnlineStore' => __('OnlineStore','tsg'), 'LocalBusiness' => __('LocalBusiness','tsg'), 'Person' => __('Person','tsg') ] as $val => $lab): ?>
+              <select name="poetheme_schema_options[publisher_type]" id="poetheme_schema_publisher_type">
+                <?php foreach ([ 'Organization' => __('Organization','poetheme'), 'OnlineStore' => __('OnlineStore','poetheme'), 'LocalBusiness' => __('LocalBusiness','poetheme'), 'Person' => __('Person','poetheme') ] as $val => $lab): ?>
                   <option value="<?php echo esc_attr($val); ?>" <?php selected($opt['publisher_type'],$val); ?>><?php echo esc_html($lab); ?></option>
                 <?php endforeach; ?>
               </select>
-              <p class="description"><?php _e('Scegli il tipo di entità che rappresenta il sito.', 'tsg'); ?></p>
+              <p class="description"><?php _e('Scegli il tipo di entità che rappresenta il sito.', 'poetheme'); ?></p>
             </td>
           </tr>
         </table>
 
-        <div class="tsg-publisher-types">
-          <div class="tsg-panel tsg-box tsg-org">
+        <div class="poetheme-schema-publisher-types">
+          <div class="poetheme-schema-panel poetheme-schema-box poetheme-schema-org">
             <h2 class="title">Organization / OnlineStore</h2>
             <table class="form-table" role="presentation">
               <tr>
-                <th scope="row"><label for="tsg_org_legal">legalName</label></th>
+                <th scope="row"><label for="poetheme_schema_org_legal">legalName</label></th>
                 <td>
-                  <input type="text" class="regular-text" id="tsg_org_legal" name="tsg_schema_options[org_legal]" value="<?php echo esc_attr($opt['org_legal']); ?>" />
-                  <p class="description"><?php _e('Nome legale completo dell&#39;organizzazione.', 'tsg'); ?></p>
+                  <input type="text" class="regular-text" id="poetheme_schema_org_legal" name="poetheme_schema_options[org_legal]" value="<?php echo esc_attr($opt['org_legal']); ?>" />
+                  <p class="description"><?php _e('Nome legale completo dell&#39;organizzazione.', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><label for="tsg_org_alt">alternateName</label></th>
+                <th scope="row"><label for="poetheme_schema_org_alt">alternateName</label></th>
                 <td>
-                  <input type="text" class="regular-text" id="tsg_org_alt" name="tsg_schema_options[org_alt]" value="<?php echo esc_attr($opt['org_alt']); ?>" />
-                  <p class="description"><?php _e('Marchio commerciale o abbreviazione conosciuta.', 'tsg'); ?></p>
+                  <input type="text" class="regular-text" id="poetheme_schema_org_alt" name="poetheme_schema_options[org_alt]" value="<?php echo esc_attr($opt['org_alt']); ?>" />
+                  <p class="description"><?php _e('Marchio commerciale o abbreviazione conosciuta.', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><label for="tsg_org_tel">telephone</label></th>
+                <th scope="row"><label for="poetheme_schema_org_tel">telephone</label></th>
                 <td>
-                  <input type="text" class="regular-text" id="tsg_org_tel" name="tsg_schema_options[org_tel]" value="<?php echo esc_attr($opt['org_tel']); ?>" placeholder="+39..." />
-                  <p class="description"><?php _e('Numero telefonico principale dell&#39;azienda.', 'tsg'); ?></p>
+                  <input type="text" class="regular-text" id="poetheme_schema_org_tel" name="poetheme_schema_options[org_tel]" value="<?php echo esc_attr($opt['org_tel']); ?>" placeholder="+39..." />
+                  <p class="description"><?php _e('Numero telefonico principale dell&#39;azienda.', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><label for="tsg_org_vat">vatID</label></th>
+                <th scope="row"><label for="poetheme_schema_org_vat">vatID</label></th>
                 <td>
-                  <input type="text" class="regular-text" id="tsg_org_vat" name="tsg_schema_options[org_vat]" value="<?php echo esc_attr($opt['org_vat']); ?>" />
-                  <p class="description"><?php _e('Partita IVA o VAT number.', 'tsg'); ?></p>
+                  <input type="text" class="regular-text" id="poetheme_schema_org_vat" name="poetheme_schema_options[org_vat]" value="<?php echo esc_attr($opt['org_vat']); ?>" />
+                  <p class="description"><?php _e('Partita IVA o VAT number.', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><label for="tsg_org_tax">taxID</label></th>
+                <th scope="row"><label for="poetheme_schema_org_tax">taxID</label></th>
                 <td>
-                  <input type="text" class="regular-text" id="tsg_org_tax" name="tsg_schema_options[org_tax]" value="<?php echo esc_attr($opt['org_tax']); ?>" />
-                  <p class="description"><?php _e('Codice fiscale o altro identificativo fiscale (facoltativo).', 'tsg'); ?></p>
+                  <input type="text" class="regular-text" id="poetheme_schema_org_tax" name="poetheme_schema_options[org_tax]" value="<?php echo esc_attr($opt['org_tax']); ?>" />
+                  <p class="description"><?php _e('Codice fiscale o altro identificativo fiscale (facoltativo).', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><?php _e('address','tsg'); ?></th>
+                <th scope="row"><?php _e('address','poetheme'); ?></th>
                 <td>
-                  <input type="text" name="tsg_schema_options[org_addr_street]" id="tsg_org_addr_street" value="<?php echo esc_attr($opt['org_addr_street']); ?>" placeholder="streetAddress" class="regular-text" />
-                  <input type="text" name="tsg_schema_options[org_addr_city]" id="tsg_org_addr_city" value="<?php echo esc_attr($opt['org_addr_city']); ?>" placeholder="addressLocality" class="regular-text" />
-                  <input type="text" name="tsg_schema_options[org_addr_region]" id="tsg_org_addr_region" value="<?php echo esc_attr($opt['org_addr_region']); ?>" placeholder="addressRegion" class="regular-text" />
-                  <input type="text" name="tsg_schema_options[org_addr_postal]" id="tsg_org_addr_postal" value="<?php echo esc_attr($opt['org_addr_postal']); ?>" placeholder="postalCode" class="regular-text" />
-                  <input type="text" name="tsg_schema_options[org_addr_country]" id="tsg_org_addr_country" value="<?php echo esc_attr($opt['org_addr_country']); ?>" placeholder="addressCountry" class="regular-text" />
-                  <p class="description"><?php _e('Compila l&#39;indirizzo completo della sede principale.', 'tsg'); ?></p>
+                  <input type="text" name="poetheme_schema_options[org_addr_street]" id="poetheme_schema_org_addr_street" value="<?php echo esc_attr($opt['org_addr_street']); ?>" placeholder="streetAddress" class="regular-text" />
+                  <input type="text" name="poetheme_schema_options[org_addr_city]" id="poetheme_schema_org_addr_city" value="<?php echo esc_attr($opt['org_addr_city']); ?>" placeholder="addressLocality" class="regular-text" />
+                  <input type="text" name="poetheme_schema_options[org_addr_region]" id="poetheme_schema_org_addr_region" value="<?php echo esc_attr($opt['org_addr_region']); ?>" placeholder="addressRegion" class="regular-text" />
+                  <input type="text" name="poetheme_schema_options[org_addr_postal]" id="poetheme_schema_org_addr_postal" value="<?php echo esc_attr($opt['org_addr_postal']); ?>" placeholder="postalCode" class="regular-text" />
+                  <input type="text" name="poetheme_schema_options[org_addr_country]" id="poetheme_schema_org_addr_country" value="<?php echo esc_attr($opt['org_addr_country']); ?>" placeholder="addressCountry" class="regular-text" />
+                  <p class="description"><?php _e('Compila l&#39;indirizzo completo della sede principale.', 'poetheme'); ?></p>
                 </td>
               </tr>
             </table>
           </div>
 
-          <div class="tsg-panel tsg-box tsg-lb">
+          <div class="poetheme-schema-panel poetheme-schema-box poetheme-schema-lb">
             <h2 class="title">LocalBusiness</h2>
             <table class="form-table" role="presentation">
               <tr>
-                <th scope="row"><label for="tsg_lb_pricerange">priceRange</label></th>
+                <th scope="row"><label for="poetheme_schema_lb_pricerange">priceRange</label></th>
                 <td>
-                  <input type="text" class="regular-text" id="tsg_lb_pricerange" name="tsg_schema_options[lb_pricerange]" value="<?php echo esc_attr($opt['lb_pricerange']); ?>" placeholder="€€" />
-                  <p class="description"><?php _e('Intervallo di prezzo indicativo (es. €€, €€€).', 'tsg'); ?></p>
+                  <input type="text" class="regular-text" id="poetheme_schema_lb_pricerange" name="poetheme_schema_options[lb_pricerange]" value="<?php echo esc_attr($opt['lb_pricerange']); ?>" placeholder="€€" />
+                  <p class="description"><?php _e('Intervallo di prezzo indicativo (es. €€, €€€).', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><?php _e('geo','tsg'); ?></th>
+                <th scope="row"><?php _e('geo','poetheme'); ?></th>
                 <td>
-                  <div class="tsg-inline">
-                    <label for="tsg_lb_geo_lat">latitude <input type="text" id="tsg_lb_geo_lat" name="tsg_schema_options[lb_geo_lat]" value="<?php echo esc_attr($opt['lb_geo_lat']); ?>" placeholder="45.4642" class="regular-text"></label>
-                    <label for="tsg_lb_geo_lng">longitude <input type="text" id="tsg_lb_geo_lng" name="tsg_schema_options[lb_geo_lng]" value="<?php echo esc_attr($opt['lb_geo_lng']); ?>" placeholder="9.1900" class="regular-text"></label>
+                  <div class="poetheme-schema-inline">
+                    <label for="poetheme_schema_lb_geo_lat">latitude <input type="text" id="poetheme_schema_lb_geo_lat" name="poetheme_schema_options[lb_geo_lat]" value="<?php echo esc_attr($opt['lb_geo_lat']); ?>" placeholder="45.4642" class="regular-text"></label>
+                    <label for="poetheme_schema_lb_geo_lng">longitude <input type="text" id="poetheme_schema_lb_geo_lng" name="poetheme_schema_options[lb_geo_lng]" value="<?php echo esc_attr($opt['lb_geo_lng']); ?>" placeholder="9.1900" class="regular-text"></label>
                   </div>
-                  <p class="description"><?php _e('Coordinate geografiche della sede (opzionali ma consigliate).', 'tsg'); ?></p>
+                  <p class="description"><?php _e('Coordinate geografiche della sede (opzionali ma consigliate).', 'poetheme'); ?></p>
                 </td>
               </tr>
             </table>
 
-            <h3 class="tsg-subtitle"><?php _e('Orari di apertura','tsg'); ?></h3>
+            <h3 class="poetheme-schema-subtitle"><?php _e('Orari di apertura','poetheme'); ?></h3>
             <p class="description"><?php echo esc_html($oh_config['description']); ?></p>
-            <input type="hidden" name="tsg_schema_options[lb_openinghours]" id="tsg_oh_json" value="<?php echo esc_attr($opt['lb_openinghours']); ?>" />
-            <div id="tsg_oh_items" class="tsg-repeater" data-config="<?php echo esc_attr(wp_json_encode($oh_config, JSON_UNESCAPED_UNICODE)); ?>" data-days="<?php echo esc_attr(wp_json_encode($day_labels, JSON_UNESCAPED_UNICODE)); ?>"></div>
-            <p><button type="button" class="button button-secondary" id="tsg_oh_add_btn"><?php echo esc_html($oh_config['add_label']); ?></button></p>
+            <input type="hidden" name="poetheme_schema_options[lb_openinghours]" id="poetheme_schema_oh_json" value="<?php echo esc_attr($opt['lb_openinghours']); ?>" />
+            <div id="poetheme_schema_oh_items" class="poetheme-schema-repeater" data-config="<?php echo esc_attr(wp_json_encode($oh_config, JSON_UNESCAPED_UNICODE)); ?>" data-days="<?php echo esc_attr(wp_json_encode($day_labels, JSON_UNESCAPED_UNICODE)); ?>"></div>
+            <p><button type="button" class="button button-secondary" id="poetheme_schema_oh_add_btn"><?php echo esc_html($oh_config['add_label']); ?></button></p>
 
             <table class="form-table" role="presentation">
               <tr>
-                <th scope="row"><label for="tsg_lb_images"><?php _e('Immagini della sede','tsg'); ?></label></th>
+                <th scope="row"><label for="poetheme_schema_lb_images"><?php _e('Immagini della sede','poetheme'); ?></label></th>
                 <td>
-                  <textarea name="tsg_schema_options[lb_images]" id="tsg_lb_images" rows="3" class="large-text" placeholder="https://.../esterno.jpg&#10;https://.../interno.jpg"><?php echo esc_textarea($opt['lb_images']); ?></textarea>
-                  <p class="description"><?php _e('Inserisci una URL per riga con immagini rappresentative (opzionale).', 'tsg'); ?></p>
+                  <textarea name="poetheme_schema_options[lb_images]" id="poetheme_schema_lb_images" rows="3" class="large-text" placeholder="https://.../esterno.jpg&#10;https://.../interno.jpg"><?php echo esc_textarea($opt['lb_images']); ?></textarea>
+                  <p class="description"><?php _e('Inserisci una URL per riga con immagini rappresentative (opzionale).', 'poetheme'); ?></p>
                 </td>
               </tr>
             </table>
           </div>
 
-          <div class="tsg-panel tsg-box tsg-person">
+          <div class="poetheme-schema-panel poetheme-schema-box poetheme-schema-person">
             <h2 class="title">Person</h2>
             <table class="form-table" role="presentation">
               <tr>
-                <th scope="row"><label for="tsg_person_image">image.url</label></th>
+                <th scope="row"><label for="poetheme_schema_person_image">image.url</label></th>
                 <td>
-                  <div class="tsg-inline">
-                    <input type="url" class="regular-text" name="tsg_schema_options[person_image_url]" id="tsg_person_image" value="<?php echo esc_attr($opt['person_image_url']); ?>" placeholder="https://example.com/avatar.jpg" />
-                    <button type="button" class="button" id="tsg_person_img_btn"><?php _e('Seleziona dal Media','tsg'); ?></button>
+                  <div class="poetheme-schema-inline">
+                    <input type="url" class="regular-text" name="poetheme_schema_options[person_image_url]" id="poetheme_schema_person_image" value="<?php echo esc_attr($opt['person_image_url']); ?>" placeholder="https://example.com/avatar.jpg" />
+                    <button type="button" class="button" id="poetheme_schema_person_img_btn"><?php _e('Seleziona dal Media','poetheme'); ?></button>
                   </div>
-                  <div class="tsg-inline">
-                    <label for="tsg_person_image_w">width <input type="number" id="tsg_person_image_w" name="tsg_schema_options[person_image_w]" value="<?php echo esc_attr($opt['person_image_w']); ?>" min="0" class="small-text"></label>
-                    <label for="tsg_person_image_h">height <input type="number" id="tsg_person_image_h" name="tsg_schema_options[person_image_h]" value="<?php echo esc_attr($opt['person_image_h']); ?>" min="0" class="small-text"></label>
+                  <div class="poetheme-schema-inline">
+                    <label for="poetheme_schema_person_image_w">width <input type="number" id="poetheme_schema_person_image_w" name="poetheme_schema_options[person_image_w]" value="<?php echo esc_attr($opt['person_image_w']); ?>" min="0" class="small-text"></label>
+                    <label for="poetheme_schema_person_image_h">height <input type="number" id="poetheme_schema_person_image_h" name="poetheme_schema_options[person_image_h]" value="<?php echo esc_attr($opt['person_image_h']); ?>" min="0" class="small-text"></label>
                   </div>
-                  <p class="description"><?php _e('Carica un ritratto riconoscibile (minimo 200×200 px).', 'tsg'); ?></p>
+                  <p class="description"><?php _e('Carica un ritratto riconoscibile (minimo 200×200 px).', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><label for="tsg_person_job">jobTitle</label></th>
+                <th scope="row"><label for="poetheme_schema_person_job">jobTitle</label></th>
                 <td>
-                  <input type="text" class="regular-text" id="tsg_person_job" name="tsg_schema_options[person_job]" value="<?php echo esc_attr($opt['person_job']); ?>" />
-                  <p class="description"><?php _e('Ruolo o mansione principale (es. CEO, Consulente SEO).', 'tsg'); ?></p>
+                  <input type="text" class="regular-text" id="poetheme_schema_person_job" name="poetheme_schema_options[person_job]" value="<?php echo esc_attr($opt['person_job']); ?>" />
+                  <p class="description"><?php _e('Ruolo o mansione principale (es. CEO, Consulente SEO).', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><label for="tsg_person_worksfor">worksFor</label></th>
+                <th scope="row"><label for="poetheme_schema_person_worksfor">worksFor</label></th>
                 <td>
-                  <input type="text" class="regular-text" id="tsg_person_worksfor" name="tsg_schema_options[person_worksfor]" value="<?php echo esc_attr($opt['person_worksfor']); ?>" />
-                  <p class="description"><?php _e('Nome dell&#39;organizzazione per cui lavora (facoltativo).', 'tsg'); ?></p>
+                  <input type="text" class="regular-text" id="poetheme_schema_person_worksfor" name="poetheme_schema_options[person_worksfor]" value="<?php echo esc_attr($opt['person_worksfor']); ?>" />
+                  <p class="description"><?php _e('Nome dell&#39;organizzazione per cui lavora (facoltativo).', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><label for="tsg_person_email">email</label></th>
+                <th scope="row"><label for="poetheme_schema_person_email">email</label></th>
                 <td>
-                  <input type="email" class="regular-text" id="tsg_person_email" name="tsg_schema_options[person_email]" value="<?php echo esc_attr($opt['person_email']); ?>" />
-                  <p class="description"><?php _e('Email pubblica di riferimento.', 'tsg'); ?></p>
+                  <input type="email" class="regular-text" id="poetheme_schema_person_email" name="poetheme_schema_options[person_email]" value="<?php echo esc_attr($opt['person_email']); ?>" />
+                  <p class="description"><?php _e('Email pubblica di riferimento.', 'poetheme'); ?></p>
                 </td>
               </tr>
               <tr>
-                <th scope="row"><label for="tsg_person_url">url</label></th>
+                <th scope="row"><label for="poetheme_schema_person_url">url</label></th>
                 <td>
-                  <input type="url" class="regular-text" id="tsg_person_url" name="tsg_schema_options[person_url]" value="<?php echo esc_attr($opt['person_url']); ?>" />
-                  <p class="description"><?php _e('Pagina personale o profilo professionale.', 'tsg'); ?></p>
+                  <input type="url" class="regular-text" id="poetheme_schema_person_url" name="poetheme_schema_options[person_url]" value="<?php echo esc_attr($opt['person_url']); ?>" />
+                  <p class="description"><?php _e('Pagina personale o profilo professionale.', 'poetheme'); ?></p>
                 </td>
               </tr>
             </table>
@@ -435,61 +438,61 @@ function tsg_render_options_page(){
 
         <table class="form-table" role="presentation">
           <tr>
-            <th scope="row"><label for="tsg_pub_id">@id</label></th>
+            <th scope="row"><label for="poetheme_schema_pub_id">@id</label></th>
             <td>
-              <input type="text" class="regular-text" id="tsg_pub_id" name="tsg_schema_options[pub_id]" value="<?php echo esc_attr($opt['pub_id']); ?>" data-default-base="<?php echo esc_attr( $default_pub_base ); ?>" />
-              <p class="description"><?php _e('Identificatore univoco dell&#39;entità (es. https://example.com/#organization).', 'tsg'); ?></p>
+              <input type="text" class="regular-text" id="poetheme_schema_pub_id" name="poetheme_schema_options[pub_id]" value="<?php echo esc_attr($opt['pub_id']); ?>" data-default-base="<?php echo esc_attr( $default_pub_base ); ?>" />
+              <p class="description"><?php _e('Identificatore univoco dell&#39;entità (es. https://example.com/#organization).', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_pub_name">name</label></th>
+            <th scope="row"><label for="poetheme_schema_pub_name">name</label></th>
             <td>
-              <input type="text" class="regular-text" id="tsg_pub_name" name="tsg_schema_options[pub_name]" value="<?php echo esc_attr($opt['pub_name']); ?>" />
-              <p class="description"><?php _e('Nome legale o commerciale visualizzato dai motori di ricerca.', 'tsg'); ?></p>
+              <input type="text" class="regular-text" id="poetheme_schema_pub_name" name="poetheme_schema_options[pub_name]" value="<?php echo esc_attr($opt['pub_name']); ?>" />
+              <p class="description"><?php _e('Nome legale o commerciale visualizzato dai motori di ricerca.', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_pub_url">url</label></th>
+            <th scope="row"><label for="poetheme_schema_pub_url">url</label></th>
             <td>
-              <input type="url" class="regular-text" id="tsg_pub_url" name="tsg_schema_options[pub_url]" value="<?php echo esc_attr($opt['pub_url']); ?>" />
-              <p class="description"><?php _e('URL pubblico dedicato all&#39;entità (homepage o pagina Chi siamo).', 'tsg'); ?></p>
+              <input type="url" class="regular-text" id="poetheme_schema_pub_url" name="poetheme_schema_options[pub_url]" value="<?php echo esc_attr($opt['pub_url']); ?>" />
+              <p class="description"><?php _e('URL pubblico dedicato all&#39;entità (homepage o pagina Chi siamo).', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_pub_desc">description</label></th>
+            <th scope="row"><label for="poetheme_schema_pub_desc">description</label></th>
             <td>
-              <textarea name="tsg_schema_options[pub_desc]" id="tsg_pub_desc" rows="3" class="large-text"><?php echo esc_textarea($opt['pub_desc']); ?></textarea>
-              <p class="description"><?php _e('Descrizione sintetica dell&#39;organizzazione o professionista.', 'tsg'); ?></p>
+              <textarea name="poetheme_schema_options[pub_desc]" id="poetheme_schema_pub_desc" rows="3" class="large-text"><?php echo esc_textarea($opt['pub_desc']); ?></textarea>
+              <p class="description"><?php _e('Descrizione sintetica dell&#39;organizzazione o professionista.', 'poetheme'); ?></p>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_logo_url">logo.url</label></th>
+            <th scope="row"><label for="poetheme_schema_logo_url">logo.url</label></th>
             <td>
-              <div class="tsg-inline">
-                <input type="url" class="regular-text" name="tsg_schema_options[pub_logo_url]" id="tsg_logo_url" value="<?php echo esc_attr($opt['pub_logo_url']); ?>" placeholder="https://example.com/logo.png" />
-                <button type="button" class="button" id="tsg_logo_btn"><?php _e('Seleziona dal Media','tsg'); ?></button>
+              <div class="poetheme-schema-inline">
+                <input type="url" class="regular-text" name="poetheme_schema_options[pub_logo_url]" id="poetheme_schema_logo_url" value="<?php echo esc_attr($opt['pub_logo_url']); ?>" placeholder="https://example.com/logo.png" />
+                <button type="button" class="button" id="poetheme_schema_logo_btn"><?php _e('Seleziona dal Media','poetheme'); ?></button>
               </div>
-              <p class="description"><?php _e('Si consiglia un logo quadrato (≥112×112 px) accessibile pubblicamente.', 'tsg');?></p>
-              <div class="tsg-inline">
-                <label for="tsg_logo_w">width <input type="number" id="tsg_logo_w" name="tsg_schema_options[pub_logo_w]" value="<?php echo esc_attr($opt['pub_logo_w']); ?>" min="0" class="small-text"></label>
-                <label for="tsg_logo_h">height <input type="number" id="tsg_logo_h" name="tsg_schema_options[pub_logo_h]" value="<?php echo esc_attr($opt['pub_logo_h']); ?>" min="0" class="small-text"></label>
+              <p class="description"><?php _e('Si consiglia un logo quadrato (≥112×112 px) accessibile pubblicamente.', 'poetheme');?></p>
+              <div class="poetheme-schema-inline">
+                <label for="poetheme_schema_logo_w">width <input type="number" id="poetheme_schema_logo_w" name="poetheme_schema_options[pub_logo_w]" value="<?php echo esc_attr($opt['pub_logo_w']); ?>" min="0" class="small-text"></label>
+                <label for="poetheme_schema_logo_h">height <input type="number" id="poetheme_schema_logo_h" name="poetheme_schema_options[pub_logo_h]" value="<?php echo esc_attr($opt['pub_logo_h']); ?>" min="0" class="small-text"></label>
               </div>
             </td>
           </tr>
           <tr>
-            <th scope="row"><label for="tsg_pub_sameas">sameAs</label></th>
+            <th scope="row"><label for="poetheme_schema_pub_sameas">sameAs</label></th>
             <td>
-              <textarea name="tsg_schema_options[pub_sameas]" id="tsg_pub_sameas" rows="3" class="large-text" placeholder="https://instagram.com/...&#10;https://www.facebook.com/..."><?php echo esc_textarea($opt['pub_sameas']); ?></textarea>
-              <p class="description"><?php _e('Inserisci una URL per riga verso profili social ufficiali o directory verificabili.', 'tsg'); ?></p>
+              <textarea name="poetheme_schema_options[pub_sameas]" id="poetheme_schema_pub_sameas" rows="3" class="large-text" placeholder="https://instagram.com/...&#10;https://www.facebook.com/..."><?php echo esc_textarea($opt['pub_sameas']); ?></textarea>
+              <p class="description"><?php _e('Inserisci una URL per riga verso profili social ufficiali o directory verificabili.', 'poetheme'); ?></p>
             </td>
           </tr>
         </table>
 
-        <h3 class="tsg-subtitle"><?php _e('Contatti del publisher','tsg'); ?></h3>
+        <h3 class="poetheme-schema-subtitle"><?php _e('Contatti del publisher','poetheme'); ?></h3>
         <p class="description"><?php echo esc_html($cp_config['help']); ?></p>
-        <input type="hidden" name="tsg_schema_options[pub_contactpoints]" id="tsg_cp_json" value="<?php echo esc_attr($opt['pub_contactpoints']); ?>" />
-        <div id="tsg_cp_items" class="tsg-repeater" data-config="<?php echo esc_attr(wp_json_encode($cp_config, JSON_UNESCAPED_UNICODE)); ?>" data-days="<?php echo esc_attr(wp_json_encode($day_labels, JSON_UNESCAPED_UNICODE)); ?>"></div>
-        <p><button type="button" class="button button-secondary" id="tsg_cp_add_btn"><?php echo esc_html($cp_config['add_label']); ?></button></p>
+        <input type="hidden" name="poetheme_schema_options[pub_contactpoints]" id="poetheme_schema_cp_json" value="<?php echo esc_attr($opt['pub_contactpoints']); ?>" />
+        <div id="poetheme_schema_cp_items" class="poetheme-schema-repeater" data-config="<?php echo esc_attr(wp_json_encode($cp_config, JSON_UNESCAPED_UNICODE)); ?>" data-days="<?php echo esc_attr(wp_json_encode($day_labels, JSON_UNESCAPED_UNICODE)); ?>"></div>
+        <p><button type="button" class="button button-secondary" id="poetheme_schema_cp_add_btn"><?php echo esc_html($cp_config['add_label']); ?></button></p>
       </div>
 
       <?php submit_button(); ?>
@@ -497,44 +500,44 @@ function tsg_render_options_page(){
   </div>
 
   <style>
-    .tsg-schema-page .tsg-panel { background:#fff; border:1px solid #dcdcde; padding:24px; margin-bottom:24px; border-radius:6px; }
-    .tsg-schema-page .tsg-panel .title { margin-top:0; }
-    .tsg-schema-page .tsg-section-description { max-width:800px; }
-    .tsg-schema-page .tsg-top-link { margin:8px 0 24px; }
-    .tsg-schema-page .tsg-top-link a { font-weight:600; }
-    .tsg-schema-page .tsg-inline { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-    .tsg-schema-page .tsg-subtitle { margin-top:32px; margin-bottom:8px; font-size:1rem; }
-    .tsg-schema-page .tsg-repeater { margin-top:12px; }
-    .tsg-schema-page .tsg-publisher-types { display:grid; gap:16px; margin:16px 0 24px; }
-    .tsg-schema-page .tsg-publisher-types .tsg-panel { margin:0; }
-    .tsg-schema-page .tsg-card { border:1px solid #dcdcde; border-radius:6px; padding:16px; background:#fafafa; margin-bottom:16px; }
-    .tsg-schema-page .tsg-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-    .tsg-schema-page .tsg-card-title { font-size:0.9375rem; margin:0; }
-    .tsg-schema-page .tsg-field { margin-bottom:12px; }
-    .tsg-schema-page .tsg-field label { font-weight:600; display:block; margin-bottom:4px; }
-    .tsg-schema-page .tsg-field textarea.widefat { min-height:80px; }
-    .tsg-schema-page .tsg-placeholder { color:#6c7781; font-style:italic; margin:0; }
-    .tsg-schema-page .tsg-hour-row { border:1px solid #e3e3e3; background:#fff; border-radius:6px; padding:12px; margin-bottom:12px; }
-    .tsg-schema-page .tsg-hour-row .tsg-day-list { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
-    .tsg-schema-page .tsg-hour-row .tsg-day-list label { display:flex; gap:4px; align-items:center; }
-    .tsg-schema-page .tsg-hour-row .tsg-inline { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
-    .tsg-schema-page .tsg-hour-row .tsg-hour-input { display:flex; flex-direction:column; font-weight:600; font-size:0.75rem; }
-    .tsg-schema-page .tsg-hour-row .tsg-hour-input span { margin-bottom:4px; }
-    .tsg-schema-page .tsg-hour-row .tsg-hour-remove { align-self:flex-start; }
+    .poetheme-schema-page .poetheme-schema-panel { background:#fff; border:1px solid #dcdcde; padding:24px; margin-bottom:24px; border-radius:6px; }
+    .poetheme-schema-page .poetheme-schema-panel .title { margin-top:0; }
+    .poetheme-schema-page .poetheme-schema-section-description { max-width:800px; }
+    .poetheme-schema-page .poetheme-schema-top-link { margin:8px 0 24px; }
+    .poetheme-schema-page .poetheme-schema-top-link a { font-weight:600; }
+    .poetheme-schema-page .poetheme-schema-inline { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .poetheme-schema-page .poetheme-schema-subtitle { margin-top:32px; margin-bottom:8px; font-size:1rem; }
+    .poetheme-schema-page .poetheme-schema-repeater { margin-top:12px; }
+    .poetheme-schema-page .poetheme-schema-publisher-types { display:grid; gap:16px; margin:16px 0 24px; }
+    .poetheme-schema-page .poetheme-schema-publisher-types .poetheme-schema-panel { margin:0; }
+    .poetheme-schema-page .poetheme-schema-card { border:1px solid #dcdcde; border-radius:6px; padding:16px; background:#fafafa; margin-bottom:16px; }
+    .poetheme-schema-page .poetheme-schema-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    .poetheme-schema-page .poetheme-schema-card-title { font-size:0.9375rem; margin:0; }
+    .poetheme-schema-page .poetheme-schema-field { margin-bottom:12px; }
+    .poetheme-schema-page .poetheme-schema-field label { font-weight:600; display:block; margin-bottom:4px; }
+    .poetheme-schema-page .poetheme-schema-field textarea.widefat { min-height:80px; }
+    .poetheme-schema-page .poetheme-schema-placeholder { color:#6c7781; font-style:italic; margin:0; }
+    .poetheme-schema-page .poetheme-schema-hour-row { border:1px solid #e3e3e3; background:#fff; border-radius:6px; padding:12px; margin-bottom:12px; }
+    .poetheme-schema-page .poetheme-schema-hour-row .poetheme-schema-day-list { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .poetheme-schema-page .poetheme-schema-hour-row .poetheme-schema-day-list label { display:flex; gap:4px; align-items:center; }
+    .poetheme-schema-page .poetheme-schema-hour-row .poetheme-schema-inline { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
+    .poetheme-schema-page .poetheme-schema-hour-row .poetheme-schema-hour-input { display:flex; flex-direction:column; font-weight:600; font-size:0.75rem; }
+    .poetheme-schema-page .poetheme-schema-hour-row .poetheme-schema-hour-input span { margin-bottom:4px; }
+    .poetheme-schema-page .poetheme-schema-hour-row .poetheme-schema-hour-remove { align-self:flex-start; }
     @media (max-width:782px) {
-      .tsg-schema-page .tsg-inline { flex-direction:column; align-items:stretch; }
-      .tsg-schema-page .tsg-hour-row .tsg-inline { flex-direction:column; align-items:stretch; }
-      .tsg-schema-page .tsg-card-header { flex-direction:column; align-items:flex-start; gap:6px; }
+      .poetheme-schema-page .poetheme-schema-inline { flex-direction:column; align-items:stretch; }
+      .poetheme-schema-page .poetheme-schema-hour-row .poetheme-schema-inline { flex-direction:column; align-items:stretch; }
+      .poetheme-schema-page .poetheme-schema-card-header { flex-direction:column; align-items:flex-start; gap:6px; }
     }
   </style>
   <script>
   (function($){
-    var cpInput = $('#tsg_cp_json');
-    var cpList = $('#tsg_cp_items');
+    var cpInput = $('#poetheme_schema_cp_json');
+    var cpList = $('#poetheme_schema_cp_items');
     var cpConfig = cpList.data('config') || {};
     var cpDayData = cpList.data('days') || {};
-    var ohInput = $('#tsg_oh_json');
-    var ohList = $('#tsg_oh_items');
+    var ohInput = $('#poetheme_schema_oh_json');
+    var ohList = $('#poetheme_schema_oh_items');
     var ohConfig = ohList.data('config') || {};
     var dayLabels = $.extend({}, cpDayData, ohList.data('days') || {});
     var dayKeys = Object.keys(dayLabels);
@@ -638,19 +641,19 @@ function tsg_render_options_page(){
     }
     function buildCpField(field, cp, index){
       var cfg = fieldConfig(field);
-      var id = 'tsg_cp_' + field + '_' + index;
+      var id = 'poetheme_schema_cp_' + field + '_' + index;
       var label = cfg.label || field;
       var placeholder = cfg.placeholder || '';
       var description = cfg.description || '';
       var type = sanitizeType(cfg.type || 'text');
       var value = cp[field] || '';
-      var html = '<div class="tsg-field">';
+      var html = '<div class="poetheme-schema-field">';
       html += '<label for="'+id+'">'+esc(label)+'</label>';
       if (type === 'textarea') {
         var rows = cfg.rows || 3;
-        html += '<textarea rows="'+rows+'" class="widefat tsg-cp-field" id="'+id+'" data-field="'+field+'" placeholder="'+escAttr(placeholder)+'">'+esc(value)+'</textarea>';
+        html += '<textarea rows="'+rows+'" class="widefat poetheme-schema-cp-field" id="'+id+'" data-field="'+field+'" placeholder="'+escAttr(placeholder)+'">'+esc(value)+'</textarea>';
       } else {
-        html += '<input type="'+type+'" class="regular-text tsg-cp-field" id="'+id+'" data-field="'+field+'" value="'+escAttr(value)+'" placeholder="'+escAttr(placeholder)+'">';
+        html += '<input type="'+type+'" class="regular-text poetheme-schema-cp-field" id="'+id+'" data-field="'+field+'" value="'+escAttr(value)+'" placeholder="'+escAttr(placeholder)+'">';
       }
       if (description) {
         html += '<p class="description">'+esc(description)+'</p>';
@@ -662,13 +665,13 @@ function tsg_render_options_page(){
     function buildHourInput(field, value, context, index, slotIndex){
       var cfg = ((context === 'cp') ? (cpConfig.hours && cpConfig.hours.fields) : (ohConfig.fields)) || {};
       cfg = cfg && cfg[field] ? cfg[field] : {};
-      var id = 'tsg_'+context+'_'+field+'_'+index+'_'+slotIndex;
+      var id = 'poetheme_schema_'+context+'_'+field+'_'+index+'_'+slotIndex;
       var label = cfg.label || field;
       var type = sanitizeType(cfg.type || (field === 'opens' || field === 'closes' ? 'time' : 'date'));
       var placeholder = cfg.placeholder || '';
-      var html = '<label class="tsg-hour-input" for="'+id+'">';
+      var html = '<label class="poetheme-schema-hour-input" for="'+id+'">';
       html += '<span>'+esc(label)+'</span>';
-      html += '<input type="'+type+'" class="tsg-hour-field" data-field="'+field+'" id="'+id+'" value="'+escAttr(value)+'" placeholder="'+escAttr(placeholder)+'">';
+      html += '<input type="'+type+'" class="poetheme-schema-hour-field" data-field="'+field+'" id="'+id+'" value="'+escAttr(value)+'" placeholder="'+escAttr(placeholder)+'">';
       html += '</label>';
       return html;
     }
@@ -677,7 +680,7 @@ function tsg_render_options_page(){
       var html = '';
       dayKeys.forEach(function(day){
         var checked = selected.indexOf(day) !== -1 ? ' checked' : '';
-        html += '<label><input type="checkbox" class="tsg-hour-day" value="'+day+'"'+checked+'> <span>'+esc(dayLabels[day] || day)+'</span></label>';
+        html += '<label><input type="checkbox" class="poetheme-schema-hour-day" value="'+day+'"'+checked+'> <span>'+esc(dayLabels[day] || day)+'</span></label>';
       });
       return html;
     }
@@ -694,48 +697,48 @@ function tsg_render_options_page(){
     function renderContactPoints(){
       cpList.empty();
       if (!cpData.length) {
-        cpList.append('<p class="tsg-placeholder">'+esc(cpConfig.empty || '')+'</p>');
+        cpList.append('<p class="poetheme-schema-placeholder">'+esc(cpConfig.empty || '')+'</p>');
         return;
       }
       cpData.forEach(function(cp, index){
-        var html = '<div class="tsg-card tsg-cp-item" data-index="'+index+'">';
-        html += '<div class="tsg-card-header"><strong class="tsg-card-title">'+esc(getCpTitle(cp, index))+'</strong>';
+        var html = '<div class="poetheme-schema-card poetheme-schema-cp-item" data-index="'+index+'">';
+        html += '<div class="poetheme-schema-card-header"><strong class="poetheme-schema-card-title">'+esc(getCpTitle(cp, index))+'</strong>';
         if (cpData.length > 1) {
-          html += '<button type="button" class="button-link-delete tsg-cp-remove">'+esc(cpConfig.remove_label || '×')+'</button>';
+          html += '<button type="button" class="button-link-delete poetheme-schema-cp-remove">'+esc(cpConfig.remove_label || '×')+'</button>';
         }
         html += '</div>';
-        html += '<div class="tsg-grid">';
+        html += '<div class="poetheme-schema-grid">';
         ['contactType','telephone','email','areaServed','availableLanguage','url'].forEach(function(field){
           html += buildCpField(field, cp, index);
         });
         html += '</div>';
         if (cpConfig.hours) {
-          html += '<div class="tsg-hours-section">';
+          html += '<div class="poetheme-schema-hours-section">';
           if (cpConfig.hours.title) {
             html += '<h4>'+esc(cpConfig.hours.title)+'</h4>';
           }
           if (cpConfig.hours.description) {
             html += '<p class="description">'+esc(cpConfig.hours.description)+'</p>';
           }
-          html += '<div class="tsg-hours-wrap">';
+          html += '<div class="poetheme-schema-hours-wrap">';
           if (!cp.hours.length) {
-            html += '<p class="tsg-placeholder">'+esc(cpConfig.hours.empty || '')+'</p>';
+            html += '<p class="poetheme-schema-placeholder">'+esc(cpConfig.hours.empty || '')+'</p>';
           } else {
             cp.hours.forEach(function(slot, slotIndex){
-              html += '<div class="tsg-hour-row" data-hour-index="'+slotIndex+'">';
-              html += '<div class="tsg-day-list">'+buildDayCheckboxes(slot.days || [])+'</div>';
-              html += '<div class="tsg-inline">';
+              html += '<div class="poetheme-schema-hour-row" data-hour-index="'+slotIndex+'">';
+              html += '<div class="poetheme-schema-day-list">'+buildDayCheckboxes(slot.days || [])+'</div>';
+              html += '<div class="poetheme-schema-inline">';
               html += buildHourInput('opens', slot.opens || '', 'cp', index, slotIndex);
               html += buildHourInput('closes', slot.closes || '', 'cp', index, slotIndex);
               html += buildHourInput('validFrom', slot.validFrom || '', 'cp', index, slotIndex);
               html += buildHourInput('validThrough', slot.validThrough || '', 'cp', index, slotIndex);
-              html += '<button type="button" class="button-link-delete tsg-hour-remove">'+esc(cpConfig.hours.remove_label || '')+'</button>';
+              html += '<button type="button" class="button-link-delete poetheme-schema-hour-remove">'+esc(cpConfig.hours.remove_label || '')+'</button>';
               html += '</div>';
               html += '</div>';
             });
           }
           html += '</div>';
-          html += '<button type="button" class="button button-secondary tsg-cp-add-hour">'+esc(cpConfig.hours.add_label || '')+'</button>';
+          html += '<button type="button" class="button button-secondary poetheme-schema-cp-add-hour">'+esc(cpConfig.hours.add_label || '')+'</button>';
           html += '</div>';
         }
         html += '</div>';
@@ -746,19 +749,19 @@ function tsg_render_options_page(){
     function renderOpeningHours(){
       ohList.empty();
       if (!ohData.length) {
-        ohList.append('<p class="tsg-placeholder">'+esc(ohConfig.empty || '')+'</p>');
+        ohList.append('<p class="poetheme-schema-placeholder">'+esc(ohConfig.empty || '')+'</p>');
         return;
       }
       ohData.forEach(function(slot, index){
         var title = (ohConfig.title_prefix || 'Fascia oraria') + ' ' + (index + 1);
-        var html = '<div class="tsg-card tsg-oh-item tsg-hour-row" data-hour-index="'+index+'">';
-        html += '<div class="tsg-card-header"><strong class="tsg-card-title">'+esc(title)+'</strong>';
+        var html = '<div class="poetheme-schema-card poetheme-schema-oh-item poetheme-schema-hour-row" data-hour-index="'+index+'">';
+        html += '<div class="poetheme-schema-card-header"><strong class="poetheme-schema-card-title">'+esc(title)+'</strong>';
         if (ohData.length > 1) {
-          html += '<button type="button" class="button-link-delete tsg-hour-remove">'+esc(ohConfig.remove_label || '')+'</button>';
+          html += '<button type="button" class="button-link-delete poetheme-schema-hour-remove">'+esc(ohConfig.remove_label || '')+'</button>';
         }
         html += '</div>';
-        html += '<div class="tsg-day-list">'+buildDayCheckboxes(slot.days || [])+'</div>';
-        html += '<div class="tsg-inline">';
+        html += '<div class="poetheme-schema-day-list">'+buildDayCheckboxes(slot.days || [])+'</div>';
+        html += '<div class="poetheme-schema-inline">';
         html += buildHourInput('opens', slot.opens || '', 'oh', index, index);
         html += buildHourInput('closes', slot.closes || '', 'oh', index, index);
         html += buildHourInput('validFrom', slot.validFrom || '', 'oh', index, index);
@@ -835,35 +838,35 @@ function tsg_render_options_page(){
     serializeContactPoints();
     serializeOpeningHours();
 
-    $('#tsg_cp_add_btn').on('click', function(e){
+    $('#poetheme_schema_cp_add_btn').on('click', function(e){
       e.preventDefault();
       cpData.push(createEmptyCp());
       renderContactPoints();
       serializeContactPoints();
     });
 
-    $(document).on('click', '.tsg-cp-remove', function(e){
+    $(document).on('click', '.poetheme-schema-cp-remove', function(e){
       e.preventDefault();
-      var index = $(this).closest('.tsg-cp-item').data('index');
+      var index = $(this).closest('.poetheme-schema-cp-item').data('index');
       cpData.splice(index,1);
       if (!cpData.length) { cpData.push(createEmptyCp()); }
       renderContactPoints();
       serializeContactPoints();
     });
 
-    $(document).on('input change', '.tsg-cp-field', function(){
-      var $card = $(this).closest('.tsg-cp-item');
+    $(document).on('input change', '.poetheme-schema-cp-field', function(){
+      var $card = $(this).closest('.poetheme-schema-cp-item');
       var index = $card.data('index');
       var field = $(this).data('field');
       if (typeof index === 'undefined' || !cpData[index]) return;
       cpData[index][field] = $(this).val();
-      $card.find('.tsg-card-title').text(getCpTitle(cpData[index], index));
+      $card.find('.poetheme-schema-card-title').text(getCpTitle(cpData[index], index));
       serializeContactPoints();
     });
 
-    $(document).on('click', '.tsg-cp-add-hour', function(e){
+    $(document).on('click', '.poetheme-schema-cp-add-hour', function(e){
       e.preventDefault();
-      var index = $(this).closest('.tsg-cp-item').data('index');
+      var index = $(this).closest('.poetheme-schema-cp-item').data('index');
       if (typeof index === 'undefined' || !cpData[index]) return;
       cpData[index].hours = cpData[index].hours || [];
       cpData[index].hours.push(createEmptySlot());
@@ -871,11 +874,11 @@ function tsg_render_options_page(){
       serializeContactPoints();
     });
 
-    $(document).on('click', '.tsg-hour-remove', function(e){
+    $(document).on('click', '.poetheme-schema-hour-remove', function(e){
       e.preventDefault();
-      var $row = $(this).closest('.tsg-hour-row');
+      var $row = $(this).closest('.poetheme-schema-hour-row');
       var slotIndex = $row.data('hour-index');
-      var $contact = $row.closest('.tsg-cp-item');
+      var $contact = $row.closest('.poetheme-schema-cp-item');
       if ($contact.length) {
         var cpIndex = $contact.data('index');
         if (cpData[cpIndex] && cpData[cpIndex].hours) {
@@ -893,11 +896,11 @@ function tsg_render_options_page(){
       }
     });
 
-    $(document).on('change', '.tsg-hour-day', function(){
-      var $row = $(this).closest('.tsg-hour-row');
+    $(document).on('change', '.poetheme-schema-hour-day', function(){
+      var $row = $(this).closest('.poetheme-schema-hour-row');
       var days = [];
-      $row.find('.tsg-hour-day:checked').each(function(){ days.push($(this).val()); });
-      var $contact = $row.closest('.tsg-cp-item');
+      $row.find('.poetheme-schema-hour-day:checked').each(function(){ days.push($(this).val()); });
+      var $contact = $row.closest('.poetheme-schema-cp-item');
       if ($contact.length) {
         var cpIndex = $contact.data('index');
         var slotIndex = $row.data('hour-index');
@@ -914,11 +917,11 @@ function tsg_render_options_page(){
       }
     });
 
-    $(document).on('input change', '.tsg-hour-field', function(){
-      var $row = $(this).closest('.tsg-hour-row');
+    $(document).on('input change', '.poetheme-schema-hour-field', function(){
+      var $row = $(this).closest('.poetheme-schema-hour-row');
       var field = $(this).data('field');
       var value = $(this).val();
-      var $contact = $row.closest('.tsg-cp-item');
+      var $contact = $row.closest('.poetheme-schema-cp-item');
       if ($contact.length) {
         var cpIndex = $contact.data('index');
         var slotIndex = $row.data('hour-index');
@@ -935,20 +938,20 @@ function tsg_render_options_page(){
       }
     });
 
-    $('#tsg_oh_add_btn').on('click', function(e){
+    $('#poetheme_schema_oh_add_btn').on('click', function(e){
       e.preventDefault();
       ohData.push(createEmptySlot());
       renderOpeningHours();
       serializeOpeningHours();
     });
 
-    $('#tsg-form').on('submit', function(){
+    $('#poetheme-schema-form').on('submit', function(){
       serializeContactPoints();
       serializeOpeningHours();
     });
 
-    var $publisherType = $('#tsg_publisher_type');
-    var $publisherId = $('#tsg_pub_id');
+    var $publisherType = $('#poetheme_schema_publisher_type');
+    var $publisherId = $('#poetheme_schema_pub_id');
 
     var defaultPublisherBase = $publisherId.data('default-base') || '';
     var initialBase = ($publisherId.val() || '').split('#')[0];
@@ -967,10 +970,10 @@ function tsg_render_options_page(){
 
     function toggleBoxes(){
       var t = $publisherType.val();
-      $('.tsg-org, .tsg-lb, .tsg-person').hide();
-      if (t === 'Organization' || t === 'OnlineStore') { $('.tsg-org').show(); }
-      if (t === 'LocalBusiness') { $('.tsg-org, .tsg-lb').show(); }
-      if (t === 'Person') { $('.tsg-person').show(); }
+      $('.poetheme-schema-org, .poetheme-schema-lb, .poetheme-schema-person').hide();
+      if (t === 'Organization' || t === 'OnlineStore') { $('.poetheme-schema-org').show(); }
+      if (t === 'LocalBusiness') { $('.poetheme-schema-org, .poetheme-schema-lb').show(); }
+      if (t === 'Person') { $('.poetheme-schema-person').show(); }
     }
 
     function updatePublisherId(){
@@ -1014,7 +1017,7 @@ function tsg_render_options_page(){
         e.preventDefault();
         if (typeof wp === 'undefined' || !wp.media) { return; }
         if (frame) { frame.open(); return; }
-        frame = wp.media({ title:'<?php echo esc_js(__('Seleziona immagine','tsg')); ?>', button:{ text:'<?php echo esc_js(__('Usa immagine','tsg')); ?>' }, library:{ type:'image' }, multiple:false });
+        frame = wp.media({ title:'<?php echo esc_js(__('Seleziona immagine','poetheme')); ?>', button:{ text:'<?php echo esc_js(__('Usa immagine','poetheme')); ?>' }, library:{ type:'image' }, multiple:false });
         frame.on('select', function(){
           var at = frame.state().get('selection').first().toJSON();
           var $input = $(inputSelector);
@@ -1028,16 +1031,16 @@ function tsg_render_options_page(){
         frame.open();
       });
     }
-    bindUploader('#tsg_logo_btn', '#tsg_logo_url', function(at){
+    bindUploader('#poetheme_schema_logo_btn', '#poetheme_schema_logo_url', function(at){
       if (at && typeof at === 'object') {
-        if (at.width) { $('#tsg_logo_w').val(at.width); }
-        if (at.height) { $('#tsg_logo_h').val(at.height); }
+        if (at.width) { $('#poetheme_schema_logo_w').val(at.width); }
+        if (at.height) { $('#poetheme_schema_logo_h').val(at.height); }
       }
     });
-    bindUploader('#tsg_person_img_btn', '#tsg_person_image', function(at){
+    bindUploader('#poetheme_schema_person_img_btn', '#poetheme_schema_person_image', function(at){
       if (at && typeof at === 'object') {
-        if (at.width) { $('#tsg_person_image_w').val(at.width); }
-        if (at.height) { $('#tsg_person_image_h').val(at.height); }
+        if (at.width) { $('#poetheme_schema_person_image_w').val(at.width); }
+        if (at.height) { $('#poetheme_schema_person_image_h').val(at.height); }
       }
     });
   })(jQuery);
@@ -1049,7 +1052,7 @@ function tsg_render_options_page(){
 // =============================
 add_action('wp_head', function(){
   if (is_admin()) return;
-  $opt = tsg_get_options();
+  $opt = poetheme_schema_get_options();
   if (empty($opt['enable'])) return;
 
   $canonical = function_exists('wp_get_canonical_url') ? wp_get_canonical_url() : '';
@@ -1150,7 +1153,7 @@ add_action('wp_head', function(){
   ], function($v){ return $v !== '' && $v !== null; });
 
   // Breadcrumb semplice
-  $crumbs = [ [ '@type'=>'ListItem','position'=>1,'name'=>__('Home','tsg'),'item'=>home_url('/') ] ];
+  $crumbs = [ [ '@type'=>'ListItem','position'=>1,'name'=>__('Home','poetheme'),'item'=>home_url('/') ] ];
   if (!is_front_page()) {
     $crumbs[] = [ '@type'=>'ListItem','position'=>2,'name'=>wp_get_document_title(),'item'=>$canonical ];
   }
@@ -1171,7 +1174,7 @@ add_action('wp_head', function(){
 // =============================
 add_action('admin_enqueue_scripts', function($hook){
   $allowed_hooks = [
-    'appearance_page_tsg-schema-options',
+    'appearance_page_poetheme-schema-options',
     'poetheme-settings_page_poetheme-seo-schema',
   ];
 
