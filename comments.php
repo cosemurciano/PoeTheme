@@ -52,7 +52,7 @@ if ( post_password_required() ) {
         array(
             'title_reply_before' => '<h2 id="reply-title" class="text-xl font-semibold mt-8">',
             'title_reply_after'  => '</h2>',
-            'class_submit'       => 'bg-indigo-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-4 focus:ring-indigo-300',
+            'class_submit'       => 'bg-indigo-600 text-white px-4 py-2 rounded-md focus:ring-4 focus:ring-indigo-300',
         )
     );
     ?>

@@ -89,6 +89,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                 $attributes .= " class='" . esc_attr( implode( ' ', $classes ) ) . "'";
                 $attributes .= " data-poetheme-submenu='true'";
                 $attributes .= " data-depth='" . esc_attr( (string) ( $depth + 1 ) ) . "'";
+                $attributes .= " aria-hidden='true'";
 
                 $output .= "\n{$indent}<ul{$attributes}>\n";
                 return;
@@ -124,6 +125,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $attributes .= " class='" . esc_attr( implode( ' ', $classes ) ) . "'";
             $attributes .= " data-poetheme-submenu='true'";
             $attributes .= " data-depth='" . esc_attr( (string) ( $depth + 1 ) ) . "'";
+            $attributes .= " aria-hidden='true'";
 
             $output .= "\n{$indent}<ul{$attributes}>\n";
         }
