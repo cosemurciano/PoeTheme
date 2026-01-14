@@ -111,7 +111,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div class="flex items-center justify-between w-full md:w-auto gap-4">
                     <?php poetheme_the_logo(); ?>
-                    <button type="button" class="md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()">
+                    <button type="button" class="md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
                         <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
@@ -142,6 +142,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
     </div>
 
     <div
+        id="poetheme-mobile-menu"
         x-show="mobileOpen"
         x-cloak
         class="fixed inset-0 z-50 md:hidden"

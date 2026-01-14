@@ -10,6 +10,21 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 - Compatibile con RTL, traduzioni tramite file POT e widget-ready (sidebar e footer).
 - Opzioni tema dedicate (Generale e Logo) per personalizzare tagline, breadcrumb e branding.
 
+## Accessibility (WCAG 2.1 AA)
+Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, focus, form). La qualità finale dipende anche dai contenuti inseriti dagli editor.
+
+**Checklist tema**
+- Skip link visibile al focus e funzionante verso il contenuto principale.
+- Landmark semantici coerenti (header, nav, main con id target, footer).
+- Navigazione da tastiera completa (menu con dropdown e gestione ESC).
+- Focus visibile e coerente su link, pulsanti e form.
+- Form con etichette accessibili (label associate o aria-label descrittivi).
+
+**Dipende dai contenuti**
+- Contrasto effettivo del testo inserito.
+- Testi dei link/CTA descrittivi.
+- Alt text per immagini editoriali.
+
 ## Mappa architetturale
 - `functions.php`: bootstrap con costanti e include.
 - `inc/setup.php`: setup tema (supporti, menu, textdomain).
