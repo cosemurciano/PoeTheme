@@ -31,6 +31,14 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 - WordPress 6.0 o superiore.
 - PHP 7.4 o superiore.
 
+## Inline CSS Architecture
+L'output CSS inline viene generato in un unico `<style>` con id `poetheme-inline-css` e separato in tre blocchi semantici:
+- **core**: font e layout strutturale.
+- **design**: colori, spaziature e aspetti estetici.
+- **custom**: CSS personalizzato inserito dall'utente (solo utenti con capability valide).
+
+Per motivi di sicurezza è applicata una soglia massima di dimensione (~20 KB). Se la soglia viene superata, il blocco **custom** viene escluso mantenendo **core** + **design** e l'evento viene loggato solo con `WP_DEBUG` attivo.
+
 ## Installazione
 1. Copia la cartella del tema in `wp-content/themes/poetheme`.
 2. Attiva il tema da **Aspetto → Temi**.

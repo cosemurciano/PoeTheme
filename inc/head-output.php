@@ -13,48 +13,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Output custom fonts selected within the theme options.
+ * Build font-related CSS rules based on theme options.
+ *
+ * @return string
  */
-function poetheme_output_font_settings() {
+function poetheme_get_font_settings_css() {
     $font_styles = poetheme_prepare_font_styles();
 
     if ( empty( $font_styles['font_faces'] ) && empty( $font_styles['css_rules'] ) ) {
-        return;
+        return '';
     }
 
-    $css = poetheme_sanitize_inline_css( $font_styles['font_faces'] . $font_styles['css_rules'] );
-
-    if ( '' === $css ) {
-        return;
-    }
-
-    echo '<style id="poetheme-font-settings">' . esc_html( $css ) . '</style>';
+    return poetheme_sanitize_inline_css( $font_styles['font_faces'] . $font_styles['css_rules'] );
 }
-add_action( 'wp_head', 'poetheme_output_font_settings', 85 );
 
 /**
- * Output layout CSS variables based on global settings.
+ * Build layout CSS variables based on global settings.
+ *
+ * @return string
  */
-function poetheme_output_layout_settings() {
+function poetheme_get_layout_settings_css() {
     $options = poetheme_get_global_options();
     $width   = isset( $options['site_width'] ) ? absint( $options['site_width'] ) : 1200;
     $width   = max( 960, min( 1920, $width ) );
 
     $css = sprintf( ':root{--poetheme-site-width:%dpx;}', $width );
-    $css = poetheme_sanitize_inline_css( $css );
 
-    if ( '' === $css ) {
-        return;
-    }
-
-    printf( '<style id="poetheme-layout-settings">%s</style>', esc_html( $css ) );
+    return poetheme_sanitize_inline_css( $css );
 }
-add_action( 'wp_head', 'poetheme_output_layout_settings', 90 );
 
 /**
- * Output design-related CSS variables based on global settings.
+ * Build design-related CSS variables based on global settings.
+ *
+ * @return string
  */
-function poetheme_output_design_settings() {
+function poetheme_get_design_settings_css() {
     $global_options       = poetheme_get_global_options();
     $color_options        = poetheme_get_color_options();
     $raw_color_options    = get_option( 'poetheme_colors', array() );
@@ -281,31 +274,120 @@ function poetheme_output_design_settings() {
         $styles = poetheme_sanitize_inline_css( $styles );
     }
 
-    if ( $styles ) {
-        echo '<style id="poetheme-design-settings">' . esc_html( $styles ) . '</style>';
-    }
+    return $styles ? $styles : '';
 }
-add_action( 'wp_head', 'poetheme_output_design_settings', 95 );
 
 /**
- * Output custom CSS defined in the theme options.
+ * Build custom CSS defined in the theme options.
+ *
+ * @return string
  */
-function poetheme_output_custom_css() {
+function poetheme_get_custom_css() {
+    if ( ! poetheme_user_can_manage_options() ) {
+        return '';
+    }
+
     $custom_css = get_option( 'poetheme_custom_css', '' );
 
     if ( empty( $custom_css ) ) {
-        return;
+        return '';
     }
 
     $custom_css = poetheme_sanitize_inline_css( $custom_css );
 
     if ( '' === $custom_css ) {
+        return '';
+    }
+
+    return $custom_css;
+}
+
+/**
+ * Build the final inline CSS output for the theme.
+ *
+ * @return array
+ */
+function poetheme_build_inline_css() {
+    $css_blocks = array(
+        'core'   => poetheme_get_font_settings_css() . poetheme_get_layout_settings_css(),
+        'design' => poetheme_get_design_settings_css(),
+        'custom' => poetheme_get_custom_css(),
+    );
+
+    foreach ( $css_blocks as $key => $value ) {
+        $css_blocks[ $key ] = $value ? $value : '';
+    }
+
+    $max_bytes   = 20 * 1024;
+    $combined    = implode( '', $css_blocks );
+    $total_bytes = strlen( $combined );
+
+    if ( $total_bytes > $max_bytes ) {
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log(
+                sprintf(
+                    'PoeTheme inline CSS exceeded %d bytes (%d bytes). Custom CSS excluded.',
+                    $max_bytes,
+                    $total_bytes
+                )
+            );
+        }
+
+        $css_blocks['custom'] = '';
+        $combined             = $css_blocks['core'] . $css_blocks['design'];
+    }
+
+    return array(
+        'css'    => $combined,
+        'blocks' => $css_blocks,
+    );
+}
+
+/**
+ * Output inline CSS in a single, traceable style tag.
+ */
+function poetheme_output_inline_css() {
+    $result = poetheme_build_inline_css();
+    $css    = $result['css'];
+
+    if ( '' === $css ) {
         return;
     }
 
-    echo '<style id="poetheme-custom-css">' . esc_html( $custom_css ) . '</style>';
+    $output = '';
+
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        $sizes = array(
+            'core'   => strlen( $result['blocks']['core'] ),
+            'design' => strlen( $result['blocks']['design'] ),
+            'custom' => strlen( $result['blocks']['custom'] ),
+        );
+
+        $output .= "/* PoeTheme Inline CSS\n";
+        $output .= sprintf( " * core:   %s KB\n", poetheme_format_inline_css_size( $sizes['core'] ) );
+        $output .= sprintf( " * design: %s KB\n", poetheme_format_inline_css_size( $sizes['design'] ) );
+        $output .= sprintf( " * custom: %s KB\n", poetheme_format_inline_css_size( $sizes['custom'] ) );
+        $output .= " */\n";
+    }
+
+    $output .= $css;
+
+    printf( '<style id="poetheme-inline-css">%s</style>', esc_html( $output ) );
 }
-add_action( 'wp_head', 'poetheme_output_custom_css', 120 );
+add_action( 'wp_head', 'poetheme_output_inline_css', 95 );
+
+/**
+ * Format a byte count to kilobytes for debug output.
+ *
+ * @param int $bytes Bytes count.
+ * @return string
+ */
+function poetheme_format_inline_css_size( $bytes ) {
+    $bytes = max( 0, (int) $bytes );
+    $kb    = $bytes / 1024;
+
+    return number_format( $kb, 2 );
+}
 
 if ( function_exists( 'poetheme_schema_output_jsonld' ) ) {
     add_action( 'wp_head', 'poetheme_schema_output_jsonld', 20 );
