@@ -254,7 +254,13 @@ function poetheme_output_font_settings() {
         return;
     }
 
-    echo '<style id="poetheme-font-settings">' . $font_styles['font_faces'] . $font_styles['css_rules'] . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    $css = poetheme_sanitize_inline_css( $font_styles['font_faces'] . $font_styles['css_rules'] );
+
+    if ( '' === $css ) {
+        return;
+    }
+
+    echo '<style id="poetheme-font-settings">' . esc_html( $css ) . '</style>';
 }
 add_action( 'wp_head', 'poetheme_output_font_settings', 85 );
 
@@ -268,13 +274,13 @@ function poetheme_output_custom_css() {
         return;
     }
 
-    $custom_css = trim( wp_kses( $custom_css, array() ) );
+    $custom_css = poetheme_sanitize_inline_css( $custom_css );
 
     if ( '' === $custom_css ) {
         return;
     }
 
-    echo '<style id="poetheme-custom-css">' . $custom_css . '</style>';
+    echo '<style id="poetheme-custom-css">' . esc_html( $custom_css ) . '</style>';
 }
 add_action( 'wp_head', 'poetheme_output_custom_css', 120 );
 
@@ -286,7 +292,14 @@ function poetheme_output_layout_settings() {
     $width   = isset( $options['site_width'] ) ? absint( $options['site_width'] ) : 1200;
     $width   = max( 960, min( 1920, $width ) );
 
-    printf( '<style id="poetheme-layout-settings">:root{--poetheme-site-width:%dpx;}</style>', $width );
+    $css = sprintf( ':root{--poetheme-site-width:%dpx;}', $width );
+    $css = poetheme_sanitize_inline_css( $css );
+
+    if ( '' === $css ) {
+        return;
+    }
+
+    printf( '<style id="poetheme-layout-settings">%s</style>', esc_html( $css ) );
 }
 add_action( 'wp_head', 'poetheme_output_layout_settings', 90 );
 
@@ -421,6 +434,7 @@ function poetheme_output_design_settings() {
 
     $styles .= 'body.poetheme-has-color-settings #primary-content .entry-content a{color:var(--poetheme-general-link-color) !important;}';
 
+    // TODO: Consolidare i selettori ripetuti del contenuto in un asset CSS condiviso per ridurre il bloat inline.
     $styles .= 'body.poetheme-has-color-settings main{color:var(--poetheme-content-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings main p,body.poetheme-has-color-settings main li,body.poetheme-has-color-settings main span,body.poetheme-has-color-settings main td,body.poetheme-has-color-settings main th,body.poetheme-has-color-settings main dd,body.poetheme-has-color-settings main dt{color:var(--poetheme-content-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings main strong,body.poetheme-has-color-settings main b{color:var(--poetheme-content-strong-color) !important;}';
@@ -478,6 +492,7 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-post-title a{color:inherit !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-category-title{color:var(--poetheme-category-title-color) !important;background-color:var(--poetheme-category-title-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-category-title a{color:inherit !important;}';
+    // TODO: Accorpare le regole dei widget del footer in un foglio esterno per evitare duplicazioni inline.
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets{background-color:var(--poetheme-footer-widget-background) !important;color:var(--poetheme-footer-widget-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget,body.poetheme-has-color-settings .poetheme-footer-widgets .widget p,body.poetheme-has-color-settings .poetheme-footer-widgets .widget li,body.poetheme-has-color-settings .poetheme-footer-widgets .widget span{color:var(--poetheme-footer-widget-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets .widget-title,body.poetheme-has-color-settings .poetheme-footer-widgets .widgettitle{color:var(--poetheme-footer-widget-heading-h2-color) !important;background-color:var(--poetheme-footer-widget-heading-h2-background) !important;}';
@@ -512,7 +527,11 @@ function poetheme_output_design_settings() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets a:hover,body.poetheme-has-color-settings .poetheme-footer-widgets a:focus{color:var(--poetheme-footer-widget-link-color) !important;}';
 
     if ( $styles ) {
-        echo '<style id="poetheme-design-settings">' . $styles . '</style>';
+        $styles = poetheme_sanitize_inline_css( $styles );
+    }
+
+    if ( $styles ) {
+        echo '<style id="poetheme-design-settings">' . esc_html( $styles ) . '</style>';
     }
 }
 add_action( 'wp_head', 'poetheme_output_design_settings', 95 );

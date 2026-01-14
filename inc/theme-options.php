@@ -714,6 +714,10 @@ function poetheme_sanitize_font_options( $input ) {
     $default = poetheme_get_default_font_options();
     $output  = poetheme_get_font_options();
 
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return $output;
+    }
+
     foreach ( poetheme_get_font_field_config() as $field ) {
         if ( empty( $field['option_key'] ) ) {
             continue;
@@ -1136,6 +1140,10 @@ function poetheme_prepare_font_styles() {
 function poetheme_sanitize_global_options( $input ) {
     $defaults = poetheme_get_default_global_options();
 
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return poetheme_get_global_options();
+    }
+
     if ( ! is_array( $input ) ) {
         $input = array();
     }
@@ -1304,6 +1312,10 @@ function poetheme_sanitize_color_options( $input ) {
         'header_disable_shadow',
         'footer_widget_background_transparent',
     );
+
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return poetheme_get_color_options();
+    }
 
     if ( ! is_array( $input ) ) {
         $input = array();
@@ -1873,7 +1885,7 @@ function poetheme_add_options_pages() {
         __( 'SEO Schema', 'poetheme' ),
         'manage_options',
         'poetheme-seo-schema',
-        'tsg_render_options_page'
+        'poetheme_schema_render_options_page'
     );
 }
 add_action( 'admin_menu', 'poetheme_add_options_pages' );
@@ -4231,14 +4243,30 @@ function poetheme_sanitize_logo_options( $input ) {
  * @param string $css Raw CSS code.
  * @return string
  */
+function poetheme_sanitize_inline_css( $css ) {
+    $css = (string) $css;
+    $css = wp_kses_no_null( $css );
+    $css = wp_strip_all_tags( $css );
+    $css = preg_replace( '#/\*.*?\*/#s', '', $css );
+    $css = preg_replace( '/@import[^;]+;?/i', '', $css );
+    $css = preg_replace( '/@charset[^;]+;?/i', '', $css );
+    $css = trim( $css );
+
+    return $css;
+}
+
 function poetheme_sanitize_custom_css( $css ) {
     if ( empty( $css ) ) {
         return '';
     }
 
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return get_option( 'poetheme_custom_css', '' );
+    }
+
     $css = (string) $css;
 
-    return wp_kses( $css, array() );
+    return poetheme_sanitize_inline_css( $css );
 }
 
 /**
