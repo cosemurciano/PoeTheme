@@ -2,6 +2,9 @@
 /**
  * Navigation helpers and custom walkers.
  *
+ * Responsibility: define navigation-related helpers and walker classes.
+ * It must NOT register theme options or enqueue assets.
+ *
  * @package PoeTheme
  */
 

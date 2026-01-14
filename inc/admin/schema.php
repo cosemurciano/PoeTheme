@@ -1,28 +1,29 @@
 <?php
 /**
- * Theme-integrated JSON-LD Schema Graph (WebSite + Organization/Person)
- * ---------------------------------------------------------------
- * Implementazione DIRETTA nel tema :
- * - Voce di menu del tema: SEO Schema
- * - Selettore tipologia Publisher (Organization / OnlineStore / LocalBusiness / Person)
- * - Campi necessari per WebSite e Publisher
- * - Output di un grafo JSON-LD unico in <head>
+ * Theme-integrated JSON-LD Schema Graph (WebSite + Organization/Person).
  *
- * ISTRUZIONI
- * 1) Salva il nuovo file in: /inc/schema-jsonld.php
- * 2) Nel file functions.php del tema aggiungi:  require_once get_template_directory() . '/inc/schema-jsonld.php';
- * 3) In SEO Schema (JSON-LD), compila e salva.
+ * Responsibility: manage schema settings and render the JSON-LD graph.
+ * It must NOT handle unrelated theme options or front-end assets.
+ *
+ * @package PoeTheme
  */
 
-if (!defined('ABSPATH')) { exit; }
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
-add_action('admin_init', function(){
-  register_setting('poetheme_schema_group', 'poetheme_schema_options', [
-    'type' => 'array',
-    'sanitize_callback' => 'poetheme_schema_sanitize_options',
-    'default' => []
-  ]);
-});
+function poetheme_schema_register_settings() {
+    register_setting(
+        'poetheme_schema_group',
+        'poetheme_schema_options',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'poetheme_schema_sanitize_options',
+            'default'           => array(),
+        )
+    );
+}
+add_action( 'admin_init', 'poetheme_schema_register_settings' );
 
 function poetheme_schema_default_options(){
   $site = home_url('/');
@@ -89,7 +90,7 @@ function poetheme_schema_get_options(){
 
 function poetheme_schema_sanitize_options($input){
   $defaults = poetheme_schema_default_options();
-  if ( ! current_user_can('manage_options') ) {
+  if ( ! poetheme_user_can_manage_options() ) {
     return wp_parse_args( get_option('poetheme_schema_options', []), $defaults );
   }
   $clean = [];
@@ -113,7 +114,9 @@ function poetheme_schema_sanitize_options($input){
 // =============================
 
 function poetheme_schema_render_options_page(){
-  if (!current_user_can('manage_options')) return;
+  if ( ! poetheme_user_can_manage_options() ) {
+    return;
+  }
   wp_enqueue_media();
   $opt = poetheme_schema_get_options();
   $default_pub_base = trailingslashit( home_url() );
@@ -1050,15 +1053,22 @@ function poetheme_schema_render_options_page(){
 // =============================
 // =  FRONTEND: OUTPUT JSON-LD =
 // =============================
-add_action('wp_head', function(){
-  if (is_admin()) return;
+function poetheme_schema_output_jsonld() {
+  if ( is_admin() ) {
+    return;
+  }
+
   $opt = poetheme_schema_get_options();
-  if (empty($opt['enable'])) return;
+  if ( empty( $opt['enable'] ) ) {
+    return;
+  }
 
-  $canonical = function_exists('wp_get_canonical_url') ? wp_get_canonical_url() : '';
-  if (!$canonical) { $canonical = is_singular() ? get_permalink() : home_url(add_query_arg([])); }
+  $canonical = function_exists( 'wp_get_canonical_url' ) ? wp_get_canonical_url() : '';
+  if ( ! $canonical ) {
+    $canonical = is_singular() ? get_permalink() : home_url( add_query_arg( [] ) );
+  }
 
-  $website = array_filter([
+  $website = array_filter( [
     '@type' => 'WebSite',
     '@id'   => $opt['website_id'],
     'url'   => $opt['website_url'],
@@ -1066,7 +1076,7 @@ add_action('wp_head', function(){
     'alternateName' => $opt['website_alt'] ?: null,
     'inLanguage' => $opt['website_lang'],
     'description'=> $opt['website_desc'] ?: null,
-  ], function($v){ return $v !== '' && $v !== null; });
+  ], function( $v ) { return $v !== '' && $v !== null; } );
 
   $publisher = [
     '@type' => $opt['publisher_type'],
@@ -1074,112 +1084,123 @@ add_action('wp_head', function(){
     'name'  => $opt['pub_name'],
     'url'   => $opt['pub_url'],
     'description' => $opt['pub_desc'] ?: null,
-    'logo'  => ($opt['pub_logo_url']? array_filter([
+    'logo'  => ( $opt['pub_logo_url'] ? array_filter( [
       '@type'=>'ImageObject','url'=>$opt['pub_logo_url'],
-      'width' => $opt['pub_logo_w']? (int)$opt['pub_logo_w'] : null,
-      'height'=> $opt['pub_logo_h']? (int)$opt['pub_logo_h'] : null,
-    ]) : null),
-    'sameAs'=> (function($txt){
-      $arr = array_filter(array_map('trim', preg_split("/(\r?\n)+/", (string)$txt)));
-      return $arr ? array_values($arr) : null;
+      'width' => $opt['pub_logo_w']? (int) $opt['pub_logo_w'] : null,
+      'height'=> $opt['pub_logo_h']? (int) $opt['pub_logo_h'] : null,
+    ] ) : null ),
+    'sameAs'=> (function( $txt ) {
+      $arr = array_filter( array_map( 'trim', preg_split( "/(\r?\n)+/", (string) $txt ) ) );
+      return $arr ? array_values( $arr ) : null;
     })($opt['pub_sameas']),
   ];
 
   // ContactPoint JSON
-  $cps = json_decode($opt['pub_contactpoints'] ?: '[]', true);
-  if (json_last_error() !== JSON_ERROR_NONE) $cps = [];
+  $cps = json_decode( $opt['pub_contactpoints'] ?: '[]', true );
+  if ( json_last_error() !== JSON_ERROR_NONE ) {
+    $cps = [];
+  }
   $publisher['contactPoint'] = $cps ?: null;
 
-  if ($opt['publisher_type'] !== 'Person') {
+  if ( $opt['publisher_type'] !== 'Person' ) {
     // Organization / Store fields
-    $addr = array_filter([
+    $addr = array_filter( [
       '@type' => 'PostalAddress',
       'streetAddress'   => $opt['org_addr_street'] ?: null,
       'addressLocality' => $opt['org_addr_city'] ?: null,
       'addressRegion'   => $opt['org_addr_region'] ?: null,
       'postalCode'      => $opt['org_addr_postal'] ?: null,
       'addressCountry'  => $opt['org_addr_country'] ?: null,
-    ], function($v){ return $v !== '' && $v !== null; });
+    ], function( $v ) { return $v !== '' && $v !== null; } );
 
-    $publisher = array_filter(array_merge($publisher, [
+    $publisher = array_filter( array_merge( $publisher, [
       'legalName'     => $opt['org_legal'] ?: null,
       'alternateName' => $opt['org_alt'] ?: null,
       'telephone'     => $opt['org_tel'] ?: null,
       'vatID'         => $opt['org_vat'] ?: null,
       'taxID'         => $opt['org_tax'] ?: null,
       'address'       => $addr ?: null,
-    ]), function($v){ return $v !== '' && $v !== null; });
+    ] ), function( $v ) { return $v !== '' && $v !== null; } );
 
-    if ($opt['publisher_type'] === 'LocalBusiness') {
+    if ( $opt['publisher_type'] === 'LocalBusiness' ) {
       // LB extras
-      $imgs = array_filter(array_map('trim', preg_split("/(\r?\n)+/", (string)$opt['lb_images'])));
-      $oh = json_decode($opt['lb_openinghours'] ?: '[]', true);
-      if (json_last_error() !== JSON_ERROR_NONE) $oh = [];
+      $imgs = array_filter( array_map( 'trim', preg_split( "/(\r?\n)+/", (string) $opt['lb_images'] ) ) );
+      $oh = json_decode( $opt['lb_openinghours'] ?: '[]', true );
+      if ( json_last_error() !== JSON_ERROR_NONE ) {
+        $oh = [];
+      }
       $geo = ( $opt['lb_geo_lat'] !== '' && $opt['lb_geo_lng'] !== '' ) ? [
         '@type' => 'GeoCoordinates',
-        'latitude' => (float)$opt['lb_geo_lat'],
-        'longitude'=> (float)$opt['lb_geo_lng'],
+        'latitude' => (float) $opt['lb_geo_lat'],
+        'longitude'=> (float) $opt['lb_geo_lng'],
       ] : null;
       $publisher['priceRange'] = $opt['lb_pricerange'] ?: null;
-      if ($geo) $publisher['geo'] = $geo;
-      if ($imgs) $publisher['image'] = array_map(function($u){ return ['@type'=>'ImageObject','url'=>$u]; }, $imgs);
-      if ($oh) $publisher['openingHoursSpecification'] = $oh;
+      if ( $geo ) {
+        $publisher['geo'] = $geo;
+      }
+      if ( $imgs ) {
+        $publisher['image'] = array_map( function( $u ) { return ['@type'=>'ImageObject','url'=>$u]; }, $imgs );
+      }
+      if ( $oh ) {
+        $publisher['openingHoursSpecification'] = $oh;
+      }
     }
   } else {
     // Person extras
-    $img = ($opt['person_image_url']? array_filter([
+    $img = ( $opt['person_image_url']? array_filter( [
       '@type'=>'ImageObject','url'=>$opt['person_image_url'],
-      'width' => $opt['person_image_w']? (int)$opt['person_image_w'] : null,
-      'height'=> $opt['person_image_h']? (int)$opt['person_image_h'] : null,
-    ]) : null);
-    $publisher = array_filter(array_merge($publisher, [
+      'width' => $opt['person_image_w']? (int) $opt['person_image_w'] : null,
+      'height'=> $opt['person_image_h']? (int) $opt['person_image_h'] : null,
+    ] ) : null );
+    $publisher = array_filter( array_merge( $publisher, [
       'image'    => $img ?: null,
       'jobTitle' => $opt['person_job'] ?: null,
       'worksFor' => $opt['person_worksfor'] ?: null,
       'email'    => $opt['person_email'] ?: null,
       'url'      => $opt['person_url'] ?: $publisher['url'],
-    ]), function($v){ return $v !== '' && $v !== null; });
+    ] ), function( $v ) { return $v !== '' && $v !== null; } );
   }
 
-  $webpage = array_filter([
+  $webpage = array_filter( [
     '@type' => 'WebPage',
-    '@id'   => trailingslashit($canonical).'#webpage',
+    '@id'   => trailingslashit( $canonical ) . '#webpage',
     'url'   => $canonical,
     'name'  => wp_get_document_title(),
     'isPartOf' => [ '@id' => $website['@id'] ],
     'inLanguage' => $opt['website_lang'],
     'publisher'  => [ '@id' => $publisher['@id'] ],
     'mainEntityOfPage' => $canonical,
-  ], function($v){ return $v !== '' && $v !== null; });
+  ], function( $v ) { return $v !== '' && $v !== null; } );
 
   // Breadcrumb semplice
-  $crumbs = [ [ '@type'=>'ListItem','position'=>1,'name'=>__('Home','poetheme'),'item'=>home_url('/') ] ];
-  if (!is_front_page()) {
+  $crumbs = [ [ '@type'=>'ListItem','position'=>1,'name'=>__( 'Home', 'poetheme' ),'item'=>home_url('/') ] ];
+  if ( ! is_front_page() ) {
     $crumbs[] = [ '@type'=>'ListItem','position'=>2,'name'=>wp_get_document_title(),'item'=>$canonical ];
   }
   $breadcrumb = [
     '@type' => 'BreadcrumbList',
-    '@id'   => trailingslashit($canonical).'#breadcrumb',
+    '@id'   => trailingslashit( $canonical ) . '#breadcrumb',
     'itemListElement' => $crumbs,
   ];
 
-  $graph = array_values(array_filter([ $website, $publisher, $webpage, $breadcrumb ]));
+  $graph = array_values( array_filter( [ $website, $publisher, $webpage, $breadcrumb ] ) );
   $payload = [ '@context' => 'https://schema.org', '@graph' => $graph ];
 
-  echo '<script type="application/ld+json">'. wp_json_encode($payload, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) .'</script>' . "\n";
-}, 20);
+  echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+}
 
 // =============================
 // =  ASSET ADMIN (solo pagina) =
 // =============================
-add_action('admin_enqueue_scripts', function($hook){
+function poetheme_schema_admin_assets( $hook ) {
   $allowed_hooks = [
     'appearance_page_poetheme-schema-options',
     'poetheme-settings_page_poetheme-seo-schema',
   ];
 
-  if (!in_array($hook, $allowed_hooks, true)) {
+  if ( ! in_array( $hook, $allowed_hooks, true ) ) {
     return;
   }
   wp_enqueue_media(); // per media uploader
-});
+}
+add_action( 'admin_enqueue_scripts', 'poetheme_schema_admin_assets' );
