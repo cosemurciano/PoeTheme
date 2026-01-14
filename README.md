@@ -10,6 +10,24 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 - Compatibile con RTL, traduzioni tramite file POT e widget-ready (sidebar e footer).
 - Opzioni tema dedicate (Generale e Logo) per personalizzare tagline, breadcrumb e branding.
 
+## SEO & Schema Policy
+Il tema gestisce un set minimo di dati strutturati JSON-LD e breadcrumb HTML in modo compatibile con i plugin SEO più diffusi.
+
+**Cosa gestisce nativamente il tema**
+- Schema JSON-LD contestuale (Home, articoli, pagine, archivi) con output pulito e senza campi vuoti.
+- Breadcrumb HTML accessibili con markup Schema.org coerente con la gerarchia delle pagine.
+
+**Quando lo schema del tema è attivo**
+- Lo schema JSON-LD è attivo solo se l’opzione schema del tema è abilitata e non sono rilevati plugin SEO.
+
+**Compatibilità con plugin SEO**
+- Se sono attivi Yoast SEO, Rank Math o SEOPress, lo schema JSON-LD del tema viene automaticamente disattivato.
+- I breadcrumb HTML del tema restano disponibili se non duplicati dal plugin.
+
+**Raccomandazioni d’uso**
+- Se utilizzi un plugin SEO, lascia attivo il tema: lo schema del tema si disattiva automaticamente per evitare duplicazioni.
+- In assenza di plugin SEO, il tema fornisce un fallback affidabile per dati strutturati e breadcrumb.
+
 ## Accessibility (WCAG 2.1 AA)
 Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, focus, form). La qualità finale dipende anche dai contenuti inseriti dagli editor.
 
