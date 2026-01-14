@@ -10,8 +10,20 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 - Compatibile con RTL, traduzioni tramite file POT e widget-ready (sidebar e footer).
 - Opzioni tema dedicate (Generale e Logo) per personalizzare tagline, breadcrumb e branding.
 
+## Mappa architetturale
+- `functions.php`: bootstrap con costanti e include.
+- `inc/setup.php`: setup tema (supporti, menu, textdomain).
+- `inc/assets.php`: enqueue asset frontend/editor.
+- `inc/widgets.php`: registrazione sidebar e widget.
+- `inc/head-output.php`: output dinamico nel `<head>`.
+- `inc/security.php`: capability check e sanitizzazione condivisa.
+- `inc/admin/options.php`: opzioni tema + UI admin.
+- `inc/admin/schema.php`: schema JSON-LD + pagina admin dedicata.
+- `inc/helpers/`: utility e sanitizzazione riutilizzabili.
+- `inc/template-tags.php` / `inc/nav-menu.php`: helper di rendering.
+
 ## Struttura cartelle
-- `inc/` funzioni di supporto e opzioni tema.
+- `inc/` moduli del tema e logica di supporto, suddivisi per dominio.
 - `assets/css/` stili dedicati all'editor a blocchi.
 - `languages/` file di traduzione `.pot`.
 

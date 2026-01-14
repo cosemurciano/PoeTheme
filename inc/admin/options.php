@@ -1,6 +1,9 @@
 <?php
 /**
- * Theme options pages and helpers.
+ * Theme options pages, settings, and related helpers.
+ *
+ * Responsibility: define option defaults, sanitization, and admin UI.
+ * It must NOT output front-end markup or enqueue public assets.
  *
  * @package PoeTheme
  */
@@ -167,172 +170,6 @@ function poetheme_get_default_spacing_group() {
         'margin'  => $sides,
         'padding' => $sides,
     );
-}
-
-function poetheme_sanitize_spacing_value( $value, $allow_auto = false, $allow_negative = false ) {
-    $value = trim( (string) $value );
-
-    if ( '' === $value ) {
-        return '';
-    }
-
-    if ( $allow_auto && 'auto' === strtolower( $value ) ) {
-        return 'auto';
-    }
-
-    $unit = '';
-    if ( preg_match( '/(px|rem|em|%|vh|vw)$/i', $value, $unit_match ) ) {
-        $unit        = strtolower( $unit_match[1] );
-        $numeric_part = substr( $value, 0, -strlen( $unit_match[1] ) );
-    } else {
-        $numeric_part = $value;
-    }
-
-    $numeric_part = trim( str_replace( ',', '.', $numeric_part ) );
-
-    if ( '' === $numeric_part ) {
-        return '';
-    }
-
-    if ( ! is_numeric( $numeric_part ) ) {
-        return '';
-    }
-
-    $number = (float) $numeric_part;
-
-    if ( ! $allow_negative && $number < 0 ) {
-        return '';
-    }
-
-    if ( 0.0 === $number ) {
-        return '0';
-    }
-
-    if ( '' === $unit ) {
-        $unit = 'px';
-    }
-
-    $formatted = poetheme_format_number_for_css( $number );
-
-    if ( '' === $formatted ) {
-        $formatted = '0';
-    }
-
-    return $formatted . $unit;
-}
-
-function poetheme_sanitize_spacing_group( $value, $default = array() ) {
-    $default_group = poetheme_get_default_spacing_group();
-
-    if ( ! is_array( $default ) || empty( $default ) ) {
-        $default = $default_group;
-    } else {
-        $default = wp_parse_args( $default, $default_group );
-        $default['margin']  = wp_parse_args( is_array( $default['margin'] ) ? $default['margin'] : array(), $default_group['margin'] );
-        $default['padding'] = wp_parse_args( is_array( $default['padding'] ) ? $default['padding'] : array(), $default_group['padding'] );
-    }
-
-    $value  = is_array( $value ) ? $value : array();
-    $result = $default;
-
-    $segments = array(
-        'margin'  => array(
-            'allow_auto'     => true,
-            'allow_negative' => true,
-        ),
-        'padding' => array(
-            'allow_auto'     => false,
-            'allow_negative' => false,
-        ),
-    );
-
-    foreach ( $segments as $segment => $rules ) {
-        $segment_values = isset( $value[ $segment ] ) && is_array( $value[ $segment ] ) ? $value[ $segment ] : array();
-
-        foreach ( $default[ $segment ] as $side => $default_side_value ) {
-            $raw_value = isset( $segment_values[ $side ] ) ? $segment_values[ $side ] : '';
-            $result[ $segment ][ $side ] = poetheme_sanitize_spacing_value(
-                $raw_value,
-                $rules['allow_auto'],
-                $rules['allow_negative']
-            );
-        }
-    }
-
-    return $result;
-}
-
-/**
- * Determine whether a spacing group contains any usable values.
- *
- * @param mixed $value Potential spacing group.
- * @return bool
- */
-function poetheme_is_spacing_group_empty( $value ) {
-    if ( ! is_array( $value ) ) {
-        return true;
-    }
-
-    $segments   = array( 'margin', 'padding' );
-    $directions = array( 'top', 'right', 'bottom', 'left' );
-
-    foreach ( $segments as $segment ) {
-        if ( empty( $value[ $segment ] ) || ! is_array( $value[ $segment ] ) ) {
-            continue;
-        }
-
-        foreach ( $directions as $direction ) {
-            if ( ! array_key_exists( $direction, $value[ $segment ] ) ) {
-                continue;
-            }
-
-            $raw = trim( (string) $value[ $segment ][ $direction ] );
-
-            if ( '' !== $raw ) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-/**
- * Convert a spacing group to CSS declarations.
- *
- * @param mixed $value Potential spacing group.
- * @return string
- */
-function poetheme_format_spacing_group_for_css( $value ) {
-    if ( ! is_array( $value ) ) {
-        return '';
-    }
-
-    $segments     = array( 'margin', 'padding' );
-    $directions   = array( 'top', 'right', 'bottom', 'left' );
-    $declarations = array();
-
-    foreach ( $segments as $segment ) {
-        if ( empty( $value[ $segment ] ) || ! is_array( $value[ $segment ] ) ) {
-            continue;
-        }
-
-        foreach ( $directions as $direction ) {
-            if ( ! array_key_exists( $direction, $value[ $segment ] ) ) {
-                continue;
-            }
-
-            $raw = trim( (string) $value[ $segment ][ $direction ] );
-
-            if ( '' === $raw ) {
-                continue;
-            }
-
-            $declarations[] = $segment . '-' . $direction . ':' . $raw;
-        }
-    }
-
-    return implode( ';', $declarations );
 }
 
 function poetheme_get_default_color_options() {
@@ -589,18 +426,6 @@ function poetheme_generate_font_face_css( $font_slugs = null ) {
 }
 
 /**
- * Sanitize a font stack string.
- *
- * @param string $value Raw value.
- * @return string
- */
-function poetheme_sanitize_font_stack( $value ) {
-    $value = wp_strip_all_tags( $value );
-    $value = preg_replace( "/[^a-zA-Z0-9,\-\s\"']+/", '', $value );
-    return trim( preg_replace( '/\s+/', ' ', $value ) );
-}
-
-/**
  * Default font options.
  *
  * @return array
@@ -714,7 +539,7 @@ function poetheme_sanitize_font_options( $input ) {
     $default = poetheme_get_default_font_options();
     $output  = poetheme_get_font_options();
 
-    if ( ! current_user_can( 'manage_options' ) ) {
+    if ( ! poetheme_user_can_manage_options() ) {
         return $output;
     }
 
@@ -1140,7 +965,7 @@ function poetheme_prepare_font_styles() {
 function poetheme_sanitize_global_options( $input ) {
     $defaults = poetheme_get_default_global_options();
 
-    if ( ! current_user_can( 'manage_options' ) ) {
+    if ( ! poetheme_user_can_manage_options() ) {
         return poetheme_get_global_options();
     }
 
@@ -1223,86 +1048,6 @@ function poetheme_sanitize_global_options( $input ) {
     );
 }
 
-function poetheme_is_valid_css_color( $color ) {
-    if ( '' === $color ) {
-        return true;
-    }
-
-    $color = trim( (string) $color );
-
-    if ( '' === $color ) {
-        return true;
-    }
-
-    if ( 'transparent' === strtolower( $color ) ) {
-        return true;
-    }
-
-    if ( sanitize_hex_color( $color ) ) {
-        return true;
-    }
-
-    if ( preg_match( '/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i', $color, $matches ) ) {
-        $components = array_slice( $matches, 1 );
-        $red        = (int) $components[0];
-        $green      = (int) $components[1];
-        $blue       = (int) $components[2];
-
-        if ( $red > 255 || $green > 255 || $blue > 255 ) {
-            return false;
-        }
-
-        if ( isset( $components[3] ) ) {
-            $alpha = (float) $components[3];
-            if ( $alpha < 0 || $alpha > 1 ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    if ( preg_match( '/^hsla?\(/i', $color ) ) {
-        // Basic sanity check for HSLA strings.
-        return (bool) preg_match( '/^hsla?\(\s*\d{1,3}(deg|grad|rad|turn)?\s*,\s*\d{1,3}%\s*,\s*\d{1,3}%(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i', $color );
-    }
-
-    return false;
-}
-
-function poetheme_normalize_color_value( $color, $default = '' ) {
-    $color = trim( (string) $color );
-
-    if ( '' === $color ) {
-        return '';
-    }
-
-    if ( 'transparent' === strtolower( $color ) ) {
-        return 'transparent';
-    }
-
-    $hex = sanitize_hex_color( $color );
-    if ( $hex ) {
-        return $hex;
-    }
-
-    if ( preg_match( '/^rgba?\(/i', $color ) ) {
-        // Normalize spacing.
-        if ( poetheme_is_valid_css_color( $color ) ) {
-            $color = strtolower( preg_replace( '/\s+/', '', $color ) );
-            $color = str_replace( array( 'rgba(', 'rgb(' ), array( 'rgba(', 'rgb(' ), $color );
-            return $color;
-        }
-    }
-
-    if ( preg_match( '/^hsla?\(/i', $color ) && poetheme_is_valid_css_color( $color ) ) {
-        $color = strtolower( preg_replace( '/\s+/', '', $color ) );
-        return $color;
-    }
-
-    return '' === $default ? '' : poetheme_normalize_color_value( $default, '' );
-}
-
 function poetheme_sanitize_color_options( $input ) {
     $defaults = poetheme_get_default_color_options();
     $output   = array();
@@ -1313,7 +1058,7 @@ function poetheme_sanitize_color_options( $input ) {
         'footer_widget_background_transparent',
     );
 
-    if ( ! current_user_can( 'manage_options' ) ) {
+    if ( ! poetheme_user_can_manage_options() ) {
         return poetheme_get_color_options();
     }
 
@@ -4235,38 +3980,6 @@ function poetheme_sanitize_logo_options( $input ) {
     }
 
     return $output;
-}
-
-/**
- * Sanitize custom CSS option.
- *
- * @param string $css Raw CSS code.
- * @return string
- */
-function poetheme_sanitize_inline_css( $css ) {
-    $css = (string) $css;
-    $css = wp_kses_no_null( $css );
-    $css = wp_strip_all_tags( $css );
-    $css = preg_replace( '#/\*.*?\*/#s', '', $css );
-    $css = preg_replace( '/@import[^;]+;?/i', '', $css );
-    $css = preg_replace( '/@charset[^;]+;?/i', '', $css );
-    $css = trim( $css );
-
-    return $css;
-}
-
-function poetheme_sanitize_custom_css( $css ) {
-    if ( empty( $css ) ) {
-        return '';
-    }
-
-    if ( ! current_user_can( 'manage_options' ) ) {
-        return get_option( 'poetheme_custom_css', '' );
-    }
-
-    $css = (string) $css;
-
-    return poetheme_sanitize_inline_css( $css );
 }
 
 /**
