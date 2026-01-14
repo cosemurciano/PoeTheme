@@ -400,6 +400,49 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
     }
 }
 
+/**
+ * Append the CTA button as the last primary menu item when requested.
+ *
+ * @param string $items Existing menu HTML.
+ * @param object $args  wp_nav_menu arguments.
+ * @return string
+ */
+function poetheme_append_primary_menu_cta( $items, $args ) {
+    if ( empty( $args->poetheme_cta ) || ! is_array( $args->poetheme_cta ) ) {
+        return $items;
+    }
+
+    if ( empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+        return $items;
+    }
+
+    $cta = wp_parse_args(
+        $args->poetheme_cta,
+        array(
+            'text'  => '',
+            'url'   => '',
+            'class' => 'poetheme-cta-button',
+        )
+    );
+
+    $cta_text = trim( (string) $cta['text'] );
+    if ( '' === $cta_text ) {
+        return $items;
+    }
+
+    $cta_url = ! empty( $cta['url'] ) ? $cta['url'] : home_url( '/' );
+
+    $items .= sprintf(
+        '<li class="poetheme-menu-item poetheme-menu-item--cta"><a class="%1$s" href="%2$s">%3$s</a></li>',
+        esc_attr( $cta['class'] ),
+        esc_url( $cta_url ),
+        esc_html( $cta_text )
+    );
+
+    return $items;
+}
+add_filter( 'wp_nav_menu_items', 'poetheme_append_primary_menu_cta', 10, 2 );
+
 if ( ! function_exists( 'poetheme_menu_item_custom_fields' ) ) {
     /**
      * Output custom fields for nav menu items.

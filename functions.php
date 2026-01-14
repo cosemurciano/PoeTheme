@@ -5,7 +5,7 @@
  * @package PoeTheme
  */
 
-define( 'POETHEME_VERSION', '1.5.0' );
+define( 'POETHEME_VERSION', '1.6.0' );
 
 define( 'POETHEME_DIR', get_template_directory() );
 define( 'POETHEME_URI', get_template_directory_uri() );
