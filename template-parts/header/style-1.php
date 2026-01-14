@@ -34,6 +34,21 @@ $cta_text      = trim( (string) $context['cta_text'] );
 $cta_url       = $context['cta_url'];
 $show_top_bar  = ! empty( $context['show_top_bar'] );
 $show_cta      = ! empty( $context['show_cta'] );
+$cta_desktop   = array();
+$cta_mobile    = array();
+
+if ( $show_cta && '' !== $cta_text ) {
+    $cta_desktop = array(
+        'text'  => $cta_text,
+        'url'   => $cta_url,
+        'class' => 'poetheme-cta-button inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition',
+    );
+    $cta_mobile  = array(
+        'text'  => $cta_text,
+        'url'   => $cta_url,
+        'class' => 'poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition',
+    );
+}
 
 $has_top_items = ! empty( $top_bar_items );
 $has_social    = false;
@@ -48,7 +63,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
 ?>
 <header
-    class="poetheme-site-header relative bg-white shadow-sm"
+    class="poetheme-site-header poetheme-site-header--style-1 relative bg-white shadow-sm"
     role="banner"
     x-data="{ mobileOpen: false }"
     x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
@@ -108,8 +123,8 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
     <div class="border-b border-gray-200">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-4' ) ) ); ?>">
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div class="flex items-center justify-between w-full md:w-auto gap-4">
+            <div class="flex items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
                     <?php poetheme_the_logo(); ?>
                     <button type="button" class="md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
                         <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
@@ -117,26 +132,19 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     </button>
                 </div>
 
-                <nav class="nav-primary hidden md:flex flex-1 items-center justify-center gap-6 text-sm font-medium text-gray-700 px-2.5 py-2" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
+                <nav class="nav-primary hidden md:flex flex-1 items-center justify-end gap-6 text-sm font-medium text-gray-700" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                     <?php
                     poetheme_render_navigation_menu(
                         'primary',
                         'desktop',
                         array(
-                            'menu_class'  => 'flex flex-wrap items-center gap-6 text-sm font-medium',
-                            'fallback_cb' => 'wp_page_menu',
+                            'menu_class'   => 'flex flex-wrap items-center gap-6 text-sm font-medium',
+                            'fallback_cb'  => 'wp_page_menu',
+                            'poetheme_cta' => $cta_desktop,
                         )
                     );
                     ?>
                 </nav>
-
-                <?php if ( $show_cta && '' !== $cta_text ) : ?>
-                    <div class="hidden md:block">
-                        <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-                            <?php echo esc_html( $cta_text ); ?>
-                        </a>
-                    </div>
-                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -180,20 +188,13 @@ $has_top_menu = has_nav_menu( 'top-info' );
                         'primary',
                         'mobile',
                         array(
-                            'menu_class'  => 'flex flex-col gap-4 text-base font-medium text-gray-800',
-                            'fallback_cb' => 'wp_page_menu',
+                            'menu_class'   => 'flex flex-col gap-4 text-base font-medium text-gray-800',
+                            'fallback_cb'  => 'wp_page_menu',
+                            'poetheme_cta' => $cta_mobile,
                         )
                     );
                     ?>
                 </nav>
-
-                <?php if ( $show_cta && '' !== $cta_text ) : ?>
-                    <div>
-                        <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-                            <?php echo esc_html( $cta_text ); ?>
-                        </a>
-                    </div>
-                <?php endif; ?>
 
                 <?php if ( $has_top_menu ) : ?>
                     <nav aria-label="<?php esc_attr_e( 'Informazioni rapide', 'poetheme' ); ?>" class="border-t border-gray-200 pt-6">

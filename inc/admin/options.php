@@ -3472,14 +3472,38 @@ function poetheme_render_logo_page() {
 function poetheme_render_header_page() {
     $options       = poetheme_get_header_options();
     $layouts       = array(
-        'style-1' => __( 'Layout 1 – Classico', 'poetheme' ),
-        'style-2' => __( 'Layout 2 – Centrato', 'poetheme' ),
-        'style-3' => __( 'Layout 3 – Minimal', 'poetheme' ),
-        'style-4' => __( 'Layout 4 – Vetrina', 'poetheme' ),
-        'style-5' => __( 'Layout 5 – Overlay', 'poetheme' ),
-        'style-6' => __( 'Layout 6 – Sticky', 'poetheme' ),
-        'style-7' => __( 'Layout 7 – Promo', 'poetheme' ),
-        'style-8' => __( 'Layout 8 – E-commerce', 'poetheme' ),
+        'style-1' => array(
+            'label' => __( 'Classic', 'poetheme' ),
+            'image' => 'classic.png',
+        ),
+        'style-2' => array(
+            'label' => __( 'Split menu | Semitransparent', 'poetheme' ),
+            'image' => 'split-menu-semitransparent.png',
+        ),
+        'style-3' => array(
+            'label' => __( 'Shop split', 'poetheme' ),
+            'image' => 'shop-split.png',
+        ),
+        'style-4' => array(
+            'label' => __( 'Shop', 'poetheme' ),
+            'image' => 'shop.png',
+        ),
+        'style-5' => array(
+            'label' => __( 'Fixed', 'poetheme' ),
+            'image' => 'fixed.png',
+        ),
+        'style-6' => array(
+            'label' => __( 'Stack | Center', 'poetheme' ),
+            'image' => 'stack-center.png',
+        ),
+        'style-7' => array(
+            'label' => __( 'Stack | Left', 'poetheme' ),
+            'image' => 'stack-left.png',
+        ),
+        'style-8' => array(
+            'label' => __( 'Plain', 'poetheme' ),
+            'image' => 'plain.png',
+        ),
     );
     $socials       = poetheme_get_header_social_networks();
     $show_cta      = ! empty( $options['show_cta'] );
@@ -3503,13 +3527,30 @@ function poetheme_render_header_page() {
             <table class="form-table" role="presentation">
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="poetheme_header_layout"><?php esc_html_e( 'Seleziona layout', 'poetheme' ); ?></label></th>
+                        <th scope="row"><?php esc_html_e( 'Seleziona layout', 'poetheme' ); ?></th>
                         <td>
-                            <select id="poetheme_header_layout" name="poetheme_header[layout]">
-                                <?php foreach ( $layouts as $layout_key => $label ) : ?>
-                                    <option value="<?php echo esc_attr( $layout_key ); ?>" <?php selected( $options['layout'], $layout_key ); ?>><?php echo esc_html( $label ); ?></option>
+                            <div class="poetheme-header-layouts" role="radiogroup" aria-label="<?php esc_attr_e( 'Seleziona layout', 'poetheme' ); ?>">
+                                <?php foreach ( $layouts as $layout_key => $layout ) : ?>
+                                    <label class="poetheme-header-layout">
+                                        <input
+                                            type="radio"
+                                            class="poetheme-header-layout__input"
+                                            name="poetheme_header[layout]"
+                                            value="<?php echo esc_attr( $layout_key ); ?>"
+                                            <?php checked( $options['layout'], $layout_key ); ?>
+                                            aria-label="<?php echo esc_attr( $layout['label'] ); ?>"
+                                        />
+                                        <span class="poetheme-header-layout__card">
+                                            <img
+                                                src="<?php echo esc_url( POETHEME_URI . '/assets/img/admin/header-layouts/' . $layout['image'] ); ?>"
+                                                alt="<?php echo esc_attr( $layout['label'] ); ?>"
+                                                class="poetheme-header-layout__image"
+                                            />
+                                            <span class="poetheme-header-layout__name"><?php echo esc_html( $layout['label'] ); ?></span>
+                                        </span>
+                                    </label>
                                 <?php endforeach; ?>
-                            </select>
+                            </div>
                             <p class="description"><?php esc_html_e( "Scegli quale testata applicare al tema.", 'poetheme' ); ?></p>
                         </td>
                     </tr>

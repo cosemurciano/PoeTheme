@@ -301,3 +301,23 @@ function poetheme_block_editor_assets() {
     }
 }
 add_action( 'enqueue_block_editor_assets', 'poetheme_block_editor_assets' );
+
+/**
+ * Admin assets for header layout selection.
+ *
+ * @param string $hook Current admin page hook.
+ * @return void
+ */
+function poetheme_admin_header_layout_assets( $hook ) {
+    if ( 'poetheme_page_poetheme-header' !== $hook ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'poetheme-admin-header-layouts',
+        POETHEME_URI . '/assets/css/admin-header-layouts.css',
+        array(),
+        poetheme_get_asset_version( 'assets/css/admin-header-layouts.css' )
+    );
+}
+add_action( 'admin_enqueue_scripts', 'poetheme_admin_header_layout_assets' );

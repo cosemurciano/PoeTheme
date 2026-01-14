@@ -34,6 +34,21 @@ $cta_text      = trim( (string) $context['cta_text'] );
 $cta_url       = $context['cta_url'];
 $show_top_bar  = ! empty( $context['show_top_bar'] );
 $show_cta      = ! empty( $context['show_cta'] );
+$cta_desktop   = array();
+$cta_mobile    = array();
+
+if ( $show_cta && '' !== $cta_text ) {
+    $cta_desktop = array(
+        'text'  => $cta_text,
+        'url'   => $cta_url,
+        'class' => 'poetheme-cta-button inline-flex items-center px-4 py-2 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] text-[11px] hover:bg-gray-900 hover:text-white transition',
+    );
+    $cta_mobile  = array(
+        'text'  => $cta_text,
+        'url'   => $cta_url,
+        'class' => 'poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] hover:bg-gray-900 hover:text-white transition',
+    );
+}
 
 $has_top_items = ! empty( $top_bar_items );
 $has_social    = false;
@@ -117,20 +132,13 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     'primary',
                     'desktop',
                     array(
-                        'menu_class'  => 'flex items-center gap-10 text-xs font-semibold tracking-[0.35em] uppercase',
-                        'fallback_cb' => 'wp_page_menu',
+                        'menu_class'   => 'flex items-center gap-10 text-xs font-semibold tracking-[0.35em] uppercase',
+                        'fallback_cb'  => 'wp_page_menu',
+                        'poetheme_cta' => $cta_desktop,
                     )
                 );
                 ?>
             </nav>
-
-            <?php if ( $show_cta && '' !== $cta_text ) : ?>
-                <div class="hidden md:block">
-                    <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex items-center px-4 py-2 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] text-[11px] hover:bg-gray-900 hover:text-white transition">
-                        <?php echo esc_html( $cta_text ); ?>
-                    </a>
-                </div>
-            <?php endif; ?>
         </div>
     </div>
 
@@ -142,18 +150,13 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     'primary',
                     'mobile',
                     array(
-                        'menu_class'  => 'flex flex-col gap-3 text-sm font-medium text-gray-800 uppercase tracking-[0.2em]',
-                        'fallback_cb' => 'wp_page_menu',
+                        'menu_class'   => 'flex flex-col gap-3 text-sm font-medium text-gray-800 uppercase tracking-[0.2em]',
+                        'fallback_cb'  => 'wp_page_menu',
+                        'poetheme_cta' => $cta_mobile,
                     )
                 );
                 ?>
             </nav>
-
-            <?php if ( $show_cta && '' !== $cta_text ) : ?>
-                <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] hover:bg-gray-900 hover:text-white transition">
-                    <?php echo esc_html( $cta_text ); ?>
-                </a>
-            <?php endif; ?>
         </div>
     </div>
 </header>
