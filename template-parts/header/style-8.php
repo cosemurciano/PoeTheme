@@ -34,6 +34,21 @@ $cta_text      = trim( (string) $context['cta_text'] );
 $cta_url       = $context['cta_url'];
 $show_top_bar  = ! empty( $context['show_top_bar'] );
 $show_cta      = ! empty( $context['show_cta'] );
+$cta_desktop   = array();
+$cta_mobile    = array();
+
+if ( $show_cta && '' !== $cta_text ) {
+    $cta_desktop = array(
+        'text'  => $cta_text,
+        'url'   => $cta_url,
+        'class' => 'poetheme-cta-button inline-flex items-center px-4 py-2 rounded-full bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition',
+    );
+    $cta_mobile  = array(
+        'text'  => $cta_text,
+        'url'   => $cta_url,
+        'class' => 'poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 rounded-full bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition',
+    );
+}
 
 $has_top_items = ! empty( $top_bar_items );
 $has_social    = false;
@@ -134,11 +149,6 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     <span class="absolute -top-1 -right-1 inline-flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-indigo-600 rounded-full">3</span>
                     <span class="sr-only"><?php esc_html_e( 'Carrello', 'poetheme' ); ?></span>
                 </button>
-                <?php if ( $show_cta && '' !== $cta_text ) : ?>
-                    <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button hidden sm:inline-flex items-center px-4 py-2 rounded-full bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition">
-                        <?php echo esc_html( $cta_text ); ?>
-                    </a>
-                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -151,8 +161,9 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     'primary',
                     'desktop',
                     array(
-                        'menu_class'  => 'flex items-center gap-6 text-sm font-medium uppercase tracking-wide',
-                        'fallback_cb' => 'wp_page_menu',
+                        'menu_class'   => 'flex items-center gap-6 text-sm font-medium uppercase tracking-wide',
+                        'fallback_cb'  => 'wp_page_menu',
+                        'poetheme_cta' => $cta_desktop,
                     )
                 );
                 ?>
@@ -180,18 +191,13 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     'primary',
                     'mobile',
                     array(
-                        'menu_class'  => 'flex flex-col gap-4 text-base font-medium text-gray-900',
-                        'fallback_cb' => 'wp_page_menu',
+                        'menu_class'   => 'flex flex-col gap-4 text-base font-medium text-gray-900',
+                        'fallback_cb'  => 'wp_page_menu',
+                        'poetheme_cta' => $cta_mobile,
                     )
                 );
                 ?>
             </nav>
-
-            <?php if ( $show_cta && '' !== $cta_text ) : ?>
-                <a href="<?php echo esc_url( $cta_url ? $cta_url : home_url( '/' ) ); ?>" class="poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 rounded-full bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition">
-                    <?php echo esc_html( $cta_text ); ?>
-                </a>
-            <?php endif; ?>
         </div>
     </div>
 </header>

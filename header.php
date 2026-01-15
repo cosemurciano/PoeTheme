@@ -9,13 +9,6 @@
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php
-    $options = poetheme_get_options();
-    $description = ! empty( $options['tagline'] ) ? $options['tagline'] : get_bloginfo( 'description', 'display' );
-    if ( $description ) {
-        echo '<meta name="description" content="' . esc_attr( $description ) . '">';
-    }
-    ?>
     <?php wp_head(); ?>
 </head>
 <body <?php body_class( 'bg-gray-50 text-gray-900 leading-relaxed' ); ?>>

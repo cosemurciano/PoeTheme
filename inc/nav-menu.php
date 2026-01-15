@@ -2,6 +2,9 @@
 /**
  * Navigation helpers and custom walkers.
  *
+ * Responsibility: define navigation-related helpers and walker classes.
+ * It must NOT register theme options or enqueue assets.
+ *
  * @package PoeTheme
  */
 
@@ -86,6 +89,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                 $attributes .= " class='" . esc_attr( implode( ' ', $classes ) ) . "'";
                 $attributes .= " data-poetheme-submenu='true'";
                 $attributes .= " data-depth='" . esc_attr( (string) ( $depth + 1 ) ) . "'";
+                $attributes .= " aria-hidden='true'";
 
                 $output .= "\n{$indent}<ul{$attributes}>\n";
                 return;
@@ -121,6 +125,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $attributes .= " class='" . esc_attr( implode( ' ', $classes ) ) . "'";
             $attributes .= " data-poetheme-submenu='true'";
             $attributes .= " data-depth='" . esc_attr( (string) ( $depth + 1 ) ) . "'";
+            $attributes .= " aria-hidden='true'";
 
             $output .= "\n{$indent}<ul{$attributes}>\n";
         }
@@ -395,6 +400,49 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
     }
 }
 
+/**
+ * Append the CTA button as the last primary menu item when requested.
+ *
+ * @param string $items Existing menu HTML.
+ * @param object $args  wp_nav_menu arguments.
+ * @return string
+ */
+function poetheme_append_primary_menu_cta( $items, $args ) {
+    if ( empty( $args->poetheme_cta ) || ! is_array( $args->poetheme_cta ) ) {
+        return $items;
+    }
+
+    if ( empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+        return $items;
+    }
+
+    $cta = wp_parse_args(
+        $args->poetheme_cta,
+        array(
+            'text'  => '',
+            'url'   => '',
+            'class' => 'poetheme-cta-button',
+        )
+    );
+
+    $cta_text = trim( (string) $cta['text'] );
+    if ( '' === $cta_text ) {
+        return $items;
+    }
+
+    $cta_url = ! empty( $cta['url'] ) ? $cta['url'] : home_url( '/' );
+
+    $items .= sprintf(
+        '<li class="poetheme-menu-item poetheme-menu-item--cta"><a class="%1$s" href="%2$s">%3$s</a></li>',
+        esc_attr( $cta['class'] ),
+        esc_url( $cta_url ),
+        esc_html( $cta_text )
+    );
+
+    return $items;
+}
+add_filter( 'wp_nav_menu_items', 'poetheme_append_primary_menu_cta', 10, 2 );
+
 if ( ! function_exists( 'poetheme_menu_item_custom_fields' ) ) {
     /**
      * Output custom fields for nav menu items.
@@ -512,9 +560,13 @@ if ( ! function_exists( 'poetheme_admin_menu_assets' ) ) {
             return;
         }
 
-        wp_enqueue_style( 'poetheme-menu-icons', POETHEME_URI . '/assets/css/menu-icons.css', array(), POETHEME_VERSION );
-        wp_enqueue_script( 'poetheme-menu-icons', POETHEME_URI . '/assets/js/menu-icons.js', array( 'jquery' ), POETHEME_VERSION, true );
-        wp_enqueue_script( 'poetheme-lucide-admin', 'https://unpkg.com/lucide@latest/dist/umd/lucide.min.js', array(), POETHEME_VERSION, true );
+        wp_enqueue_style( 'poetheme-menu-icons', POETHEME_URI . '/assets/css/menu-icons.css', array(), poetheme_get_asset_version( 'assets/css/menu-icons.css' ) );
+        wp_enqueue_script( 'poetheme-menu-icons', POETHEME_URI . '/assets/js/menu-icons.js', array( 'jquery' ), poetheme_get_asset_version( 'assets/js/menu-icons.js' ), true );
+
+        $lucide = function_exists( 'poetheme_get_cdn_asset' ) ? poetheme_get_cdn_asset( 'poetheme-lucide-admin' ) : array();
+        $lucide_src = isset( $lucide['src'] ) ? $lucide['src'] : 'https://cdn.jsdelivr.net/npm/lucide@0.294.0/dist/umd/lucide.min.js';
+        $lucide_ver = isset( $lucide['version'] ) ? $lucide['version'] : POETHEME_VERSION;
+        wp_enqueue_script( 'poetheme-lucide-admin', $lucide_src, array(), $lucide_ver, true );
 
         wp_localize_script(
             'poetheme-menu-icons',

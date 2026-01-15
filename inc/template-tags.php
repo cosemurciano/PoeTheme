@@ -2,6 +2,9 @@
 /**
  * Template tags and helpers.
  *
+ * Responsibility: provide rendering helpers for templates.
+ * It must NOT register options pages or output <head> assets.
+ *
  * @package PoeTheme
  */
 

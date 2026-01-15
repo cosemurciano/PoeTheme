@@ -1,188 +1,2456 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PoeTheme package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PoeTheme 1.0.0\n"
-"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"Project-Id-Version: PoeTheme 1.6.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-14 17:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: OpenAI ChatGPT\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: comments.php:24
+#: comments.php:17
+#, php-format
 msgid "%1$s Comment"
-msgstr ""
+msgid_plural "%1$s Comments"
+msgstr[0] ""
+msgstr[1] ""
 
-#: comments.php:24
-msgid "%1$s Comments"
-msgstr ""
-
-#: comments.php:39
+#: comments.php:37
 msgid "Comments navigation"
 msgstr ""
 
-#: comments.php:42
+#: comments.php:39
 msgid "Older Comments"
 msgstr ""
 
-#: comments.php:43
+#: comments.php:40
 msgid "Newer Comments"
 msgstr ""
 
-#: comments.php:50
+#: comments.php:47
 msgid "Comments are closed."
 msgstr ""
 
-#: footer.php:20
-msgid "Footer widgets"
-msgstr ""
-
-#: footer.php:26
-msgid "Widget Area"
-msgstr ""
-
-#: footer.php:27
-msgid "Add widgets in the WordPress admin to replace this placeholder."
-msgstr ""
-
-#: index.php:88
-msgid "About this site"
-msgstr ""
-
-#: index.php:89
-msgid "Use the Widgets area in the WordPress admin to customize this sidebar."
-msgstr ""
-
-#: footer.php:33
-msgid "Footer navigation"
-msgstr ""
-
-#: header.php:27
-msgid "Primary navigation"
-msgstr ""
-
-#: functions.php:34
-msgid "Primary Menu"
-msgstr ""
-
-#: functions.php:35
-msgid "Footer Menu"
-msgstr ""
-
-#: functions.php:64
-msgid "Sidebar"
-msgstr ""
-
-#: functions.php:66
-msgid "Add widgets here."
-msgstr ""
-
-#: functions.php:76
-msgid "Footer Widgets"
-msgstr ""
-
-#: functions.php:78
-msgid "Appears in the footer widget area."
-msgstr ""
-
-#: functions.php:113
-msgid "Skip to content"
-msgstr ""
-
-#: inc/template-tags.php:27
-msgid "Home"
-msgstr ""
-
-#: inc/template-tags.php:63
-msgid "Search results for \"%s\""
-msgstr ""
-
-#: inc/template-tags.php:69
-msgid "404 Not Found"
-msgstr ""
-
-#: inc/template-tags.php:83
-msgid "Breadcrumb"
-msgstr ""
-
-#: inc/template-tags.php:120
-msgid "Previous"
-msgstr ""
-
-#: inc/template-tags.php:121
-msgid "Next"
-msgstr ""
-
-#: inc/template-tags.php:122
-msgid "Posts navigation"
-msgstr ""
-
-#: inc/theme-options.php:20
-msgid "General"
-msgstr ""
-
-#: inc/theme-options.php:28
-msgid "Alternative Tagline"
-msgstr ""
-
-#: inc/theme-options.php:37
-msgid "Enable Breadcrumbs"
-msgstr ""
-
-#: inc/theme-options.php:48
-msgid "Logo"
-msgstr ""
-
-#: inc/theme-options.php:56
-msgid "Custom Logo URL"
-msgstr ""
-
-#: inc/theme-options.php:90
-msgid "Overrides the site tagline for meta descriptions."
-msgstr ""
-
-#: inc/theme-options.php:101
-msgid "Display breadcrumbs on archive and singular pages."
-msgstr ""
-
-#: inc/theme-options.php:112
-msgid "Paste the URL of the logo image if you prefer not to use the Customizer logo."
-msgstr ""
-
-#: inc/theme-options.php:122
-msgid "PoeTheme Options"
-msgstr ""
-
-#: index.php:24
+#: index.php:51
 msgid "Author"
 msgstr ""
 
-#: index.php:43
+#: index.php:68 templates/page-blank.php:20
+#: templates/page-two-columns-left.php:40
+#: templates/page-two-columns-right.php:29 page.php:26
 msgid "Page"
 msgstr ""
 
-#: index.php:53
+#: index.php:83
 msgid "Tags: "
 msgstr ""
 
-#: index.php:54
+#: index.php:88
 msgid "Categories: "
 msgstr ""
 
-#: index.php:66
+#: index.php:102 inc/template-tags.php:876
+msgid "Previous"
+msgstr ""
+
+#: index.php:103 inc/template-tags.php:877
+msgid "Next"
+msgstr ""
+
+#: index.php:114
 msgid "Nothing found"
 msgstr ""
 
-#: index.php:69
-msgid "It seems we can’t find what you’re looking for. Perhaps searching can help."
+#: index.php:116
+msgid ""
+"It seems we can’t find what you’re looking for. Perhaps searching can help."
 msgstr ""
 
-#: searchform.php:11
+#: index.php:122 inc/widgets.php:21
+msgid "Sidebar"
+msgstr ""
+
+#: index.php:127
+msgid "About this site"
+msgstr ""
+
+#: index.php:128
+msgid "Use the Widgets area in the WordPress admin to customize this sidebar."
+msgstr ""
+
+#: footer.php:29
+msgid "Footer widgets"
+msgstr ""
+
+#: footer.php:84
+msgid "Widget Area"
+msgstr ""
+
+#: footer.php:85
+msgid "Add widgets in the WordPress admin to replace this placeholder."
+msgstr ""
+
+#: footer.php:100
+msgid "Footer navigation"
+msgstr ""
+
+#: template-parts/header/style-8.php:70
+msgid "Supporto rapido"
+msgstr ""
+
+#: template-parts/header/style-8.php:107 template-parts/header/style-1.php:115
+#: template-parts/header/style-4.php:110 template-parts/header/style-5.php:116
+#: template-parts/header/style-7.php:122 template-parts/header/style-6.php:109
+#: template-parts/header/style-3.php:108 template-parts/header/style-2.php:110
+msgid "Apri il menù principale"
+msgstr ""
+
+#: template-parts/header/style-8.php:115 template-parts/header/style-8.php:166
+msgid "Cerca prodotti"
+msgstr ""
+
+#: template-parts/header/style-8.php:117 template-parts/header/style-8.php:168
+msgid "Cerca prodotti..."
+msgstr ""
+
+#: template-parts/header/style-8.php:125
+msgid "Apri ricerca"
+msgstr ""
+
+#: template-parts/header/style-8.php:130 template-parts/header/style-7.php:148
+#: template-parts/header/style-7.php:182
+msgid "Account"
+msgstr ""
+
+#: template-parts/header/style-8.php:135
+msgid "Carrello"
+msgstr ""
+
+#: template-parts/header/style-8.php:148 template-parts/header/style-8.php:177
+#: template-parts/header/style-1.php:120 template-parts/header/style-1.php:177
+#: template-parts/header/style-4.php:115 template-parts/header/style-4.php:141
+#: template-parts/header/style-5.php:120 template-parts/header/style-5.php:172
+#: template-parts/header/style-7.php:128 template-parts/header/style-7.php:162
+#: template-parts/header/style-6.php:115 template-parts/header/style-6.php:141
+#: template-parts/header/style-3.php:114 template-parts/header/style-3.php:139
+#: template-parts/header/style-2.php:115 template-parts/header/style-2.php:141
+msgid "Primary navigation"
+msgstr ""
+
+#: template-parts/header/style-1.php:75 template-parts/header/style-1.php:199
+msgid "Informazioni rapide"
+msgstr ""
+
+#: template-parts/header/style-1.php:171
+msgid "Chiudi il menù principale"
+msgstr ""
+
+#: template-parts/header/style-4.php:70
+msgid "Link utili"
+msgstr ""
+
+#: template-parts/header/style-5.php:74 template-parts/header/style-2.php:70
+msgid "Link rapidi"
+msgstr ""
+
+#: template-parts/header/style-5.php:148
+msgid "Un header con effetto overlay perfetto per presentazioni immersive."
+msgstr ""
+
+#: template-parts/header/style-5.php:158
+msgid "Punti di forza"
+msgstr ""
+
+#: template-parts/header/style-5.php:160
+msgid "Design d'impatto"
+msgstr ""
+
+#: template-parts/header/style-5.php:161
+msgid "Navigazione rapida"
+msgstr ""
+
+#: template-parts/header/style-5.php:162
+msgid "Massima affidabilità"
+msgstr ""
+
+#: template-parts/header/style-7.php:70
+msgid "Menu informazioni"
+msgstr ""
+
+#: template-parts/header/style-7.php:108
+msgid "Spedizione gratuita oltre 50€ per un tempo limitato!"
+msgstr ""
+
+#: template-parts/header/style-7.php:111
+msgid "Nascondi promozione"
+msgstr ""
+
+#: template-parts/header/style-7.php:144 template-parts/header/style-7.php:178
+msgid "Cerca"
+msgstr ""
+
+#: template-parts/header/style-6.php:70
+msgid "Informazioni"
+msgstr ""
+
+#: template-parts/header/style-3.php:70
+msgid "Link info"
+msgstr ""
+
+#: templates/page-two-columns-left.php:16
+#: templates/page-two-columns-right.php:42
+msgid "Widget pagina"
+msgstr ""
+
+#: templates/page-two-columns-left.php:21
+#: templates/page-two-columns-right.php:47
+msgid "Area widget"
+msgstr ""
+
+#: templates/page-two-columns-left.php:22
+#: templates/page-two-columns-right.php:48
+msgid ""
+"Aggiungi i tuoi widget nella sezione \"Page Widgets\" per visualizzarli qui."
+msgstr ""
+
+#: inc/template-tags.php:257
+#, php-format
+msgid "Risultati della ricerca per \"%s\""
+msgstr ""
+
+#: inc/template-tags.php:261
+msgid "Pagina non trovata"
+msgstr ""
+
+#: inc/template-tags.php:317 inc/template-tags.php:486
+msgid "Breadcrumb"
+msgstr ""
+
+#: inc/template-tags.php:388
+msgid "Home"
+msgstr ""
+
+#: inc/template-tags.php:464
+#, php-format
+msgid "Search results for \"%s\""
+msgstr ""
+
+#: inc/template-tags.php:469
+msgid "404 Not Found"
+msgstr ""
+
+#: inc/template-tags.php:513
+#, php-format
+msgid "Vai a %s"
+msgstr ""
+
+#: inc/template-tags.php:830
+msgid "Invia una email"
+msgstr ""
+
+#: inc/template-tags.php:833
+msgid "Chiama il numero"
+msgstr ""
+
+#: inc/template-tags.php:836
+msgid "Apri chat WhatsApp"
+msgstr ""
+
+#: inc/template-tags.php:839
+msgid "Apri la posizione su Google Maps"
+msgstr ""
+
+#: inc/template-tags.php:878
+msgid "Posts navigation"
+msgstr ""
+
+#: inc/nav-menu.php:418
+msgid "Mostra il testo in grassetto"
+msgstr ""
+
+#: inc/nav-menu.php:422
+msgid "Icona Lucide"
+msgstr ""
+
+#: inc/nav-menu.php:425 inc/nav-menu.php:430
+msgid "Nessuna icona selezionata"
+msgstr ""
+
+#: inc/nav-menu.php:434
+msgid "Scegli icona"
+msgstr ""
+
+#: inc/nav-menu.php:435
+msgid "Rimuovi icona"
+msgstr ""
+
+#: inc/nav-menu.php:486
+msgid "Interfaccia"
+msgstr ""
+
+#: inc/nav-menu.php:490
+msgid "Contenuti"
+msgstr ""
+
+#: inc/nav-menu.php:494
+msgid "Comunicazione"
+msgstr ""
+
+#: inc/nav-menu.php:498
+msgid "E-commerce"
+msgstr ""
+
+#: inc/nav-menu.php:502
+msgid "Varie"
+msgstr ""
+
+#: inc/nav-menu.php:533
+msgid "Cerca tra le icone..."
+msgstr ""
+
+#: inc/nav-menu.php:534
+msgid "Nessuna icona corrisponde ai criteri di ricerca."
+msgstr ""
+
+#: inc/nav-menu.php:535
+msgid "Chiudi"
+msgstr ""
+
+#: inc/nav-menu.php:536
+msgid "Seleziona un'icona"
+msgstr ""
+
+#: inc/nav-menu.php:537
+msgid "Tutte"
+msgstr ""
+
+#: inc/setup.php:33
+msgid "Primary Menu"
+msgstr ""
+
+#: inc/setup.php:34
+msgid "Top Info Menu"
+msgstr ""
+
+#: inc/setup.php:35
+msgid "Footer Menu"
+msgstr ""
+
+#: inc/setup.php:130
+msgid "Skip to content"
+msgstr ""
+
+#: inc/admin/schema.php:124
+msgid "Lunedì"
+msgstr ""
+
+#: inc/admin/schema.php:125
+msgid "Martedì"
+msgstr ""
+
+#: inc/admin/schema.php:126
+msgid "Mercoledì"
+msgstr ""
+
+#: inc/admin/schema.php:127
+msgid "Giovedì"
+msgstr ""
+
+#: inc/admin/schema.php:128
+msgid "Venerdì"
+msgstr ""
+
+#: inc/admin/schema.php:129
+msgid "Sabato"
+msgstr ""
+
+#: inc/admin/schema.php:130
+msgid "Domenica"
+msgstr ""
+
+#: inc/admin/schema.php:133
+msgid "Contatto"
+msgstr ""
+
+#: inc/admin/schema.php:134
+msgid "Aggiungi contatto"
+msgstr ""
+
+#: inc/admin/schema.php:135
+msgid "Rimuovi"
+msgstr ""
+
+#: inc/admin/schema.php:136
+msgid "Nessun contatto ancora configurato."
+msgstr ""
+
+#: inc/admin/schema.php:137
+msgid ""
+"Crea un blocco per ogni canale di contatto disponibile (telefono, email, "
+"form, ecc.)."
+msgstr ""
+
+#: inc/admin/schema.php:140
+msgid "Tipologia di contatto"
+msgstr ""
+
+#: inc/admin/schema.php:141
+msgid "Esempio: customer service"
+msgstr ""
+
+#: inc/admin/schema.php:142
+msgid ""
+"Descrive la funzione del canale (es. assistenza clienti, vendite, "
+"prenotazioni)."
+msgstr ""
+
+#: inc/admin/schema.php:146 inc/admin/options.php:3544
+msgid "Telefono"
+msgstr ""
+
+#: inc/admin/schema.php:147
+msgid "Esempio: +39 0123 456789"
+msgstr ""
+
+#: inc/admin/schema.php:148
+msgid "Inserisci il numero completo di prefisso internazionale."
+msgstr ""
+
+#: inc/admin/schema.php:152 inc/admin/options.php:3536
+msgid "Email"
+msgstr ""
+
+#: inc/admin/schema.php:153 inc/admin/options.php:3539
+msgid "esempio@dominio.it"
+msgstr ""
+
+#: inc/admin/schema.php:154
+msgid "Indirizzo email dedicato al contatto."
+msgstr ""
+
+#: inc/admin/schema.php:158
+msgid "Aree servite"
+msgstr ""
+
+#: inc/admin/schema.php:159
+msgid "Esempio: IT, CH"
+msgstr ""
+
+#: inc/admin/schema.php:160
+msgid "Elenco di paesi o regioni servite, separati da virgole."
+msgstr ""
+
+#: inc/admin/schema.php:164
+msgid "Lingue supportate"
+msgstr ""
+
+#: inc/admin/schema.php:165
+msgid "Esempio: it, en"
+msgstr ""
+
+#: inc/admin/schema.php:166
+msgid "Lingue in cui il servizio risponde, separate da virgole."
+msgstr ""
+
+#: inc/admin/schema.php:170
+msgid "URL di riferimento"
+msgstr ""
+
+#: inc/admin/schema.php:171
+msgid "https://example.com/contatti"
+msgstr ""
+
+#: inc/admin/schema.php:172
+msgid "Pagina di supporto o modulo contatti (facoltativo)."
+msgstr ""
+
+#: inc/admin/schema.php:177
+msgid "Fasce orarie di disponibilità"
+msgstr ""
+
+#: inc/admin/schema.php:178
+msgid ""
+"Seleziona i giorni e inserisci gli orari in cui questo canale è attivo. "
+"Lascia vuoto per omettere l&#39;informazione."
+msgstr ""
+
+#: inc/admin/schema.php:179 inc/admin/schema.php:206
+msgid "Aggiungi fascia oraria"
+msgstr ""
+
+#: inc/admin/schema.php:180 inc/admin/schema.php:207
+msgid "Rimuovi fascia"
+msgstr ""
+
+#: inc/admin/schema.php:181
+msgid "Nessuna fascia oraria aggiunta."
+msgstr ""
+
+#: inc/admin/schema.php:184
+msgid "Apre alle"
+msgstr ""
+
+#: inc/admin/schema.php:189
+msgid "Chiude alle"
+msgstr ""
+
+#: inc/admin/schema.php:194
+msgid "Valido dal"
+msgstr ""
+
+#: inc/admin/schema.php:198
+msgid "Valido fino al"
+msgstr ""
+
+#: inc/admin/schema.php:205
+msgid "Fascia oraria"
+msgstr ""
+
+#: inc/admin/schema.php:208
+msgid "Nessuna fascia oraria configurata."
+msgstr ""
+
+#: inc/admin/schema.php:209
+msgid ""
+"Raggruppa i giorni con gli stessi orari di apertura. Aggiungi più fasce per "
+"orari differenti."
+msgstr ""
+
+#: inc/admin/schema.php:214
+msgid "SEO Schema (JSON-LD)"
+msgstr ""
+
+#: inc/admin/schema.php:215
+msgid "Verifica con il Test risultati multimediali di Google"
+msgstr ""
+
+#: inc/admin/schema.php:219
+msgid ""
+"Compila i campi qui sotto per generare il markup JSON-LD senza scrivere "
+"codice. Ogni campo mostra suggerimenti utili per completare le informazioni "
+"richieste."
+msgstr ""
+
+#: inc/admin/schema.php:222
+msgid "Impostazioni generali"
+msgstr ""
+
+#: inc/admin/schema.php:225
+msgid "Attiva output JSON-LD"
+msgstr ""
+
+#: inc/admin/schema.php:229
+msgid "Abilita l'inserimento automatico del markup nel front-end."
+msgstr ""
+
+#: inc/admin/schema.php:231
+msgid ""
+"Disattiva temporaneamente se stai testando altre implementazioni o plugin."
+msgstr ""
+
+#: inc/admin/schema.php:244
+msgid ""
+"Identificatore stabile del sito. Consigliato un URL con anchor, es. https://"
+"example.com/#website."
+msgstr ""
+
+#: inc/admin/schema.php:251
+msgid "Indica la home page principale del sito."
+msgstr ""
+
+#: inc/admin/schema.php:258
+msgid "Nome ufficiale mostrato nei rich snippet."
+msgstr ""
+
+#: inc/admin/schema.php:265
+msgid "Denominazione alternativa o payoff. Lascia vuoto se non serve."
+msgstr ""
+
+#: inc/admin/schema.php:272
+msgid "Formato BCP47 (es. it-IT, en-US). Usa la lingua principale del sito."
+msgstr ""
+
+#: inc/admin/schema.php:279
+msgid "Breve descrizione del sito (150-200 caratteri consigliati)."
+msgstr ""
+
+#: inc/admin/schema.php:289
+msgid "Tipologia di publisher"
+msgstr ""
+
+#: inc/admin/schema.php:292
+msgid "Organization"
+msgstr ""
+
+#: inc/admin/schema.php:292
+msgid "OnlineStore"
+msgstr ""
+
+#: inc/admin/schema.php:292
+msgid "LocalBusiness"
+msgstr ""
+
+#: inc/admin/schema.php:292
+msgid "Person"
+msgstr ""
+
+#: inc/admin/schema.php:296
+msgid "Scegli il tipo di entità che rappresenta il sito."
+msgstr ""
+
+#: inc/admin/schema.php:309
+msgid "Nome legale completo dell&#39;organizzazione."
+msgstr ""
+
+#: inc/admin/schema.php:316
+msgid "Marchio commerciale o abbreviazione conosciuta."
+msgstr ""
+
+#: inc/admin/schema.php:323
+msgid "Numero telefonico principale dell&#39;azienda."
+msgstr ""
+
+#: inc/admin/schema.php:330
+msgid "Partita IVA o VAT number."
+msgstr ""
+
+#: inc/admin/schema.php:337
+msgid "Codice fiscale o altro identificativo fiscale (facoltativo)."
+msgstr ""
+
+#: inc/admin/schema.php:341
+msgid "address"
+msgstr ""
+
+#: inc/admin/schema.php:348
+msgid "Compila l&#39;indirizzo completo della sede principale."
+msgstr ""
+
+#: inc/admin/schema.php:361
+msgid "Intervallo di prezzo indicativo (es. €€, €€€)."
+msgstr ""
+
+#: inc/admin/schema.php:365
+msgid "geo"
+msgstr ""
+
+#: inc/admin/schema.php:371
+msgid "Coordinate geografiche della sede (opzionali ma consigliate)."
+msgstr ""
+
+#: inc/admin/schema.php:376
+msgid "Orari di apertura"
+msgstr ""
+
+#: inc/admin/schema.php:384
+msgid "Immagini della sede"
+msgstr ""
+
+#: inc/admin/schema.php:387
+msgid "Inserisci una URL per riga con immagini rappresentative (opzionale)."
+msgstr ""
+
+#: inc/admin/schema.php:401 inc/admin/schema.php:476
+msgid "Seleziona dal Media"
+msgstr ""
+
+#: inc/admin/schema.php:407
+msgid "Carica un ritratto riconoscibile (minimo 200×200 px)."
+msgstr ""
+
+#: inc/admin/schema.php:414
+msgid "Ruolo o mansione principale (es. CEO, Consulente SEO)."
+msgstr ""
+
+#: inc/admin/schema.php:421
+msgid "Nome dell&#39;organizzazione per cui lavora (facoltativo)."
+msgstr ""
+
+#: inc/admin/schema.php:428
+msgid "Email pubblica di riferimento."
+msgstr ""
+
+#: inc/admin/schema.php:435
+msgid "Pagina personale o profilo professionale."
+msgstr ""
+
+#: inc/admin/schema.php:447
+msgid ""
+"Identificatore univoco dell&#39;entità (es. https://example.com/"
+"#organization)."
+msgstr ""
+
+#: inc/admin/schema.php:454
+msgid "Nome legale o commerciale visualizzato dai motori di ricerca."
+msgstr ""
+
+#: inc/admin/schema.php:461
+msgid "URL pubblico dedicato all&#39;entità (homepage o pagina Chi siamo)."
+msgstr ""
+
+#: inc/admin/schema.php:468
+msgid "Descrizione sintetica dell&#39;organizzazione o professionista."
+msgstr ""
+
+#: inc/admin/schema.php:478
+msgid "Si consiglia un logo quadrato (≥112×112 px) accessibile pubblicamente."
+msgstr ""
+
+#: inc/admin/schema.php:489
+msgid ""
+"Inserisci una URL per riga verso profili social ufficiali o directory "
+"verificabili."
+msgstr ""
+
+#: inc/admin/schema.php:494
+msgid "Contatti del publisher"
+msgstr ""
+
+#: inc/admin/schema.php:1023
+msgid "Seleziona immagine"
+msgstr ""
+
+#: inc/admin/schema.php:1023
+msgid "Usa immagine"
+msgstr ""
+
+#: inc/admin/options.php:23
+msgid "Facebook"
+msgstr ""
+
+#: inc/admin/options.php:27
+msgid "Instagram"
+msgstr ""
+
+#: inc/admin/options.php:31
+msgid "YouTube"
+msgstr ""
+
+#: inc/admin/options.php:35
+msgid "LinkedIn"
+msgstr ""
+
+#: inc/admin/options.php:65 inc/admin/options.php:3567
+msgid "Get Started"
+msgstr ""
+
+#: inc/admin/options.php:79
+msgid "1/4 – 1/4 – 1/4 – 1/4"
+msgstr ""
+
+#: inc/admin/options.php:83
+msgid "1/2 – 1/4 – 1/4"
+msgstr ""
+
+#: inc/admin/options.php:87
+msgid "1/4 – 1/4 – 1/2"
+msgstr ""
+
+#: inc/admin/options.php:91
+msgid "1/2 – 1/2"
+msgstr ""
+
+#: inc/admin/options.php:95
+msgid "1/1"
+msgstr ""
+
+#: inc/admin/options.php:1293
+msgid "Titolo e Breadcrumbs centrati (uno sotto l’altro)"
+msgstr ""
+
+#: inc/admin/options.php:1294
+msgid "Titolo e Breadcrumbs a sinistra (uno sotto l’altro)"
+msgstr ""
+
+#: inc/admin/options.php:1295
+msgid "Titolo e Breadcrumbs a destra (uno sotto l’altro)"
+msgstr ""
+
+#: inc/admin/options.php:1296
+msgid "Titolo a sinistra (Breadcrumbs nascosto)"
+msgstr ""
+
+#: inc/admin/options.php:1297
+msgid "Titolo a destra (Breadcrumbs nascosto)"
+msgstr ""
+
+#: inc/admin/options.php:1298
+msgid "Titolo al centro (Breadcrumbs nascosto)"
+msgstr ""
+
+#: inc/admin/options.php:1299
+msgid "Titolo a sinistra e Breadcrumbs a destra su unico rigo (60% / 40%)"
+msgstr ""
+
+#: inc/admin/options.php:1300
+msgid "Titolo a destra e Breadcrumbs a sinistra su unico rigo (40% / 60%)"
+msgstr ""
+
+#: inc/admin/options.php:1546 inc/admin/options.php:1547
+msgid "PoeTheme"
+msgstr ""
+
+#: inc/admin/options.php:1557 inc/admin/options.php:1558
+#: inc/admin/options.php:1694
+msgid "Globale"
+msgstr ""
+
+#: inc/admin/options.php:1566 inc/admin/options.php:1567
+#: inc/admin/options.php:3266
+msgid "Gestione Colori"
+msgstr ""
+
+#: inc/admin/options.php:1575 inc/admin/options.php:1576
+#: inc/admin/options.php:2695
+msgid "Gestione Font"
+msgstr ""
+
+#: inc/admin/options.php:1584 inc/admin/options.php:1585
+#: inc/admin/options.php:3407
+msgid "Logo"
+msgstr ""
+
+#: inc/admin/options.php:1593 inc/admin/options.php:1594
+#: inc/admin/options.php:1881 inc/admin/options.php:3500
+msgid "Intestazione"
+msgstr ""
+
+#: inc/admin/options.php:1602 inc/admin/options.php:1603
+#: inc/admin/options.php:3618
+msgid "Sottointestazione"
+msgstr ""
+
+#: inc/admin/options.php:1611 inc/admin/options.php:1612
+#: inc/admin/options.php:1972 inc/admin/options.php:3734
+msgid "Piè di pagina"
+msgstr ""
+
+#: inc/admin/options.php:1620 inc/admin/options.php:1621
+#: inc/admin/options.php:3897
+msgid "Custom CSS"
+msgstr ""
+
+#: inc/admin/options.php:1629 inc/admin/options.php:1630
+msgid "SEO Schema"
+msgstr ""
+
+#: inc/admin/options.php:1658 inc/admin/options.php:1686
+msgid "Predefinito"
+msgstr ""
+
+#: inc/admin/options.php:1659
+msgid "Sinistra Alto | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1660
+msgid "Sinistra Alto | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1661
+msgid "Sinistra Centro | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1662
+msgid "Sinistra Centro | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1663
+msgid "Sinistra Basso | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1664
+msgid "Sinistra Basso | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1665
+msgid "Centro Alto | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1666
+msgid "Centro Alto | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1667
+msgid "Centro Alto | repeat-x"
+msgstr ""
+
+#: inc/admin/options.php:1668
+msgid "Centro Alto | repeat-y"
+msgstr ""
+
+#: inc/admin/options.php:1669
+msgid "Centro Centro | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1670
+msgid "Centro Centro | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1671
+msgid "Centro Basso | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1672
+msgid "Centro Basso | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1673
+msgid "Centro Basso | repeat-x"
+msgstr ""
+
+#: inc/admin/options.php:1674
+msgid "Centro Basso | repeat-y"
+msgstr ""
+
+#: inc/admin/options.php:1675
+msgid "Destra Alto | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1676
+msgid "Destra Alto | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1677
+msgid "Destra Centro | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1678
+msgid "Destra Centro | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1679
+msgid "Destra Basso | no-repeat"
+msgstr ""
+
+#: inc/admin/options.php:1680
+msgid "Destra Basso | repeat"
+msgstr ""
+
+#: inc/admin/options.php:1681
+msgid "Centro | no-repeat | fisso"
+msgstr ""
+
+#: inc/admin/options.php:1682
+msgid "Centro | no-repeat | fisso | copri"
+msgstr ""
+
+#: inc/admin/options.php:1687
+msgid "Automatico"
+msgstr ""
+
+#: inc/admin/options.php:1688
+msgid "Contenere"
+msgstr ""
+
+#: inc/admin/options.php:1689
+msgid "Coprire"
+msgstr ""
+
+#: inc/admin/options.php:1690
+msgid "Coprire, solo su schermi ultra larghi > 1920px"
+msgstr ""
+
+#: inc/admin/options.php:1702 inc/admin/options.php:1705
+#: inc/admin/options.php:3657
+msgid "Layout"
+msgstr ""
+
+#: inc/admin/options.php:1708
+#, php-format
+msgid "Larghezza piena (100% della pagina)"
+msgstr ""
+
+#: inc/admin/options.php:1713
+msgid "Larghezza box"
+msgstr ""
+
+#: inc/admin/options.php:1715
+msgid "Scegli come allineare l’intero sito, incluse testata e piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:1720
+msgid "Larghezza sito (px)"
+msgstr ""
+
+#: inc/admin/options.php:1723
+msgid ""
+"Imposta la larghezza massima del sito per il layout Box. Valori consentiti "
+"da 960 a 1920 pixel."
+msgstr ""
+
+#: inc/admin/options.php:1727
+msgid "Font globale predefinito"
+msgstr ""
+
+#: inc/admin/options.php:1730
+msgid "Usa il font di sistema"
+msgstr ""
+
+#: inc/admin/options.php:1735
+msgid ""
+"Questo font verrà usato in tutto il sito se non ne imposti uno specifico "
+"nelle sezioni dedicate."
+msgstr ""
+
+#: inc/admin/options.php:1736
+msgid "Font alternativi"
+msgstr ""
+
+#: inc/admin/options.php:1738 inc/admin/options.php:2181
+msgid ""
+"Elenca i font alternativi da usare se il font principale non è disponibile "
+"(esempio: \"Arial, Helvetica, sans-serif\")."
+msgstr ""
+
+#: inc/admin/options.php:1742
+msgid "Lightbox immagini"
+msgstr ""
+
+#: inc/admin/options.php:1746
+msgid "Apri le immagini dei contenuti in una modale al clic."
+msgstr ""
+
+#: inc/admin/options.php:1748
+msgid ""
+"La modale mostra il file multimediale fino a 1024 pixel di larghezza e "
+"supporta anche le gallerie create con l’editor."
+msgstr ""
+
+#: inc/admin/options.php:1752
+msgid "Immagine di sfondo della pagina"
+msgstr ""
+
+#: inc/admin/options.php:1759 inc/admin/options.php:4089
+msgid "Nessuna immagine selezionata."
+msgstr ""
+
+#: inc/admin/options.php:1764
+msgid "Scegli immagine"
+msgstr ""
+
+#: inc/admin/options.php:1765
+msgid "Rimuovi immagine"
+msgstr ""
+
+#: inc/admin/options.php:1767
+msgid "Dimensioni consigliate: 1920x1080 px."
+msgstr ""
+
+#: inc/admin/options.php:1772
+msgid "Posizione e ripetizione"
+msgstr ""
+
+#: inc/admin/options.php:1779
+msgid ""
+"Seleziona la combinazione desiderata di ripetizione, posizione e (se "
+"disponibile) fissaggio."
+msgstr ""
+
+#: inc/admin/options.php:1783
+msgid "Dimensione"
+msgstr ""
+
+#: inc/admin/options.php:1790
+msgid ""
+"Questa opzione non è compatibile con la posizione fissa nei browser meno "
+"recenti."
+msgstr ""
+
+#: inc/admin/options.php:1830
+msgid "Contenuti e sfondi"
+msgstr ""
+
+#: inc/admin/options.php:1831
+msgid ""
+"Gestisci i colori principali delle aree di contenuto e dello sfondo del sito."
+msgstr ""
+
+#: inc/admin/options.php:1834
+msgid "Contenuto principale"
+msgstr ""
+
+#: inc/admin/options.php:1837
+msgid "Colore del testo del contenuto"
+msgstr ""
+
+#: inc/admin/options.php:1838
+msgid "Si applica ai testi principali all’interno del contenuto."
+msgstr ""
+
+#: inc/admin/options.php:1842
+msgid "Colore dei link nel contenuto"
+msgstr ""
+
+#: inc/admin/options.php:1843
+msgid "Personalizza il colore dei collegamenti nel corpo dei contenuti."
+msgstr ""
+
+#: inc/admin/options.php:1847
+msgid "Sottolinea i link del contenuto"
+msgstr ""
+
+#: inc/admin/options.php:1848
+msgid "Attiva o disattiva la sottolineatura per i link nel contenuto."
+msgstr ""
+
+#: inc/admin/options.php:1852
+msgid "Colore del testo evidenziato (strong)"
+msgstr ""
+
+#: inc/admin/options.php:1853
+msgid "Imposta il colore per i testi marcati in grassetto."
+msgstr ""
+
+#: inc/admin/options.php:1857
+msgid "Colore di sfondo dell’intera pagina"
+msgstr ""
+
+#: inc/admin/options.php:1858
+msgid "Utilizza questo colore assieme o in alternativa all’immagine di sfondo."
+msgstr ""
+
+#: inc/admin/options.php:1862
+msgid "Colore di sfondo del contenuto"
+msgstr ""
+
+#: inc/admin/options.php:1863
+msgid "Colore applicato alle aree principali del contenuto."
+msgstr ""
+
+#: inc/admin/options.php:1869
+msgid "Link globali"
+msgstr ""
+
+#: inc/admin/options.php:1872
+msgid "Colore link generale"
+msgstr ""
+
+#: inc/admin/options.php:1873
+msgid ""
+"Colore applicato ai link generici del sito (intestazione, piè di pagina, "
+"ecc.)."
+msgstr ""
+
+#: inc/admin/options.php:1882
+msgid "Personalizza la testata, il menù principale e la call to action."
+msgstr ""
+
+#: inc/admin/options.php:1885
+msgid "Testata"
+msgstr ""
+
+#: inc/admin/options.php:1888
+msgid "Colore di sfondo della testata"
+msgstr ""
+
+#: inc/admin/options.php:1889
+msgid "Imposta il colore di sfondo del contenitore principale della testata."
+msgstr ""
+
+#: inc/admin/options.php:1893
+msgid "Rendi la testata trasparente"
+msgstr ""
+
+#: inc/admin/options.php:1894
+msgid "Rimuove qualsiasi colore di sfondo e rende la testata trasparente."
+msgstr ""
+
+#: inc/admin/options.php:1898
+msgid "Rimuovi ombra della testata"
+msgstr ""
+
+#: inc/admin/options.php:1899
+msgid "Disattiva l’ombra presente sotto la testata."
+msgstr ""
+
+#: inc/admin/options.php:1905
+msgid "Menù principale"
+msgstr ""
+
+#: inc/admin/options.php:1908
+msgid "Colore link"
+msgstr ""
+
+#: inc/admin/options.php:1909
+msgid "Colore base dei link del menù principale."
+msgstr ""
+
+#: inc/admin/options.php:1913
+msgid "Colore sfondo link"
+msgstr ""
+
+#: inc/admin/options.php:1914
+msgid "Sfondo dei link del menù principale (desktop e mobile)."
+msgstr ""
+
+#: inc/admin/options.php:1918
+msgid "Colore del link attivo"
+msgstr ""
+
+#: inc/admin/options.php:1919
+msgid "Colore per la voce di menù attiva o al passaggio del mouse."
+msgstr ""
+
+#: inc/admin/options.php:1923
+msgid "Colore sfondo link attivo"
+msgstr ""
+
+#: inc/admin/options.php:1924
+msgid "Sfondo della voce di menù attiva."
+msgstr ""
+
+#: inc/admin/options.php:1930 inc/admin/options.php:3559
+msgid "Call to Action"
+msgstr ""
+
+#: inc/admin/options.php:1933
+msgid "Colore di sfondo"
+msgstr ""
+
+#: inc/admin/options.php:1934
+msgid "Colore del pulsante principale di invito all’azione."
+msgstr ""
+
+#: inc/admin/options.php:1938 inc/admin/options.php:1958
+msgid "Colore del testo"
+msgstr ""
+
+#: inc/admin/options.php:1939
+msgid "Colore del testo all’interno del pulsante."
+msgstr ""
+
+#: inc/admin/options.php:1945 inc/admin/options.php:3517
+msgid "Barra superiore"
+msgstr ""
+
+#: inc/admin/options.php:1948
+msgid "Colore di sfondo della barra"
+msgstr ""
+
+#: inc/admin/options.php:1949
+msgid "Colore dello sfondo dell’intera barra superiore."
+msgstr ""
+
+#: inc/admin/options.php:1953
+msgid "Colore delle icone"
+msgstr ""
+
+#: inc/admin/options.php:1954
+msgid "Si applica alle icone social e di contatto."
+msgstr ""
+
+#: inc/admin/options.php:1959
+msgid "Colore del testo nella barra superiore."
+msgstr ""
+
+#: inc/admin/options.php:1963
+msgid "Colore dei link"
+msgstr ""
+
+#: inc/admin/options.php:1964
+msgid "Colore dei collegamenti testuali della barra."
+msgstr ""
+
+#: inc/admin/options.php:1973
+msgid "Personalizza i colori delle aree widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:1976
+msgid "Widget Footer"
+msgstr ""
+
+#: inc/admin/options.php:1977
+msgid "Gestisci i colori dei widget mostrati nelle aree del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:1980
+msgid "Colore testo widget"
+msgstr ""
+
+#: inc/admin/options.php:1981
+msgid "Personalizza il colore del testo dei widget posizionati nel footer."
+msgstr ""
+
+#: inc/admin/options.php:1986
+msgid "Colore link widget"
+msgstr ""
+
+#: inc/admin/options.php:1987
+msgid "Imposta il colore dei link all’interno dei widget del footer."
+msgstr ""
+
+#: inc/admin/options.php:1992
+msgid "Colore sfondo area widget"
+msgstr ""
+
+#: inc/admin/options.php:1993
+msgid "Scegli il colore di sfondo per l’intero blocco dei widget nel footer."
+msgstr ""
+
+#: inc/admin/options.php:1998
+msgid "Sfondo area widget trasparente"
+msgstr ""
+
+#: inc/admin/options.php:1999
+msgid ""
+"Attiva per rimuovere qualsiasi colore di sfondo dal blocco widget del footer."
+msgstr ""
+
+#: inc/admin/options.php:2004
+msgid "Colore titolo H2"
+msgstr ""
+
+#: inc/admin/options.php:2005
+msgid "Imposta il colore dei titoli H2 dei widget del footer."
+msgstr ""
+
+#: inc/admin/options.php:2010
+msgid "Sfondo titolo H2"
+msgstr ""
+
+#: inc/admin/options.php:2011
+msgid "Definisci uno sfondo, anche con trasparenza, per i titoli H2."
+msgstr ""
+
+#: inc/admin/options.php:2016
+msgid "Colore titolo H3"
+msgstr ""
+
+#: inc/admin/options.php:2017
+msgid "Personalizza il colore dei titoli H3 presenti nei widget del footer."
+msgstr ""
+
+#: inc/admin/options.php:2022
+msgid "Sfondo titolo H3"
+msgstr ""
+
+#: inc/admin/options.php:2023
+msgid "Scegli uno sfondo con supporto alla trasparenza per i titoli H3."
+msgstr ""
+
+#: inc/admin/options.php:2028
+msgid "Colore titolo H4"
+msgstr ""
+
+#: inc/admin/options.php:2029
+msgid "Imposta il colore dei titoli H4 nei widget del footer."
+msgstr ""
+
+#: inc/admin/options.php:2034
+msgid "Sfondo titolo H4"
+msgstr ""
+
+#: inc/admin/options.php:2035
+msgid "Definisci uno sfondo con trasparenza dedicato ai titoli H4."
+msgstr ""
+
+#: inc/admin/options.php:2040
+msgid "Colore titolo H5"
+msgstr ""
+
+#: inc/admin/options.php:2041
+msgid "Personalizza il colore dei titoli H5 dei widget del footer."
+msgstr ""
+
+#: inc/admin/options.php:2046
+msgid "Sfondo titolo H5"
+msgstr ""
+
+#: inc/admin/options.php:2047
+msgid "Scegli uno sfondo con supporto alla trasparenza per i titoli H5."
+msgstr ""
+
+#: inc/admin/options.php:2056
+msgid "Tipografia"
+msgstr ""
+
+#: inc/admin/options.php:2057
+msgid "Imposta i colori delle intestazioni principali delle pagine (H1–H6)."
+msgstr ""
+
+#: inc/admin/options.php:2060
+msgid "Intestazioni (H1–H6)"
+msgstr ""
+
+#: inc/admin/options.php:2063
+msgid "Colore H1"
+msgstr ""
+
+#: inc/admin/options.php:2064
+msgid "Colore applicato alle intestazioni H1."
+msgstr ""
+
+#: inc/admin/options.php:2068
+msgid "Sfondo H1"
+msgstr ""
+
+#: inc/admin/options.php:2069
+msgid "Colore di sfondo per le intestazioni H1."
+msgstr ""
+
+#: inc/admin/options.php:2073
+msgid "Colore H2"
+msgstr ""
+
+#: inc/admin/options.php:2074
+msgid "Colore applicato alle intestazioni H2."
+msgstr ""
+
+#: inc/admin/options.php:2078
+msgid "Sfondo H2"
+msgstr ""
+
+#: inc/admin/options.php:2079
+msgid "Colore di sfondo per le intestazioni H2."
+msgstr ""
+
+#: inc/admin/options.php:2083
+msgid "Colore H3"
+msgstr ""
+
+#: inc/admin/options.php:2084
+msgid "Colore applicato alle intestazioni H3."
+msgstr ""
+
+#: inc/admin/options.php:2088
+msgid "Sfondo H3"
+msgstr ""
+
+#: inc/admin/options.php:2089
+msgid "Colore di sfondo per le intestazioni H3."
+msgstr ""
+
+#: inc/admin/options.php:2093
+msgid "Colore H4"
+msgstr ""
+
+#: inc/admin/options.php:2094
+msgid "Colore applicato alle intestazioni H4."
+msgstr ""
+
+#: inc/admin/options.php:2098
+msgid "Sfondo H4"
+msgstr ""
+
+#: inc/admin/options.php:2099
+msgid "Colore di sfondo per le intestazioni H4."
+msgstr ""
+
+#: inc/admin/options.php:2103
+msgid "Colore H5"
+msgstr ""
+
+#: inc/admin/options.php:2104
+msgid "Colore applicato alle intestazioni H5."
+msgstr ""
+
+#: inc/admin/options.php:2108
+msgid "Sfondo H5"
+msgstr ""
+
+#: inc/admin/options.php:2109
+msgid "Colore di sfondo per le intestazioni H5."
+msgstr ""
+
+#: inc/admin/options.php:2113
+msgid "Colore H6"
+msgstr ""
+
+#: inc/admin/options.php:2114
+msgid "Colore applicato alle intestazioni H6."
+msgstr ""
+
+#: inc/admin/options.php:2118
+msgid "Sfondo H6"
+msgstr ""
+
+#: inc/admin/options.php:2119
+msgid "Colore di sfondo per le intestazioni H6."
+msgstr ""
+
+#: inc/admin/options.php:2125
+msgid "Titoli pagine e archivi"
+msgstr ""
+
+#: inc/admin/options.php:2126
+msgid ""
+"Personalizza i colori dei titoli principali di pagine, articoli e categorie."
+msgstr ""
+
+#: inc/admin/options.php:2129
+msgid "Colore titolo pagina"
+msgstr ""
+
+#: inc/admin/options.php:2130
+msgid "Colore applicato al titolo delle pagine statiche."
+msgstr ""
+
+#: inc/admin/options.php:2134
+msgid "Sfondo titolo pagina"
+msgstr ""
+
+#: inc/admin/options.php:2135
+msgid "Colore di sfondo per il titolo delle pagine statiche."
+msgstr ""
+
+#: inc/admin/options.php:2139
+msgid "Colore titolo articolo"
+msgstr ""
+
+#: inc/admin/options.php:2140
+msgid "Colore del titolo degli articoli singoli."
+msgstr ""
+
+#: inc/admin/options.php:2144
+msgid "Sfondo titolo articolo"
+msgstr ""
+
+#: inc/admin/options.php:2145
+msgid "Colore di sfondo per il titolo degli articoli singoli."
+msgstr ""
+
+#: inc/admin/options.php:2149
+msgid "Colore titolo categoria"
+msgstr ""
+
+#: inc/admin/options.php:2150
+msgid "Colore per i titoli delle pagine categoria e tassonomie."
+msgstr ""
+
+#: inc/admin/options.php:2154
+msgid "Sfondo titolo categoria"
+msgstr ""
+
+#: inc/admin/options.php:2155
+msgid "Colore di sfondo dei titoli di categorie, archivi e tassonomie."
+msgstr ""
+
+#: inc/admin/options.php:2174
+msgid "Font testo del contenuto"
+msgstr ""
+
+#: inc/admin/options.php:2175
+msgid "Scegli il font principale per paragrafi e testi di base."
+msgstr ""
+
+#: inc/admin/options.php:2176
+msgid "Usa il font di sistema predefinito"
+msgstr ""
+
+#: inc/admin/options.php:2180
+msgid "Font di fallback"
+msgstr ""
+
+#: inc/admin/options.php:2184
+msgid "Questo è un esempio di paragrafo con il font selezionato."
+msgstr ""
+
+#: inc/admin/options.php:2194
+msgid "Dimensione testo (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2195
+msgid "Imposta la dimensione base del font per il contenuto usando i rem."
+msgstr ""
+
+#: inc/admin/options.php:2204
+msgid "Font testo Call to Action"
+msgstr ""
+
+#: inc/admin/options.php:2205
+msgid "Font del testo all’interno del pulsante di invito all’azione."
+msgstr ""
+
+#: inc/admin/options.php:2206 inc/admin/options.php:2364
+#: inc/admin/options.php:2389
+msgid "Usa il font del testo principale"
+msgstr ""
+
+#: inc/admin/options.php:2209
+msgid "Call to action di esempio"
+msgstr ""
+
+#: inc/admin/options.php:2215
+msgid "Dimensione pulsante (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2216
+msgid "Definisce la dimensione del testo del pulsante Call to Action in rem."
+msgstr ""
+
+#: inc/admin/options.php:2223
+msgid "Raggio angoli pulsante (px)"
+msgstr ""
+
+#: inc/admin/options.php:2224
+msgid ""
+"Imposta un raggio uniforme per tutti gli angoli del pulsante Call to Action."
+msgstr ""
+
+#: inc/admin/options.php:2234
+msgid "Font titoli widget footer"
+msgstr ""
+
+#: inc/admin/options.php:2235
+msgid "Scegli il font per i titoli (H) dei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2236 inc/admin/options.php:2449
+#: inc/admin/options.php:2473 inc/admin/options.php:2497
+#: inc/admin/options.php:2521 inc/admin/options.php:2545
+#: inc/admin/options.php:2569 inc/admin/options.php:2587
+#: inc/admin/options.php:2605
+msgid "Usa il font generale dei titoli"
+msgstr ""
+
+#: inc/admin/options.php:2239
+msgid "Titolo widget di esempio"
+msgstr ""
+
+#: inc/admin/options.php:2248
+msgid "Dimensione titoli widget (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2249
+msgid "Imposta la dimensione delle intestazioni dei widget del footer in rem."
+msgstr ""
+
+#: inc/admin/options.php:2258
+msgid "Font titolo widget H2"
+msgstr ""
+
+#: inc/admin/options.php:2259
+msgid ""
+"Applica un font specifico ai titoli H2 presenti nei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2260 inc/admin/options.php:2286
+#: inc/admin/options.php:2312 inc/admin/options.php:2338
+msgid "Usa il font generale dei titoli widget"
+msgstr ""
+
+#: inc/admin/options.php:2263
+msgid "Titolo widget H2"
+msgstr ""
+
+#: inc/admin/options.php:2267
+msgid "Dimensione H2 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2268
+msgid "Imposta la dimensione dei titoli H2 nei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2277
+msgid "Margini e padding H2 widget (px)"
+msgstr ""
+
+#: inc/admin/options.php:2278
+msgid ""
+"Imposta valori in px, come 20px, per i margini e il padding dei titoli H2 "
+"nelle aree widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2284
+msgid "Font titolo widget H3"
+msgstr ""
+
+#: inc/admin/options.php:2285
+msgid "Applica un font specifico ai titoli H3 dei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2289
+msgid "Titolo widget H3"
+msgstr ""
+
+#: inc/admin/options.php:2293
+msgid "Dimensione H3 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2294
+msgid "Imposta la dimensione dei titoli H3 nei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2303
+msgid "Margini e padding H3 widget (px)"
+msgstr ""
+
+#: inc/admin/options.php:2304
+msgid ""
+"Utilizza valori in px, ad esempio 18px, per i margini e il padding dei "
+"titoli H3 nelle aree widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2310
+msgid "Font titolo widget H4"
+msgstr ""
+
+#: inc/admin/options.php:2311
+msgid ""
+"Applica un font specifico ai titoli H4 presenti nei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2315
+msgid "Titolo widget H4"
+msgstr ""
+
+#: inc/admin/options.php:2319
+msgid "Dimensione H4 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2320
+msgid "Imposta la dimensione dei titoli H4 nei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2329
+msgid "Margini e padding H4 widget (px)"
+msgstr ""
+
+#: inc/admin/options.php:2330
+msgid ""
+"Specifica valori in px, per esempio 16px, per margini e padding dei titoli "
+"H4 nelle aree widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2336
+msgid "Font titolo widget H5"
+msgstr ""
+
+#: inc/admin/options.php:2337
+msgid ""
+"Applica un font specifico ai titoli H5 presenti nei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2341
+msgid "Titolo widget H5"
+msgstr ""
+
+#: inc/admin/options.php:2345
+msgid "Dimensione H5 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2346
+msgid "Imposta la dimensione dei titoli H5 nei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2355
+msgid "Margini e padding H5 widget (px)"
+msgstr ""
+
+#: inc/admin/options.php:2356
+msgid ""
+"Immetti valori in px, come 14px, per i margini e il padding dei titoli H5 "
+"nelle aree widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2362
+msgid "Font testo widget footer"
+msgstr ""
+
+#: inc/admin/options.php:2363
+msgid "Definisci il font del testo dei widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2367
+msgid "Testo del widget footer di esempio."
+msgstr ""
+
+#: inc/admin/options.php:2377
+msgid "Dimensione testo widget (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2378
+msgid ""
+"Regola la dimensione del testo all’interno dei widget del footer in rem."
+msgstr ""
+
+#: inc/admin/options.php:2387
+msgid "Font testo barra superiore"
+msgstr ""
+
+#: inc/admin/options.php:2388
+msgid "Font delle informazioni mostrate nella barra superiore."
+msgstr ""
+
+#: inc/admin/options.php:2392
+msgid "Testo della barra superiore di esempio."
+msgstr ""
+
+#: inc/admin/options.php:2401
+msgid "Dimensione barra superiore (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2402
+msgid "Regola la dimensione del testo mostrato nella barra superiore in rem."
+msgstr ""
+
+#: inc/admin/options.php:2410
+msgid "Font titolo H1"
+msgstr ""
+
+#: inc/admin/options.php:2411
+msgid "Font del titolo principale della pagina."
+msgstr ""
+
+#: inc/admin/options.php:2412
+msgid "Usa lo stesso font del testo"
+msgstr ""
+
+#: inc/admin/options.php:2416
+msgid "Font di fallback titoli"
+msgstr ""
+
+#: inc/admin/options.php:2417
+msgid "Specifica i font alternativi per titoli e intestazioni."
+msgstr ""
+
+#: inc/admin/options.php:2420
+msgid "Titolo di esempio H1"
+msgstr ""
+
+#: inc/admin/options.php:2431
+msgid "Dimensione titolo H1 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2432
+msgid "Applica una dimensione personalizzata al titolo H1 misurata in rem."
+msgstr ""
+
+#: inc/admin/options.php:2440
+msgid "Margini e padding H1 (px)"
+msgstr ""
+
+#: inc/admin/options.php:2441
+msgid ""
+"Inserisci valori in px, ad esempio 24px, per gestire margini e padding del "
+"titolo H1."
+msgstr ""
+
+#: inc/admin/options.php:2447
+msgid "Font titolo H2"
+msgstr ""
+
+#: inc/admin/options.php:2448
+msgid "Font per i titoli di secondo livello."
+msgstr ""
+
+#: inc/admin/options.php:2452
+msgid "Titolo di esempio H2"
+msgstr ""
+
+#: inc/admin/options.php:2456
+msgid "Dimensione titolo H2 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2457
+msgid "Personalizza la dimensione dei titoli H2 in rem."
+msgstr ""
+
+#: inc/admin/options.php:2464
+msgid "Margini e padding H2 (px)"
+msgstr ""
+
+#: inc/admin/options.php:2465
+msgid ""
+"Usa valori in px, come 18px, per definire margini e padding dei titoli H2."
+msgstr ""
+
+#: inc/admin/options.php:2471
+msgid "Font titolo H3"
+msgstr ""
+
+#: inc/admin/options.php:2472
+msgid "Font per i titoli di terzo livello."
+msgstr ""
+
+#: inc/admin/options.php:2476
+msgid "Titolo di esempio H3"
+msgstr ""
+
+#: inc/admin/options.php:2480
+msgid "Dimensione titolo H3 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2481
+msgid "Personalizza la dimensione dei titoli H3 in rem."
+msgstr ""
+
+#: inc/admin/options.php:2488
+msgid "Margini e padding H3 (px)"
+msgstr ""
+
+#: inc/admin/options.php:2489
+msgid ""
+"Specificare valori in px, ad esempio 16px, per regolare margini e padding "
+"dei titoli H3."
+msgstr ""
+
+#: inc/admin/options.php:2495
+msgid "Font titolo H4"
+msgstr ""
+
+#: inc/admin/options.php:2496
+msgid "Font per i titoli di quarto livello."
+msgstr ""
+
+#: inc/admin/options.php:2500
+msgid "Titolo di esempio H4"
+msgstr ""
+
+#: inc/admin/options.php:2504
+msgid "Dimensione titolo H4 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2505
+msgid "Personalizza la dimensione dei titoli H4 in rem."
+msgstr ""
+
+#: inc/admin/options.php:2512
+msgid "Margini e padding H4 (px)"
+msgstr ""
+
+#: inc/admin/options.php:2513
+msgid ""
+"Indica valori in px, per esempio 14px, per i margini e il padding dei titoli "
+"H4."
+msgstr ""
+
+#: inc/admin/options.php:2519
+msgid "Font titolo H5"
+msgstr ""
+
+#: inc/admin/options.php:2520
+msgid "Font per i titoli di quinto livello."
+msgstr ""
+
+#: inc/admin/options.php:2524
+msgid "Titolo di esempio H5"
+msgstr ""
+
+#: inc/admin/options.php:2528
+msgid "Dimensione titolo H5 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2529
+msgid "Personalizza la dimensione dei titoli H5 in rem."
+msgstr ""
+
+#: inc/admin/options.php:2536
+msgid "Margini e padding H5 (px)"
+msgstr ""
+
+#: inc/admin/options.php:2537
+msgid ""
+"Inserisci valori in px, come 12px, per controllare margini e padding dei "
+"titoli H5."
+msgstr ""
+
+#: inc/admin/options.php:2543
+msgid "Font titolo H6"
+msgstr ""
+
+#: inc/admin/options.php:2544
+msgid "Font per i titoli di sesto livello."
+msgstr ""
+
+#: inc/admin/options.php:2548
+msgid "Titolo di esempio H6"
+msgstr ""
+
+#: inc/admin/options.php:2552
+msgid "Dimensione titolo H6 (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2553
+msgid "Personalizza la dimensione dei titoli H6 in rem."
+msgstr ""
+
+#: inc/admin/options.php:2560
+msgid "Margini e padding H6 (px)"
+msgstr ""
+
+#: inc/admin/options.php:2561
+msgid ""
+"Usa valori in px, ad esempio 10px, per i margini e il padding dei titoli H6."
+msgstr ""
+
+#: inc/admin/options.php:2567
+msgid "Font titolo pagina"
+msgstr ""
+
+#: inc/admin/options.php:2568
+msgid "Scegli il font per il titolo principale delle pagine."
+msgstr ""
+
+#: inc/admin/options.php:2572
+msgid "Titolo di pagina di esempio"
+msgstr ""
+
+#: inc/admin/options.php:2576
+msgid "Dimensione titolo pagina (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2577
+msgid "Imposta la dimensione del titolo delle pagine in rem."
+msgstr ""
+
+#: inc/admin/options.php:2585
+msgid "Font titolo articolo"
+msgstr ""
+
+#: inc/admin/options.php:2586
+msgid "Definisci il font utilizzato per il titolo degli articoli singoli."
+msgstr ""
+
+#: inc/admin/options.php:2590
+msgid "Titolo di articolo di esempio"
+msgstr ""
+
+#: inc/admin/options.php:2594
+msgid "Dimensione titolo articolo (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2595
+msgid "Personalizza la dimensione del titolo degli articoli in rem."
+msgstr ""
+
+#: inc/admin/options.php:2603
+msgid "Font titolo categoria"
+msgstr ""
+
+#: inc/admin/options.php:2604
+msgid "Imposta il font per i titoli delle categorie e delle tassonomie."
+msgstr ""
+
+#: inc/admin/options.php:2608
+msgid "Titolo di categoria di esempio"
+msgstr ""
+
+#: inc/admin/options.php:2612
+msgid "Dimensione titolo categoria (rem)"
+msgstr ""
+
+#: inc/admin/options.php:2613
+msgid "Regola la dimensione del titolo delle pagine categoria in rem."
+msgstr ""
+
+#: inc/admin/options.php:2631
+msgid "Tipi di carattere"
+msgstr ""
+
+#: inc/admin/options.php:2632
+msgid "Gestisci i font principali del sito."
+msgstr ""
+
+#: inc/admin/options.php:2636
+msgid "Personalizza i font delle aree widget del piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:2705
+msgid ""
+"Non sono stati trovati font personalizzati nella cartella theme-font. Carica "
+"file .woff2, .woff, .ttf o .otf per renderli disponibili."
+msgstr ""
+
+#: inc/admin/options.php:2799
+msgid "Anteprima"
+msgstr ""
+
+#: inc/admin/options.php:2802
+msgid ""
+"Spaziatura, padding e margin (specifica l'unità di misura da utilizzare con "
+"un esempio)."
+msgstr ""
+
+#: inc/admin/options.php:2876 inc/admin/options.php:3204
+msgid "Margine"
+msgstr ""
+
+#: inc/admin/options.php:2877 inc/admin/options.php:3205
+msgid "Padding"
+msgstr ""
+
+#: inc/admin/options.php:2880 inc/admin/options.php:3208
+msgid "Alto"
+msgstr ""
+
+#: inc/admin/options.php:2881 inc/admin/options.php:3209
+msgid "Destra"
+msgstr ""
+
+#: inc/admin/options.php:2882 inc/admin/options.php:3210
+msgid "Basso"
+msgstr ""
+
+#: inc/admin/options.php:2883 inc/admin/options.php:3211
+msgid "Sinistra"
+msgstr ""
+
+#: inc/admin/options.php:2907
+msgid "es. 20px"
+msgstr ""
+
+#: inc/admin/options.php:2979
+msgid "Non sono disponibili sezioni font da configurare."
+msgstr ""
+
+#: inc/admin/options.php:2987
+msgid "Font disponibili"
+msgstr ""
+
+#: inc/admin/options.php:2988
+msgid "L'elenco seguente mostra i font caricati nella cartella theme-font."
+msgstr ""
+
+#: inc/admin/options.php:3198
+msgid "No"
+msgstr ""
+
+#: inc/admin/options.php:3199
+msgid "Sì"
+msgstr ""
+
+#: inc/admin/options.php:3415 inc/admin/options.php:4086
+msgid "Nessun logo selezionato."
+msgstr ""
+
+#: inc/admin/options.php:3427
+msgid "Carica logo"
+msgstr ""
+
+#: inc/admin/options.php:3428
+msgid "Rimuovi logo"
+msgstr ""
+
+#: inc/admin/options.php:3433
+msgid "Mostra il titolo del sito al posto del logo"
+msgstr ""
+
+#: inc/admin/options.php:3439
+msgid "Altezza del logo (px)"
+msgstr ""
+
+#: inc/admin/options.php:3441
+msgid "Imposta 0 per utilizzare le proporzioni originali."
+msgstr ""
+
+#: inc/admin/options.php:3447
+msgid "Colore del titolo"
+msgstr ""
+
+#: inc/admin/options.php:3458
+msgid "Dimensione del titolo (rem)"
+msgstr ""
+
+#: inc/admin/options.php:3475
+msgid "Layout 1 – Classico"
+msgstr ""
+
+#: inc/admin/options.php:3476
+msgid "Layout 2 – Centrato"
+msgstr ""
+
+#: inc/admin/options.php:3477
+msgid "Layout 3 – Minimal"
+msgstr ""
+
+#: inc/admin/options.php:3478
+msgid "Layout 4 – Vetrina"
+msgstr ""
+
+#: inc/admin/options.php:3479
+msgid "Layout 5 – Overlay"
+msgstr ""
+
+#: inc/admin/options.php:3480
+msgid "Layout 6 – Sticky"
+msgstr ""
+
+#: inc/admin/options.php:3481
+msgid "Layout 7 – Promo"
+msgstr ""
+
+#: inc/admin/options.php:3482
+msgid "Layout 8 – E-commerce"
+msgstr ""
+
+#: inc/admin/options.php:3506
+msgid "Seleziona layout"
+msgstr ""
+
+#: inc/admin/options.php:3513
+msgid "Scegli quale testata applicare al tema."
+msgstr ""
+
+#: inc/admin/options.php:3521
+msgid "Mostra la barra superiore con informazioni e social."
+msgstr ""
+
+#: inc/admin/options.php:3523
+msgid ""
+"La barra comprende messaggio iniziale, contatti, posizione, un menù "
+"informativo e le icone social."
+msgstr ""
+
+#: inc/admin/options.php:3528
+msgid "Messaggio iniziale"
+msgstr ""
+
+#: inc/admin/options.php:3547 inc/admin/options.php:3555
+msgid "+39 012 3456789"
+msgstr ""
+
+#: inc/admin/options.php:3552
+msgid "WhatsApp"
+msgstr ""
+
+#: inc/admin/options.php:3563
+msgid "Mostra il pulsante Call to Action."
+msgstr ""
+
+#: inc/admin/options.php:3565
+msgid "Deseleziona per nascondere il pulsante in tutte le testate."
+msgstr ""
+
+#: inc/admin/options.php:3566
+msgid "Testo pulsante"
+msgstr ""
+
+#: inc/admin/options.php:3568
+msgid "Link pulsante"
+msgstr ""
+
+#: inc/admin/options.php:3574
+msgid "Posizione"
+msgstr ""
+
+#: inc/admin/options.php:3577
+msgid "Es. Piazza del Duomo, Milano"
+msgstr ""
+
+#: inc/admin/options.php:3578
+msgid "Testo mostrato accanto all’icona della posizione."
+msgstr ""
+
+#: inc/admin/options.php:3579
+msgid "Link Google Maps"
+msgstr ""
+
+#: inc/admin/options.php:3584
+msgid "Icone social"
+msgstr ""
+
+#: inc/admin/options.php:3586
+msgid ""
+"Inserisci gli URL dei tuoi profili social per mostrarne le icone nella barra "
+"superiore."
+msgstr ""
+
+#: inc/admin/options.php:3602
+msgid ""
+"Suggerimento: assegna un menù alla posizione \"Top Info Menu\" da Aspetto → "
+"Menu per mostrare i link informativi nella barra superiore."
+msgstr ""
+
+#: inc/admin/options.php:3625
+msgid "Mostra sottointestazione"
+msgstr ""
+
+#: inc/admin/options.php:3629
+msgid "Abilita la sezione con titolo pagina e breadcrumbs."
+msgstr ""
+
+#: inc/admin/options.php:3631
+msgid "Se disattivata, titolo e breadcrumbs non verranno mostrati globalmente."
+msgstr ""
+
+#: inc/admin/options.php:3638
+msgid "Impostazioni sottointestazione"
+msgstr ""
+
+#: inc/admin/options.php:3642
+msgid "Elementi visibili"
+msgstr ""
+
+#: inc/admin/options.php:3646
+msgid "Mostra il titolo della pagina"
+msgstr ""
+
+#: inc/admin/options.php:3651
+msgid "Mostra i breadcrumbs"
+msgstr ""
+
+#: inc/admin/options.php:3653
+msgid ""
+"Le impostazioni della singola pagina possono comunque nascondere questi "
+"elementi."
+msgstr ""
+
+#: inc/admin/options.php:3664
+msgid "Scegli come posizionare titolo e breadcrumbs nella sottointestazione."
+msgstr ""
+
+#: inc/admin/options.php:3668
+msgid "Tag del titolo"
+msgstr ""
+
+#: inc/admin/options.php:3675
+msgid "Seleziona il tag HTML utilizzato per il titolo principale."
+msgstr ""
+
+#: inc/admin/options.php:3679
+msgid "Separatore breadcrumbs"
+msgstr ""
+
+#: inc/admin/options.php:3687
+msgid ""
+"Suggerimenti: /, >, », ›, | oppure qualsiasi stringa entro 10 caratteri."
+msgstr ""
+
+#: inc/admin/options.php:3742
+msgid "Mostra il piè di pagina"
+msgstr ""
+
+#: inc/admin/options.php:3746
+msgid "Visualizza l’intera area footer."
+msgstr ""
+
+#: inc/admin/options.php:3748
+msgid ""
+"Disattiva per nascondere completamente i widget del piè di pagina e la "
+"sezione finale."
+msgstr ""
+
+#: inc/admin/options.php:3752
+msgid "Credits"
+msgstr ""
+
+#: inc/admin/options.php:3756
+msgid "Visualizza i credits."
+msgstr ""
+
+#: inc/admin/options.php:3758
+msgid "Disattiva per nascondere la sezione con i credits nel piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:3762
+msgid "Numero di righe"
+msgstr ""
+
+#: inc/admin/options.php:3765
+msgid "1 riga"
+msgstr ""
+
+#: inc/admin/options.php:3766
+msgid "2 righe"
+msgstr ""
+
+#: inc/admin/options.php:3768
+msgid "Scegli se visualizzare una o due righe di widget nel piè di pagina."
+msgstr ""
+
+#: inc/admin/options.php:3780
+#, php-format
+msgid "Layout riga %d"
+msgstr ""
+
+#: inc/admin/options.php:3787
+#, php-format
+msgid "Scegli quante colonne mostrare nella riga %d."
+msgstr ""
+
+#: inc/admin/options.php:3792
+msgid "Testo credits"
+msgstr ""
+
+#: inc/admin/options.php:3805
+msgid "Inserisci testo o HTML per personalizzare i credits del sito."
+msgstr ""
+
+#: inc/admin/options.php:3900
+msgid "CSS personalizzato"
+msgstr ""
+
+#: inc/admin/options.php:4084
+msgid "Scegli un logo"
+msgstr ""
+
+#: inc/admin/options.php:4085
+msgid "Usa questo logo"
+msgstr ""
+
+#: inc/admin/options.php:4087
+msgid "Scegli un’immagine di sfondo"
+msgstr ""
+
+#: inc/admin/options.php:4088
+msgid "Usa questa immagine"
+msgstr ""
+
+#: inc/admin/options.php:4090
+msgid "Trasparenza"
+msgstr ""
+
+#: inc/admin/options.php:4191
+msgid "Impostazioni pagina"
+msgstr ""
+
+#: inc/admin/options.php:4220
+msgid "Nascondi breadcrumbs"
+msgstr ""
+
+#: inc/admin/options.php:4226
+msgid "Nascondi titolo pagina"
+msgstr ""
+
+#: inc/admin/options.php:4232
+msgid "Rimuovi il padding superiore del contenuto"
+msgstr ""
+
+#: inc/admin/options.php:4235
+msgid "Queste impostazioni influiscono solo su questa pagina."
+msgstr ""
+
+#: inc/widgets.php:23
+msgid "Add widgets here."
+msgstr ""
+
+#: inc/widgets.php:40
+#, php-format
+msgid "Footer Row %1$d – Column %2$d"
+msgstr ""
+
+#: inc/widgets.php:42
+#, php-format
+msgid "Appears in footer row %1$d column %2$d."
+msgstr ""
+
+#: inc/widgets.php:54
+msgid "Page Widgets"
+msgstr ""
+
+#: inc/widgets.php:56
+msgid "Widgets displayed in page templates with a sidebar."
+msgstr ""
+
+#: searchform.php:9
 msgid "Search for:"
 msgstr ""
 
-#: searchform.php:12
+#: searchform.php:10
 msgid "Search …"
 msgstr ""
 
-#: searchform.php:14
+#: searchform.php:12
 msgid "Search"
 msgstr ""

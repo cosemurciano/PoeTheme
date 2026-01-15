@@ -41,8 +41,19 @@
                 item.classList.add('is-open');
                 submenu.classList.remove('hidden');
                 submenu.classList.add('block');
+                submenu.setAttribute('aria-hidden', 'false');
                 if (trigger) {
                     trigger.setAttribute('aria-expanded', 'true');
+                }
+            };
+
+            var closeMenu = function () {
+                item.classList.remove('is-open');
+                submenu.classList.remove('block');
+                submenu.classList.add('hidden');
+                submenu.setAttribute('aria-hidden', 'true');
+                if (trigger) {
+                    trigger.setAttribute('aria-expanded', 'false');
                 }
             };
 
@@ -52,12 +63,7 @@
                 }
 
                 closeTimer = setTimeout(function () {
-                    item.classList.remove('is-open');
-                    submenu.classList.remove('block');
-                    submenu.classList.add('hidden');
-                    if (trigger) {
-                        trigger.setAttribute('aria-expanded', 'false');
-                    }
+                    closeMenu();
                     closeTimer = null;
                 }, 200);
             };
@@ -82,6 +88,16 @@
                     return;
                 }
                 scheduleClose();
+            });
+
+            item.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    event.stopPropagation();
+                    closeMenu();
+                    if (trigger) {
+                        trigger.focus();
+                    }
+                }
             });
 
             submenu.addEventListener('mouseenter', cancelClose);
@@ -126,6 +142,14 @@
                     closeItem();
                 } else {
                     openItem();
+                }
+            });
+
+            item.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                    closeItem();
+                    trigger.focus();
                 }
             });
         });
