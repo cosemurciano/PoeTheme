@@ -262,10 +262,52 @@ function poetheme_get_subheader_title_text() {
     }
 
     if ( is_archive() ) {
-        return get_the_archive_title();
+        return poetheme_get_archive_title_text();
     }
 
     return get_bloginfo( 'name' );
+}
+
+/**
+ * Return a plain-text archive title without HTML markup.
+ *
+ * @return string
+ */
+function poetheme_get_archive_title_text() {
+    if ( is_category() || is_tag() || is_tax() ) {
+        return single_term_title( '', false );
+    }
+
+    if ( is_post_type_archive() ) {
+        return post_type_archive_title( '', false );
+    }
+
+    if ( is_author() ) {
+        $author = get_queried_object();
+        if ( $author instanceof WP_User ) {
+            return $author->display_name;
+        }
+
+        return get_the_author();
+    }
+
+    if ( is_day() ) {
+        return get_the_date();
+    }
+
+    if ( is_month() ) {
+        return get_the_date( 'F Y' );
+    }
+
+    if ( is_year() ) {
+        return get_the_date( 'Y' );
+    }
+
+    if ( is_search() ) {
+        return sprintf( __( 'Risultati della ricerca per "%s"', 'poetheme' ), get_search_query() );
+    }
+
+    return wp_strip_all_tags( get_the_archive_title() );
 }
 
 /**

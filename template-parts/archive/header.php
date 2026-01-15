@@ -19,7 +19,7 @@ $title       = $context['title'];
 $description = $context['description'];
 
 if ( '' === trim( $title ) ) {
-    $title = get_the_archive_title();
+    $title = poetheme_get_archive_title_text();
 }
 
 if ( '' === trim( $description ) ) {
