@@ -112,7 +112,7 @@
         }
 
         items.forEach(function (item) {
-            var trigger = item.querySelector(':scope > a[data-poetheme-toggle="submenu"]');
+            var trigger = item.querySelector(':scope > .poetheme-mobile-item-row > .poetheme-submenu-toggle');
             var submenu = item.querySelector(':scope > [data-poetheme-submenu="true"]');
             if (!trigger || !submenu) {
                 return;
@@ -136,8 +136,7 @@
                 closeItem();
             }
 
-            trigger.addEventListener('click', function (event) {
-                event.preventDefault();
+            trigger.addEventListener('click', function () {
                 if (item.classList.contains('is-open')) {
                     closeItem();
                 } else {

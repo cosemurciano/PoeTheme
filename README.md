@@ -70,6 +70,10 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - `assets/css/` stili dedicati all'editor a blocchi.
 - `languages/` file di traduzione `.pot`.
 
+## Menu locations (header split)
+- Nuove locations `primary-left` e `primary-right` per i layout header split.
+- Se non assegnate, il tema usa una sola volta `primary` (posizione destra), lasciando vuota la sinistra per evitare duplicazioni.
+
 ## Asset Policy (M5)
 - Preferire asset locali e versionati.
 - CDN ammessi solo se versionati, con SRI e `crossorigin="anonymous"`.

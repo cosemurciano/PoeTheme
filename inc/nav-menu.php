@@ -190,7 +190,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $atts['rel']    = ! empty( $item->xfn ) ? $item->xfn : '';
             $atts['href']   = ! empty( $item->url ) ? $item->url : '';
 
-            if ( $has_children ) {
+            if ( $has_children && 'mobile' !== $this->variant ) {
                 $atts['aria-haspopup'] = 'true';
                 $atts['aria-expanded'] = 'false';
                 if ( $submenu_id ) {
@@ -228,26 +228,32 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             }
 
             $indicator = '';
-            if ( $has_children ) {
-                if ( 'mobile' === $this->variant ) {
-                    $indicator_icon = 'chevron-down';
-                } else {
-                    $indicator_icon = ( 0 === $depth ) ? 'chevron-down' : 'chevron-right';
-                }
-
+            if ( $has_children && 'mobile' !== $this->variant ) {
+                $indicator_icon    = ( 0 === $depth ) ? 'chevron-down' : 'chevron-right';
                 $indicator_classes = array( 'poetheme-submenu-indicator', 'w-4', 'h-4', 'ml-1', 'text-gray-400' );
+                $indicator         = '<i data-lucide="' . esc_attr( $indicator_icon ) . '" class="' . esc_attr( implode( ' ', $indicator_classes ) ) . '"></i>';
+            }
 
-                if ( 'mobile' === $this->variant ) {
-                    $indicator_classes[] = 'transition-transform';
-                    $indicator_classes[] = 'duration-200';
-                }
-
-                $indicator = '<i data-lucide="' . esc_attr( $indicator_icon ) . '" class="' . esc_attr( implode( ' ', $indicator_classes ) ) . '"></i>';
+            $submenu_toggle = '';
+            if ( $has_children && 'mobile' === $this->variant ) {
+                $toggle_label = sprintf(
+                    /* translators: %s: menu item title */
+                    __( 'Apri il sottomenu di %s', 'poetheme' ),
+                    $title
+                );
+                $submenu_toggle = sprintf(
+                    '<button type="button" class="poetheme-submenu-toggle inline-flex items-center justify-center text-gray-500 hover:text-blue-600 transition" aria-expanded="false"%1$s aria-label="%2$s"><i data-lucide="chevron-down" class="poetheme-submenu-indicator w-4 h-4"></i></button>',
+                    $submenu_id ? ' aria-controls="' . esc_attr( $submenu_id ) . '"' : '',
+                    esc_attr( $toggle_label )
+                );
             }
 
             $title_markup = '<span class="menu-item-text' . ( $is_bold ? ' font-semibold' : '' ) . '">' . esc_html( $title ) . '</span>';
 
             $item_output  = $args->before;
+            if ( $has_children && 'mobile' === $this->variant ) {
+                $item_output .= '<div class="poetheme-mobile-item-row">';
+            }
             $item_output .= '<a' . $attributes . '>';
             $item_output .= $args->link_before;
 
@@ -263,6 +269,14 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
 
             $item_output .= $args->link_after;
             $item_output .= '</a>';
+
+            if ( $submenu_toggle ) {
+                $item_output .= $submenu_toggle;
+            }
+
+            if ( $has_children && 'mobile' === $this->variant ) {
+                $item_output .= '</div>';
+            }
             $item_output .= $args->after;
 
             $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
@@ -302,7 +316,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $is_primary_layout = ( 'primary' === $this->layout );
 
             if ( 'mobile' === $this->variant ) {
-                $classes = array( 'flex', 'items-center', 'gap-2', 'w-full', 'text-left', 'transition', 'duration-150' );
+                $classes = array( 'flex', 'items-center', 'gap-2', 'flex-1', 'text-left', 'transition', 'duration-150' );
                 $classes[] = ( 0 === $depth ) ? 'text-base' : 'text-sm';
                 $classes[] = 'text-gray-800';
                 $classes[] = 'hover:text-blue-600';
@@ -400,6 +414,46 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
     }
 }
 
+if ( ! function_exists( 'poetheme_get_navigation_menu_items' ) ) {
+    /**
+     * Return navigation menu items markup only (without wrapping <ul>).
+     *
+     * @param string $location Menu location slug.
+     * @param string $variant  Menu variant (desktop or mobile).
+     * @param array  $args     Additional arguments passed to wp_nav_menu().
+     * @return string
+     */
+    function poetheme_get_navigation_menu_items( $location, $variant = 'desktop', $args = array() ) {
+        $defaults = array(
+            'theme_location' => $location,
+            'container'      => false,
+            'echo'           => false,
+            'depth'          => 0,
+            'items_wrap'     => '%3$s',
+        );
+
+        if ( 'top-info' === $location ) {
+            $defaults['fallback_cb'] = false;
+        } else {
+            $defaults['fallback_cb'] = 'wp_page_menu';
+        }
+
+        $walker_args          = array(
+            'layout'  => ( 'top-info' === $location ) ? 'top-info' : 'primary',
+            'variant' => ( 'mobile' === $variant ) ? 'mobile' : 'desktop',
+        );
+        $defaults['walker']   = new PoeTheme_Nav_Walker( $walker_args );
+
+        if ( 'mobile' === $variant ) {
+            $defaults['depth'] = 0;
+        }
+
+        $args = wp_parse_args( $args, $defaults );
+
+        return wp_nav_menu( $args );
+    }
+}
+
 /**
  * Append the CTA button as the last primary menu item when requested.
  *
@@ -412,7 +466,8 @@ function poetheme_append_primary_menu_cta( $items, $args ) {
         return $items;
     }
 
-    if ( empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+    $allowed_locations = array( 'primary', 'primary-left', 'primary-right' );
+    if ( empty( $args->theme_location ) || ! in_array( $args->theme_location, $allowed_locations, true ) ) {
         return $items;
     }
 
