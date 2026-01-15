@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.6.0
+Version: 1.7.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -273,6 +273,65 @@ body.admin-bar #wpadminbar * {
   padding: 0;
 }
 
+.poetheme-header {
+  position: relative;
+  background-color: var(--poetheme-header-background-color);
+  box-shadow: var(--poetheme-header-shadow);
+}
+
+.poetheme-header--style-2 .poetheme-header__main {
+  background-color: color-mix(in srgb, var(--poetheme-header-background-color) 85%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.poetheme-header--style-5 {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+body.admin-bar .poetheme-header--style-5 {
+  top: var(--wp-admin--admin-bar--height, 32px);
+}
+
+.poetheme-mobile-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.poetheme-mobile-panel__title {
+  font-weight: 600;
+}
+
+.poetheme-mobile-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.poetheme-header__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+}
+
+.poetheme-submenu-toggle {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  border-radius: 9999px;
+}
+
+.poetheme-nav--mobile .poetheme-menu-item + .poetheme-menu-item {
+  margin-top: 0.35rem;
+}
+
 .poetheme-nav--desktop li.is-open > [data-poetheme-submenu="true"] {
   display: block;
 }
@@ -295,6 +354,12 @@ body.admin-bar #wpadminbar * {
 
 .poetheme-nav--mobile li.is-open .poetheme-submenu-indicator {
   transform: rotate(180deg);
+}
+
+.poetheme-header--style-8 .poetheme-nav--desktop > li > a {
+  padding: 0.45rem 0.8rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(15, 23, 42, 0.12);
 }
 
 .poetheme-nav-link--level-0 {

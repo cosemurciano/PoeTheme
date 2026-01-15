@@ -1,6 +1,6 @@
 <?php
 /**
- * Header layout: Style 7 (Promo).
+ * Header layout: Style 7 (Stack | Left).
  *
  * @package PoeTheme
  */
@@ -62,10 +62,15 @@ foreach ( $social_links as $link ) {
 $has_top_menu = has_nav_menu( 'top-info' );
 
 ?>
-<header class="poetheme-site-header relative bg-white shadow-sm" role="banner" x-data="{ mobileOpen: false, promoOpen: true }">
+<header
+    class="poetheme-site-header poetheme-site-header--style-7 poetheme-header poetheme-header--style-7"
+    role="banner"
+    x-data="{ mobileOpen: false }"
+    x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
+>
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="poetheme-top-bar bg-gray-900 text-white text-xs">
-        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
+            <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
                     poetheme_render_top_bar_items(
@@ -116,31 +121,23 @@ $has_top_menu = has_nav_menu( 'top-info' );
         </div>
     <?php endif; ?>
 
-    <div x-show="promoOpen" x-transition.opacity class="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white text-sm">
-        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'items-center', 'justify-between' ) ) ); ?>">
-            <div class="flex items-center gap-2 font-semibold">
-                <i data-lucide="sparkles" class="w-4 h-4"></i>
-                <span><?php esc_html_e( 'Spedizione gratuita oltre 50€ per un tempo limitato!', 'poetheme' ); ?></span>
-            </div>
-            <button type="button" class="text-white/80 hover:text-white" @click="promoOpen = false">
-                <span class="sr-only"><?php esc_html_e( 'Nascondi promozione', 'poetheme' ); ?></span>
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-        </div>
-    </div>
-
     <div class="border-b border-gray-100">
-        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-4' ) ) ); ?>">
-            <div class="flex items-center justify-between gap-6">
-                <div class="flex items-center gap-4">
-                    <button type="button" class="md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" aria-expanded="false">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
+            <div class="flex items-center justify-start">
+                <div class="flex w-full items-center justify-between md:w-auto">
+                    <?php poetheme_the_logo(); ?>
+                    <button type="button" class="poetheme-header__toggle md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
                         <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
-                    <?php poetheme_the_logo(); ?>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <nav class="nav-primary hidden md:flex items-center gap-6 text-sm font-medium text-gray-700" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
+    <div class="border-b border-gray-100 hidden md:block">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-3' ) ) ); ?>">
+            <nav class="nav-primary flex items-center justify-start" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                 <?php
                 poetheme_render_navigation_menu(
                     'primary',
@@ -152,49 +149,57 @@ $has_top_menu = has_nav_menu( 'top-info' );
                     )
                 );
                 ?>
-                </nav>
-
-                <div class="hidden md:flex items-center gap-3">
-                    <button type="button" class="text-gray-600 hover:text-orange-500">
-                        <i data-lucide="search" class="w-5 h-5"></i>
-                        <span class="sr-only"><?php esc_html_e( 'Cerca', 'poetheme' ); ?></span>
-                    </button>
-                    <button type="button" class="text-gray-600 hover:text-orange-500">
-                        <i data-lucide="user" class="w-5 h-5"></i>
-                        <span class="sr-only"><?php esc_html_e( 'Account', 'poetheme' ); ?></span>
-                    </button>
-                </div>
-            </div>
+            </nav>
         </div>
     </div>
 
-    <div x-show="mobileOpen" x-cloak class="md:hidden border-b border-gray-100 bg-white" @keydown.escape.window="mobileOpen = false">
-        <div class="px-4 py-5 space-y-4" @click.away="mobileOpen = false">
-            <nav aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
-                <?php
-                poetheme_render_navigation_menu(
-                    'primary',
-                    'mobile',
-                    array(
-                        'menu_class'   => 'flex flex-col gap-4 text-base font-medium text-gray-900',
-                        'fallback_cb'  => 'wp_page_menu',
-                        'poetheme_cta' => $cta_mobile,
-                    )
-                );
-                ?>
-            </nav>
+    <div
+        id="poetheme-mobile-menu"
+        x-show="mobileOpen"
+        x-cloak
+        class="fixed inset-0 z-50 md:hidden"
+        @keydown.escape.window="mobileOpen = false"
+        x-transition:enter="transition-opacity ease-linear duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-linear duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+    >
+        <div class="absolute inset-0 bg-gray-900/50" @click="mobileOpen = false" aria-hidden="true"></div>
 
-            <div class="flex items-center gap-4 text-gray-600">
-                <button type="button" class="p-2 rounded-full border border-gray-200 hover:border-orange-500 hover:text-orange-500 transition">
-                    <i data-lucide="search" class="w-5 h-5"></i>
-                    <span class="sr-only"><?php esc_html_e( 'Cerca', 'poetheme' ); ?></span>
-                </button>
-                <button type="button" class="p-2 rounded-full border border-gray-200 hover:border-orange-500 hover:text-orange-500 transition">
-                    <i data-lucide="user" class="w-5 h-5"></i>
-                    <span class="sr-only"><?php esc_html_e( 'Account', 'poetheme' ); ?></span>
+        <div
+            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col bg-white shadow-xl"
+            x-transition:enter="transition ease-in-out duration-300"
+            x-transition:enter-start="translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in-out duration-300"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="translate-x-full"
+        >
+            <div class="poetheme-mobile-panel__header">
+                <span class="poetheme-mobile-panel__title"><?php esc_html_e( 'Menu', 'poetheme' ); ?></span>
+                <button type="button" class="text-gray-700" @click="mobileOpen = false">
+                    <span class="sr-only"><?php esc_html_e( 'Chiudi il menù principale', 'poetheme' ); ?></span>
+                    <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
 
+            <div class="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-6">
+                <nav aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
+                    <?php
+                    poetheme_render_navigation_menu(
+                        'primary',
+                        'mobile',
+                        array(
+                            'menu_class'   => 'flex flex-col gap-4 text-base font-medium text-gray-900',
+                            'fallback_cb'  => 'wp_page_menu',
+                            'poetheme_cta' => $cta_mobile,
+                        )
+                    );
+                    ?>
+                </nav>
+            </div>
         </div>
     </div>
 </header>

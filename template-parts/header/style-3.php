@@ -1,6 +1,6 @@
 <?php
 /**
- * Header layout: Style 3 (Minimal).
+ * Header layout: Style 3 (Shop split).
  *
  * @package PoeTheme
  */
@@ -41,12 +41,12 @@ if ( $show_cta && '' !== $cta_text ) {
     $cta_desktop = array(
         'text'  => $cta_text,
         'url'   => $cta_url,
-        'class' => 'poetheme-cta-button inline-flex items-center px-4 py-2 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] text-[11px] hover:bg-gray-900 hover:text-white transition',
+        'class' => 'poetheme-cta-button inline-flex items-center px-4 py-2 rounded-lg shadow transition',
     );
     $cta_mobile  = array(
         'text'  => $cta_text,
         'url'   => $cta_url,
-        'class' => 'poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 border border-gray-900 text-gray-900 uppercase tracking-[0.3em] hover:bg-gray-900 hover:text-white transition',
+        'class' => 'poetheme-cta-button inline-flex w-full justify-center items-center px-5 py-3 rounded-lg shadow transition',
     );
 }
 
@@ -61,11 +61,35 @@ foreach ( $social_links as $link ) {
 
 $has_top_menu = has_nav_menu( 'top-info' );
 
+$has_left_menu        = has_nav_menu( 'primary-left' );
+$has_right_menu       = has_nav_menu( 'primary-right' );
+$use_primary_fallback = ! $has_left_menu && ! $has_right_menu && has_nav_menu( 'primary' );
+$left_location        = $has_left_menu ? 'primary-left' : '';
+$right_location       = $has_right_menu ? 'primary-right' : ( $use_primary_fallback ? 'primary' : '' );
+$cta_target_location  = $right_location ? $right_location : $left_location;
+
+$left_cta_desktop  = ( $cta_target_location === $left_location ) ? $cta_desktop : array();
+$right_cta_desktop = ( $cta_target_location === $right_location ) ? $cta_desktop : array();
+$left_cta_mobile   = ( $cta_target_location === $left_location ) ? $cta_mobile : array();
+$right_cta_mobile  = ( $cta_target_location === $right_location ) ? $cta_mobile : array();
+
+$mobile_left_items  = $left_location ? poetheme_get_navigation_menu_items( $left_location, 'mobile', array( 'poetheme_cta' => $left_cta_mobile ) ) : '';
+$mobile_right_items = $right_location ? poetheme_get_navigation_menu_items( $right_location, 'mobile', array( 'poetheme_cta' => $right_cta_mobile ) ) : '';
+
+$has_woocommerce = function_exists( 'WC' );
+$cart_url        = $has_woocommerce ? wc_get_cart_url() : '';
+$account_url     = $has_woocommerce ? wc_get_page_permalink( 'myaccount' ) : '';
+$search_url      = get_search_link();
 ?>
-<header class="poetheme-site-header relative bg-white border-b border-gray-200" role="banner" x-data="{ mobileOpen: false }">
+<header
+    class="poetheme-site-header poetheme-site-header--style-3 poetheme-header poetheme-header--style-3"
+    role="banner"
+    x-data="{ mobileOpen: false }"
+    x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
+>
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
         <div class="poetheme-top-bar bg-gray-50 text-xs text-gray-600 border-b border-gray-200">
-        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
+            <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
                     poetheme_render_top_bar_items(
@@ -116,47 +140,149 @@ $has_top_menu = has_nav_menu( 'top-info' );
         </div>
     <?php endif; ?>
 
-    <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-8">
-                <button type="button" class="md:hidden text-gray-800" @click="mobileOpen = ! mobileOpen" aria-expanded="false">
-                    <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
-                    <i data-lucide="menu" class="w-6 h-6"></i>
-                </button>
-                <?php poetheme_the_logo(); ?>
-            </div>
+    <div class="border-b border-gray-200">
+        <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
+            <div class="md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6 flex items-center justify-between gap-4">
+                <div class="hidden md:flex items-center justify-start">
+                    <?php if ( $left_location ) : ?>
+                        <nav class="nav-primary" aria-label="<?php esc_attr_e( 'Primary navigation left', 'poetheme' ); ?>">
+                            <?php
+                            poetheme_render_navigation_menu(
+                                $left_location,
+                                'desktop',
+                                array(
+                                    'menu_class'   => 'flex flex-wrap items-center gap-6 text-sm font-medium',
+                                    'fallback_cb'  => false,
+                                    'poetheme_cta' => $left_cta_desktop,
+                                )
+                            );
+                            ?>
+                        </nav>
+                    <?php endif; ?>
+                </div>
 
-            <nav class="nav-primary hidden md:flex items-center gap-10 text-xs font-semibold tracking-[0.35em] text-gray-700 uppercase" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
-                <?php
-                poetheme_render_navigation_menu(
-                    'primary',
-                    'desktop',
-                    array(
-                        'menu_class'   => 'flex items-center gap-10 text-xs font-semibold tracking-[0.35em] uppercase',
-                        'fallback_cb'  => 'wp_page_menu',
-                        'poetheme_cta' => $cta_desktop,
-                    )
-                );
-                ?>
-            </nav>
+                <div class="flex w-full items-center justify-between md:w-auto md:justify-center">
+                    <?php poetheme_the_logo(); ?>
+                    <button type="button" class="poetheme-header__toggle md:hidden text-gray-800" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
+                        <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <div class="hidden md:flex items-center justify-end gap-4">
+                    <?php if ( $right_location ) : ?>
+                        <nav class="nav-primary" aria-label="<?php esc_attr_e( 'Primary navigation right', 'poetheme' ); ?>">
+                            <?php
+                            poetheme_render_navigation_menu(
+                                $right_location,
+                                'desktop',
+                                array(
+                                    'menu_class'   => 'flex flex-wrap items-center gap-6 text-sm font-medium',
+                                    'fallback_cb'  => false,
+                                    'poetheme_cta' => $right_cta_desktop,
+                                )
+                            );
+                            ?>
+                        </nav>
+                    <?php endif; ?>
+
+                    <?php if ( $has_woocommerce ) : ?>
+                        <div class="flex items-center gap-3 text-gray-700">
+                            <a class="hover:text-blue-600 transition" href="<?php echo esc_url( $search_url ); ?>" aria-label="<?php esc_attr_e( 'Cerca', 'poetheme' ); ?>">
+                                <i data-lucide="search" class="w-5 h-5"></i>
+                            </a>
+                            <?php if ( $account_url ) : ?>
+                                <a class="hover:text-blue-600 transition" href="<?php echo esc_url( $account_url ); ?>" aria-label="<?php esc_attr_e( 'Account', 'poetheme' ); ?>">
+                                    <i data-lucide="user" class="w-5 h-5"></i>
+                                </a>
+                            <?php endif; ?>
+                            <?php if ( $cart_url ) : ?>
+                                <a class="hover:text-blue-600 transition" href="<?php echo esc_url( $cart_url ); ?>" aria-label="<?php esc_attr_e( 'Carrello', 'poetheme' ); ?>">
+                                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div x-show="mobileOpen" x-cloak class="md:hidden border-t border-gray-200 bg-white" @keydown.escape.window="mobileOpen = false">
-        <div class="px-4 py-4 space-y-4" @click.away="mobileOpen = false">
-            <nav aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
-                <?php
-                poetheme_render_navigation_menu(
-                    'primary',
-                    'mobile',
-                    array(
-                        'menu_class'   => 'flex flex-col gap-3 text-sm font-medium text-gray-800 uppercase tracking-[0.2em]',
-                        'fallback_cb'  => 'wp_page_menu',
-                        'poetheme_cta' => $cta_mobile,
-                    )
-                );
-                ?>
-            </nav>
+    <div
+        id="poetheme-mobile-menu"
+        x-show="mobileOpen"
+        x-cloak
+        class="fixed inset-0 z-50 md:hidden"
+        @keydown.escape.window="mobileOpen = false"
+        x-transition:enter="transition-opacity ease-linear duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-linear duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+    >
+        <div class="absolute inset-0 bg-gray-900/50" @click="mobileOpen = false" aria-hidden="true"></div>
+
+        <div
+            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col bg-white shadow-xl"
+            x-transition:enter="transition ease-in-out duration-300"
+            x-transition:enter-start="translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in-out duration-300"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="translate-x-full"
+        >
+            <div class="poetheme-mobile-panel__header">
+                <span class="poetheme-mobile-panel__title"><?php esc_html_e( 'Menu', 'poetheme' ); ?></span>
+                <button type="button" class="text-gray-700" @click="mobileOpen = false">
+                    <span class="sr-only"><?php esc_html_e( 'Chiudi il menù principale', 'poetheme' ); ?></span>
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-6">
+                <?php if ( $has_woocommerce ) : ?>
+                    <div class="flex items-center gap-4 text-gray-700">
+                        <a class="hover:text-blue-600 transition" href="<?php echo esc_url( $search_url ); ?>" aria-label="<?php esc_attr_e( 'Cerca', 'poetheme' ); ?>">
+                            <i data-lucide="search" class="w-5 h-5"></i>
+                        </a>
+                        <?php if ( $account_url ) : ?>
+                            <a class="hover:text-blue-600 transition" href="<?php echo esc_url( $account_url ); ?>" aria-label="<?php esc_attr_e( 'Account', 'poetheme' ); ?>">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </a>
+                        <?php endif; ?>
+                        <?php if ( $cart_url ) : ?>
+                            <a class="hover:text-blue-600 transition" href="<?php echo esc_url( $cart_url ); ?>" aria-label="<?php esc_attr_e( 'Carrello', 'poetheme' ); ?>">
+                                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <nav aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
+                    <ul class="poetheme-nav poetheme-nav--mobile poetheme-nav--location-primary flex flex-col gap-4 text-base font-medium text-gray-800" data-poetheme-nav="1" data-variant="mobile" data-location="primary">
+                        <?php
+                        echo $mobile_left_items; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        echo $mobile_right_items; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        ?>
+                    </ul>
+                </nav>
+
+                <?php if ( $has_top_menu ) : ?>
+                    <nav aria-label="<?php esc_attr_e( 'Informazioni rapide', 'poetheme' ); ?>" class="border-t border-gray-200 pt-6">
+                        <?php
+                        poetheme_render_navigation_menu(
+                            'top-info',
+                            'mobile',
+                            array(
+                                'menu_class'  => 'flex flex-col gap-3 text-sm font-medium text-gray-600',
+                                'fallback_cb' => false,
+                            )
+                        );
+                        ?>
+                    </nav>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </header>

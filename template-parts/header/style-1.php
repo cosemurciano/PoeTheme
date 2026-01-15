@@ -63,7 +63,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 
 ?>
 <header
-    class="poetheme-site-header poetheme-site-header--style-1 relative bg-white shadow-sm"
+    class="poetheme-site-header poetheme-site-header--style-1 poetheme-header poetheme-header--style-1 relative"
     role="banner"
     x-data="{ mobileOpen: false }"
     x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
@@ -124,9 +124,9 @@ $has_top_menu = has_nav_menu( 'top-info' );
     <div class="border-b border-gray-200">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-4' ) ) ); ?>">
             <div class="flex items-center justify-between gap-6">
-                <div class="flex items-center gap-4">
+                <div class="flex w-full items-center justify-between gap-4 md:w-auto">
                     <?php poetheme_the_logo(); ?>
-                    <button type="button" class="md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
+                    <button type="button" class="poetheme-header__toggle md:hidden text-gray-700" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
                         <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
@@ -173,8 +173,8 @@ $has_top_menu = has_nav_menu( 'top-info' );
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="translate-x-full"
         >
-            <div class="flex items-center justify-between px-4 py-4 border-b border-gray-200">
-                <?php poetheme_the_logo(); ?>
+            <div class="poetheme-mobile-panel__header">
+                <span class="poetheme-mobile-panel__title"><?php esc_html_e( 'Menu', 'poetheme' ); ?></span>
                 <button type="button" class="text-gray-700" @click="mobileOpen = false">
                     <span class="sr-only"><?php esc_html_e( 'Chiudi il menù principale', 'poetheme' ); ?></span>
                     <i data-lucide="x" class="w-6 h-6"></i>
