@@ -88,6 +88,10 @@ function poetheme_body_classes( $classes ) {
 
     $classes[] = 'poetheme-has-color-settings';
 
+    if ( defined( 'WPB_VC_VERSION' ) || class_exists( 'Vc_Manager' ) ) {
+        $classes[] = 'poetheme-wpbakery-active';
+    }
+
     return $classes;
 }
 add_filter( 'body_class', 'poetheme_body_classes' );

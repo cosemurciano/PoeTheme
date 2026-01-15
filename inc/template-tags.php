@@ -879,3 +879,129 @@ function poetheme_the_posts_navigation() {
         )
     );
 }
+
+/**
+ * Retrieve the current blog list style.
+ *
+ * @return string
+ */
+function poetheme_get_blog_list_style() {
+    $options = poetheme_get_blog_options();
+
+    return isset( $options['list_style'] ) ? $options['list_style'] : 'media';
+}
+
+/**
+ * Get a trimmed excerpt for archive listings.
+ *
+ * @param int $length Number of words.
+ * @return string
+ */
+function poetheme_get_post_excerpt( $length = 26 ) {
+    $excerpt = get_the_excerpt();
+
+    if ( '' === trim( $excerpt ) ) {
+        $excerpt = wp_strip_all_tags( get_the_content() );
+    }
+
+    return wp_trim_words( $excerpt, $length, '…' );
+}
+
+/**
+ * Output post meta for archive listings.
+ *
+ * @param array $args Optional arguments.
+ * @return void
+ */
+function poetheme_render_post_meta( $args = array() ) {
+    $defaults = array(
+        'show_date'   => true,
+        'show_author' => true,
+        'class'       => '',
+    );
+    $args = wp_parse_args( $args, $defaults );
+
+    $items = array();
+
+    if ( $args['show_date'] ) {
+        $items[] = sprintf(
+            '<time datetime="%1$s" itemprop="datePublished">%2$s</time>',
+            esc_attr( get_the_date( DATE_W3C ) ),
+            esc_html( get_the_date() )
+        );
+    }
+
+    if ( $args['show_author'] ) {
+        $author_id   = get_the_author_meta( 'ID' );
+        $author_url  = get_author_posts_url( $author_id );
+        $author_name = get_the_author();
+        $items[]     = sprintf(
+            '<span class="poetheme-post-meta__author" itemprop="author" itemscope itemtype="https://schema.org/Person"><span class="screen-reader-text">%1$s </span><a href="%2$s" rel="author" itemprop="name">%3$s</a></span>',
+            esc_html__( 'Author', 'poetheme' ),
+            esc_url( $author_url ),
+            esc_html( $author_name )
+        );
+    }
+
+    if ( empty( $items ) ) {
+        return;
+    }
+
+    $classes = 'poetheme-post-meta';
+    if ( $args['class'] ) {
+        $classes .= ' ' . $args['class'];
+    }
+
+    echo '<div class="' . esc_attr( $classes ) . '">';
+
+    foreach ( $items as $index => $item ) {
+        if ( 0 !== $index ) {
+            echo '<span class="poetheme-post-meta__separator" aria-hidden="true">•</span>';
+        }
+
+        echo '<span class="poetheme-post-meta__item">' . wp_kses_post( $item ) . '</span>';
+    }
+
+    echo '</div>';
+}
+
+/**
+ * Output the featured image for archive listings.
+ *
+ * @param string $size  Image size.
+ * @param string $class Optional class name.
+ * @return void
+ */
+function poetheme_render_post_thumbnail( $size = 'medium_large', $class = '' ) {
+    if ( ! has_post_thumbnail() ) {
+        return;
+    }
+
+    $attributes = array(
+        'class'   => $class,
+        'loading' => 'lazy',
+    );
+
+    echo get_the_post_thumbnail( get_the_ID(), $size, $attributes );
+}
+
+/**
+ * Output a read more button for archive listings.
+ *
+ * @param array $args Optional arguments.
+ * @return void
+ */
+function poetheme_render_read_more( $args = array() ) {
+    $defaults = array(
+        'label' => __( 'Read more', 'poetheme' ),
+        'class' => '',
+    );
+    $args = wp_parse_args( $args, $defaults );
+
+    $classes = 'poetheme-read-more';
+    if ( $args['class'] ) {
+        $classes .= ' ' . $args['class'];
+    }
+
+    echo '<a class="' . esc_attr( $classes ) . '" href="' . esc_url( get_permalink() ) . '">' . esc_html( $args['label'] ) . '</a>';
+}
