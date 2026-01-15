@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.7.1
+Version: 1.7.2
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -24,6 +24,7 @@ Tags: blog, accessibility-ready, custom-logo, custom-menu, rtl-language-support,
   max-width: var(--poetheme-site-width);
   margin-left: auto;
   margin-right: auto;
+  box-sizing: border-box;
 }
 
 .poetheme-layout-full .poetheme-container {

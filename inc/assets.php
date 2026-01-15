@@ -149,6 +149,17 @@ function poetheme_should_load_media_lightbox() {
 }
 
 /**
+ * Determine if Alpine.js is needed in the block editor.
+ *
+ * @return bool
+ */
+function poetheme_should_load_editor_alpine() {
+    $should_load = false;
+
+    return (bool) apply_filters( 'poetheme_should_load_editor_alpine', $should_load );
+}
+
+/**
  * Add integrity + crossorigin attributes to CDN assets.
  *
  * @param string $tag    HTML tag for the enqueued asset.
@@ -288,11 +299,13 @@ function poetheme_block_editor_assets() {
     wp_enqueue_style( 'poetheme-editor-tailwind', $tailwind_src, array(), $tailwind_ver );
     wp_enqueue_style( 'poetheme-editor-style', POETHEME_URI . '/assets/css/editor.css', array( 'poetheme-editor-tailwind' ), poetheme_get_asset_version( 'assets/css/editor.css' ) );
 
-    $alpine     = poetheme_get_cdn_asset( 'poetheme-editor-alpine' );
-    $alpine_src = isset( $alpine['src'] ) ? $alpine['src'] : 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js';
-    $alpine_ver = isset( $alpine['version'] ) ? $alpine['version'] : POETHEME_VERSION;
-    wp_enqueue_script( 'poetheme-editor-alpine', $alpine_src, array(), $alpine_ver, true );
-    wp_script_add_data( 'poetheme-editor-alpine', 'defer', true );
+    if ( poetheme_should_load_editor_alpine() ) {
+        $alpine     = poetheme_get_cdn_asset( 'poetheme-editor-alpine' );
+        $alpine_src = isset( $alpine['src'] ) ? $alpine['src'] : 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js';
+        $alpine_ver = isset( $alpine['version'] ) ? $alpine['version'] : POETHEME_VERSION;
+        wp_enqueue_script( 'poetheme-editor-alpine', $alpine_src, array(), $alpine_ver, true );
+        wp_script_add_data( 'poetheme-editor-alpine', 'defer', true );
+    }
 
     $font_styles = poetheme_prepare_font_styles();
 
