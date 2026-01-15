@@ -127,7 +127,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
             <div class="flex items-center justify-center">
                 <div class="flex w-full items-center justify-between md:w-auto md:justify-center">
                     <?php poetheme_the_logo(); ?>
-                    <button type="button" class="poetheme-header__toggle md:hidden text-rose-600" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
+                    <button type="button" class="poetheme-header__toggle poetheme-nav-toggle md:hidden text-rose-600" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
                         <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
@@ -136,7 +136,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
         </div>
     </div>
 
-    <div class="border-b border-rose-100 hidden md:block">
+    <div class="poetheme-nav-desktop border-b border-rose-100 hidden md:block">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-3' ) ) ); ?>">
             <nav class="nav-primary flex items-center justify-center" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                 <?php
@@ -158,7 +158,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
         id="poetheme-mobile-menu"
         x-show="mobileOpen"
         x-cloak
-        class="fixed inset-0 z-50 md:hidden"
+        class="poetheme-nav-mobile fixed inset-0 z-50 md:hidden"
         @keydown.escape.window="mobileOpen = false"
         x-transition:enter="transition-opacity ease-linear duration-200"
         x-transition:enter-start="opacity-0"
