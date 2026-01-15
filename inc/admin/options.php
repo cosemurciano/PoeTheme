@@ -69,6 +69,17 @@ function poetheme_get_default_header_options() {
 }
 
 /**
+ * Default values for blog options.
+ *
+ * @return array
+ */
+function poetheme_get_default_blog_options() {
+    return array(
+        'list_style' => 'media',
+    );
+}
+
+/**
  * Retrieve the available footer layout choices.
  *
  * @return array
@@ -1395,6 +1406,30 @@ function poetheme_sanitize_subheader_options( $input ) {
 }
 
 /**
+ * Sanitize blog options before saving.
+ *
+ * @param array $input Raw input values.
+ * @return array
+ */
+function poetheme_sanitize_blog_options( $input ) {
+    $defaults = poetheme_get_default_blog_options();
+
+    if ( ! is_array( $input ) ) {
+        $input = array();
+    }
+
+    $output = $defaults;
+
+    $list_style = isset( $input['list_style'] ) ? sanitize_key( $input['list_style'] ) : $defaults['list_style'];
+    $allowed    = array( 'media', 'cards' );
+    if ( in_array( $list_style, $allowed, true ) ) {
+        $output['list_style'] = $list_style;
+    }
+
+    return $output;
+}
+
+/**
  * Sanitize footer options before saving.
  *
  * @param array $input Raw input values.
@@ -1507,6 +1542,16 @@ function poetheme_register_settings() {
     );
 
     register_setting(
+        'poetheme_blog_group',
+        'poetheme_blog',
+        array(
+            'type'              => 'array',
+            'sanitize_callback' => 'poetheme_sanitize_blog_options',
+            'default'           => poetheme_get_default_blog_options(),
+        )
+    );
+
+    register_setting(
         'poetheme_custom_css_group',
         'poetheme_custom_css',
         array(
@@ -1604,6 +1649,15 @@ function poetheme_add_options_pages() {
         'manage_options',
         'poetheme-subheader',
         'poetheme_render_subheader_page'
+    );
+
+    add_submenu_page(
+        'poetheme-settings',
+        __( 'Blog', 'poetheme' ),
+        __( 'Blog', 'poetheme' ),
+        'manage_options',
+        'poetheme-blog',
+        'poetheme_render_blog_page'
     );
 
     add_submenu_page(
@@ -3756,6 +3810,50 @@ function poetheme_render_subheader_page() {
 }
 
 /**
+ * Render the blog settings page.
+ */
+function poetheme_render_blog_page() {
+    $options      = poetheme_get_blog_options();
+    $list_style   = isset( $options['list_style'] ) ? $options['list_style'] : 'media';
+    $style_choices = array(
+        'media' => __( 'Media list (immagine a sinistra)', 'poetheme' ),
+        'cards' => __( 'Cards / griglia', 'poetheme' ),
+    );
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e( 'Blog', 'poetheme' ); ?></h1>
+
+        <form action="options.php" method="post">
+            <?php settings_fields( 'poetheme_blog_group' ); ?>
+
+            <table class="form-table" role="presentation">
+                <tbody>
+                    <tr>
+                        <th scope="row"><?php esc_html_e( 'Stile elenco articoli', 'poetheme' ); ?></th>
+                        <td>
+                            <fieldset>
+                                <legend class="screen-reader-text"><?php esc_html_e( 'Seleziona lo stile di elenco', 'poetheme' ); ?></legend>
+                                <?php foreach ( $style_choices as $value => $label ) : ?>
+                                    <label class="poetheme-option-inline">
+                                        <input type="radio" name="poetheme_blog[list_style]" value="<?php echo esc_attr( $value ); ?>" <?php checked( $list_style, $value ); ?> />
+                                        <?php echo esc_html( $label ); ?>
+                                    </label>
+                                    <br />
+                                <?php endforeach; ?>
+                            </fieldset>
+                            <p class="description"><?php esc_html_e( 'Applica lo stile agli archivi (categorie, tag, autore, data) e ai risultati di ricerca.', 'poetheme' ); ?></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
+/**
  * Render the footer settings page.
  */
 function poetheme_render_footer_page() {
@@ -4097,6 +4195,7 @@ function poetheme_options_admin_assets( $hook ) {
         'poetheme_page_poetheme-logo',
         'poetheme_page_poetheme-header',
         'poetheme_page_poetheme-subheader',
+        'poetheme_page_poetheme-blog',
         'poetheme_page_poetheme-footer',
         'poetheme_page_poetheme-custom-css',
     );
@@ -4110,6 +4209,7 @@ function poetheme_options_admin_assets( $hook ) {
         'poetheme_page_poetheme-settings',
         'poetheme_page_poetheme-colors',
         'poetheme_page_poetheme-logo',
+        'poetheme_page_poetheme-blog',
         'poetheme_page_poetheme-footer',
     );
 
@@ -4219,6 +4319,29 @@ function poetheme_get_header_options() {
 
     $options['show_top_bar'] = ! empty( $options['show_top_bar'] );
     $options['show_cta']     = ! empty( $options['show_cta'] );
+
+    return $options;
+}
+
+/**
+ * Retrieve blog options with defaults.
+ *
+ * @return array
+ */
+function poetheme_get_blog_options() {
+    $defaults = poetheme_get_default_blog_options();
+    $options  = get_option( 'poetheme_blog', array() );
+
+    if ( ! is_array( $options ) ) {
+        $options = array();
+    }
+
+    $options = wp_parse_args( $options, $defaults );
+
+    $allowed_styles = array( 'media', 'cards' );
+    if ( ! in_array( $options['list_style'], $allowed_styles, true ) ) {
+        $options['list_style'] = $defaults['list_style'];
+    }
 
     return $options;
 }

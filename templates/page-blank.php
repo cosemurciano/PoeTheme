@@ -12,7 +12,7 @@ if ( have_posts() ) :
     while ( have_posts() ) :
         the_post();
         ?>
-        <div class="entry-content space-y-6 leading-relaxed">
+        <div class="entry-content poetheme-content-area space-y-6 leading-relaxed">
             <?php
             the_content();
             wp_link_pages(

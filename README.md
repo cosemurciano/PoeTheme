@@ -74,6 +74,26 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - Nuove locations `primary-left` e `primary-right` per i layout header split.
 - Se non assegnate, il tema usa una sola volta `primary` (posizione destra), lasciando vuota la sinistra per evitare duplicazioni.
 
+## Blog listing styles
+- Nuova sezione **Blog** nelle opzioni tema per scegliere lo stile di listing negli archivi (categorie, tag, autore, data) e nei risultati di ricerca.
+- Stili disponibili: **Media list** (immagine a sinistra) e **Cards / griglia** (immagine sopra).
+- Default: Media list, pensato per continuità con il layout editoriale classico.
+
+## WPBakery compatibility expectations
+- I template di pagina/articolo mantengono la `the_content()` standard, richiesta da WPBakery per il rendering corretto.
+- I wrapper del contenuto non impongono overflow nascosti e includono regole di compatibilità per `.vc_row` e `.vc_column`.
+- Le row full-width di WPBakery possono espandersi in layout full senza alterare header/footer.
+
+## Header layouts audit (Fase 2)
+- Style 1 (Classic): nessuna modifica (layout conforme).
+- Style 2 (Split menu | Semitransparent): corretta la riga unica con menu sinistra/logo/menù destra.
+- Style 3 (Shop split): nessuna modifica (layout conforme).
+- Style 4 (Shop): nessuna modifica (layout conforme).
+- Style 5 (Fixed): nessuna modifica (layout conforme).
+- Style 6 (Stack | Center): nessuna modifica (layout conforme).
+- Style 7 (Stack | Left): nessuna modifica (layout conforme).
+- Style 8 (Plain): nessuna modifica (layout conforme).
+
 ## Asset Policy (M5)
 - Preferire asset locali e versionati.
 - CDN ammessi solo se versionati, con SRI e `crossorigin="anonymous"`.

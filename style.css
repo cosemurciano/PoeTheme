@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.7.2
+Version: 1.8.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -308,6 +308,40 @@ body.admin-bar #wpadminbar * {
   backdrop-filter: blur(10px);
 }
 
+.poetheme-header--style-2 .poetheme-header__split {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .poetheme-header--style-2 .poetheme-header__split {
+    gap: 1.5rem;
+  }
+
+  .poetheme-header--style-2 .poetheme-header__split-menu {
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .poetheme-header--style-2 .poetheme-header__split-menu--left {
+    justify-content: flex-start;
+  }
+
+  .poetheme-header--style-2 .poetheme-header__split-menu--right {
+    justify-content: flex-end;
+  }
+
+  .poetheme-header--style-2 .poetheme-header__split-logo {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .poetheme-header--style-5 {
   position: sticky;
   top: 0;
@@ -400,6 +434,182 @@ body.admin-bar .poetheme-header--style-5 {
 
 .poetheme-nav--desktop .sub-menu > li > a.poetheme-nav-link--submenu {
   width: 100%;
+}
+
+/* --------------------------------------------------------------
+ * Blog listing styles
+ * -------------------------------------------------------------- */
+
+.poetheme-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.poetheme-posts--cards {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .poetheme-posts--cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .poetheme-posts--cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.poetheme-post-item {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 0.75rem;
+}
+
+.poetheme-post-item--media {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .poetheme-post-item--media {
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+  }
+}
+
+.poetheme-post-item--media.no-thumbnail {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.poetheme-post-item--card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.poetheme-post-media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+.poetheme-post-item--card .poetheme-post-media {
+  border-radius: 0;
+}
+
+.poetheme-post-media__link {
+  display: block;
+  height: 100%;
+}
+
+.poetheme-post-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.poetheme-post-item--media .poetheme-post-thumbnail {
+  aspect-ratio: 4 / 3;
+}
+
+.poetheme-post-item--card .poetheme-post-thumbnail {
+  aspect-ratio: 16 / 9;
+}
+
+.poetheme-post-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.poetheme-post-item--card .poetheme-post-content {
+  padding: 1.5rem;
+  flex: 1 1 auto;
+}
+
+.poetheme-post-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.poetheme-post-title a:hover,
+.poetheme-post-title a:focus {
+  color: var(--poetheme-focus-color);
+}
+
+.poetheme-post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.poetheme-post-meta__separator {
+  color: #9ca3af;
+}
+
+.poetheme-read-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.5rem;
+  border-radius: 9999px;
+  background: var(--poetheme-focus-color);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.poetheme-read-more:hover,
+.poetheme-read-more:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+}
+
+.poetheme-read-more--outline {
+  background: transparent;
+  color: var(--poetheme-focus-color);
+  border: 1px solid currentColor;
+}
+
+/* --------------------------------------------------------------
+ * WPBakery compatibility helpers
+ * -------------------------------------------------------------- */
+
+.poetheme-content-area {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.poetheme-content-area .vc_row,
+.poetheme-content-area .wpb_row,
+.poetheme-content-area .vc_column_container,
+.poetheme-content-area .vc_column-inner {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.poetheme-layout-full .poetheme-content-area .vc_row[data-vc-full-width="true"],
+.poetheme-layout-full .poetheme-content-area .wpb_row[data-vc-full-width="true"] {
+  width: 100vw;
+  max-width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
 
 /* --------------------------------------------------------------

@@ -138,8 +138,8 @@ $mobile_right_items = $right_location ? poetheme_get_navigation_menu_items( $rig
 
     <div class="poetheme-header__main border-b border-blue-100">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
-            <div class="md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6 flex items-center justify-between gap-4">
-                <div class="hidden md:flex items-center justify-start">
+            <div class="poetheme-header__split flex items-center justify-between gap-4 md:gap-6">
+                <div class="poetheme-header__split-menu poetheme-header__split-menu--left hidden md:flex items-center justify-start">
                     <?php if ( $left_location ) : ?>
                         <nav class="nav-primary poetheme-nav-desktop" aria-label="<?php esc_attr_e( 'Primary navigation left', 'poetheme' ); ?>">
                             <?php
@@ -157,7 +157,7 @@ $mobile_right_items = $right_location ? poetheme_get_navigation_menu_items( $rig
                     <?php endif; ?>
                 </div>
 
-                <div class="flex w-full items-center justify-between md:w-auto md:justify-center">
+                <div class="poetheme-header__split-logo flex w-full items-center justify-between md:w-auto md:justify-center">
                     <?php poetheme_the_logo(); ?>
                     <button type="button" class="poetheme-header__toggle poetheme-nav-toggle md:hidden text-blue-700" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
                         <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
@@ -165,7 +165,7 @@ $mobile_right_items = $right_location ? poetheme_get_navigation_menu_items( $rig
                     </button>
                 </div>
 
-                <div class="hidden md:flex items-center justify-end">
+                <div class="poetheme-header__split-menu poetheme-header__split-menu--right hidden md:flex items-center justify-end">
                     <?php if ( $right_location ) : ?>
                         <nav class="nav-primary poetheme-nav-desktop" aria-label="<?php esc_attr_e( 'Primary navigation right', 'poetheme' ); ?>">
                             <?php
