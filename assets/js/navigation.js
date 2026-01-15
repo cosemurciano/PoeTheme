@@ -7,14 +7,28 @@
             return;
         }
 
+        var navBreakpoint = getNavBreakpoint();
+
         menus.forEach(function (menu) {
             var variant = menu.getAttribute('data-variant') || 'desktop';
             if (variant === 'mobile') {
-                setupMobileMenu(menu);
+                setupMobileMenu(menu, navBreakpoint);
             } else {
                 setupDesktopMenu(menu);
             }
         });
+    }
+
+    function getNavBreakpoint() {
+        var rootStyle = window.getComputedStyle(document.documentElement);
+        var value = rootStyle.getPropertyValue('--poetheme-nav-breakpoint');
+        var parsed = parseInt(value, 10);
+
+        if (isNaN(parsed)) {
+            parsed = 768;
+        }
+
+        return parsed;
     }
 
     function setupDesktopMenu(menu) {
@@ -105,11 +119,13 @@
         });
     }
 
-    function setupMobileMenu(menu) {
+    function setupMobileMenu(menu, navBreakpoint) {
         var items = menu.querySelectorAll('li.menu-item-has-children');
         if (!items.length) {
             return;
         }
+
+        var isMobileViewport = window.innerWidth < navBreakpoint;
 
         items.forEach(function (item) {
             var trigger = item.querySelector(':scope > .poetheme-mobile-item-row > .poetheme-submenu-toggle');
@@ -130,7 +146,10 @@
                 submenu.setAttribute('aria-hidden', 'true');
             };
 
-            if (item.classList.contains('current-menu-ancestor') || item.classList.contains('current-menu-item')) {
+            if (
+                isMobileViewport &&
+                (item.classList.contains('current-menu-ancestor') || item.classList.contains('current-menu-item'))
+            ) {
                 openItem();
             } else {
                 closeItem();

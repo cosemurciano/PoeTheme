@@ -145,7 +145,7 @@ $search_url      = get_search_link();
             <div class="md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6 flex items-center justify-between gap-4">
                 <div class="hidden md:flex items-center justify-start">
                     <?php if ( $left_location ) : ?>
-                        <nav class="nav-primary" aria-label="<?php esc_attr_e( 'Primary navigation left', 'poetheme' ); ?>">
+                        <nav class="nav-primary poetheme-nav-desktop" aria-label="<?php esc_attr_e( 'Primary navigation left', 'poetheme' ); ?>">
                             <?php
                             poetheme_render_navigation_menu(
                                 $left_location,
@@ -163,7 +163,7 @@ $search_url      = get_search_link();
 
                 <div class="flex w-full items-center justify-between md:w-auto md:justify-center">
                     <?php poetheme_the_logo(); ?>
-                    <button type="button" class="poetheme-header__toggle md:hidden text-gray-800" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
+                    <button type="button" class="poetheme-header__toggle poetheme-nav-toggle md:hidden text-gray-800" @click="mobileOpen = ! mobileOpen" :aria-expanded="mobileOpen.toString()" aria-controls="poetheme-mobile-menu" aria-haspopup="true">
                         <span class="sr-only"><?php esc_html_e( 'Apri il menù principale', 'poetheme' ); ?></span>
                         <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
@@ -171,7 +171,7 @@ $search_url      = get_search_link();
 
                 <div class="hidden md:flex items-center justify-end gap-4">
                     <?php if ( $right_location ) : ?>
-                        <nav class="nav-primary" aria-label="<?php esc_attr_e( 'Primary navigation right', 'poetheme' ); ?>">
+                        <nav class="nav-primary poetheme-nav-desktop" aria-label="<?php esc_attr_e( 'Primary navigation right', 'poetheme' ); ?>">
                             <?php
                             poetheme_render_navigation_menu(
                                 $right_location,
@@ -212,7 +212,7 @@ $search_url      = get_search_link();
         id="poetheme-mobile-menu"
         x-show="mobileOpen"
         x-cloak
-        class="fixed inset-0 z-50 md:hidden"
+        class="poetheme-nav-mobile fixed inset-0 z-50 md:hidden"
         @keydown.escape.window="mobileOpen = false"
         x-transition:enter="transition-opacity ease-linear duration-200"
         x-transition:enter-start="opacity-0"
