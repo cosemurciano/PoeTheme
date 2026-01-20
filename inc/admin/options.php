@@ -1744,108 +1744,115 @@ function poetheme_render_global_page() {
         'cover-ultrawide'=> __( 'Coprire, solo su schermi ultra larghi > 1920px', 'poetheme' ),
     );
     ?>
-    <div class="wrap">
+    <div class="wrap poetheme-admin">
         <h1><?php esc_html_e( 'Globale', 'poetheme' ); ?></h1>
 
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_global_group' ); ?>
-
-            <table class="form-table" role="presentation">
-                <tbody>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Layout', 'poetheme' ); ?></th>
-                        <td>
-                            <fieldset>
-                                <legend class="screen-reader-text"><?php esc_html_e( 'Layout', 'poetheme' ); ?></legend>
-                                <label>
-                                    <input type="radio" name="<?php echo esc_attr( $layout_field ); ?>" value="full" <?php checked( 'full', $layout_mode ); ?>>
-                                    <?php esc_html_e( 'Larghezza piena (100% della pagina)', 'poetheme' ); ?>
-                                </label>
-                                <br>
-                                <label>
-                                    <input type="radio" name="<?php echo esc_attr( $layout_field ); ?>" value="boxed" <?php checked( 'boxed', $layout_mode ); ?>>
-                                    <?php esc_html_e( 'Larghezza box', 'poetheme' ); ?>
-                                </label>
-                                <p class="description"><?php esc_html_e( 'Scegli come allineare l’intero sito, incluse testata e piè di pagina.', 'poetheme' ); ?></p>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <tr id="poetheme-global-width-row">
-                        <th scope="row"><label for="<?php echo esc_attr( $width_id ); ?>"><?php esc_html_e( 'Larghezza sito (px)', 'poetheme' ); ?></label></th>
-                        <td>
-                            <input type="number" name="poetheme_global[site_width]" id="<?php echo esc_attr( $width_id ); ?>" value="<?php echo esc_attr( $site_width ); ?>" min="960" max="1920" step="10" class="small-text">
-                            <p class="description"><?php esc_html_e( 'Imposta la larghezza massima del sito per il layout Box. Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="<?php echo esc_attr( $default_font_id ); ?>"><?php esc_html_e( 'Font globale predefinito', 'poetheme' ); ?></label></th>
-                        <td>
-                            <select id="<?php echo esc_attr( $default_font_id ); ?>" name="poetheme_global[default_font]">
-                                <option value="">&mdash; <?php esc_html_e( 'Usa il font di sistema', 'poetheme' ); ?> &mdash;</option>
-                                <?php foreach ( $available_fonts as $slug => $font_data ) : ?>
-                                    <option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $default_font, $slug ); ?>><?php echo esc_html( $font_data['family'] ); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <p class="description"><?php esc_html_e( 'Questo font verrà usato in tutto il sito se non ne imposti uno specifico nelle sezioni dedicate.', 'poetheme' ); ?></p>
-                            <label class="screen-reader-text" for="<?php echo esc_attr( $default_fallback_id ); ?>"><?php esc_html_e( 'Font alternativi', 'poetheme' ); ?></label>
-                            <input type="text" class="regular-text" id="<?php echo esc_attr( $default_fallback_id ); ?>" name="poetheme_global[default_font_fallback]" value="<?php echo esc_attr( $default_font_fallback ); ?>" placeholder="Arial, Helvetica, sans-serif" />
-                            <p class="description"><?php esc_html_e( 'Elenca i font alternativi da usare se il font principale non è disponibile (esempio: "Arial, Helvetica, sans-serif").', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Lightbox immagini', 'poetheme' ); ?></th>
-                        <td>
-                            <label for="poetheme-enable-media-lightbox">
-                                <input type="checkbox" name="poetheme_global[enable_media_lightbox]" id="poetheme-enable-media-lightbox" value="1" <?php checked( $enable_media_lightbox ); ?>>
-                                <?php esc_html_e( 'Apri le immagini dei contenuti in una modale al clic.', 'poetheme' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'La modale mostra il file multimediale fino a 1024 pixel di larghezza e supporta anche le gallerie create con l’editor.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Immagine di sfondo della pagina', 'poetheme' ); ?></th>
-                        <td>
-                            <div class="poetheme-background-control">
-                                <div id="poetheme-background-preview" class="poetheme-background-preview">
-                                    <?php if ( $background_image ) : ?>
-                                        <img src="<?php echo esc_url( $background_image[0] ); ?>" alt="" />
-                                    <?php else : ?>
-                                        <p class="description"><?php esc_html_e( 'Nessuna immagine selezionata.', 'poetheme' ); ?></p>
-                                    <?php endif; ?>
-                                </div>
-                                <input type="hidden" id="poetheme_global_background_image_id" name="poetheme_global[background_image_id]" value="<?php echo esc_attr( $background_image_id ); ?>">
-                                <p class="poetheme-background-actions">
-                                    <button type="button" class="button button-secondary" id="poetheme-background-upload"><?php esc_html_e( 'Scegli immagine', 'poetheme' ); ?></button>
-                                    <button type="button" class="button" id="poetheme-background-remove" <?php disabled( 0 === $background_image_id ); ?>><?php esc_html_e( 'Rimuovi immagine', 'poetheme' ); ?></button>
-                                </p>
-                                <p class="description"><?php esc_html_e( 'Dimensioni consigliate: 1920x1080 px.', 'poetheme' ); ?></p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="poetheme-background-position"><?php esc_html_e( 'Posizione e ripetizione', 'poetheme' ); ?></label></th>
-                        <td>
-                            <select id="poetheme-background-position" name="poetheme_global[background_position]">
-                                <?php foreach ( $background_positions as $value => $label ) : ?>
-                                    <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $background_position ); ?>><?php echo esc_html( $label ); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <p class="description"><?php esc_html_e( 'Seleziona la combinazione desiderata di ripetizione, posizione e (se disponibile) fissaggio.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="poetheme-background-size"><?php esc_html_e( 'Dimensione', 'poetheme' ); ?></label></th>
-                        <td>
-                            <select id="poetheme-background-size" name="poetheme_global[background_size]">
-                                <?php foreach ( $background_sizes as $value => $label ) : ?>
-                                    <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $background_size ); ?>><?php echo esc_html( $label ); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <p class="description"><?php esc_html_e( 'Questa opzione non è compatibile con la posizione fissa nei browser meno recenti.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="poetheme-panel">
+                <div class="poetheme-panel__header">
+                    <h2><?php esc_html_e( 'Impostazioni globali', 'poetheme' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Configura layout, font di default e opzioni di sfondo globali.', 'poetheme' ); ?></p>
+                </div>
+                <div class="poetheme-panel__body">
+                    <table class="form-table poetheme-fields" role="presentation">
+                        <tbody>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Layout', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <fieldset aria-describedby="poetheme-global-layout-help">
+                                        <legend class="screen-reader-text"><?php esc_html_e( 'Layout', 'poetheme' ); ?></legend>
+                                        <label for="poetheme-global-layout-full">
+                                            <input id="poetheme-global-layout-full" type="radio" name="<?php echo esc_attr( $layout_field ); ?>" value="full" <?php checked( 'full', $layout_mode ); ?>>
+                                            <?php esc_html_e( 'Larghezza piena (100% della pagina)', 'poetheme' ); ?>
+                                        </label>
+                                        <br>
+                                        <label for="poetheme-global-layout-boxed">
+                                            <input id="poetheme-global-layout-boxed" type="radio" name="<?php echo esc_attr( $layout_field ); ?>" value="boxed" <?php checked( 'boxed', $layout_mode ); ?>>
+                                            <?php esc_html_e( 'Larghezza box', 'poetheme' ); ?>
+                                        </label>
+                                        <p id="poetheme-global-layout-help" class="description poetheme-field__help"><?php esc_html_e( 'Scegli come allineare l’intero sito, incluse testata e piè di pagina.', 'poetheme' ); ?></p>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                            <tr id="poetheme-global-width-row" class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><label for="<?php echo esc_attr( $width_id ); ?>"><?php esc_html_e( 'Larghezza sito (px)', 'poetheme' ); ?></label></th>
+                                <td class="poetheme-field__control">
+                                    <input type="number" name="poetheme_global[site_width]" id="<?php echo esc_attr( $width_id ); ?>" value="<?php echo esc_attr( $site_width ); ?>" min="960" max="1920" step="10" class="small-text" aria-describedby="poetheme-global-width-help">
+                                    <p id="poetheme-global-width-help" class="description poetheme-field__help"><?php esc_html_e( 'Imposta la larghezza massima del sito per il layout Box. Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><label for="<?php echo esc_attr( $default_font_id ); ?>"><?php esc_html_e( 'Font globale predefinito', 'poetheme' ); ?></label></th>
+                                <td class="poetheme-field__control">
+                                    <select id="<?php echo esc_attr( $default_font_id ); ?>" name="poetheme_global[default_font]" aria-describedby="poetheme-global-default-font-help">
+                                        <option value="">&mdash; <?php esc_html_e( 'Usa il font di sistema', 'poetheme' ); ?> &mdash;</option>
+                                        <?php foreach ( $available_fonts as $slug => $font_data ) : ?>
+                                            <option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $default_font, $slug ); ?>><?php echo esc_html( $font_data['family'] ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <p id="poetheme-global-default-font-help" class="description poetheme-field__help"><?php esc_html_e( 'Questo font verrà usato in tutto il sito se non ne imposti uno specifico nelle sezioni dedicate.', 'poetheme' ); ?></p>
+                                    <label class="screen-reader-text" for="<?php echo esc_attr( $default_fallback_id ); ?>"><?php esc_html_e( 'Font alternativi', 'poetheme' ); ?></label>
+                                    <input type="text" class="regular-text" id="<?php echo esc_attr( $default_fallback_id ); ?>" name="poetheme_global[default_font_fallback]" value="<?php echo esc_attr( $default_font_fallback ); ?>" placeholder="Arial, Helvetica, sans-serif" aria-describedby="poetheme-global-default-font-fallback-help" />
+                                    <p id="poetheme-global-default-font-fallback-help" class="description poetheme-field__help"><?php esc_html_e( 'Elenca i font alternativi da usare se il font principale non è disponibile (esempio: "Arial, Helvetica, sans-serif").', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Lightbox immagini', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <label for="poetheme-enable-media-lightbox">
+                                        <input type="checkbox" name="poetheme_global[enable_media_lightbox]" id="poetheme-enable-media-lightbox" value="1" <?php checked( $enable_media_lightbox ); ?> aria-describedby="poetheme-global-lightbox-help">
+                                        <?php esc_html_e( 'Apri le immagini dei contenuti in una modale al clic.', 'poetheme' ); ?>
+                                    </label>
+                                    <p id="poetheme-global-lightbox-help" class="description poetheme-field__help"><?php esc_html_e( 'La modale mostra il file multimediale fino a 1024 pixel di larghezza e supporta anche le gallerie create con l’editor.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Immagine di sfondo della pagina', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <div class="poetheme-background-control" aria-describedby="poetheme-global-background-help">
+                                        <div id="poetheme-background-preview" class="poetheme-background-preview">
+                                            <?php if ( $background_image ) : ?>
+                                                <img src="<?php echo esc_url( $background_image[0] ); ?>" alt="" />
+                                            <?php else : ?>
+                                                <p class="description"><?php esc_html_e( 'Nessuna immagine selezionata.', 'poetheme' ); ?></p>
+                                            <?php endif; ?>
+                                        </div>
+                                        <input type="hidden" id="poetheme_global_background_image_id" name="poetheme_global[background_image_id]" value="<?php echo esc_attr( $background_image_id ); ?>">
+                                        <p class="poetheme-background-actions">
+                                            <button type="button" class="button button-secondary" id="poetheme-background-upload"><?php esc_html_e( 'Scegli immagine', 'poetheme' ); ?></button>
+                                            <button type="button" class="button" id="poetheme-background-remove" <?php disabled( 0 === $background_image_id ); ?>><?php esc_html_e( 'Rimuovi immagine', 'poetheme' ); ?></button>
+                                        </p>
+                                        <p id="poetheme-global-background-help" class="description poetheme-field__help"><?php esc_html_e( 'Dimensioni consigliate: 1920x1080 px.', 'poetheme' ); ?></p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><label for="poetheme-background-position"><?php esc_html_e( 'Posizione e ripetizione', 'poetheme' ); ?></label></th>
+                                <td class="poetheme-field__control">
+                                    <select id="poetheme-background-position" name="poetheme_global[background_position]" aria-describedby="poetheme-global-background-position-help">
+                                        <?php foreach ( $background_positions as $value => $label ) : ?>
+                                            <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $background_position ); ?>><?php echo esc_html( $label ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <p id="poetheme-global-background-position-help" class="description poetheme-field__help"><?php esc_html_e( 'Seleziona la combinazione desiderata di ripetizione, posizione e (se disponibile) fissaggio.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><label for="poetheme-background-size"><?php esc_html_e( 'Dimensione', 'poetheme' ); ?></label></th>
+                                <td class="poetheme-field__control">
+                                    <select id="poetheme-background-size" name="poetheme_global[background_size]" aria-describedby="poetheme-global-background-size-help">
+                                        <?php foreach ( $background_sizes as $value => $label ) : ?>
+                                            <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $background_size ); ?>><?php echo esc_html( $label ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <p id="poetheme-global-background-size-help" class="description poetheme-field__help"><?php esc_html_e( 'Questa opzione non è compatibile con la posizione fissa nei browser meno recenti.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <?php submit_button(); ?>
         </form>
@@ -2745,7 +2752,7 @@ function poetheme_render_fonts_page() {
         }
     }
     ?>
-    <div class="wrap poetheme-font-settings">
+    <div class="wrap poetheme-admin poetheme-font-settings">
         <h1><?php esc_html_e( 'Gestione Font', 'poetheme' ); ?></h1>
 
         <?php if ( $font_faces ) : ?>
@@ -2800,6 +2807,7 @@ function poetheme_render_fonts_page() {
                                             $spacing_config = isset( $field['spacing'] ) ? $field['spacing'] : array();
                                             $spacing_value  = array();
                                             $column         = isset( $field['column'] ) ? $field['column'] : '';
+                                            $description_id = ! empty( $field['description'] ) ? $field_id . '-description' : '';
 
                                             if ( 'right' === $column ) {
                                                 $has_right_column = true;
@@ -2838,7 +2846,7 @@ function poetheme_render_fonts_page() {
                                             <div class="poetheme-font-section__field">
                                                 <label class="poetheme-font-section__label" for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
                                                 <div class="poetheme-font-section__control">
-                                                    <select class="poetheme-font-select" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" data-preview="<?php echo esc_attr( $preview_id ); ?>"<?php echo $fallback_attr; ?> <?php disabled( empty( $available_fonts ) ); ?>>
+                                                    <select class="poetheme-font-select" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" data-preview="<?php echo esc_attr( $preview_id ); ?>"<?php echo $fallback_attr; ?> <?php disabled( empty( $available_fonts ) ); ?><?php echo $description_id ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : ''; ?>>
                                                         <option value="" <?php selected( '', $value ); ?>><?php echo esc_html( $field['default_label'] ); ?></option>
                                                         <?php foreach ( $available_fonts as $font ) : ?>
                                                             <option value="<?php echo esc_attr( $font['slug'] ); ?>" <?php selected( $value, $font['slug'] ); ?> data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
@@ -2847,7 +2855,7 @@ function poetheme_render_fonts_page() {
                                                         <?php endforeach; ?>
                                                     </select>
                                                     <?php if ( ! empty( $field['description'] ) ) : ?>
-                                                        <p class="description"><?php echo esc_html( $field['description'] ); ?></p>
+                                                        <p id="<?php echo esc_attr( $description_id ); ?>" class="description"><?php echo esc_html( $field['description'] ); ?></p>
                                                     <?php endif; ?>
                                                     <div class="<?php echo esc_attr( $preview_class ); ?>" id="<?php echo esc_attr( $preview_id ); ?>" style="<?php echo esc_attr( $preview_style ); ?>">
                                                         <span class="poetheme-font-preview__label"><?php esc_html_e( 'Anteprima', 'poetheme' ); ?></span>
@@ -2882,9 +2890,10 @@ function poetheme_render_fonts_page() {
                                                             data-preview="<?php echo esc_attr( $preview_id ); ?>"
                                                             data-unit="rem"
                                                             data-property="fontSize"
+                                                            <?php echo ! empty( $size_config['description'] ) ? ' aria-describedby="' . esc_attr( $size_id ) . '-description"' : ''; ?>
                                                         />
                                                         <?php if ( ! empty( $size_config['description'] ) ) : ?>
-                                                            <p class="description"><?php echo esc_html( $size_config['description'] ); ?></p>
+                                                            <p id="<?php echo esc_attr( $size_id ); ?>-description" class="description"><?php echo esc_html( $size_config['description'] ); ?></p>
                                                         <?php endif; ?>
                                                     <?php endif; ?>
                                                     <?php if ( ! empty( $field['border_radius'] ) && ! empty( $field['border_radius']['option_key'] ) ) :
@@ -2917,9 +2926,10 @@ function poetheme_render_fonts_page() {
                                                             data-preview="<?php echo esc_attr( $preview_id ); ?>"
                                                             data-unit="<?php echo esc_attr( $radius_unit ); ?>"
                                                             data-property="borderRadius"
+                                                            <?php echo ! empty( $radius_config['description'] ) ? ' aria-describedby="' . esc_attr( $radius_id ) . '-description"' : ''; ?>
                                                         />
                                                         <?php if ( ! empty( $radius_config['description'] ) ) : ?>
-                                                            <p class="description"><?php echo esc_html( $radius_config['description'] ); ?></p>
+                                                            <p id="<?php echo esc_attr( $radius_id ); ?>-description" class="description"><?php echo esc_html( $radius_config['description'] ); ?></p>
                                                         <?php endif; ?>
                                                     <?php endif; ?>
                                                     <?php if ( ! empty( $spacing_config['option_key'] ) ) :
@@ -2939,7 +2949,7 @@ function poetheme_render_fonts_page() {
                                                     ?>
                                                         <div class="poetheme-font-spacing">
                                                             <span class="poetheme-font-spacing__label" id="<?php echo esc_attr( $spacing_id ); ?>-label"><?php echo esc_html( $spacing_config['label'] ); ?></span>
-                                                            <div class="poetheme-spacing-control" role="group" aria-labelledby="<?php echo esc_attr( $spacing_id ); ?>-label">
+                                                            <div class="poetheme-spacing-control" role="group" aria-labelledby="<?php echo esc_attr( $spacing_id ); ?>-label"<?php echo ! empty( $spacing_config['description'] ) ? ' aria-describedby="' . esc_attr( $spacing_id ) . '-description"' : ''; ?>>
                                                                 <?php foreach ( $segments as $segment_key => $segment_label ) :
                                                                     $segment_values = isset( $spacing_value[ $segment_key ] ) && is_array( $spacing_value[ $segment_key ] ) ? $spacing_value[ $segment_key ] : array();
                                                                     ?>
@@ -2968,19 +2978,19 @@ function poetheme_render_fonts_page() {
                                                                             <?php endforeach; ?>
                                                                         </div>
                                                                     </div>
-                                                                <?php endforeach; ?>
-                                                            </div>
-                                                            <?php if ( ! empty( $spacing_config['description'] ) ) : ?>
-                                                                <p class="description"><?php echo esc_html( $spacing_config['description'] ); ?></p>
-                                                            <?php endif; ?>
+                                                            <?php endforeach; ?>
                                                         </div>
+                                                        <?php if ( ! empty( $spacing_config['description'] ) ) : ?>
+                                                            <p id="<?php echo esc_attr( $spacing_id ); ?>-description" class="description"><?php echo esc_html( $spacing_config['description'] ); ?></p>
+                                                        <?php endif; ?>
+                                                    </div>
                                                     <?php endif; ?>
                                                     <?php if ( ! empty( $field['fallback'] ) ) :
                                                         $fallback_config = $field['fallback'];
                                                     ?>
                                                         <label class="poetheme-font-fallback-label" for="<?php echo esc_attr( $fallback_id ); ?>"><?php echo esc_html( $fallback_config['label'] ); ?></label>
-                                                        <input type="text" class="regular-text poetheme-font-fallback" id="<?php echo esc_attr( $fallback_id ); ?>" name="poetheme_fonts[<?php echo esc_attr( $fallback_config['key'] ); ?>]" value="<?php echo esc_attr( $fallback_value ); ?>" />
-                                                        <p class="description"><?php echo esc_html( $fallback_config['description'] ); ?></p>
+                                                        <input type="text" class="regular-text poetheme-font-fallback" id="<?php echo esc_attr( $fallback_id ); ?>" name="poetheme_fonts[<?php echo esc_attr( $fallback_config['key'] ); ?>]" value="<?php echo esc_attr( $fallback_value ); ?>" aria-describedby="<?php echo esc_attr( $fallback_id ); ?>-description" />
+                                                        <p id="<?php echo esc_attr( $fallback_id ); ?>-description" class="description"><?php echo esc_html( $fallback_config['description'] ); ?></p>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -3242,13 +3252,14 @@ function poetheme_render_colors_page() {
         $value       = $entry['value'];
         $default     = $entry['default'];
         $preview     = $entry['preview'];
+        $description_id = ! empty( $field['description'] ) ? $field_id . '-description' : '';
         ?>
         <div class="poetheme-color-section__field">
             <label class="poetheme-color-section__label" for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 
             <div class="poetheme-color-section__control">
                 <?php if ( 'toggle' === $type ) : ?>
-                    <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
+                    <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>"<?php echo $description_id ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : ''; ?>>
                         <option value="0" <?php selected( false, ! empty( $value ) ); ?>><?php esc_html_e( 'No', 'poetheme' ); ?></option>
                         <option value="1" <?php selected( true, ! empty( $value ) ); ?>><?php esc_html_e( 'Sì', 'poetheme' ); ?></option>
                     </select>
@@ -3266,7 +3277,7 @@ function poetheme_render_colors_page() {
                     );
                     $value = is_array( $value ) ? $value : array();
                     ?>
-                    <div class="poetheme-spacing-control" role="group" aria-labelledby="<?php echo esc_attr( $field_id ); ?>">
+                    <div class="poetheme-spacing-control" role="group" aria-labelledby="<?php echo esc_attr( $field_id ); ?>"<?php echo $description_id ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : ''; ?>>
                         <?php foreach ( $segments as $segment_key => $segment_label ) :
                             $segment_values = isset( $value[ $segment_key ] ) && is_array( $value[ $segment_key ] ) ? $value[ $segment_key ] : array();
                             ?>
@@ -3303,20 +3314,21 @@ function poetheme_render_colors_page() {
                             value="<?php echo esc_attr( $value ); ?>"
                             data-default-color="<?php echo esc_attr( $default ); ?>"
                             data-supports-alpha="true"
+                            <?php echo $description_id ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : ''; ?>
                         />
                         <span class="poetheme-color-preview" data-preview-for="<?php echo esc_attr( $field_id ); ?>" style="--poetheme-preview-color: <?php echo esc_attr( $preview ); ?>;"></span>
                     </div>
                 <?php endif; ?>
 
                 <?php if ( ! empty( $field['description'] ) ) : ?>
-                    <p class="description poetheme-color-section__help"><?php echo esc_html( $field['description'] ); ?></p>
+                    <p id="<?php echo esc_attr( $description_id ); ?>" class="description poetheme-color-section__help"><?php echo esc_html( $field['description'] ); ?></p>
                 <?php endif; ?>
             </div>
         </div>
         <?php
     };
     ?>
-    <div class="wrap poetheme-color-settings">
+    <div class="wrap poetheme-admin poetheme-color-settings">
         <h1><?php esc_html_e( 'Gestione Colori', 'poetheme' ); ?></h1>
 
         <form action="options.php" method="post">
@@ -3457,61 +3469,83 @@ function poetheme_render_logo_page() {
     $title_style_attr   = $title_style_attr ? ' style="' . esc_attr( $title_style_attr ) . '"' : '';
     $tagline_style_attr = $tagline_style_attr ? ' style="' . esc_attr( $tagline_style_attr ) . '"' : '';
     ?>
-    <div class="wrap">
+    <div class="wrap poetheme-admin">
         <h1><?php esc_html_e( 'Logo', 'poetheme' ); ?></h1>
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_logo_group' ); ?>
-            <div id="poetheme-logo-preview" class="poetheme-logo-preview">
-                <div class="poetheme-logo-preview__image-wrapper"<?php echo $show_site_title ? ' style="display:none;"' : ''; ?>>
-                    <?php if ( $logo ) : ?>
-                        <img src="<?php echo esc_url( $logo[0] ); ?>" alt="" class="poetheme-logo-preview__image"<?php echo $logo_style_attr; ?> />
-                    <?php else : ?>
-                        <p class="description"><?php esc_html_e( 'Nessun logo selezionato.', 'poetheme' ); ?></p>
-                    <?php endif; ?>
+            <div class="poetheme-panel">
+                <div class="poetheme-panel__header">
+                    <h2><?php esc_html_e( 'Branding', 'poetheme' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Carica il logo o usa il titolo del sito con colori personalizzati.', 'poetheme' ); ?></p>
                 </div>
-                <div class="poetheme-logo-preview__title-wrapper"<?php echo $show_site_title ? '' : ' style="display:none;"'; ?>>
-                    <div class="poetheme-logo-preview__title"<?php echo $title_style_attr; ?>><?php echo esc_html( $site_title ); ?></div>
-                    <?php if ( $site_tagline ) : ?>
-                        <div class="poetheme-logo-preview__tagline"<?php echo $tagline_style_attr; ?>><?php echo esc_html( $site_tagline ); ?></div>
-                    <?php endif; ?>
+                <div class="poetheme-panel__body">
+                    <div id="poetheme-logo-preview" class="poetheme-logo-preview">
+                        <div class="poetheme-logo-preview__image-wrapper"<?php echo $show_site_title ? ' style="display:none;"' : ''; ?>>
+                            <?php if ( $logo ) : ?>
+                                <img src="<?php echo esc_url( $logo[0] ); ?>" alt="" class="poetheme-logo-preview__image"<?php echo $logo_style_attr; ?> />
+                            <?php else : ?>
+                                <p class="description"><?php esc_html_e( 'Nessun logo selezionato.', 'poetheme' ); ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <div class="poetheme-logo-preview__title-wrapper"<?php echo $show_site_title ? '' : ' style="display:none;"'; ?>>
+                            <div class="poetheme-logo-preview__title"<?php echo $title_style_attr; ?>><?php echo esc_html( $site_title ); ?></div>
+                            <?php if ( $site_tagline ) : ?>
+                                <div class="poetheme-logo-preview__tagline"<?php echo $tagline_style_attr; ?>><?php echo esc_html( $site_tagline ); ?></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <input type="hidden" name="poetheme_logo[logo_id]" id="poetheme_logo_id" value="<?php echo esc_attr( $logo_id ); ?>" />
+                    <div class="poetheme-form-stack">
+                        <div class="poetheme-field">
+                            <div class="poetheme-field__control">
+                                <div class="poetheme-background-actions">
+                                    <button type="button" class="button button-secondary" id="poetheme-logo-upload"><?php esc_html_e( 'Carica logo', 'poetheme' ); ?></button>
+                                    <button type="button" class="button" id="poetheme-logo-remove" <?php disabled( 0 === $logo_id ); ?>><?php esc_html_e( 'Rimuovi logo', 'poetheme' ); ?></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="poetheme-field">
+                            <div class="poetheme-field__control">
+                                <label for="poetheme_logo_show_site_title">
+                                    <input type="checkbox" id="poetheme_logo_show_site_title" name="poetheme_logo[show_site_title]" value="1" <?php checked( $show_site_title ); ?> />
+                                    <?php esc_html_e( 'Mostra il titolo del sito al posto del logo', 'poetheme' ); ?>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="poetheme-logo-options<?php echo $show_site_title ? '' : ' poetheme-form-stack'; ?>"<?php echo $show_site_title ? ' style="display:none;"' : ''; ?>>
+                        <div class="poetheme-field">
+                            <label class="poetheme-field__label" for="poetheme_logo_height"><?php esc_html_e( 'Altezza del logo (px)', 'poetheme' ); ?></label>
+                            <div class="poetheme-field__control">
+                                <input type="number" min="0" step="1" id="poetheme_logo_height" name="poetheme_logo[logo_height]" value="<?php echo esc_attr( $logo_height ); ?>" class="small-text" aria-describedby="poetheme-logo-height-help" />
+                                <span id="poetheme-logo-height-help" class="description poetheme-field__help"><?php esc_html_e( 'Imposta 0 per utilizzare le proporzioni originali.', 'poetheme' ); ?></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="poetheme-title-options<?php echo $show_site_title ? ' poetheme-form-stack' : ''; ?>"<?php echo $show_site_title ? '' : ' style="display:none;"'; ?>>
+                        <div class="poetheme-field">
+                            <label class="poetheme-field__label" for="poetheme_logo_title_color"><?php esc_html_e( 'Colore del titolo', 'poetheme' ); ?></label>
+                            <div class="poetheme-field__control">
+                                <input
+                                    type="text"
+                                    class="poetheme-color-field"
+                                    id="poetheme_logo_title_color"
+                                    name="poetheme_logo[title_color]"
+                                    value="<?php echo esc_attr( $title_color ); ?>"
+                                    data-default-color="<?php echo esc_attr( $logo_defaults['title_color'] ); ?>"
+                                />
+                            </div>
+                        </div>
+                        <div class="poetheme-field">
+                            <label class="poetheme-field__label" for="poetheme_logo_title_size"><?php esc_html_e( 'Dimensione del titolo (rem)', 'poetheme' ); ?></label>
+                            <div class="poetheme-field__control">
+                                <input type="number" min="0.5" step="0.05" id="poetheme_logo_title_size" name="poetheme_logo[title_size]" value="<?php echo esc_attr( poetheme_format_number_for_css( $title_size ) ); ?>" class="small-text" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <input type="hidden" name="poetheme_logo[logo_id]" id="poetheme_logo_id" value="<?php echo esc_attr( $logo_id ); ?>" />
-            <p>
-                <button type="button" class="button button-secondary" id="poetheme-logo-upload"><?php esc_html_e( 'Carica logo', 'poetheme' ); ?></button>
-                <button type="button" class="button" id="poetheme-logo-remove" <?php disabled( 0 === $logo_id ); ?>><?php esc_html_e( 'Rimuovi logo', 'poetheme' ); ?></button>
-            </p>
-            <p>
-                <label for="poetheme_logo_show_site_title">
-                    <input type="checkbox" id="poetheme_logo_show_site_title" name="poetheme_logo[show_site_title]" value="1" <?php checked( $show_site_title ); ?> />
-                    <?php esc_html_e( 'Mostra il titolo del sito al posto del logo', 'poetheme' ); ?>
-                </label>
-            </p>
-
-            <div class="poetheme-logo-options"<?php echo $show_site_title ? ' style="display:none;"' : ''; ?>>
-                <p>
-                    <label for="poetheme_logo_height"><?php esc_html_e( 'Altezza del logo (px)', 'poetheme' ); ?></label><br />
-                    <input type="number" min="0" step="1" id="poetheme_logo_height" name="poetheme_logo[logo_height]" value="<?php echo esc_attr( $logo_height ); ?>" class="small-text" />
-                    <span class="description"><?php esc_html_e( 'Imposta 0 per utilizzare le proporzioni originali.', 'poetheme' ); ?></span>
-                </p>
-            </div>
-
-            <div class="poetheme-title-options"<?php echo $show_site_title ? '' : ' style="display:none;"'; ?>>
-                <p>
-                    <label for="poetheme_logo_title_color"><?php esc_html_e( 'Colore del titolo', 'poetheme' ); ?></label><br />
-                    <input
-                        type="text"
-                        class="poetheme-color-field"
-                        id="poetheme_logo_title_color"
-                        name="poetheme_logo[title_color]"
-                        value="<?php echo esc_attr( $title_color ); ?>"
-                        data-default-color="<?php echo esc_attr( $logo_defaults['title_color'] ); ?>"
-                    />
-                </p>
-                <p>
-                    <label for="poetheme_logo_title_size"><?php esc_html_e( 'Dimensione del titolo (rem)', 'poetheme' ); ?></label><br />
-                    <input type="number" min="0.5" step="0.05" id="poetheme_logo_title_size" name="poetheme_logo[title_size]" value="<?php echo esc_attr( poetheme_format_number_for_css( $title_size ) ); ?>" class="small-text" />
-                </p>
             </div>
 
             <?php submit_button(); ?>
@@ -3574,123 +3608,135 @@ function poetheme_render_header_page() {
         )
     );
     ?>
-    <div class="wrap">
+    <div class="wrap poetheme-admin">
         <h1><?php esc_html_e( 'Intestazione', 'poetheme' ); ?></h1>
         <form action="options.php" method="post" class="poetheme-options-form">
             <?php settings_fields( 'poetheme_header_group' ); ?>
-            <table class="form-table" role="presentation">
-                <tbody>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Seleziona layout', 'poetheme' ); ?></th>
-                        <td>
-                            <div class="poetheme-header-layouts" role="radiogroup" aria-label="<?php esc_attr_e( 'Seleziona layout', 'poetheme' ); ?>">
-                                <?php foreach ( $layouts as $layout_key => $layout ) : ?>
-                                    <label class="poetheme-header-layout">
-                                        <input
-                                            type="radio"
-                                            class="poetheme-header-layout__input"
-                                            name="poetheme_header[layout]"
-                                            value="<?php echo esc_attr( $layout_key ); ?>"
-                                            <?php checked( $options['layout'], $layout_key ); ?>
-                                            aria-label="<?php echo esc_attr( $layout['label'] ); ?>"
-                                        />
-                                        <span class="poetheme-header-layout__card">
-                                            <img
-                                                src="<?php echo esc_url( POETHEME_URI . '/assets/img/admin/header-layouts/' . $layout['image'] ); ?>"
-                                                alt="<?php echo esc_attr( $layout['label'] ); ?>"
-                                                class="poetheme-header-layout__image"
-                                            />
-                                            <span class="poetheme-header-layout__name"><?php echo esc_html( $layout['label'] ); ?></span>
-                                        </span>
+            <div class="poetheme-panel">
+                <div class="poetheme-panel__header">
+                    <h2><?php esc_html_e( 'Impostazioni testata', 'poetheme' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Configura layout, top bar, call to action e profili social.', 'poetheme' ); ?></p>
+                </div>
+                <div class="poetheme-panel__body">
+                    <table class="form-table poetheme-fields" role="presentation">
+                        <tbody>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Seleziona layout', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <div class="poetheme-header-layouts" role="radiogroup" aria-label="<?php esc_attr_e( 'Seleziona layout', 'poetheme' ); ?>" aria-describedby="poetheme-header-layout-help">
+                                        <?php foreach ( $layouts as $layout_key => $layout ) : ?>
+                                            <?php $layout_id = 'poetheme_header_layout_' . $layout_key; ?>
+                                            <label class="poetheme-header-layout" for="<?php echo esc_attr( $layout_id ); ?>">
+                                                <input
+                                                    id="<?php echo esc_attr( $layout_id ); ?>"
+                                                    type="radio"
+                                                    class="poetheme-header-layout__input"
+                                                    name="poetheme_header[layout]"
+                                                    value="<?php echo esc_attr( $layout_key ); ?>"
+                                                    <?php checked( $options['layout'], $layout_key ); ?>
+                                                    aria-label="<?php echo esc_attr( $layout['label'] ); ?>"
+                                                />
+                                                <span class="poetheme-header-layout__card">
+                                                    <img
+                                                        src="<?php echo esc_url( POETHEME_URI . '/assets/img/admin/header-layouts/' . $layout['image'] ); ?>"
+                                                        alt="<?php echo esc_attr( $layout['label'] ); ?>"
+                                                        class="poetheme-header-layout__image"
+                                                    />
+                                                    <span class="poetheme-header-layout__name"><?php echo esc_html( $layout['label'] ); ?></span>
+                                                </span>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <p id="poetheme-header-layout-help" class="description poetheme-field__help"><?php esc_html_e( "Scegli quale testata applicare al tema.", 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Barra superiore', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <label for="poetheme_header_show_top_bar">
+                                        <input type="checkbox" id="poetheme_header_show_top_bar" name="poetheme_header[show_top_bar]" value="1" <?php checked( ! empty( $options['show_top_bar'] ) ); ?> aria-describedby="poetheme-header-topbar-help" />
+                                        <?php esc_html_e( 'Mostra la barra superiore con informazioni e social.', 'poetheme' ); ?>
                                     </label>
-                                <?php endforeach; ?>
-                            </div>
-                            <p class="description"><?php esc_html_e( "Scegli quale testata applicare al tema.", 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Barra superiore', 'poetheme' ); ?></th>
-                        <td>
-                            <label for="poetheme_header_show_top_bar">
-                                <input type="checkbox" id="poetheme_header_show_top_bar" name="poetheme_header[show_top_bar]" value="1" <?php checked( ! empty( $options['show_top_bar'] ) ); ?> />
-                                <?php esc_html_e( 'Mostra la barra superiore con informazioni e social.', 'poetheme' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'La barra comprende messaggio iniziale, contatti, posizione, un menù informativo e le icone social.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">
+                                    <p id="poetheme-header-topbar-help" class="description poetheme-field__help"><?php esc_html_e( 'La barra comprende messaggio iniziale, contatti, posizione, un menù informativo e le icone social.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                    <tr class="poetheme-field">
+                        <th scope="row" class="poetheme-field__label">
                             <label for="poetheme_header_top_text_info"><?php esc_html_e( 'Messaggio iniziale', 'poetheme' ); ?></label>
                         </th>
-                        <td>
+                        <td class="poetheme-field__control">
                             <input type="text" id="poetheme_header_top_text_info" name="poetheme_header[top_bar_texts][text_1]" value="<?php echo esc_attr( $top_bar_texts['text_1'] ); ?>" class="regular-text" />
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row">
+                    <tr class="poetheme-field">
+                        <th scope="row" class="poetheme-field__label">
                             <label for="poetheme_header_top_text_email"><?php esc_html_e( 'Email', 'poetheme' ); ?></label>
                         </th>
-                        <td>
+                        <td class="poetheme-field__control">
                             <input type="email" id="poetheme_header_top_text_email" name="poetheme_header[top_bar_texts][email]" value="<?php echo esc_attr( $top_bar_texts['email'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'esempio@dominio.it', 'poetheme' ); ?>" />
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row">
+                    <tr class="poetheme-field">
+                        <th scope="row" class="poetheme-field__label">
                             <label for="poetheme_header_top_text_phone"><?php esc_html_e( 'Telefono', 'poetheme' ); ?></label>
                         </th>
-                        <td>
+                        <td class="poetheme-field__control">
                             <input type="text" id="poetheme_header_top_text_phone" name="poetheme_header[top_bar_texts][phone]" value="<?php echo esc_attr( $top_bar_texts['phone'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( '+39 012 3456789', 'poetheme' ); ?>" />
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row">
+                    <tr class="poetheme-field">
+                        <th scope="row" class="poetheme-field__label">
                             <label for="poetheme_header_top_text_whatsapp"><?php esc_html_e( 'WhatsApp', 'poetheme' ); ?></label>
                         </th>
-                        <td>
+                        <td class="poetheme-field__control">
                             <input type="text" id="poetheme_header_top_text_whatsapp" name="poetheme_header[top_bar_texts][whatsapp]" value="<?php echo esc_attr( $top_bar_texts['whatsapp'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( '+39 012 3456789', 'poetheme' ); ?>" />
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Call to Action', 'poetheme' ); ?></th>
-                        <td>
+                    <tr class="poetheme-field">
+                        <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Call to Action', 'poetheme' ); ?></th>
+                        <td class="poetheme-field__control">
                             <label for="poetheme_header_show_cta">
-                                <input type="checkbox" id="poetheme_header_show_cta" name="poetheme_header[show_cta]" value="1" <?php checked( $show_cta ); ?> />
+                                <input type="checkbox" id="poetheme_header_show_cta" name="poetheme_header[show_cta]" value="1" <?php checked( $show_cta ); ?> aria-describedby="poetheme-header-cta-help" />
                                 <?php esc_html_e( 'Mostra il pulsante Call to Action.', 'poetheme' ); ?>
                             </label>
-                            <p class="description"><?php esc_html_e( 'Deseleziona per nascondere il pulsante in tutte le testate.', 'poetheme' ); ?></p>
+                            <p id="poetheme-header-cta-help" class="description poetheme-field__help"><?php esc_html_e( 'Deseleziona per nascondere il pulsante in tutte le testate.', 'poetheme' ); ?></p>
                             <label for="poetheme_header_cta_text" class="screen-reader-text"><?php esc_html_e( 'Testo pulsante', 'poetheme' ); ?></label>
                             <input type="text" id="poetheme_header_cta_text" name="poetheme_header[cta_text]" value="<?php echo esc_attr( $options['cta_text'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Get Started', 'poetheme' ); ?>" />
                             <label for="poetheme_header_cta_url" class="screen-reader-text"><?php esc_html_e( 'Link pulsante', 'poetheme' ); ?></label>
                             <input type="url" id="poetheme_header_cta_url" name="poetheme_header[cta_url]" value="<?php echo esc_attr( $options['cta_url'] ); ?>" class="regular-text" placeholder="<?php echo esc_attr( home_url( '/' ) ); ?>" />
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row">
+                    <tr class="poetheme-field">
+                        <th scope="row" class="poetheme-field__label">
                             <label for="poetheme_header_top_text_location_label"><?php esc_html_e( 'Posizione', 'poetheme' ); ?></label>
                         </th>
-                        <td>
-                            <input type="text" id="poetheme_header_top_text_location_label" name="poetheme_header[top_bar_texts][location_label]" value="<?php echo esc_attr( $top_bar_texts['location_label'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Es. Piazza del Duomo, Milano', 'poetheme' ); ?>" />
-                            <p class="description"><?php esc_html_e( 'Testo mostrato accanto all’icona della posizione.', 'poetheme' ); ?></p>
+                        <td class="poetheme-field__control">
+                            <input type="text" id="poetheme_header_top_text_location_label" name="poetheme_header[top_bar_texts][location_label]" value="<?php echo esc_attr( $top_bar_texts['location_label'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Es. Piazza del Duomo, Milano', 'poetheme' ); ?>" aria-describedby="poetheme-header-location-help" />
+                            <p id="poetheme-header-location-help" class="description poetheme-field__help"><?php esc_html_e( 'Testo mostrato accanto all’icona della posizione.', 'poetheme' ); ?></p>
                             <label for="poetheme_header_top_text_location_url" class="screen-reader-text"><?php esc_html_e( 'Link Google Maps', 'poetheme' ); ?></label>
                             <input type="url" id="poetheme_header_top_text_location_url" name="poetheme_header[top_bar_texts][location_url]" value="<?php echo esc_attr( $top_bar_texts['location_url'] ); ?>" class="regular-text" placeholder="https://maps.google.com/" />
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Icone social', 'poetheme' ); ?></th>
-                        <td>
-                            <p class="description"><?php esc_html_e( 'Inserisci gli URL dei tuoi profili social per mostrarne le icone nella barra superiore.', 'poetheme' ); ?></p>
+                    <tr class="poetheme-field">
+                        <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Icone social', 'poetheme' ); ?></th>
+                        <td class="poetheme-field__control">
+                            <p id="poetheme-header-social-help" class="description poetheme-field__help"><?php esc_html_e( 'Inserisci gli URL dei tuoi profili social per mostrarne le icone nella barra superiore.', 'poetheme' ); ?></p>
                             <?php foreach ( $socials as $key => $social ) :
                                 $value = isset( $options['social_links'][ $key ] ) ? $options['social_links'][ $key ] : '';
                                 ?>
-                                <p>
-                                    <label for="poetheme_header_social_<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $social['label'] ); ?></label><br />
-                                    <input type="url" id="poetheme_header_social_<?php echo esc_attr( $key ); ?>" name="poetheme_header[social_links][<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="regular-text" placeholder="https://" />
-                                </p>
+                                <div class="poetheme-field">
+                                    <label class="poetheme-field__label" for="poetheme_header_social_<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $social['label'] ); ?></label>
+                                    <div class="poetheme-field__control">
+                                        <input type="url" id="poetheme_header_social_<?php echo esc_attr( $key ); ?>" name="poetheme_header[social_links][<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="regular-text" placeholder="https://" aria-describedby="poetheme-header-social-help" />
+                                    </div>
+                                </div>
                             <?php endforeach; ?>
                         </td>
                     </tr>
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <?php submit_button(); ?>
         </form>
         <p class="description">
@@ -3709,82 +3755,98 @@ function poetheme_render_subheader_page() {
     $tags         = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
     $suggested_sep = array( '/', '>', '»', '›', '|' );
     ?>
-    <div class="wrap">
+    <div class="wrap poetheme-admin">
         <h1><?php esc_html_e( 'Sottointestazione', 'poetheme' ); ?></h1>
         <form action="options.php" method="post" class="poetheme-options-form">
             <?php settings_fields( 'poetheme_subheader_group' ); ?>
 
-            <table class="form-table" role="presentation">
-                <tbody>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Mostra sottointestazione', 'poetheme' ); ?></th>
-                        <td>
-                            <label for="poetheme_subheader_enable">
-                                <input type="checkbox" id="poetheme_subheader_enable" name="poetheme_subheader[enable_subheader]" value="1" <?php checked( $options['enable_subheader'] ); ?> />
-                                <?php esc_html_e( 'Abilita la sezione con titolo pagina e breadcrumbs.', 'poetheme' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'Se disattivata, titolo e breadcrumbs non verranno mostrati globalmente.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="poetheme-panel">
+                <div class="poetheme-panel__header">
+                    <h2><?php esc_html_e( 'Visibilità', 'poetheme' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Abilita o disabilita rapidamente la sezione sottointestazione.', 'poetheme' ); ?></p>
+                </div>
+                <div class="poetheme-panel__body">
+                    <table class="form-table poetheme-fields" role="presentation">
+                        <tbody>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Mostra sottointestazione', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <label for="poetheme_subheader_enable">
+                                        <input type="checkbox" id="poetheme_subheader_enable" name="poetheme_subheader[enable_subheader]" value="1" <?php checked( $options['enable_subheader'] ); ?> aria-describedby="poetheme-subheader-enable-help" />
+                                        <?php esc_html_e( 'Abilita la sezione con titolo pagina e breadcrumbs.', 'poetheme' ); ?>
+                                    </label>
+                                    <p id="poetheme-subheader-enable-help" class="description poetheme-field__help"><?php esc_html_e( 'Se disattivata, titolo e breadcrumbs non verranno mostrati globalmente.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-            <fieldset id="poetheme-subheader-settings" <?php disabled( ! $options['enable_subheader'] ); ?>>
-                <legend class="screen-reader-text"><?php esc_html_e( 'Impostazioni sottointestazione', 'poetheme' ); ?></legend>
-                <table class="form-table" role="presentation">
-                    <tbody>
-                        <tr>
-                            <th scope="row"><?php esc_html_e( 'Elementi visibili', 'poetheme' ); ?></th>
-                            <td>
-                                <label>
-                                    <input type="checkbox" name="poetheme_subheader[show_title]" value="1" <?php checked( $options['show_title'] ); ?> />
-                                    <?php esc_html_e( 'Mostra il titolo della pagina', 'poetheme' ); ?>
-                                </label>
-                                <br />
-                                <label>
-                                    <input type="checkbox" name="poetheme_subheader[show_breadcrumbs]" value="1" <?php checked( $options['show_breadcrumbs'] ); ?> />
-                                    <?php esc_html_e( 'Mostra i breadcrumbs', 'poetheme' ); ?>
-                                </label>
-                                <p class="description"><?php esc_html_e( 'Le impostazioni della singola pagina possono comunque nascondere questi elementi.', 'poetheme' ); ?></p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="poetheme_subheader_layout"><?php esc_html_e( 'Layout', 'poetheme' ); ?></label></th>
-                            <td>
-                                <select id="poetheme_subheader_layout" name="poetheme_subheader[layout]">
-                                    <?php foreach ( $layouts as $layout_key => $label ) : ?>
-                                        <option value="<?php echo esc_attr( $layout_key ); ?>" <?php selected( $options['layout'], $layout_key ); ?>><?php echo esc_html( $label ); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <p class="description"><?php esc_html_e( 'Scegli come posizionare titolo e breadcrumbs nella sottointestazione.', 'poetheme' ); ?></p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="poetheme_subheader_title_tag"><?php esc_html_e( 'Tag del titolo', 'poetheme' ); ?></label></th>
-                            <td>
-                                <select id="poetheme_subheader_title_tag" name="poetheme_subheader[title_tag]">
-                                    <?php foreach ( $tags as $tag ) : ?>
-                                        <option value="<?php echo esc_attr( $tag ); ?>" <?php selected( $options['title_tag'], $tag ); ?>><?php echo esc_html( strtoupper( $tag ) ); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <p class="description"><?php esc_html_e( 'Seleziona il tag HTML utilizzato per il titolo principale.', 'poetheme' ); ?></p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="poetheme_subheader_separator"><?php esc_html_e( 'Separatore breadcrumbs', 'poetheme' ); ?></label></th>
-                            <td>
-                                <input type="text" id="poetheme_subheader_separator" name="poetheme_subheader[breadcrumbs_separator]" value="<?php echo esc_attr( $options['breadcrumbs_separator'] ); ?>" maxlength="10" class="regular-text" list="poetheme-subheader-separators" />
-                                <datalist id="poetheme-subheader-separators">
-                                    <?php foreach ( $suggested_sep as $separator ) : ?>
-                                        <option value="<?php echo esc_attr( $separator ); ?>"></option>
-                                    <?php endforeach; ?>
-                                </datalist>
-                                <p class="description"><?php esc_html_e( 'Suggerimenti: /, >, », ›, | oppure qualsiasi stringa entro 10 caratteri.', 'poetheme' ); ?></p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </fieldset>
+            <div class="poetheme-panel">
+                <div class="poetheme-panel__header">
+                    <h2><?php esc_html_e( 'Dettagli sottointestazione', 'poetheme' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Gestisci layout, elementi visibili e separatori.', 'poetheme' ); ?></p>
+                </div>
+                <div class="poetheme-panel__body">
+                    <fieldset id="poetheme-subheader-settings" <?php disabled( ! $options['enable_subheader'] ); ?>>
+                        <legend class="screen-reader-text"><?php esc_html_e( 'Impostazioni sottointestazione', 'poetheme' ); ?></legend>
+                        <table class="form-table poetheme-fields" role="presentation">
+                            <tbody>
+                                <tr class="poetheme-field">
+                                    <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Elementi visibili', 'poetheme' ); ?></th>
+                                    <td class="poetheme-field__control">
+                                        <label for="poetheme_subheader_show_title">
+                                            <input type="checkbox" id="poetheme_subheader_show_title" name="poetheme_subheader[show_title]" value="1" <?php checked( $options['show_title'] ); ?> aria-describedby="poetheme-subheader-elements-help" />
+                                            <?php esc_html_e( 'Mostra il titolo della pagina', 'poetheme' ); ?>
+                                        </label>
+                                        <br />
+                                        <label for="poetheme_subheader_show_breadcrumbs">
+                                            <input type="checkbox" id="poetheme_subheader_show_breadcrumbs" name="poetheme_subheader[show_breadcrumbs]" value="1" <?php checked( $options['show_breadcrumbs'] ); ?> aria-describedby="poetheme-subheader-elements-help" />
+                                            <?php esc_html_e( 'Mostra i breadcrumbs', 'poetheme' ); ?>
+                                        </label>
+                                        <p id="poetheme-subheader-elements-help" class="description poetheme-field__help"><?php esc_html_e( 'Le impostazioni della singola pagina possono comunque nascondere questi elementi.', 'poetheme' ); ?></p>
+                                    </td>
+                                </tr>
+                                <tr class="poetheme-field">
+                                    <th scope="row" class="poetheme-field__label"><label for="poetheme_subheader_layout"><?php esc_html_e( 'Layout', 'poetheme' ); ?></label></th>
+                                    <td class="poetheme-field__control">
+                                        <select id="poetheme_subheader_layout" name="poetheme_subheader[layout]" aria-describedby="poetheme-subheader-layout-help">
+                                            <?php foreach ( $layouts as $layout_key => $label ) : ?>
+                                                <option value="<?php echo esc_attr( $layout_key ); ?>" <?php selected( $options['layout'], $layout_key ); ?>><?php echo esc_html( $label ); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <p id="poetheme-subheader-layout-help" class="description poetheme-field__help"><?php esc_html_e( 'Scegli come posizionare titolo e breadcrumbs nella sottointestazione.', 'poetheme' ); ?></p>
+                                    </td>
+                                </tr>
+                                <tr class="poetheme-field">
+                                    <th scope="row" class="poetheme-field__label"><label for="poetheme_subheader_title_tag"><?php esc_html_e( 'Tag del titolo', 'poetheme' ); ?></label></th>
+                                    <td class="poetheme-field__control">
+                                        <select id="poetheme_subheader_title_tag" name="poetheme_subheader[title_tag]" aria-describedby="poetheme-subheader-title-help">
+                                            <?php foreach ( $tags as $tag ) : ?>
+                                                <option value="<?php echo esc_attr( $tag ); ?>" <?php selected( $options['title_tag'], $tag ); ?>><?php echo esc_html( strtoupper( $tag ) ); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <p id="poetheme-subheader-title-help" class="description poetheme-field__help"><?php esc_html_e( 'Seleziona il tag HTML utilizzato per il titolo principale.', 'poetheme' ); ?></p>
+                                    </td>
+                                </tr>
+                                <tr class="poetheme-field">
+                                    <th scope="row" class="poetheme-field__label"><label for="poetheme_subheader_separator"><?php esc_html_e( 'Separatore breadcrumbs', 'poetheme' ); ?></label></th>
+                                    <td class="poetheme-field__control">
+                                        <input type="text" id="poetheme_subheader_separator" name="poetheme_subheader[breadcrumbs_separator]" value="<?php echo esc_attr( $options['breadcrumbs_separator'] ); ?>" maxlength="10" class="regular-text" list="poetheme-subheader-separators" aria-describedby="poetheme-subheader-separator-help" />
+                                        <datalist id="poetheme-subheader-separators">
+                                            <?php foreach ( $suggested_sep as $separator ) : ?>
+                                                <option value="<?php echo esc_attr( $separator ); ?>"></option>
+                                            <?php endforeach; ?>
+                                        </datalist>
+                                        <p id="poetheme-subheader-separator-help" class="description poetheme-field__help"><?php esc_html_e( 'Suggerimenti: /, >, », ›, | oppure qualsiasi stringa entro 10 caratteri.', 'poetheme' ); ?></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </div>
+            </div>
 
             <?php submit_button(); ?>
         </form>
@@ -3820,32 +3882,41 @@ function poetheme_render_blog_page() {
         'cards' => __( 'Cards / griglia', 'poetheme' ),
     );
     ?>
-    <div class="wrap">
+    <div class="wrap poetheme-admin">
         <h1><?php esc_html_e( 'Blog', 'poetheme' ); ?></h1>
 
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_blog_group' ); ?>
 
-            <table class="form-table" role="presentation">
-                <tbody>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Stile elenco articoli', 'poetheme' ); ?></th>
-                        <td>
-                            <fieldset>
-                                <legend class="screen-reader-text"><?php esc_html_e( 'Seleziona lo stile di elenco', 'poetheme' ); ?></legend>
-                                <?php foreach ( $style_choices as $value => $label ) : ?>
-                                    <label class="poetheme-option-inline">
-                                        <input type="radio" name="poetheme_blog[list_style]" value="<?php echo esc_attr( $value ); ?>" <?php checked( $list_style, $value ); ?> />
-                                        <?php echo esc_html( $label ); ?>
-                                    </label>
-                                    <br />
-                                <?php endforeach; ?>
-                            </fieldset>
-                            <p class="description"><?php esc_html_e( 'Applica lo stile agli archivi (categorie, tag, autore, data) e ai risultati di ricerca.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="poetheme-panel">
+                <div class="poetheme-panel__header">
+                    <h2><?php esc_html_e( 'Stile listing', 'poetheme' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Definisci come mostrare gli articoli nelle liste e nei risultati di ricerca.', 'poetheme' ); ?></p>
+                </div>
+                <div class="poetheme-panel__body">
+                    <table class="form-table poetheme-fields" role="presentation">
+                        <tbody>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Stile elenco articoli', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <fieldset aria-describedby="poetheme-blog-style-help">
+                                        <legend class="screen-reader-text"><?php esc_html_e( 'Seleziona lo stile di elenco', 'poetheme' ); ?></legend>
+                                        <?php foreach ( $style_choices as $value => $label ) : ?>
+                                            <?php $style_id = 'poetheme_blog_style_' . $value; ?>
+                                            <label class="poetheme-option-inline" for="<?php echo esc_attr( $style_id ); ?>">
+                                                <input id="<?php echo esc_attr( $style_id ); ?>" type="radio" name="poetheme_blog[list_style]" value="<?php echo esc_attr( $value ); ?>" <?php checked( $list_style, $value ); ?> />
+                                                <?php echo esc_html( $label ); ?>
+                                            </label>
+                                            <br />
+                                        <?php endforeach; ?>
+                                    </fieldset>
+                                    <p id="poetheme-blog-style-help" class="description poetheme-field__help"><?php esc_html_e( 'Applica lo stile agli archivi (categorie, tag, autore, data) e ai risultati di ricerca.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <?php submit_button(); ?>
         </form>
@@ -3869,44 +3940,50 @@ function poetheme_render_footer_page() {
     $display_footer_credits = ! empty( $options['display_footer_credits'] );
     $credits_content = isset( $options['credits_content'] ) ? $options['credits_content'] : '';
     ?>
-    <div class="wrap">
+    <div class="wrap poetheme-admin">
         <h1><?php esc_html_e( 'Piè di pagina', 'poetheme' ); ?></h1>
 
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_footer_group' ); ?>
 
-            <table class="form-table" role="presentation">
-                <tbody>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Mostra il piè di pagina', 'poetheme' ); ?></th>
-                        <td>
-                            <label for="poetheme-footer-display">
-                                <input type="checkbox" id="poetheme-footer-display" name="poetheme_footer[display_footer]" value="1" <?php checked( $display_footer ); ?> />
-                                <?php esc_html_e( 'Visualizza l’intera area footer.', 'poetheme' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'Disattiva per nascondere completamente i widget del piè di pagina e la sezione finale.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><?php esc_html_e( 'Credits', 'poetheme' ); ?></th>
-                        <td>
-                            <label for="poetheme-footer-display-credits">
-                                <input type="checkbox" id="poetheme-footer-display-credits" name="poetheme_footer[display_footer_credits]" value="1" <?php checked( $display_footer_credits ); ?> />
-                                <?php esc_html_e( 'Visualizza i credits.', 'poetheme' ); ?>
-                            </label>
-                            <p class="description"><?php esc_html_e( 'Disattiva per nascondere la sezione con i credits nel piè di pagina.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                    <tr class="poetheme-footer-dependent">
-                        <th scope="row"><label for="poetheme-footer-rows"><?php esc_html_e( 'Numero di righe', 'poetheme' ); ?></label></th>
-                        <td>
-                            <select id="poetheme-footer-rows" name="poetheme_footer[rows]">
-                                <option value="1" <?php selected( $rows, 1 ); ?>><?php esc_html_e( '1 riga', 'poetheme' ); ?></option>
-                                <option value="2" <?php selected( $rows, 2 ); ?>><?php esc_html_e( '2 righe', 'poetheme' ); ?></option>
-                            </select>
-                            <p class="description"><?php esc_html_e( 'Scegli se visualizzare una o due righe di widget nel piè di pagina.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
+            <div class="poetheme-panel">
+                <div class="poetheme-panel__header">
+                    <h2><?php esc_html_e( 'Struttura e credits', 'poetheme' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Gestisci la visibilità del footer, le righe di widget e il testo dei credits.', 'poetheme' ); ?></p>
+                </div>
+                <div class="poetheme-panel__body">
+                    <table class="form-table poetheme-fields" role="presentation">
+                        <tbody>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Mostra il piè di pagina', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <label for="poetheme-footer-display">
+                                        <input type="checkbox" id="poetheme-footer-display" name="poetheme_footer[display_footer]" value="1" <?php checked( $display_footer ); ?> aria-describedby="poetheme-footer-display-help" />
+                                        <?php esc_html_e( 'Visualizza l’intera area footer.', 'poetheme' ); ?>
+                                    </label>
+                                    <p id="poetheme-footer-display-help" class="description poetheme-field__help"><?php esc_html_e( 'Disattiva per nascondere completamente i widget del piè di pagina e la sezione finale.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                            <tr class="poetheme-field">
+                                <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Credits', 'poetheme' ); ?></th>
+                                <td class="poetheme-field__control">
+                                    <label for="poetheme-footer-display-credits">
+                                        <input type="checkbox" id="poetheme-footer-display-credits" name="poetheme_footer[display_footer_credits]" value="1" <?php checked( $display_footer_credits ); ?> aria-describedby="poetheme-footer-credits-help" />
+                                        <?php esc_html_e( 'Visualizza i credits.', 'poetheme' ); ?>
+                                    </label>
+                                    <p id="poetheme-footer-credits-help" class="description poetheme-field__help"><?php esc_html_e( 'Disattiva per nascondere la sezione con i credits nel piè di pagina.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                            <tr class="poetheme-field poetheme-footer-dependent">
+                                <th scope="row" class="poetheme-field__label"><label for="poetheme-footer-rows"><?php esc_html_e( 'Numero di righe', 'poetheme' ); ?></label></th>
+                                <td class="poetheme-field__control">
+                                    <select id="poetheme-footer-rows" name="poetheme_footer[rows]" aria-describedby="poetheme-footer-rows-help">
+                                        <option value="1" <?php selected( $rows, 1 ); ?>><?php esc_html_e( '1 riga', 'poetheme' ); ?></option>
+                                        <option value="2" <?php selected( $rows, 2 ); ?>><?php esc_html_e( '2 righe', 'poetheme' ); ?></option>
+                                    </select>
+                                    <p id="poetheme-footer-rows-help" class="description poetheme-field__help"><?php esc_html_e( 'Scegli se visualizzare una o due righe di widget nel piè di pagina.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
                     <?php for ( $row = 1; $row <= 2; $row++ ) :
                         $field_id   = 'poetheme-footer-layout-row-' . $row;
                         $field_name = 'poetheme_footer[row_layouts][' . $row . ']';
@@ -3915,37 +3992,42 @@ function poetheme_render_footer_page() {
                             $selected = $defaults['row_layouts'][ $row ];
                         }
                         ?>
-                        <tr class="poetheme-footer-layout-row poetheme-footer-dependent" data-footer-row="<?php echo esc_attr( $row ); ?>">
-                            <th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php printf( esc_html__( 'Layout riga %d', 'poetheme' ), $row ); ?></label></th>
-                            <td>
-                                <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>">
+                        <tr class="poetheme-field poetheme-footer-layout-row poetheme-footer-dependent" data-footer-row="<?php echo esc_attr( $row ); ?>">
+                            <th scope="row" class="poetheme-field__label"><label for="<?php echo esc_attr( $field_id ); ?>"><?php printf( esc_html__( 'Layout riga %d', 'poetheme' ), $row ); ?></label></th>
+                            <td class="poetheme-field__control">
+                                <select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" aria-describedby="<?php echo esc_attr( $field_id ); ?>-help">
                                     <?php foreach ( $choices as $choice_key => $choice ) : ?>
                                         <option value="<?php echo esc_attr( $choice_key ); ?>" <?php selected( $selected, $choice_key ); ?>><?php echo esc_html( $choice['label'] ); ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <p class="description"><?php printf( esc_html__( 'Scegli quante colonne mostrare nella riga %d.', 'poetheme' ), $row ); ?></p>
+                                <p id="<?php echo esc_attr( $field_id ); ?>-help" class="description poetheme-field__help"><?php printf( esc_html__( 'Scegli quante colonne mostrare nella riga %d.', 'poetheme' ), $row ); ?></p>
                             </td>
                         </tr>
                     <?php endfor; ?>
-                    <tr class="poetheme-footer-dependent poetheme-footer-credits-dependent">
-                        <th scope="row"><label for="poetheme-footer-credits-content"><?php esc_html_e( 'Testo credits', 'poetheme' ); ?></label></th>
-                        <td>
-                            <?php
-                            wp_editor(
-                                $credits_content,
-                                'poetheme-footer-credits-content',
-                                array(
-                                    'textarea_name' => 'poetheme_footer[credits_content]',
-                                    'textarea_rows' => 6,
-                                    'media_buttons' => true,
-                                )
-                            );
-                            ?>
-                            <p class="description"><?php esc_html_e( 'Inserisci testo o HTML per personalizzare i credits del sito.', 'poetheme' ); ?></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <tr class="poetheme-field poetheme-footer-dependent poetheme-footer-credits-dependent">
+                                <th scope="row" class="poetheme-field__label"><label for="poetheme-footer-credits-content"><?php esc_html_e( 'Testo credits', 'poetheme' ); ?></label></th>
+                                <td class="poetheme-field__control">
+                                    <div class="poetheme-editor-wrap" aria-describedby="poetheme-footer-credits-help">
+                                        <?php
+                                        wp_editor(
+                                            $credits_content,
+                                            'poetheme-footer-credits-content',
+                                            array(
+                                                'textarea_name' => 'poetheme_footer[credits_content]',
+                                                'textarea_rows' => 6,
+                                                'media_buttons' => true,
+                                                'editor_class'  => 'poetheme-editor-textarea',
+                                            )
+                                        );
+                                        ?>
+                                    </div>
+                                    <p id="poetheme-footer-credits-help" class="description poetheme-field__help"><?php esc_html_e( 'Inserisci testo o HTML per personalizzare i credits del sito.', 'poetheme' ); ?></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <?php submit_button(); ?>
         </form>
@@ -4032,12 +4114,21 @@ function poetheme_render_footer_page() {
 function poetheme_render_custom_css_page() {
     $custom_css = get_option( 'poetheme_custom_css', '' );
     ?>
-    <div class="wrap">
+    <div class="wrap poetheme-admin">
         <h1><?php esc_html_e( 'Custom CSS', 'poetheme' ); ?></h1>
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_custom_css_group' ); ?>
-            <label class="screen-reader-text" for="poetheme_custom_css"><?php esc_html_e( 'CSS personalizzato', 'poetheme' ); ?></label>
-            <textarea id="poetheme_custom_css" name="poetheme_custom_css" rows="20" class="large-text code"><?php echo esc_textarea( $custom_css ); ?></textarea>
+            <div class="poetheme-panel">
+                <div class="poetheme-panel__header">
+                    <h2><?php esc_html_e( 'Editor CSS', 'poetheme' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Inserisci qui regole CSS personalizzate. Il codice verrà iniettato nell’head del tema.', 'poetheme' ); ?></p>
+                </div>
+                <div class="poetheme-panel__body">
+                    <label class="screen-reader-text" for="poetheme_custom_css"><?php esc_html_e( 'CSS personalizzato', 'poetheme' ); ?></label>
+                    <textarea id="poetheme_custom_css" name="poetheme_custom_css" rows="20" class="large-text code poetheme-code-editor" aria-describedby="poetheme-custom-css-help"><?php echo esc_textarea( $custom_css ); ?></textarea>
+                    <p id="poetheme-custom-css-help" class="description poetheme-field__help"><?php esc_html_e( 'Usa solo CSS valido. Questo contenuto è visibile solo agli amministratori.', 'poetheme' ); ?></p>
+                </div>
+            </div>
             <?php submit_button(); ?>
         </form>
     </div>

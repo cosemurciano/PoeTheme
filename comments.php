@@ -48,11 +48,44 @@ if ( post_password_required() ) {
     <?php endif; ?>
 
     <?php
+    $commenter     = wp_get_current_commenter();
+    $require_names = (bool) get_option( 'require_name_email' );
+    $aria_required = $require_names ? ' aria-required="true" required' : '';
+    $input_class   = 'w-full border border-gray-300 rounded-md px-3 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200';
+
     comment_form(
         array(
             'title_reply_before' => '<h2 id="reply-title" class="text-xl font-semibold mt-8">',
             'title_reply_after'  => '</h2>',
+            'class_form'         => 'mt-6 space-y-6',
             'class_submit'       => 'bg-indigo-600 text-white px-4 py-2 rounded-md focus:ring-4 focus:ring-indigo-300',
+            'comment_field'      => sprintf(
+                '<p class="comment-form-comment space-y-2"><label for="comment" class="font-medium">%1$s</label><textarea id="comment" name="comment" class="%2$s" rows="6" required></textarea></p>',
+                esc_html__( 'Comment', 'poetheme' ),
+                esc_attr( $input_class )
+            ),
+            'fields'             => array(
+                'author' => sprintf(
+                    '<p class="comment-form-author space-y-2"><label for="author" class="font-medium">%1$s</label><input id="author" name="author" type="text" class="%2$s" value="%3$s"%4$s /></p>',
+                    esc_html__( 'Name', 'poetheme' ),
+                    esc_attr( $input_class ),
+                    esc_attr( $commenter['comment_author'] ),
+                    $aria_required
+                ),
+                'email'  => sprintf(
+                    '<p class="comment-form-email space-y-2"><label for="email" class="font-medium">%1$s</label><input id="email" name="email" type="email" class="%2$s" value="%3$s"%4$s /></p>',
+                    esc_html__( 'Email', 'poetheme' ),
+                    esc_attr( $input_class ),
+                    esc_attr( $commenter['comment_author_email'] ),
+                    $aria_required
+                ),
+                'url'    => sprintf(
+                    '<p class="comment-form-url space-y-2"><label for="url" class="font-medium">%1$s</label><input id="url" name="url" type="url" class="%2$s" value="%3$s" /></p>',
+                    esc_html__( 'Website', 'poetheme' ),
+                    esc_attr( $input_class ),
+                    esc_attr( $commenter['comment_author_url'] )
+                ),
+            ),
         )
     );
     ?>

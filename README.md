@@ -19,6 +19,7 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 - Ottimizzato per l'accessibilità (skip link, focus visibili, alt text automatico, navigazione da tastiera).
 - Compatibile con RTL, traduzioni tramite file POT e widget-ready (sidebar e footer).
 - Opzioni tema dedicate (Generale e Logo) per personalizzare tagline, breadcrumb e branding.
+- UI admin delle opzioni migliorata con form più leggibili, coerenti e responsive.
 
 ## SEO & Schema Policy
 Il tema gestisce un set minimo di dati strutturati JSON-LD e breadcrumb HTML in modo compatibile con i plugin SEO più diffusi.

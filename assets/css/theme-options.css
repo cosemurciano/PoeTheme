@@ -411,3 +411,155 @@
 .poetheme-font-collection li {
     margin-bottom: 8px;
 }
+.poetheme-admin {
+    --poetheme-panel-bg: #ffffff;
+    --poetheme-panel-border: #e5e7eb;
+    --poetheme-panel-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    --poetheme-panel-muted: #6b7280;
+}
+
+.poetheme-admin .poetheme-panel {
+    margin: 24px 0;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid var(--poetheme-panel-border);
+    background: var(--poetheme-panel-bg);
+    box-shadow: var(--poetheme-panel-shadow);
+}
+
+.poetheme-admin .poetheme-panel__header {
+    margin-bottom: 20px;
+}
+
+.poetheme-admin .poetheme-panel__header h2 {
+    margin: 0 0 6px;
+    font-size: 1.25rem;
+}
+
+.poetheme-admin .poetheme-panel__header .description {
+    margin: 0;
+    color: var(--poetheme-panel-muted);
+}
+
+.poetheme-admin .poetheme-panel__body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.poetheme-admin .poetheme-field__control .poetheme-field + .poetheme-field {
+    margin-top: 12px;
+}
+
+.poetheme-admin .form-table {
+    margin-top: 0;
+}
+
+.poetheme-admin .form-table th,
+.poetheme-admin .form-table td {
+    padding: 16px 12px;
+    vertical-align: top;
+}
+
+.poetheme-admin .form-table th {
+    font-weight: 600;
+    width: 240px;
+}
+
+.poetheme-admin .poetheme-field__help,
+.poetheme-admin .form-table .description {
+    color: var(--poetheme-panel-muted);
+    font-size: 0.8125rem;
+}
+
+.poetheme-admin .form-table .description {
+    margin-top: 6px;
+}
+
+.poetheme-admin input[type="text"],
+.poetheme-admin input[type="email"],
+.poetheme-admin input[type="url"],
+.poetheme-admin input[type="number"],
+.poetheme-admin input[type="search"],
+.poetheme-admin select,
+.poetheme-admin textarea {
+    width: 100%;
+    max-width: 520px;
+}
+
+.poetheme-admin textarea {
+    max-width: 100%;
+    min-height: 180px;
+}
+
+.poetheme-admin .poetheme-code-editor {
+    min-height: 420px;
+}
+
+.poetheme-admin .regular-text {
+    max-width: 420px;
+}
+
+.poetheme-admin .small-text {
+    max-width: 120px;
+}
+
+.poetheme-admin .poetheme-field__label {
+    font-weight: 600;
+}
+
+.poetheme-admin .poetheme-field__control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.poetheme-admin .poetheme-field__help {
+    margin: 0;
+}
+
+.poetheme-admin .poetheme-field__control .regular-text,
+.poetheme-admin .poetheme-field__control .small-text {
+    width: 100%;
+}
+
+.poetheme-admin .poetheme-field__control .button + .button {
+    margin-left: 0;
+}
+
+.poetheme-admin .poetheme-field__control .description + .description {
+    margin-top: 4px;
+}
+
+.poetheme-admin .notice {
+    border-radius: 8px;
+}
+
+.poetheme-admin .poetheme-form-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.poetheme-admin .poetheme-editor-wrap .wp-editor-wrap {
+    max-width: 100%;
+}
+
+.poetheme-admin .poetheme-editor-wrap .wp-editor-area {
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (max-width: 782px) {
+    .poetheme-admin .form-table th,
+    .poetheme-admin .form-table td {
+        display: block;
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .poetheme-admin .form-table th {
+        margin-bottom: 4px;
+    }
+}
