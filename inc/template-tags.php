@@ -720,9 +720,17 @@ function poetheme_the_logo() {
 /**
  * Render the compact site/author profile used by the app sidebar layout.
  *
+ * @param array $args Profile rendering arguments.
  * @return void
  */
-function poetheme_render_site_author_profile() {
+function poetheme_render_site_author_profile( $args = array() ) {
+    $args    = wp_parse_args(
+        $args,
+        array(
+            'context' => 'desktop',
+        )
+    );
+    $context = in_array( $args['context'], array( 'desktop', 'mobile' ), true ) ? $args['context'] : 'desktop';
     static $profile = null;
 
     if ( null === $profile ) {
@@ -790,7 +798,7 @@ function poetheme_render_site_author_profile() {
 
     $tag = $url ? 'a' : 'div';
     ?>
-    <div class="poetheme-app-sidebar__profile">
+    <div class="poetheme-app-sidebar__profile poetheme-app-sidebar__profile--<?php echo esc_attr( $context ); ?>">
         <<?php echo tag_escape( $tag ); ?> class="poetheme-app-sidebar__profile-link"<?php echo $url ? ' href="' . esc_url( $url ) . '"' : ''; ?> aria-label="<?php echo esc_attr( $name ); ?>">
             <?php echo wp_kses_post( $avatar ); ?>
             <span class="poetheme-app-sidebar__profile-text">

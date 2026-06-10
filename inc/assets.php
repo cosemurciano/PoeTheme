@@ -293,6 +293,8 @@ function poetheme_scripts() {
             array(
                 'expandLabel'   => __( 'Espandi menu laterale', 'poetheme' ),
                 'collapseLabel' => __( 'Comprimi menu laterale', 'poetheme' ),
+                'openMenuLabel' => __( 'Apri menu mobile', 'poetheme' ),
+                'closeMenuLabel' => __( 'Chiudi menu mobile', 'poetheme' ),
             )
         );
         wp_script_add_data( 'poetheme-app-sidebar', 'defer', true );

@@ -25,7 +25,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
         protected $layout = 'primary';
 
         /**
-         * Menu variant (desktop or mobile).
+         * Menu variant (desktop, mobile, or sidebar).
          *
          * @var string
          */
@@ -79,8 +79,11 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $parent_id = ! empty( $this->submenu_stack ) ? end( $this->submenu_stack ) : 0;
             $submenu_id = $parent_id && isset( $this->submenu_ids[ $parent_id ] ) ? $this->submenu_ids[ $parent_id ] : '';
 
-            if ( 'mobile' === $this->variant ) {
+            if ( in_array( $this->variant, array( 'mobile', 'sidebar' ), true ) ) {
                 $classes = array( 'poetheme-submenu', 'pl-4', 'border-l', 'border-gray-200', 'space-y-2', 'mt-2' );
+                if ( 'sidebar' === $this->variant ) {
+                    $classes = array( 'poetheme-submenu', 'poetheme-sidebar-submenu' );
+                }
                 if ( $depth > 0 ) {
                     $classes[] = 'ml-2';
                 }
@@ -166,7 +169,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
 
             $li_classes = array( 'poetheme-menu-item', 'relative' );
 
-            if ( 'mobile' !== $this->variant && $has_children ) {
+            if ( 'desktop' === $this->variant && $has_children ) {
                 $li_classes[] = 'group';
             }
 
@@ -190,7 +193,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $atts['rel']    = ! empty( $item->xfn ) ? $item->xfn : '';
             $atts['href']   = ! empty( $item->url ) ? $item->url : '';
 
-            if ( $has_children && 'mobile' !== $this->variant ) {
+            if ( $has_children && 'desktop' === $this->variant ) {
                 $atts['aria-haspopup'] = 'true';
                 $atts['aria-expanded'] = 'false';
                 if ( $submenu_id ) {
@@ -231,14 +234,14 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             }
 
             $indicator = '';
-            if ( $has_children && 'mobile' !== $this->variant ) {
+            if ( $has_children && 'desktop' === $this->variant ) {
                 $indicator_icon    = ( 0 === $depth ) ? 'chevron-down' : 'chevron-right';
                 $indicator_classes = array( 'poetheme-submenu-indicator', 'w-4', 'h-4', 'ml-1', 'text-gray-400' );
                 $indicator         = '<i data-lucide="' . esc_attr( $indicator_icon ) . '" class="' . esc_attr( implode( ' ', $indicator_classes ) ) . '"></i>';
             }
 
             $submenu_toggle = '';
-            if ( $has_children && 'mobile' === $this->variant ) {
+            if ( $has_children && in_array( $this->variant, array( 'mobile', 'sidebar' ), true ) ) {
                 $toggle_label = sprintf(
                     /* translators: %s: menu item title */
                     __( 'Apri il sottomenu di %s', 'poetheme' ),
@@ -254,7 +257,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $title_markup = '<span class="menu-item-text' . ( $is_bold ? ' font-semibold' : '' ) . '">' . esc_html( $title ) . '</span>';
 
             $item_output  = $args->before;
-            if ( $has_children && 'mobile' === $this->variant ) {
+            if ( $has_children && in_array( $this->variant, array( 'mobile', 'sidebar' ), true ) ) {
                 $item_output .= '<div class="poetheme-mobile-item-row">';
             }
             $item_output .= '<a' . $attributes . '>';
@@ -277,7 +280,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                 $item_output .= $submenu_toggle;
             }
 
-            if ( $has_children && 'mobile' === $this->variant ) {
+            if ( $has_children && in_array( $this->variant, array( 'mobile', 'sidebar' ), true ) ) {
                 $item_output .= '</div>';
             }
             $item_output .= $args->after;
@@ -318,7 +321,7 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $classes = array( 'inline-flex', 'items-center', 'gap-2', 'transition', 'duration-150', 'ease-out' );
             $is_primary_layout = ( 'primary' === $this->layout );
 
-            if ( 'mobile' === $this->variant ) {
+            if ( in_array( $this->variant, array( 'mobile', 'sidebar' ), true ) ) {
                 $classes = array( 'flex', 'items-center', 'gap-2', 'flex-1', 'text-left', 'transition', 'duration-150' );
                 $classes[] = ( 0 === $depth ) ? 'text-base' : 'text-sm';
                 $classes[] = 'text-gray-800';
@@ -373,7 +376,7 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
      * Helper function to render theme menus with the custom walker.
      *
      * @param string $location Menu location slug.
-     * @param string $variant  Menu variant (desktop or mobile).
+     * @param string $variant  Menu variant (desktop, mobile, or sidebar).
      * @param array  $args     Additional arguments passed to wp_nav_menu().
      */
     function poetheme_render_navigation_menu( $location, $variant = 'desktop', $args = array() ) {
@@ -392,17 +395,18 @@ if ( ! function_exists( 'poetheme_render_navigation_menu' ) ) {
 
         $walker_args         = array(
             'layout'  => ( 'top-info' === $location ) ? 'top-info' : 'primary',
-            'variant' => ( 'mobile' === $variant ) ? 'mobile' : 'desktop',
+            'variant' => in_array( $variant, array( 'mobile', 'sidebar' ), true ) ? $variant : 'desktop',
         );
         $defaults['walker']   = new PoeTheme_Nav_Walker( $walker_args );
 
-        if ( 'mobile' === $variant ) {
+        if ( in_array( $variant, array( 'mobile', 'sidebar' ), true ) ) {
             $defaults['depth'] = 0;
         }
 
         $args = wp_parse_args( $args, $defaults );
 
-        $base_classes = array( 'poetheme-nav', 'poetheme-nav--' . ( 'mobile' === $variant ? 'mobile' : 'desktop' ) );
+        $menu_variant = in_array( $variant, array( 'mobile', 'sidebar' ), true ) ? $variant : 'desktop';
+        $base_classes = array( 'poetheme-nav', 'poetheme-nav--' . $menu_variant );
         if ( $location ) {
             $base_classes[] = 'poetheme-nav--location-' . sanitize_html_class( $location );
         }
@@ -422,7 +426,7 @@ if ( ! function_exists( 'poetheme_get_navigation_menu_items' ) ) {
      * Return navigation menu items markup only (without wrapping <ul>).
      *
      * @param string $location Menu location slug.
-     * @param string $variant  Menu variant (desktop or mobile).
+     * @param string $variant  Menu variant (desktop, mobile, or sidebar).
      * @param array  $args     Additional arguments passed to wp_nav_menu().
      * @return string
      */
@@ -443,11 +447,11 @@ if ( ! function_exists( 'poetheme_get_navigation_menu_items' ) ) {
 
         $walker_args          = array(
             'layout'  => ( 'top-info' === $location ) ? 'top-info' : 'primary',
-            'variant' => ( 'mobile' === $variant ) ? 'mobile' : 'desktop',
+            'variant' => in_array( $variant, array( 'mobile', 'sidebar' ), true ) ? $variant : 'desktop',
         );
         $defaults['walker']   = new PoeTheme_Nav_Walker( $walker_args );
 
-        if ( 'mobile' === $variant ) {
+        if ( in_array( $variant, array( 'mobile', 'sidebar' ), true ) ) {
             $defaults['depth'] = 0;
         }
 

@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.8.4
+Version: 1.8.5
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -1005,100 +1005,121 @@ body.poetheme-lightbox-open {
 
 .poetheme-app-main {
   min-width: 0;
+  margin-left: var(--poetheme-app-sidebar-width);
   transition: margin-left 180ms ease, width 180ms ease;
 }
 
 .poetheme-app-sidebar {
   position: fixed;
   inset: 0 auto 0 0;
-  z-index: 40;
+  z-index: 60;
   display: flex;
   flex-direction: column;
   width: var(--poetheme-app-sidebar-width);
   height: 100vh;
   padding: 1rem 0.75rem;
-  overflow-y: auto;
+  overflow: visible;
   background: var(--poetheme-app-sidebar-bg);
   border-right: 1px solid var(--poetheme-app-border);
   transition: width 180ms ease;
 }
 
-.poetheme-app-sidebar__header {
+.rtl .poetheme-app-sidebar {
+  inset: 0 0 0 auto;
+  border-right: 0;
+  border-left: 1px solid var(--poetheme-app-border);
+}
+
+.rtl .poetheme-app-main {
+  margin-right: var(--poetheme-app-sidebar-width);
+  margin-left: 0;
+}
+
+.poetheme-app-sidebar__header,
+.poetheme-app-mobile-bar,
+.poetheme-app-mobile-drawer__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+}
+
+.poetheme-app-sidebar__header {
+  flex: 0 0 auto;
   min-height: 2.75rem;
   margin-bottom: 1.5rem;
 }
 
-.poetheme-app-sidebar__brand {
+.poetheme-app-sidebar__brand,
+.poetheme-app-mobile-bar__brand,
+.poetheme-app-mobile-drawer__brand {
   min-width: 0;
   overflow: hidden;
 }
 
-.poetheme-app-sidebar__brand .poetheme-brand-link {
+.poetheme-app-sidebar__brand .poetheme-brand-link,
+.poetheme-app-mobile-bar__brand .poetheme-brand-link,
+.poetheme-app-mobile-drawer__brand .poetheme-brand-link {
   color: var(--poetheme-page-title-color, #111827);
 }
 
-.poetheme-app-sidebar__toggle {
+.poetheme-app-sidebar__toggle,
+.poetheme-app-mobile-toggle,
+.poetheme-app-mobile-drawer__close {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   width: 2.25rem;
   height: 2.25rem;
-  border: 1px solid var(--poetheme-app-border);
-  border-radius: 0.625rem;
-  background: #ffffff;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  box-shadow: none;
   color: var(--poetheme-menu-link-color, #374151);
   cursor: pointer;
 }
 
 .poetheme-app-sidebar__toggle:hover,
+.poetheme-app-mobile-toggle:hover,
+.poetheme-app-mobile-drawer__close:hover {
+  color: var(--poetheme-menu-active-link-color, #2563eb);
+}
+
 .poetheme-app-sidebar__toggle:focus-visible,
+.poetheme-app-mobile-toggle:focus-visible,
+.poetheme-app-mobile-drawer__close:focus-visible,
 .poetheme-app-sidebar__profile-link:focus-visible,
-.poetheme-app-sidebar__nav a:focus-visible {
+.poetheme-app-sidebar__nav a:focus-visible,
+.poetheme-app-sidebar__nav .poetheme-submenu-toggle:focus-visible,
+.poetheme-app-mobile-drawer a:focus-visible,
+.poetheme-app-mobile-drawer .poetheme-submenu-toggle:focus-visible {
   outline: 2px solid var(--poetheme-menu-active-link-color, #2563eb);
   outline-offset: 2px;
 }
 
-.poetheme-app-sidebar__toggle-icon,
-.poetheme-app-sidebar__toggle-icon::before,
-.poetheme-app-sidebar__toggle-icon::after {
-  display: block;
-  width: 1rem;
-  height: 2px;
-  border-radius: 999px;
-  background: currentColor;
-}
-
 .poetheme-app-sidebar__toggle-icon {
-  position: relative;
-}
-
-.poetheme-app-sidebar__toggle-icon::before,
-.poetheme-app-sidebar__toggle-icon::after {
-  position: absolute;
-  left: 0;
-  content: "";
-}
-
-.poetheme-app-sidebar__toggle-icon::before {
-  top: -5px;
-}
-
-.poetheme-app-sidebar__toggle-icon::after {
-  top: 5px;
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 
 .poetheme-app-sidebar__nav {
   flex: 1 1 auto;
   min-height: 0;
+  overflow-x: visible;
+  overflow-y: auto;
 }
 
 .poetheme-app-sidebar__menu,
-.poetheme-app-sidebar__nav .poetheme-nav {
+.poetheme-app-sidebar__nav .poetheme-nav,
+.poetheme-app-mobile-drawer__menu,
+.poetheme-app-mobile-drawer__nav .poetheme-nav {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -1107,11 +1128,20 @@ body.poetheme-lightbox-open {
   list-style: none;
 }
 
-.poetheme-app-sidebar__nav .poetheme-menu-item {
+.poetheme-app-sidebar__nav .poetheme-menu-item,
+.poetheme-app-mobile-drawer__nav .poetheme-menu-item {
   width: 100%;
 }
 
-.poetheme-app-sidebar__nav a {
+.poetheme-app-sidebar__nav .poetheme-mobile-item-row,
+.poetheme-app-mobile-drawer__nav .poetheme-mobile-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.poetheme-app-sidebar__nav a,
+.poetheme-app-mobile-drawer__nav a {
   width: 100%;
   min-height: 2.5rem;
   padding: 0.625rem 0.75rem;
@@ -1123,19 +1153,56 @@ body.poetheme-lightbox-open {
 .poetheme-app-sidebar__nav a:hover,
 .poetheme-app-sidebar__nav a:focus,
 .poetheme-app-sidebar__nav .current-menu-item > a,
-.poetheme-app-sidebar__nav .current_page_item > a {
+.poetheme-app-sidebar__nav .current_page_item > a,
+.poetheme-app-mobile-drawer__nav a:hover,
+.poetheme-app-mobile-drawer__nav a:focus,
+.poetheme-app-mobile-drawer__nav .current-menu-item > a,
+.poetheme-app-mobile-drawer__nav .current_page_item > a {
   background: rgba(37, 99, 235, 0.08);
   color: var(--poetheme-menu-active-link-color, #2563eb);
 }
 
-.poetheme-app-sidebar__nav .menu-item-icon {
+.poetheme-app-sidebar__nav .poetheme-submenu-toggle,
+.poetheme-app-mobile-drawer__nav .poetheme-submenu-toggle {
+  flex: 0 0 2.25rem;
+  min-height: 2.25rem;
+  border: 0;
+  border-radius: 0.625rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.poetheme-app-sidebar__nav .poetheme-submenu,
+.poetheme-app-mobile-drawer__nav .poetheme-submenu {
+  display: none;
+  position: static;
+  width: auto;
+  margin: 0.25rem 0 0 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--poetheme-app-border);
+  box-shadow: none;
+}
+
+.poetheme-app-sidebar__nav .is-open > .poetheme-submenu,
+.poetheme-app-mobile-drawer__nav .is-open > .poetheme-submenu {
+  display: flex;
+}
+
+.poetheme-app-sidebar__nav .is-open > .poetheme-mobile-item-row .poetheme-submenu-indicator,
+.poetheme-app-mobile-drawer__nav .is-open > .poetheme-mobile-item-row .poetheme-submenu-indicator {
+  transform: rotate(180deg);
+}
+
+.poetheme-app-sidebar__nav .menu-item-icon,
+.poetheme-app-mobile-drawer__nav .menu-item-icon {
   display: inline-flex;
   flex: 0 0 1.25rem;
   align-items: center;
   justify-content: center;
 }
 
-.poetheme-app-sidebar__nav .poetheme-nav-link--no-icon::before {
+.poetheme-app-sidebar__nav .poetheme-nav-link--no-icon::before,
+.poetheme-app-mobile-drawer__nav .poetheme-nav-link--no-icon::before {
   display: inline-flex;
   flex: 0 0 1.25rem;
   align-items: center;
@@ -1155,6 +1222,10 @@ body.poetheme-lightbox-open {
   margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid var(--poetheme-app-border);
+}
+
+.poetheme-app-sidebar__profile--mobile {
+  display: none;
 }
 
 .poetheme-app-sidebar__profile-link {
@@ -1207,10 +1278,6 @@ body.poetheme-lightbox-open {
   font-size: 0.8125rem;
 }
 
-.poetheme-app-main {
-  margin-left: var(--poetheme-app-sidebar-width);
-}
-
 .poetheme-app-content {
   width: auto;
   max-width: none;
@@ -1219,6 +1286,13 @@ body.poetheme-lightbox-open {
 
 .poetheme-app-content--no-top-padding {
   padding-top: 0;
+}
+
+.poetheme-app-mobile-bar {
+  display: none;
+  padding: 0.875rem clamp(1rem, 3vw, 3rem);
+  border-bottom: 1px solid var(--poetheme-app-border);
+  background: var(--poetheme-app-sidebar-bg);
 }
 
 .poetheme-app-main-header {
@@ -1242,7 +1316,7 @@ body.poetheme-lightbox-open {
 .poetheme-app-breadcrumbs {
   flex: 0 1 auto;
   margin-top: 0.35rem;
-  color: #6b7280;
+  color: var(--poetheme-breadcrumb-color, #6b7280);
   font-size: 0.875rem;
   text-align: right;
 }
@@ -1255,6 +1329,11 @@ body.poetheme-lightbox-open {
 
 .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-main {
   margin-left: var(--poetheme-app-sidebar-collapsed-width);
+}
+
+.rtl .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-main {
+  margin-right: var(--poetheme-app-sidebar-collapsed-width);
+  margin-left: 0;
 }
 
 .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__header {
@@ -1283,34 +1362,97 @@ body.poetheme-lightbox-open {
   padding-left: 0.5rem;
 }
 
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .poetheme-submenu-toggle,
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .poetheme-submenu {
+  display: none;
+}
+
+.poetheme-app-mobile-overlay[hidden],
+.poetheme-app-mobile-drawer[hidden] {
+  display: none !important;
+}
+
+.poetheme-app-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(17, 24, 39, 0.55);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.poetheme-app-mobile-overlay.is-open {
+  opacity: 1;
+}
+
+.poetheme-app-mobile-drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  width: min(88vw, 22rem);
+  height: 100vh;
+  padding: 1rem;
+  overflow-y: auto;
+  background: var(--poetheme-app-sidebar-bg);
+  border-left: 1px solid var(--poetheme-app-border);
+  transform: translateX(100%);
+  transition: transform 220ms ease;
+}
+
+.rtl .poetheme-app-mobile-drawer {
+  inset: 0 auto 0 0;
+  border-right: 1px solid var(--poetheme-app-border);
+  border-left: 0;
+  transform: translateX(-100%);
+}
+
+.poetheme-app-mobile-drawer.is-open {
+  transform: translateX(0);
+}
+
+.poetheme-app-mobile-drawer__header {
+  flex: 0 0 auto;
+  margin-bottom: 1rem;
+}
+
+.poetheme-app-mobile-drawer__nav {
+  flex: 1 1 auto;
+}
+
+body.poetheme-mobile-drawer-open {
+  overflow: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .poetheme-app-main,
-  .poetheme-app-sidebar {
+  .poetheme-app-sidebar,
+  .poetheme-app-mobile-overlay,
+  .poetheme-app-mobile-drawer {
     transition: none;
   }
 }
 
-@media (max-width: 782px) {
+@media (max-width: 767.98px) {
   .poetheme-app-shell {
     min-height: auto;
   }
 
   .poetheme-app-sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-    max-height: none;
-    border-right: 0;
-    border-bottom: 1px solid var(--poetheme-app-border);
+    display: none;
   }
 
   .poetheme-app-main,
-  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-main {
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-main,
+  .rtl .poetheme-app-main,
+  .rtl .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-main {
+    margin-right: 0;
     margin-left: 0;
   }
 
-  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar {
-    width: 100%;
+  .poetheme-app-mobile-bar {
+    display: flex;
   }
 
   .poetheme-app-main-header {
@@ -1321,26 +1463,8 @@ body.poetheme-lightbox-open {
   .poetheme-app-breadcrumbs {
     text-align: left;
   }
-}
 
-@media (max-width: 782px) {
-  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__brand,
-  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .menu-item-text,
-  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .poetheme-submenu-indicator,
-  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__profile-text {
-    position: static;
-    width: auto;
-    height: auto;
-    padding: initial;
-    margin: initial;
-    overflow: visible;
-    clip: auto;
-    white-space: normal;
-    border: 0;
-  }
-
-  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav a,
-  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__profile-link {
-    justify-content: flex-start;
+  .poetheme-app-sidebar__profile--mobile {
+    display: block;
   }
 }
