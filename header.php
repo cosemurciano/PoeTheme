@@ -20,11 +20,17 @@ $layout         = isset( $header_context['layout'] ) ? $header_context['layout']
 $template_slug  = 'template-parts/header/' . $layout;
 
 if ( ! locate_template( array( $template_slug . '.php' ), false, false ) ) {
-    $template_slug = 'template-parts/header/style-1';
+    $layout                    = 'style-1';
+    $header_context['layout']  = $layout;
+    $template_slug             = 'template-parts/header/style-1';
 }
+
+$GLOBALS['poetheme_current_header_layout'] = $layout;
 
 get_template_part( $template_slug, null, $header_context );
 ?>
 
 <main id="primary-content" class="<?php echo esc_attr( poetheme_get_main_classes() ); ?>" tabindex="-1">
-    <?php poetheme_render_subheader(); ?>
+    <?php if ( 'style-9' !== $layout ) : ?>
+        <?php poetheme_render_subheader(); ?>
+    <?php endif; ?>

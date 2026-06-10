@@ -63,3 +63,85 @@
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+.poetheme-header-layout__description {
+    color: #646970;
+    display: block;
+    font-size: 12px;
+    line-height: 1.35;
+    max-width: 100%;
+}
+
+.poetheme-header-layout__preview {
+    background: #f8fafc;
+    border: 1px solid #dcdcde;
+    border-radius: 8px;
+    display: grid;
+    height: 118px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.poetheme-header-layout__preview--app-sidebar {
+    grid-template-columns: 32% 1fr;
+}
+
+.poetheme-header-layout__preview-sidebar {
+    background: #f1f1f1;
+    border-right: 1px solid #dcdcde;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 8px;
+}
+
+.poetheme-header-layout__preview-sidebar span {
+    background: #8c8f94;
+    border-radius: 999px;
+    display: block;
+    height: 6px;
+    opacity: 0.9;
+}
+
+.poetheme-header-layout__preview-sidebar span:first-child {
+    background: #1d2327;
+    height: 12px;
+    margin-bottom: 8px;
+    width: 70%;
+}
+
+.poetheme-header-layout__preview-sidebar span:last-child {
+    margin-top: auto;
+    width: 42%;
+}
+
+.poetheme-header-layout__preview-main {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+}
+
+.poetheme-header-layout__preview-main span {
+    background: #dcdcde;
+    border-radius: 999px;
+    display: block;
+    height: 8px;
+}
+
+.poetheme-header-layout__preview-main span:first-child {
+    background: #1d2327;
+    height: 18px;
+    width: 68%;
+}
+
+.poetheme-header-layout__preview-main span:nth-child(2) {
+    margin-left: auto;
+    width: 44%;
+}
+
+.poetheme-header-layout__preview-main span:last-child {
+    height: 42px;
+    width: 84%;
+}

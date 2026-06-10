@@ -200,7 +200,11 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                 }
             }
 
+            $icon         = get_post_meta( $item->ID, 'poetheme_menu_icon', true );
             $link_classes = $this->get_link_classes( $depth, $has_children, $item );
+            if ( ! $icon ) {
+                $link_classes .= ' poetheme-nav-link--no-icon';
+            }
             if ( $link_classes ) {
                 $atts['class'] = trim( $link_classes );
             }
@@ -219,7 +223,6 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
 
             $title = apply_filters( 'the_title', $item->title, $item->ID );
 
-            $icon     = get_post_meta( $item->ID, 'poetheme_menu_icon', true );
             $is_bold  = (bool) get_post_meta( $item->ID, 'poetheme_menu_bold', true );
             $icon_svg = '';
 

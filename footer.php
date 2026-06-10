@@ -114,6 +114,14 @@
     <?php endif; ?>
     <?php endif; ?>
 
+    <?php
+    $current_header_layout = isset( $GLOBALS['poetheme_current_header_layout'] ) ? $GLOBALS['poetheme_current_header_layout'] : '';
+    if ( 'style-9' === $current_header_layout ) :
+    ?>
+        </div><!-- .poetheme-app-main -->
+    </div><!-- .poetheme-app-shell -->
+    <?php endif; ?>
+
     <?php wp_footer(); ?>
 </body>
 </html>

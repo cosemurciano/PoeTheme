@@ -38,6 +38,63 @@ function poetheme_get_header_social_networks() {
     );
 }
 
+
+/**
+ * Retrieve the available header layout choices.
+ *
+ * @return array
+ */
+function poetheme_get_header_layout_choices() {
+    return array(
+        'style-1' => array(
+            'label'       => __( 'Classic', 'poetheme' ),
+            'description' => __( 'Layout classico con logo, navigazione e opzioni top bar.', 'poetheme' ),
+            'image'       => 'classic.png',
+        ),
+        'style-2' => array(
+            'label'       => __( 'Split menu | Semitransparent', 'poetheme' ),
+            'description' => __( 'Layout con menu diviso e testata semitrasparente.', 'poetheme' ),
+            'image'       => 'split-menu-semitransparent.png',
+        ),
+        'style-3' => array(
+            'label'       => __( 'Shop split', 'poetheme' ),
+            'description' => __( 'Layout shop con navigazione divisa.', 'poetheme' ),
+            'image'       => 'shop-split.png',
+        ),
+        'style-4' => array(
+            'label'       => __( 'Shop', 'poetheme' ),
+            'description' => __( 'Layout shop compatto con azioni in testata.', 'poetheme' ),
+            'image'       => 'shop.png',
+        ),
+        'style-5' => array(
+            'label'       => __( 'Fixed', 'poetheme' ),
+            'description' => __( 'Layout con testata fissa.', 'poetheme' ),
+            'image'       => 'fixed.png',
+        ),
+        'style-6' => array(
+            'label'       => __( 'Stack | Center', 'poetheme' ),
+            'description' => __( 'Layout impilato con logo centrato.', 'poetheme' ),
+            'image'       => 'stack-center.png',
+        ),
+        'style-7' => array(
+            'label'       => __( 'Stack | Left', 'poetheme' ),
+            'description' => __( 'Layout impilato con logo allineato a sinistra.', 'poetheme' ),
+            'image'       => 'stack-left.png',
+        ),
+        'style-8' => array(
+            'label'       => __( 'Plain', 'poetheme' ),
+            'description' => __( 'Layout essenziale e minimale.', 'poetheme' ),
+            'image'       => 'plain.png',
+        ),
+        'style-9' => array(
+            'label'       => __( 'App Sidebar', 'poetheme' ),
+            'description' => __( 'Layout con sidebar verticale collassabile, logo in alto, menu laterale, titolo pagina e breadcrumb nell’area contenuto.', 'poetheme' ),
+            'image'       => '',
+            'preview'     => 'app-sidebar',
+        ),
+    );
+}
+
 /**
  * Default values for header options.
  *
@@ -3559,40 +3616,7 @@ function poetheme_render_logo_page() {
  */
 function poetheme_render_header_page() {
     $options       = poetheme_get_header_options();
-    $layouts       = array(
-        'style-1' => array(
-            'label' => __( 'Classic', 'poetheme' ),
-            'image' => 'classic.png',
-        ),
-        'style-2' => array(
-            'label' => __( 'Split menu | Semitransparent', 'poetheme' ),
-            'image' => 'split-menu-semitransparent.png',
-        ),
-        'style-3' => array(
-            'label' => __( 'Shop split', 'poetheme' ),
-            'image' => 'shop-split.png',
-        ),
-        'style-4' => array(
-            'label' => __( 'Shop', 'poetheme' ),
-            'image' => 'shop.png',
-        ),
-        'style-5' => array(
-            'label' => __( 'Fixed', 'poetheme' ),
-            'image' => 'fixed.png',
-        ),
-        'style-6' => array(
-            'label' => __( 'Stack | Center', 'poetheme' ),
-            'image' => 'stack-center.png',
-        ),
-        'style-7' => array(
-            'label' => __( 'Stack | Left', 'poetheme' ),
-            'image' => 'stack-left.png',
-        ),
-        'style-8' => array(
-            'label' => __( 'Plain', 'poetheme' ),
-            'image' => 'plain.png',
-        ),
-    );
+    $layouts       = poetheme_get_header_layout_choices();
     $socials       = poetheme_get_header_social_networks();
     $show_cta      = ! empty( $options['show_cta'] );
     $top_bar_texts = isset( $options['top_bar_texts'] ) && is_array( $options['top_bar_texts'] ) ? $options['top_bar_texts'] : array();
@@ -3637,12 +3661,26 @@ function poetheme_render_header_page() {
                                                     aria-label="<?php echo esc_attr( $layout['label'] ); ?>"
                                                 />
                                                 <span class="poetheme-header-layout__card">
-                                                    <img
-                                                        src="<?php echo esc_url( POETHEME_URI . '/assets/img/admin/header-layouts/' . $layout['image'] ); ?>"
-                                                        alt="<?php echo esc_attr( $layout['label'] ); ?>"
-                                                        class="poetheme-header-layout__image"
-                                                    />
+                                                    <?php if ( ! empty( $layout['image'] ) ) : ?>
+                                                        <img
+                                                            src="<?php echo esc_url( POETHEME_URI . '/assets/img/admin/header-layouts/' . $layout['image'] ); ?>"
+                                                            alt="<?php echo esc_attr( $layout['label'] ); ?>"
+                                                            class="poetheme-header-layout__image"
+                                                        />
+                                                    <?php else : ?>
+                                                        <span class="poetheme-header-layout__preview poetheme-header-layout__preview--<?php echo esc_attr( isset( $layout['preview'] ) ? sanitize_html_class( $layout['preview'] ) : sanitize_html_class( $layout_key ) ); ?>" aria-hidden="true">
+                                                            <span class="poetheme-header-layout__preview-sidebar">
+                                                                <span></span><span></span><span></span><span></span>
+                                                            </span>
+                                                            <span class="poetheme-header-layout__preview-main">
+                                                                <span></span><span></span><span></span>
+                                                            </span>
+                                                        </span>
+                                                    <?php endif; ?>
                                                     <span class="poetheme-header-layout__name"><?php echo esc_html( $layout['label'] ); ?></span>
+                                                    <?php if ( ! empty( $layout['description'] ) ) : ?>
+                                                        <span class="poetheme-header-layout__description"><?php echo esc_html( $layout['description'] ); ?></span>
+                                                    <?php endif; ?>
                                                 </span>
                                             </label>
                                         <?php endforeach; ?>
@@ -4228,7 +4266,7 @@ function poetheme_sanitize_header_options( $input ) {
 
     if ( isset( $input['layout'] ) ) {
         $layout = sanitize_key( $input['layout'] );
-        if ( preg_match( '/^style-[1-8]$/', $layout ) ) {
+        if ( isset( poetheme_get_header_layout_choices()[ $layout ] ) ) {
             $output['layout'] = $layout;
         }
     }
@@ -4403,7 +4441,7 @@ function poetheme_get_header_options() {
 
     // Validate layout fallback.
     $layout = isset( $options['layout'] ) ? sanitize_key( $options['layout'] ) : $defaults['layout'];
-    if ( ! preg_match( '/^style-[1-8]$/', $layout ) ) {
+    if ( ! isset( poetheme_get_header_layout_choices()[ $layout ] ) ) {
         $layout = $defaults['layout'];
     }
     $options['layout'] = $layout;
