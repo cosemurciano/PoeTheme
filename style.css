@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.8.2
+Version: 1.8.3
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -232,9 +232,94 @@ article {
   padding: 1.5rem 0;
 }
 
-article header h1,
-article header h2 {
-  font-size: 1.875rem;
+/* Base typography: headings */
+:where(h1, h2, h3, h4, h5, h6) {
+  font-family: inherit;
+  text-wrap: balance;
+}
+
+:where(h1):not([class*="-font-size"]),
+:where(main h1):not([class*="-font-size"]),
+:where(.entry-content h1):not([class*="-font-size"]),
+:where(h1.wp-block-heading):not([class*="-font-size"]),
+.poetheme-page-title,
+.poetheme-post-title,
+.poetheme-category-title {
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+:where(h2):not([class*="-font-size"]),
+:where(main h2):not([class*="-font-size"]),
+:where(.entry-content h2):not([class*="-font-size"]),
+:where(h2.wp-block-heading):not([class*="-font-size"]) {
+  font-size: clamp(1.875rem, 3vw, 3rem);
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+:where(h3):not([class*="-font-size"]),
+:where(main h3):not([class*="-font-size"]),
+:where(.entry-content h3):not([class*="-font-size"]),
+:where(h3.wp-block-heading):not([class*="-font-size"]) {
+  font-size: clamp(1.5rem, 2.2vw, 2.25rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+:where(h4):not([class*="-font-size"]),
+:where(main h4):not([class*="-font-size"]),
+:where(.entry-content h4):not([class*="-font-size"]),
+:where(h4.wp-block-heading):not([class*="-font-size"]) {
+  font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+:where(h5):not([class*="-font-size"]),
+:where(main h5):not([class*="-font-size"]),
+:where(.entry-content h5):not([class*="-font-size"]),
+:where(h5.wp-block-heading):not([class*="-font-size"]) {
+  font-size: clamp(1.125rem, 1.4vw, 1.375rem);
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+:where(h6):not([class*="-font-size"]),
+:where(main h6):not([class*="-font-size"]),
+:where(.entry-content h6):not([class*="-font-size"]),
+:where(h6.wp-block-heading):not([class*="-font-size"]) {
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+:where(.entry-content, main) :where(h1, h2, h3, h4, h5, h6, .wp-block-heading) {
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+}
+
+:where(.entry-content, main) > :where(h1, h2, h3, h4, h5, h6, .wp-block-heading):first-child {
+  margin-top: 0;
+}
+
+:where(header, nav, aside, footer) :where(h1, h2, h3, h4, h5, h6):not(.wp-block-heading) {
+  margin-top: 0;
+}
+
+.poetheme-post-title {
+  font-size: clamp(1.5rem, 2.2vw, 2.25rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h1.poetheme-post-title,
+h1.poetheme-page-title,
+h1.poetheme-category-title {
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  line-height: 1.1;
   font-weight: 700;
 }
 

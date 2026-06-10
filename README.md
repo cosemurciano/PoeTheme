@@ -4,6 +4,9 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 
 **Stato del tema:** Core Stable (release-ready).
 
+## Changelog
+- 1.8.3: introdotta gerarchia tipografica default per heading H1–H6 frontend/editor.
+
 ## Milestone completate (M1–M8)
 - M1–M3: architettura modulare e sicurezza.
 - M4: design system base con `theme.json`.

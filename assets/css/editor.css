@@ -5,6 +5,58 @@ body.block-editor-page .editor-styles-wrapper {
   background-color: var(--wp--preset--color--background);
 }
 
+/* Base typography: headings */
+body.block-editor-page .editor-styles-wrapper :where(h1, h2, h3, h4, h5, h6) {
+  font-family: inherit;
+  text-wrap: balance;
+}
+
+body.block-editor-page .editor-styles-wrapper :where(h1):not([class*="-font-size"]) {
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+body.block-editor-page .editor-styles-wrapper :where(h2):not([class*="-font-size"]) {
+  font-size: clamp(1.875rem, 3vw, 3rem);
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+body.block-editor-page .editor-styles-wrapper :where(h3):not([class*="-font-size"]) {
+  font-size: clamp(1.5rem, 2.2vw, 2.25rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+body.block-editor-page .editor-styles-wrapper :where(h4):not([class*="-font-size"]) {
+  font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+body.block-editor-page .editor-styles-wrapper :where(h5):not([class*="-font-size"]) {
+  font-size: clamp(1.125rem, 1.4vw, 1.375rem);
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+body.block-editor-page .editor-styles-wrapper :where(h6):not([class*="-font-size"]) {
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+body.block-editor-page .editor-styles-wrapper :where(.wp-block-heading) {
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+}
+
+body.block-editor-page .editor-styles-wrapper > :where(.wp-block-heading):first-child {
+  margin-top: 0;
+}
+
 body.block-editor-page .editor-styles-wrapper a {
   color: var(--wp--preset--color--primary);
 }
