@@ -5,6 +5,7 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 **Stato del tema:** Core Stable (release-ready).
 
 ## Changelog
+- 1.8.4: aggiunto header layout **Style 9 – App Sidebar** con sidebar verticale collassabile, topbar contenuto con titolo/breadcrumb e profilo sito/autore.
 - 1.8.3: introdotta gerarchia tipografica default per heading H1–H6 frontend/editor.
 
 ## Milestone completate (M1–M8)
@@ -23,6 +24,7 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 - Compatibile con RTL, traduzioni tramite file POT e widget-ready (sidebar e footer).
 - Opzioni tema dedicate (Generale e Logo) per personalizzare tagline, breadcrumb e branding.
 - UI admin delle opzioni migliorata con form più leggibili, coerenti e responsive.
+- Nuovo header **Style 9 – App Sidebar**, pensato per siti editoriali, dashboard-like, documentazioni, portali e progetti con navigazione laterale persistente.
 
 ## SEO & Schema Policy
 Il tema gestisce un set minimo di dati strutturati JSON-LD e breadcrumb HTML in modo compatibile con i plugin SEO più diffusi.
@@ -97,6 +99,7 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - Style 6 (Stack | Center): nessuna modifica (layout conforme).
 - Style 7 (Stack | Left): nessuna modifica (layout conforme).
 - Style 8 (Plain): nessuna modifica (layout conforme).
+- Style 9 (App Sidebar): sidebar verticale collassabile con logo in alto, menu laterale, titolo pagina e breadcrumb nell’area contenuto, profilo sito/autore in basso.
 
 ## Asset Policy (M5)
 - Preferire asset locali e versionati.
@@ -109,7 +112,8 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - `poetheme-style` (`style.css`)
 
 **Frontend scripts**
-- `poetheme-navigation` (`assets/js/navigation.js`, solo se è presente un menu primario)
+- `poetheme-navigation` (`assets/js/navigation.js`, solo se è presente un menu primario o il layout App Sidebar)
+- `poetheme-app-sidebar` (`assets/js/app-sidebar.js`, solo con header Style 9 – App Sidebar)
 - `poetheme-alpine` (CDN, Alpine.js 3.13.5, interazioni header)
 - `poetheme-lucide` (CDN, Lucide 0.294.0, icone frontend)
 - `poetheme-media-lightbox` (`assets/js/media-lightbox.js`, solo se opzione abilitata e pagina singola/home)

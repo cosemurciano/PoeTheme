@@ -19,6 +19,7 @@
  * - poetheme-alpine (CDN, Alpine.js 3.13.5)
  * - poetheme-lucide (CDN, Lucide 0.294.0)
  * - poetheme-media-lightbox (assets/js/media-lightbox.js, conditional)
+ * - poetheme-app-sidebar (assets/js/app-sidebar.js, style-9 only)
  *
  * Editor scripts:
  * - poetheme-editor-alpine (CDN, Alpine.js 3.13.5)
@@ -125,7 +126,8 @@ function poetheme_should_load_lucide() {
  * @return bool
  */
 function poetheme_should_load_navigation() {
-    $should_load = has_nav_menu( 'primary' );
+    $header_options = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
+    $should_load    = has_nav_menu( 'primary' ) || ( isset( $header_options['layout'] ) && 'style-9' === $header_options['layout'] );
 
     return (bool) apply_filters( 'poetheme_should_load_navigation', $should_load );
 }
@@ -280,6 +282,20 @@ function poetheme_scripts() {
     if ( poetheme_should_load_navigation() ) {
         wp_enqueue_script( 'poetheme-navigation', POETHEME_URI . '/assets/js/navigation.js', array(), poetheme_get_asset_version( 'assets/js/navigation.js' ), true );
         wp_script_add_data( 'poetheme-navigation', 'defer', true );
+    }
+
+    $header_options = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
+    if ( isset( $header_options['layout'] ) && 'style-9' === $header_options['layout'] ) {
+        wp_enqueue_script( 'poetheme-app-sidebar', POETHEME_URI . '/assets/js/app-sidebar.js', array(), poetheme_get_asset_version( 'assets/js/app-sidebar.js' ), true );
+        wp_localize_script(
+            'poetheme-app-sidebar',
+            'poethemeAppSidebar',
+            array(
+                'expandLabel'   => __( 'Espandi menu laterale', 'poetheme' ),
+                'collapseLabel' => __( 'Comprimi menu laterale', 'poetheme' ),
+            )
+        );
+        wp_script_add_data( 'poetheme-app-sidebar', 'defer', true );
     }
 
     if ( poetheme_should_load_media_lightbox() ) {

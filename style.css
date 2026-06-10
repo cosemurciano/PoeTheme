@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.8.3
+Version: 1.8.4
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -990,5 +990,357 @@ body.poetheme-lightbox-open {
   .poetheme-lightbox__close {
     top: 0.25rem;
     right: 0.25rem;
+  }
+}
+
+/* Header Style 9: App Sidebar */
+.poetheme-app-shell {
+  --poetheme-app-sidebar-width: 260px;
+  --poetheme-app-sidebar-collapsed-width: 64px;
+  --poetheme-app-sidebar-bg: var(--poetheme-header-background-color, #f7f7f8);
+  --poetheme-app-border: rgba(17, 24, 39, 0.12);
+  min-height: 100vh;
+  background: var(--poetheme-content-background-color, #ffffff);
+}
+
+.poetheme-app-main {
+  min-width: 0;
+  transition: margin-left 180ms ease, width 180ms ease;
+}
+
+.poetheme-app-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: var(--poetheme-app-sidebar-width);
+  height: 100vh;
+  padding: 1rem 0.75rem;
+  overflow-y: auto;
+  background: var(--poetheme-app-sidebar-bg);
+  border-right: 1px solid var(--poetheme-app-border);
+  transition: width 180ms ease;
+}
+
+.poetheme-app-sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.poetheme-app-sidebar__brand {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.poetheme-app-sidebar__brand .poetheme-brand-link {
+  color: var(--poetheme-page-title-color, #111827);
+}
+
+.poetheme-app-sidebar__toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--poetheme-app-border);
+  border-radius: 0.625rem;
+  background: #ffffff;
+  color: var(--poetheme-menu-link-color, #374151);
+  cursor: pointer;
+}
+
+.poetheme-app-sidebar__toggle:hover,
+.poetheme-app-sidebar__toggle:focus-visible,
+.poetheme-app-sidebar__profile-link:focus-visible,
+.poetheme-app-sidebar__nav a:focus-visible {
+  outline: 2px solid var(--poetheme-menu-active-link-color, #2563eb);
+  outline-offset: 2px;
+}
+
+.poetheme-app-sidebar__toggle-icon,
+.poetheme-app-sidebar__toggle-icon::before,
+.poetheme-app-sidebar__toggle-icon::after {
+  display: block;
+  width: 1rem;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.poetheme-app-sidebar__toggle-icon {
+  position: relative;
+}
+
+.poetheme-app-sidebar__toggle-icon::before,
+.poetheme-app-sidebar__toggle-icon::after {
+  position: absolute;
+  left: 0;
+  content: "";
+}
+
+.poetheme-app-sidebar__toggle-icon::before {
+  top: -5px;
+}
+
+.poetheme-app-sidebar__toggle-icon::after {
+  top: 5px;
+}
+
+.poetheme-app-sidebar__nav {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.poetheme-app-sidebar__menu,
+.poetheme-app-sidebar__nav .poetheme-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.poetheme-app-sidebar__nav .poetheme-menu-item {
+  width: 100%;
+}
+
+.poetheme-app-sidebar__nav a {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.75rem;
+  color: var(--poetheme-menu-link-color, #374151);
+  text-decoration: none;
+}
+
+.poetheme-app-sidebar__nav a:hover,
+.poetheme-app-sidebar__nav a:focus,
+.poetheme-app-sidebar__nav .current-menu-item > a,
+.poetheme-app-sidebar__nav .current_page_item > a {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--poetheme-menu-active-link-color, #2563eb);
+}
+
+.poetheme-app-sidebar__nav .menu-item-icon {
+  display: inline-flex;
+  flex: 0 0 1.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.poetheme-app-sidebar__nav .poetheme-nav-link--no-icon::before {
+  display: inline-flex;
+  flex: 0 0 1.25rem;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.08);
+  color: currentColor;
+  font-size: 0.7rem;
+  font-weight: 700;
+  content: "•";
+}
+
+.poetheme-app-sidebar__profile {
+  flex: 0 0 auto;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--poetheme-app-border);
+}
+
+.poetheme-app-sidebar__profile-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.875rem;
+  color: var(--poetheme-menu-link-color, #374151);
+  text-decoration: none;
+}
+
+.poetheme-app-sidebar__profile-avatar {
+  flex: 0 0 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.poetheme-app-sidebar__profile-avatar--fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #111827;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.poetheme-app-sidebar__profile-text {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.poetheme-app-sidebar__profile-name,
+.poetheme-app-sidebar__profile-description {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.poetheme-app-sidebar__profile-name {
+  color: var(--poetheme-page-title-color, #111827);
+  font-weight: 700;
+}
+
+.poetheme-app-sidebar__profile-description {
+  color: #6b7280;
+  font-size: 0.8125rem;
+}
+
+.poetheme-app-main {
+  margin-left: var(--poetheme-app-sidebar-width);
+}
+
+.poetheme-app-content {
+  width: auto;
+  max-width: none;
+  padding: 2rem clamp(1rem, 3vw, 3rem) 3rem;
+}
+
+.poetheme-app-content--no-top-padding {
+  padding-top: 0;
+}
+
+.poetheme-app-main-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2rem clamp(1rem, 3vw, 3rem) 1.25rem;
+  border-bottom: 1px solid var(--poetheme-app-border);
+  background: var(--poetheme-content-background-color, #ffffff);
+}
+
+.poetheme-app-page-title {
+  margin: 0;
+  color: var(--poetheme-page-title-color, #111827);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.poetheme-app-breadcrumbs {
+  flex: 0 1 auto;
+  margin-top: 0.35rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar {
+  width: var(--poetheme-app-sidebar-collapsed-width);
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-main {
+  margin-left: var(--poetheme-app-sidebar-collapsed-width);
+}
+
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__header {
+  justify-content: center;
+}
+
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__brand,
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .menu-item-text,
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .poetheme-submenu-indicator,
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__profile-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav a,
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__profile-link {
+  justify-content: center;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poetheme-app-main,
+  .poetheme-app-sidebar {
+    transition: none;
+  }
+}
+
+@media (max-width: 782px) {
+  .poetheme-app-shell {
+    min-height: auto;
+  }
+
+  .poetheme-app-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--poetheme-app-border);
+  }
+
+  .poetheme-app-main,
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-main {
+    margin-left: 0;
+  }
+
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar {
+    width: 100%;
+  }
+
+  .poetheme-app-main-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .poetheme-app-breadcrumbs {
+    text-align: left;
+  }
+}
+
+@media (max-width: 782px) {
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__brand,
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .menu-item-text,
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .poetheme-submenu-indicator,
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__profile-text {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: initial;
+    margin: initial;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    border: 0;
+  }
+
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav a,
+  .poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__profile-link {
+    justify-content: flex-start;
   }
 }

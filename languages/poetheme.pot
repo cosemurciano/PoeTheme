@@ -2454,3 +2454,31 @@ msgstr ""
 #: searchform.php:12
 msgid "Search"
 msgstr ""
+
+#: inc/admin/options.php:119
+msgid "App Sidebar"
+msgstr ""
+
+#: inc/admin/options.php:120
+msgid "Layout con sidebar verticale collassabile, logo in alto, menu laterale, titolo pagina e breadcrumb nell’area contenuto."
+msgstr ""
+
+#: inc/assets.php:292 template-parts/header/style-9.php:36
+msgid "Espandi menu laterale"
+msgstr ""
+
+#: inc/assets.php:293 template-parts/header/style-9.php:36
+msgid "Comprimi menu laterale"
+msgstr ""
+
+#: inc/template-tags.php:704
+msgid "Autore del sito"
+msgstr ""
+
+#: template-parts/header/style-9.php:22
+msgid "Menu laterale del sito"
+msgstr ""
+
+#: template-parts/header/style-9.php:43
+msgid "Navigazione principale"
+msgstr ""

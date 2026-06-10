@@ -406,6 +406,18 @@ function poetheme_get_layout_container_classes( $additional = array(), $include_
  * @return string
  */
 function poetheme_get_main_classes() {
+    $header_options = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
+
+    if ( isset( $header_options['layout'] ) && 'style-9' === $header_options['layout'] ) {
+        $classes = array( 'poetheme-app-content' );
+
+        if ( poetheme_page_has_no_top_padding() ) {
+            $classes[] = 'poetheme-app-content--no-top-padding';
+        }
+
+        return implode( ' ', array_map( 'sanitize_html_class', $classes ) );
+    }
+
     $additional = array( 'pt-10', 'pb-10' );
 
     if ( poetheme_page_has_no_top_padding() ) {
@@ -702,6 +714,94 @@ function poetheme_the_logo() {
     }
 
     echo '</a>';
+}
+
+
+/**
+ * Render the compact site/author profile used by the app sidebar layout.
+ *
+ * @return void
+ */
+function poetheme_render_site_author_profile() {
+    static $profile = null;
+
+    if ( null === $profile ) {
+        $profile = array(
+            'user'        => null,
+            'name'        => get_bloginfo( 'name' ),
+            'description' => get_bloginfo( 'description', 'display' ),
+            'url'         => '',
+        );
+
+        $user_id     = 0;
+        $admin_email = get_option( 'admin_email' );
+
+        if ( $admin_email ) {
+            $admin_user = get_user_by( 'email', $admin_email );
+            if ( $admin_user instanceof WP_User ) {
+                $user_id = (int) $admin_user->ID;
+            }
+        }
+
+        if ( ! $user_id ) {
+            $admin_users = get_users(
+                array(
+                    'role'    => 'administrator',
+                    'number'  => 1,
+                    'orderby' => 'ID',
+                    'order'   => 'ASC',
+                    'fields'  => array( 'ID' ),
+                )
+            );
+
+            if ( ! empty( $admin_users[0]->ID ) ) {
+                $user_id = (int) $admin_users[0]->ID;
+            }
+        }
+
+        $user_id = (int) apply_filters( 'poetheme_sidebar_profile_user_id', $user_id );
+
+        if ( $user_id ) {
+            $user = get_user_by( 'id', $user_id );
+            if ( $user instanceof WP_User ) {
+                $description = get_the_author_meta( 'description', $user_id );
+                $post_count  = count_user_posts( $user_id, 'post', true );
+
+                $profile = array(
+                    'user'        => $user,
+                    'name'        => $user->display_name ? $user->display_name : get_bloginfo( 'name' ),
+                    'description' => $description ? $description : __( 'Autore del sito', 'poetheme' ),
+                    'url'         => $post_count > 0 ? get_author_posts_url( $user_id ) : '',
+                );
+            }
+        }
+    }
+
+    $name        = isset( $profile['name'] ) ? (string) $profile['name'] : get_bloginfo( 'name' );
+    $description = isset( $profile['description'] ) ? (string) $profile['description'] : '';
+    $url         = isset( $profile['url'] ) ? (string) $profile['url'] : '';
+    $user        = isset( $profile['user'] ) ? $profile['user'] : null;
+    $avatar      = $user instanceof WP_User ? get_avatar( $user->ID, 40, '', $name, array( 'class' => 'poetheme-app-sidebar__profile-avatar' ) ) : '';
+
+    if ( ! $avatar ) {
+        $initial = function_exists( 'mb_substr' ) ? mb_substr( $name, 0, 1 ) : substr( $name, 0, 1 );
+        $avatar  = '<span class="poetheme-app-sidebar__profile-avatar poetheme-app-sidebar__profile-avatar--fallback" aria-hidden="true">' . esc_html( strtoupper( $initial ) ) . '</span>';
+    }
+
+    $tag = $url ? 'a' : 'div';
+    ?>
+    <div class="poetheme-app-sidebar__profile">
+        <<?php echo tag_escape( $tag ); ?> class="poetheme-app-sidebar__profile-link"<?php echo $url ? ' href="' . esc_url( $url ) . '"' : ''; ?> aria-label="<?php echo esc_attr( $name ); ?>">
+            <?php echo wp_kses_post( $avatar ); ?>
+            <span class="poetheme-app-sidebar__profile-text">
+                <span class="poetheme-app-sidebar__profile-name"><?php echo esc_html( $name ); ?></span>
+                <?php if ( '' !== trim( $description ) ) : ?>
+                    <span class="poetheme-app-sidebar__profile-description"><?php echo esc_html( wp_trim_words( $description, 6, '…' ) ); ?></span>
+                <?php endif; ?>
+            </span>
+        </<?php echo tag_escape( $tag ); ?>>
+    </div>
+    <?php
 }
 
 /**
