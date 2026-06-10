@@ -155,7 +155,14 @@
           "size": "4rem"
         }
       ],
-      "units": [ "px", "rem", "em", "%", "vw", "vh" ],
+      "units": [
+        "px",
+        "rem",
+        "em",
+        "%",
+        "vw",
+        "vh"
+      ],
       "customSpacingSize": true
     },
     "layout": {
@@ -177,6 +184,49 @@
       "link": {
         "color": {
           "text": "var:preset|color|primary"
+        }
+      },
+      "h1": {
+        "typography": {
+          "fontSize": "clamp(2.25rem, 4vw, 3.75rem)",
+          "lineHeight": "1.1",
+          "fontWeight": "700"
+        }
+      },
+      "h2": {
+        "typography": {
+          "fontSize": "clamp(1.875rem, 3vw, 3rem)",
+          "lineHeight": "1.15",
+          "fontWeight": "700"
+        }
+      },
+      "h3": {
+        "typography": {
+          "fontSize": "clamp(1.5rem, 2.2vw, 2.25rem)",
+          "lineHeight": "1.2",
+          "fontWeight": "600"
+        }
+      },
+      "h4": {
+        "typography": {
+          "fontSize": "clamp(1.25rem, 1.8vw, 1.75rem)",
+          "lineHeight": "1.25",
+          "fontWeight": "600"
+        }
+      },
+      "h5": {
+        "typography": {
+          "fontSize": "clamp(1.125rem, 1.4vw, 1.375rem)",
+          "lineHeight": "1.35",
+          "fontWeight": "600"
+        }
+      },
+      "h6": {
+        "typography": {
+          "fontSize": "clamp(1rem, 1.2vw, 1.125rem)",
+          "lineHeight": "1.4",
+          "fontWeight": "600",
+          "letterSpacing": "0.02em"
         }
       }
     }
