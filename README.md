@@ -59,6 +59,20 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - Testi dei link/CTA descrittivi.
 - Alt text per immagini editoriali.
 
+
+## Note versione 1.8.5
+- Corretto il layout **Style 9 – App Sidebar** affinché il titolo pagina rispetti `enable_subheader`, `show_title`, `hide_title` e il tag `title_tag` configurato.
+- Aggiunta variante menu `sidebar` con accordion verticale multilivello per evitare il clipping del terzo livello sotto il contenuto principale.
+- Aggiunto drawer mobile da destra con overlay, chiusura via ESC/click overlay e stato ARIA aggiornato.
+- Spostato il profilo autore in fondo al drawer mobile mantenendo la versione desktop nella sidebar.
+- Aggiornata l’icona del toggle sidebar con SVG inline a pannello laterale, senza sfondo o bordo.
+
+## Checklist audit Style 9 – App Sidebar
+- **Applicate:** layout header selezionato, logo via `poetheme_the_logo()`, menu primary, `enable_subheader`, `show_title`, `show_breadcrumbs`, `title_tag`, `breadcrumbs_separator`, `hide_title`, `hide_breadcrumbs`, remove top padding, colori dinamici per titolo/menu/sidebar, layout contenuto fluido, responsive menu e supporto RTL di base.
+- **Non applicabili al layout:** top bar e CTA degli header classici non vengono mostrati nello Style 9 perché il pattern App Sidebar usa navigazione laterale/drawer e non una barra header orizzontale.
+- **Da verificare in una fase successiva:** equivalenza visiva completa di font/dimensioni titolo rispetto a ogni combinazione legacy e audit manuale footer visibility su installazioni con plugin/child theme.
+- **Test manuali consigliati:** cambio layout header; logo testuale/immagine; title tag H1–H6; show/hide title; show/hide breadcrumb; separatore breadcrumb; impostazioni pagina hide title/hide breadcrumb/remove top padding; colori heading/menu; font heading/page title; footer visibility; menu responsive desktop/mobile; menu sidebar con almeno tre livelli.
+
 ## Mappa architetturale
 - `functions.php`: bootstrap con costanti e include.
 - `inc/setup.php`: setup tema (supporti, menu, textdomain).
