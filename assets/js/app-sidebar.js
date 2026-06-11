@@ -51,31 +51,48 @@
         menus.forEach(function (menu) {
             var items = menu.querySelectorAll('li.menu-item-has-children');
 
-            items.forEach(function (item) {
-                var trigger = item.querySelector(':scope > .poetheme-mobile-item-row > .poetheme-submenu-toggle');
-                var submenu = item.querySelector(':scope > [data-poetheme-submenu="true"]');
+            function setOpen(item, isOpen) {
+                var submenu = item.querySelector(':scope > [data-poetheme-sidebar-submenu]');
+                var toggles = item.querySelectorAll(':scope > .poetheme-sidebar-item-row > [data-poetheme-sidebar-submenu-toggle]');
 
-                if (!trigger || !submenu) {
+                if (!submenu || !toggles.length) {
                     return;
                 }
 
-                function setOpen(isOpen) {
-                    item.classList.toggle('is-open', isOpen);
-                    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                    submenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+                item.classList.toggle('is-open', isOpen);
+                submenu.hidden = !isOpen;
+                submenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+
+                toggles.forEach(function (toggle) {
+                    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                });
+            }
+
+            items.forEach(function (item) {
+                var submenu = item.querySelector(':scope > [data-poetheme-sidebar-submenu]');
+                var toggles = item.querySelectorAll(':scope > .poetheme-sidebar-item-row > [data-poetheme-sidebar-submenu-toggle]');
+
+                if (!submenu || !toggles.length) {
+                    return;
                 }
 
-                setOpen(item.classList.contains('current-menu-ancestor') || item.classList.contains('current-menu-item'));
+                setOpen(item, item.classList.contains('current-menu-ancestor') || item.classList.contains('current-menu-parent') || item.classList.contains('current-menu-item'));
 
-                trigger.addEventListener('click', function () {
-                    setOpen(!item.classList.contains('is-open'));
+                toggles.forEach(function (toggle) {
+                    toggle.addEventListener('click', function (event) {
+                        if (toggle.tagName && toggle.tagName.toLowerCase() === 'a') {
+                            event.preventDefault();
+                        }
+
+                        setOpen(item, !item.classList.contains('is-open'));
+                    });
                 });
 
                 item.addEventListener('keydown', function (event) {
                     if (event.key === 'Escape' && item.classList.contains('is-open')) {
                         event.preventDefault();
-                        setOpen(false);
-                        trigger.focus();
+                        setOpen(item, false);
+                        toggles[0].focus();
                     }
                 });
             });

@@ -119,9 +119,12 @@ function poetheme_get_default_header_options() {
             'location_label' => '',
             'location_url'   => '',
         ),
-        'cta_text'      => __( 'Get Started', 'poetheme' ),
-        'cta_url'       => home_url( '/' ),
-        'social_links'  => $social_defaults,
+        'cta_text'                     => __( 'Get Started', 'poetheme' ),
+        'cta_url'                      => home_url( '/' ),
+        'social_links'                 => $social_defaults,
+        'show_app_header_intro'        => false,
+        'app_header_intro_title'       => __( 'Impostazioni testata', 'poetheme' ),
+        'app_header_intro_description' => __( 'Configura layout, top bar, call to action e profili social.', 'poetheme' ),
     );
 }
 
@@ -3756,6 +3759,20 @@ function poetheme_render_header_page() {
                         </td>
                     </tr>
                     <tr class="poetheme-field">
+                        <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Fascia descrittiva App Sidebar', 'poetheme' ); ?></th>
+                        <td class="poetheme-field__control">
+                            <label for="poetheme_header_show_app_header_intro">
+                                <input type="checkbox" id="poetheme_header_show_app_header_intro" name="poetheme_header[show_app_header_intro]" value="1" <?php checked( ! empty( $options['show_app_header_intro'] ) ); ?> aria-describedby="poetheme-header-app-intro-help" />
+                                <?php esc_html_e( 'Mostra fascia descrittiva nel layout App Sidebar.', 'poetheme' ); ?>
+                            </label>
+                            <p id="poetheme-header-app-intro-help" class="description poetheme-field__help"><?php esc_html_e( 'Queste impostazioni si applicano al layout App Sidebar e visualizzano una fascia sopra il contenuto destro.', 'poetheme' ); ?></p>
+                            <label for="poetheme_header_app_intro_title" class="poetheme-field__label"><?php esc_html_e( 'Titolo fascia', 'poetheme' ); ?></label>
+                            <input type="text" id="poetheme_header_app_intro_title" name="poetheme_header[app_header_intro_title]" value="<?php echo esc_attr( $options['app_header_intro_title'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Impostazioni testata', 'poetheme' ); ?>" />
+                            <label for="poetheme_header_app_intro_description" class="poetheme-field__label"><?php esc_html_e( 'Descrizione fascia', 'poetheme' ); ?></label>
+                            <textarea id="poetheme_header_app_intro_description" name="poetheme_header[app_header_intro_description]" class="large-text" rows="3" placeholder="<?php esc_attr_e( 'Configura layout, top bar, call to action e profili social.', 'poetheme' ); ?>"><?php echo esc_textarea( $options['app_header_intro_description'] ); ?></textarea>
+                        </td>
+                    </tr>
+                    <tr class="poetheme-field">
                         <th scope="row" class="poetheme-field__label"><?php esc_html_e( 'Icone social', 'poetheme' ); ?></th>
                         <td class="poetheme-field__control">
                             <p id="poetheme-header-social-help" class="description poetheme-field__help"><?php esc_html_e( 'Inserisci gli URL dei tuoi profili social per mostrarne le icone nella barra superiore.', 'poetheme' ); ?></p>
@@ -4271,8 +4288,9 @@ function poetheme_sanitize_header_options( $input ) {
         }
     }
 
-    $output['show_top_bar'] = ! empty( $input['show_top_bar'] );
-    $output['show_cta']     = ! empty( $input['show_cta'] );
+    $output['show_top_bar']          = ! empty( $input['show_top_bar'] );
+    $output['show_cta']              = ! empty( $input['show_cta'] );
+    $output['show_app_header_intro'] = ! empty( $input['show_app_header_intro'] );
 
     $output['top_bar_texts'] = array();
     foreach ( $defaults['top_bar_texts'] as $key => $default_value ) {
@@ -4301,6 +4319,9 @@ function poetheme_sanitize_header_options( $input ) {
 
     $output['cta_text'] = isset( $input['cta_text'] ) ? sanitize_text_field( $input['cta_text'] ) : '';
     $output['cta_url']  = isset( $input['cta_url'] ) ? esc_url_raw( $input['cta_url'] ) : '';
+
+    $output['app_header_intro_title']       = isset( $input['app_header_intro_title'] ) ? sanitize_text_field( $input['app_header_intro_title'] ) : $defaults['app_header_intro_title'];
+    $output['app_header_intro_description'] = isset( $input['app_header_intro_description'] ) ? sanitize_textarea_field( $input['app_header_intro_description'] ) : $defaults['app_header_intro_description'];
 
     $output['social_links'] = array();
     foreach ( poetheme_get_header_social_networks() as $key => $social ) {
@@ -4446,8 +4467,12 @@ function poetheme_get_header_options() {
     }
     $options['layout'] = $layout;
 
-    $options['show_top_bar'] = ! empty( $options['show_top_bar'] );
-    $options['show_cta']     = ! empty( $options['show_cta'] );
+    $options['show_top_bar']          = ! empty( $options['show_top_bar'] );
+    $options['show_cta']              = ! empty( $options['show_cta'] );
+    $options['show_app_header_intro'] = ! empty( $options['show_app_header_intro'] );
+
+    $options['app_header_intro_title']       = isset( $options['app_header_intro_title'] ) ? (string) $options['app_header_intro_title'] : $defaults['app_header_intro_title'];
+    $options['app_header_intro_description'] = isset( $options['app_header_intro_description'] ) ? (string) $options['app_header_intro_description'] : $defaults['app_header_intro_description'];
 
     return $options;
 }

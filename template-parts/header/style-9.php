@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $sidebar_id           = 'poetheme-app-sidebar';
 $mobile_drawer_id     = 'poetheme-app-mobile-drawer';
 $subheader_options    = poetheme_get_subheader_options();
+$header_options       = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
 $show_title           = poetheme_subheader_should_display_title();
 $show_breadcrumbs     = poetheme_subheader_should_display_breadcrumbs();
 $breadcrumbs_items    = $show_breadcrumbs ? poetheme_get_breadcrumbs_items() : array();
@@ -20,6 +21,17 @@ $title_tag            = isset( $subheader_options['title_tag'] ) ? strtolower( (
 $allowed_title_tags   = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
 $title_classes        = array_merge( array( 'poetheme-app-page-title' ), poetheme_get_subheader_title_classes() );
 $title_classes        = implode( ' ', array_map( 'sanitize_html_class', array_unique( $title_classes ) ) );
+$show_app_header_intro  = ! empty( $header_options['show_app_header_intro'] );
+$app_intro_title       = isset( $header_options['app_header_intro_title'] ) ? (string) $header_options['app_header_intro_title'] : '';
+$app_intro_description = isset( $header_options['app_header_intro_description'] ) ? (string) $header_options['app_header_intro_description'] : '';
+
+if ( '' === trim( $app_intro_title ) ) {
+    $app_intro_title = __( 'Impostazioni testata', 'poetheme' );
+}
+
+if ( '' === trim( $app_intro_description ) ) {
+    $app_intro_description = __( 'Configura layout, top bar, call to action e profili social.', 'poetheme' );
+}
 
 if ( ! in_array( $title_tag, $allowed_title_tags, true ) ) {
     $title_tag = 'h1';
@@ -86,6 +98,15 @@ if ( $show_title ) {
                 <span class="screen-reader-text"><?php esc_html_e( 'Apri menu mobile', 'poetheme' ); ?></span>
             </button>
         </div>
+
+        <?php if ( $show_app_header_intro ) : ?>
+            <section class="poetheme-app-intro-strip" aria-label="<?php esc_attr_e( 'Introduzione impostazioni testata', 'poetheme' ); ?>">
+                <p class="poetheme-app-intro-strip__title"><?php echo esc_html( $app_intro_title ); ?></p>
+                <?php if ( '' !== trim( $app_intro_description ) ) : ?>
+                    <p class="poetheme-app-intro-strip__description"><?php echo esc_html( $app_intro_description ); ?></p>
+                <?php endif; ?>
+            </section>
+        <?php endif; ?>
 
         <?php if ( $show_title || ! empty( $breadcrumbs_items ) ) : ?>
             <header class="poetheme-app-main-header">

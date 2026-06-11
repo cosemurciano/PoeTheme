@@ -5,6 +5,7 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 **Stato del tema:** Core Stable (release-ready).
 
 ## Changelog
+- 1.8.6: corretto **Style 9 – App Sidebar** con menu accordion verticale senza conflitto JS, rispetto completo delle impostazioni titolo/breadcrumb e nuova fascia descrittiva configurabile sopra il contenuto destro.
 - 1.8.4: aggiunto header layout **Style 9 – App Sidebar** con sidebar verticale collassabile, topbar contenuto con titolo/breadcrumb e profilo sito/autore.
 - 1.8.3: introdotta gerarchia tipografica default per heading H1–H6 frontend/editor.
 
@@ -59,6 +60,12 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - Testi dei link/CTA descrittivi.
 - Alt text per immagini editoriali.
 
+
+## Note versione 1.8.6
+- `navigation.js` ignora esplicitamente la variante `sidebar`, lasciando il controllo dell’accordion laterale a `app-sidebar.js` senza handler hover/focusout desktop.
+- Il menu sinistro dello **Style 9 – App Sidebar** usa un accordion verticale multilivello con sottovoci nel flusso, indicatori indentati, stato attivo evidenziato e terzo livello visibile senza flyout laterale.
+- Il layout Style 9 rispetta `poetheme_subheader_should_display_title()`, `title_tag`, `hide_title`, `poetheme_subheader_should_display_breadcrumbs()` e `hide_breadcrumbs`.
+- Aggiunte opzioni admin per mostrare/nascondere e personalizzare la fascia descrittiva “Impostazioni testata” sopra la colonna contenuto destra del layout App Sidebar.
 
 ## Note versione 1.8.5
 - Corretto il layout **Style 9 – App Sidebar** affinché il titolo pagina rispetti `enable_subheader`, `show_title`, `hide_title` e il tag `title_tag` configurato.

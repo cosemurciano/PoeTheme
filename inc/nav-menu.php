@@ -79,11 +79,8 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $parent_id = ! empty( $this->submenu_stack ) ? end( $this->submenu_stack ) : 0;
             $submenu_id = $parent_id && isset( $this->submenu_ids[ $parent_id ] ) ? $this->submenu_ids[ $parent_id ] : '';
 
-            if ( in_array( $this->variant, array( 'mobile', 'sidebar' ), true ) ) {
+            if ( 'mobile' === $this->variant ) {
                 $classes = array( 'poetheme-submenu', 'pl-4', 'border-l', 'border-gray-200', 'space-y-2', 'mt-2' );
-                if ( 'sidebar' === $this->variant ) {
-                    $classes = array( 'poetheme-submenu', 'poetheme-sidebar-submenu' );
-                }
                 if ( $depth > 0 ) {
                     $classes[] = 'ml-2';
                 }
@@ -93,6 +90,26 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                 $attributes .= " data-poetheme-submenu='true'";
                 $attributes .= " data-depth='" . esc_attr( (string) ( $depth + 1 ) ) . "'";
                 $attributes .= " aria-hidden='true'";
+
+                $output .= "\n{$indent}<ul{$attributes}>\n";
+                return;
+            }
+
+            if ( 'sidebar' === $this->variant ) {
+                $submenu_depth = $depth + 1;
+                $classes       = array(
+                    'poetheme-submenu',
+                    'poetheme-sidebar-submenu',
+                    'poetheme-sidebar-submenu--depth-' . $submenu_depth,
+                );
+
+                $attributes  = $submenu_id ? " id='" . esc_attr( $submenu_id ) . "'" : '';
+                $attributes .= " class='" . esc_attr( implode( ' ', $classes ) ) . "'";
+                $attributes .= " data-poetheme-submenu='true'";
+                $attributes .= " data-poetheme-sidebar-submenu='true'";
+                $attributes .= " data-depth='" . esc_attr( (string) $submenu_depth ) . "'";
+                $attributes .= " aria-hidden='true'";
+                $attributes .= ' hidden';
 
                 $output .= "\n{$indent}<ul{$attributes}>\n";
                 return;
@@ -167,7 +184,11 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                 $this->submenu_stack[]                = $item->ID;
             }
 
-            $li_classes = array( 'poetheme-menu-item', 'relative' );
+            $li_classes = array( 'poetheme-menu-item' );
+
+            if ( 'sidebar' !== $this->variant ) {
+                $li_classes[] = 'relative';
+            }
 
             if ( 'desktop' === $this->variant && $has_children ) {
                 $li_classes[] = 'group';
@@ -247,10 +268,29 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
                     __( 'Apri il sottomenu di %s', 'poetheme' ),
                     $title
                 );
+                $toggle_attributes = array(
+                    'type'          => 'button',
+                    'class'         => 'poetheme-submenu-toggle inline-flex items-center justify-center text-gray-500 hover:text-blue-600 transition',
+                    'aria-expanded' => 'false',
+                    'aria-label'    => $toggle_label,
+                );
+
+                if ( $submenu_id ) {
+                    $toggle_attributes['aria-controls'] = $submenu_id;
+                }
+
+                if ( 'sidebar' === $this->variant ) {
+                    $toggle_attributes['data-poetheme-sidebar-submenu-toggle'] = 'true';
+                }
+
+                $toggle_attributes_markup = '';
+                foreach ( $toggle_attributes as $toggle_attribute => $toggle_value ) {
+                    $toggle_attributes_markup .= ' ' . $toggle_attribute . '="' . esc_attr( $toggle_value ) . '"';
+                }
+
                 $submenu_toggle = sprintf(
-                    '<button type="button" class="poetheme-submenu-toggle inline-flex items-center justify-center text-gray-500 hover:text-blue-600 transition" aria-expanded="false"%1$s aria-label="%2$s"><i data-lucide="chevron-down" class="poetheme-submenu-indicator w-4 h-4"></i></button>',
-                    $submenu_id ? ' aria-controls="' . esc_attr( $submenu_id ) . '"' : '',
-                    esc_attr( $toggle_label )
+                    '<button%1$s><i data-lucide="chevron-down" class="poetheme-submenu-indicator w-4 h-4"></i></button>',
+                    $toggle_attributes_markup
                 );
             }
 
@@ -258,8 +298,31 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
 
             $item_output  = $args->before;
             if ( $has_children && in_array( $this->variant, array( 'mobile', 'sidebar' ), true ) ) {
-                $item_output .= '<div class="poetheme-mobile-item-row">';
+                $row_classes = array( 'poetheme-mobile-item-row' );
+                if ( 'sidebar' === $this->variant ) {
+                    $row_classes[] = 'poetheme-sidebar-item-row';
+                }
+                $item_output .= '<div class="' . esc_attr( implode( ' ', $row_classes ) ) . '">';
             }
+
+            if ( $has_children && 'sidebar' === $this->variant ) {
+                $atts['aria-expanded'] = 'false';
+                if ( $submenu_id ) {
+                    $atts['aria-controls'] = $submenu_id;
+                }
+                $atts['data-poetheme-sidebar-submenu-toggle'] = 'true';
+
+                $attributes = '';
+                foreach ( $atts as $attr => $value ) {
+                    if ( empty( $value ) ) {
+                        continue;
+                    }
+
+                    $value       = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+                    $attributes .= ' ' . $attr . '="' . $value . '"';
+                }
+            }
+
             $item_output .= '<a' . $attributes . '>';
             $item_output .= $args->link_before;
 
@@ -321,8 +384,18 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $classes = array( 'inline-flex', 'items-center', 'gap-2', 'transition', 'duration-150', 'ease-out' );
             $is_primary_layout = ( 'primary' === $this->layout );
 
-            if ( in_array( $this->variant, array( 'mobile', 'sidebar' ), true ) ) {
+            if ( 'mobile' === $this->variant ) {
                 $classes = array( 'flex', 'items-center', 'gap-2', 'flex-1', 'text-left', 'transition', 'duration-150' );
+                $classes[] = ( 0 === $depth ) ? 'text-base' : 'text-sm';
+                $classes[] = 'text-gray-800';
+                $classes[] = 'hover:text-blue-600';
+                $classes[] = 'py-1.5';
+                return implode( ' ', array_filter( $classes ) );
+            }
+
+            if ( 'sidebar' === $this->variant ) {
+                $classes = array( 'poetheme-sidebar-link', 'flex', 'items-center', 'gap-2', 'flex-1', 'text-left', 'transition', 'duration-150' );
+                $classes[] = 'poetheme-sidebar-link--depth-' . absint( $depth );
                 $classes[] = ( 0 === $depth ) ? 'text-base' : 'text-sm';
                 $classes[] = 'text-gray-800';
                 $classes[] = 'hover:text-blue-600';

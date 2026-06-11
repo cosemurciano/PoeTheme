@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.8.5
+Version: 1.8.6
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -1467,4 +1467,122 @@ body.poetheme-mobile-drawer-open {
   .poetheme-app-sidebar__profile--mobile {
     display: block;
   }
+}
+
+/* Style 9 App Sidebar accordion refinements */
+.poetheme-app-sidebar__nav .poetheme-sidebar-item-row {
+  gap: 0.35rem;
+  border-radius: 0.75rem;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-link {
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 0.75rem;
+  color: var(--poetheme-menu-link-color, #374151);
+  font-weight: 600;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-link--depth-1,
+.poetheme-app-sidebar__nav .poetheme-sidebar-link--depth-2,
+.poetheme-app-sidebar__nav .poetheme-sidebar-link--depth-3 {
+  min-height: 2.25rem;
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+  color: #5f6b7a;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-link--depth-2,
+.poetheme-app-sidebar__nav .poetheme-sidebar-link--depth-3 {
+  font-size: 0.8125rem;
+}
+
+.poetheme-app-sidebar__nav .menu-item-has-children.is-open > .poetheme-sidebar-item-row > .poetheme-sidebar-link,
+.poetheme-app-sidebar__nav .current-menu-item > .poetheme-sidebar-item-row > .poetheme-sidebar-link,
+.poetheme-app-sidebar__nav .current-menu-parent > .poetheme-sidebar-item-row > .poetheme-sidebar-link,
+.poetheme-app-sidebar__nav .current-menu-ancestor > .poetheme-sidebar-item-row > .poetheme-sidebar-link,
+.poetheme-app-sidebar__nav .current_page_item > .poetheme-sidebar-item-row > .poetheme-sidebar-link {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--poetheme-menu-active-link-color, #2563eb);
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-item-row > .poetheme-submenu-toggle {
+  align-self: stretch;
+  min-height: 2.75rem;
+  color: #8a94a6;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-submenu {
+  position: static;
+  display: none;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: auto;
+  margin: 0.25rem 0 0 1.25rem;
+  padding: 0.25rem 0 0.35rem 0.85rem;
+  overflow: visible;
+  border-left: 1px solid rgba(148, 163, 184, 0.45);
+  box-shadow: none;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-submenu--depth-2 {
+  margin-left: 0.9rem;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-submenu--depth-3 {
+  margin-left: 0.75rem;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-submenu[hidden] {
+  display: none !important;
+}
+
+.poetheme-app-sidebar__nav .is-open > .poetheme-sidebar-submenu:not([hidden]) {
+  display: flex;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-submenu .poetheme-menu-item {
+  position: relative;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-submenu .poetheme-menu-item::before {
+  position: absolute;
+  top: 1.1rem;
+  left: -0.95rem;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.9);
+  content: "";
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-submenu .current-menu-item::before,
+.poetheme-app-sidebar__nav .poetheme-sidebar-submenu .current_page_item::before {
+  background: var(--poetheme-menu-active-link-color, #2563eb);
+}
+
+.poetheme-app-intro-strip {
+  width: 100%;
+  padding: 1.25rem clamp(1rem, 3vw, 3rem);
+  border-bottom: 1px solid var(--poetheme-app-border);
+  background: #f9fafb;
+}
+
+.poetheme-app-intro-strip__title {
+  margin: 0;
+  color: var(--poetheme-page-title-color, #111827);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.poetheme-app-intro-strip__description {
+  max-width: 46rem;
+  margin: 0.25rem 0 0;
+  color: #6b7280;
+  font-size: 0.925rem;
+  line-height: 1.6;
 }
