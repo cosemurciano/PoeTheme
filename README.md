@@ -5,6 +5,7 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 **Stato del tema:** Core Stable (release-ready).
 
 ## Changelog
+- 1.8.7: rimossi i placeholder automatici dalla fascia App Sidebar, aggiunto il menu opzionale a destra, corrette icone assenti senza pallini/bullet e sottomenu chiusi di default.
 - 1.8.6: corretto **Style 9 – App Sidebar** con menu accordion verticale senza conflitto JS, rispetto completo delle impostazioni titolo/breadcrumb e nuova fascia descrittiva configurabile sopra il contenuto destro.
 - 1.8.4: aggiunto header layout **Style 9 – App Sidebar** con sidebar verticale collassabile, topbar contenuto con titolo/breadcrumb e profilo sito/autore.
 - 1.8.3: introdotta gerarchia tipografica default per heading H1–H6 frontend/editor.
@@ -60,6 +61,13 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - Testi dei link/CTA descrittivi.
 - Alt text per immagini editoriali.
 
+
+
+## Note versione 1.8.7
+- Rimossi i placeholder automatici dalla fascia descrittiva dello **Style 9 – App Sidebar**: titolo e descrizione vuoti non producono più testi frontend.
+- Aggiunto il menu WordPress opzionale `app-intro` per mostrare link nella parte destra della fascia App Sidebar.
+- Corretto il menu laterale App Sidebar per evitare bullet, pallini o cerchi grigi quando una voce non ha un’icona assegnata.
+- I sottomenu della sidebar sono chiusi di default e si aprono solo tramite interazione esplicita, mantenendo link e pulsante toggle separati quando la voce ha un URL reale.
 
 ## Note versione 1.8.6
 - `navigation.js` ignora esplicitamente la variante `sidebar`, lasciando il controllo dell’accordion laterale a `app-sidebar.js` senza handler hover/focusout desktop.
