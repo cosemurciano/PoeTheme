@@ -76,7 +76,7 @@
                     return;
                 }
 
-                setOpen(item, item.classList.contains('current-menu-ancestor') || item.classList.contains('current-menu-parent') || item.classList.contains('current-menu-item'));
+                setOpen(item, false);
 
                 toggles.forEach(function (toggle) {
                     toggle.addEventListener('click', function (event) {

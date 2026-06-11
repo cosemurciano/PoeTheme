@@ -21,17 +21,11 @@ $title_tag            = isset( $subheader_options['title_tag'] ) ? strtolower( (
 $allowed_title_tags   = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
 $title_classes        = array_merge( array( 'poetheme-app-page-title' ), poetheme_get_subheader_title_classes() );
 $title_classes        = implode( ' ', array_map( 'sanitize_html_class', array_unique( $title_classes ) ) );
-$show_app_header_intro  = ! empty( $header_options['show_app_header_intro'] );
-$app_intro_title       = isset( $header_options['app_header_intro_title'] ) ? (string) $header_options['app_header_intro_title'] : '';
-$app_intro_description = isset( $header_options['app_header_intro_description'] ) ? (string) $header_options['app_header_intro_description'] : '';
-
-if ( '' === trim( $app_intro_title ) ) {
-    $app_intro_title = __( 'Impostazioni testata', 'poetheme' );
-}
-
-if ( '' === trim( $app_intro_description ) ) {
-    $app_intro_description = __( 'Configura layout, top bar, call to action e profili social.', 'poetheme' );
-}
+$app_intro_title       = isset( $header_options['app_header_intro_title'] ) ? trim( (string) $header_options['app_header_intro_title'] ) : '';
+$app_intro_description = isset( $header_options['app_header_intro_description'] ) ? trim( (string) $header_options['app_header_intro_description'] ) : '';
+$has_app_intro_text    = '' !== $app_intro_title || '' !== $app_intro_description;
+$has_app_intro_menu    = has_nav_menu( 'app-intro' );
+$show_app_intro_strip  = ! empty( $header_options['show_app_header_intro'] ) && ( $has_app_intro_text || $has_app_intro_menu );
 
 if ( ! in_array( $title_tag, $allowed_title_tags, true ) ) {
     $title_tag = 'h1';
@@ -99,11 +93,33 @@ if ( $show_title ) {
             </button>
         </div>
 
-        <?php if ( $show_app_header_intro ) : ?>
-            <section class="poetheme-app-intro-strip" aria-label="<?php esc_attr_e( 'Introduzione impostazioni testata', 'poetheme' ); ?>">
-                <p class="poetheme-app-intro-strip__title"><?php echo esc_html( $app_intro_title ); ?></p>
-                <?php if ( '' !== trim( $app_intro_description ) ) : ?>
-                    <p class="poetheme-app-intro-strip__description"><?php echo esc_html( $app_intro_description ); ?></p>
+        <?php if ( $show_app_intro_strip ) : ?>
+            <section class="poetheme-app-intro-strip" aria-label="<?php esc_attr_e( 'Introduzione App Sidebar', 'poetheme' ); ?>">
+                <?php if ( $has_app_intro_text ) : ?>
+                    <div class="poetheme-app-intro-strip__content">
+                        <?php if ( '' !== $app_intro_title ) : ?>
+                            <p class="poetheme-app-intro-strip__title"><?php echo esc_html( $app_intro_title ); ?></p>
+                        <?php endif; ?>
+                        <?php if ( '' !== $app_intro_description ) : ?>
+                            <p class="poetheme-app-intro-strip__description"><?php echo esc_html( $app_intro_description ); ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ( $has_app_intro_menu ) : ?>
+                    <nav class="poetheme-app-intro-strip__nav" aria-label="<?php esc_attr_e( 'Menu fascia App Sidebar', 'poetheme' ); ?>">
+                        <?php
+                        wp_nav_menu(
+                            array(
+                                'theme_location' => 'app-intro',
+                                'container'      => false,
+                                'menu_class'     => 'poetheme-app-intro-menu',
+                                'fallback_cb'    => false,
+                                'depth'          => 1,
+                            )
+                        );
+                        ?>
+                    </nav>
                 <?php endif; ?>
             </section>
         <?php endif; ?>

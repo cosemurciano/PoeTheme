@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.8.6
+Version: 1.8.7
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -1117,7 +1117,9 @@ body.poetheme-lightbox-open {
 }
 
 .poetheme-app-sidebar__menu,
+.poetheme-app-sidebar__menu ul,
 .poetheme-app-sidebar__nav .poetheme-nav,
+.poetheme-sidebar-submenu,
 .poetheme-app-mobile-drawer__menu,
 .poetheme-app-mobile-drawer__nav .poetheme-nav {
   display: flex;
@@ -1125,6 +1127,15 @@ body.poetheme-lightbox-open {
   gap: 0.25rem;
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+
+.poetheme-app-sidebar__menu,
+.poetheme-app-sidebar__menu ul,
+.poetheme-app-sidebar__menu li,
+.poetheme-sidebar-submenu,
+.poetheme-sidebar-submenu li {
   list-style: none;
 }
 
@@ -1201,20 +1212,20 @@ body.poetheme-lightbox-open {
   justify-content: center;
 }
 
-.poetheme-app-sidebar__nav .poetheme-nav-link--no-icon::before,
-.poetheme-app-mobile-drawer__nav .poetheme-nav-link--no-icon::before {
-  display: inline-flex;
-  flex: 0 0 1.25rem;
-  align-items: center;
-  justify-content: center;
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 999px;
-  background: rgba(17, 24, 39, 0.08);
-  color: currentColor;
-  font-size: 0.7rem;
-  font-weight: 700;
-  content: "•";
+.poetheme-app-sidebar__menu li::marker,
+.poetheme-sidebar-submenu li::marker {
+  content: "";
+}
+
+.poetheme-sidebar-link--no-icon .menu-item-icon,
+.poetheme-nav-link--no-icon .menu-item-icon {
+  display: none;
+}
+
+.poetheme-app-sidebar__nav .poetheme-sidebar-link--no-icon::before,
+.poetheme-app-sidebar__nav .poetheme-nav-link--no-icon::before {
+  display: none;
+  content: none;
 }
 
 .poetheme-app-sidebar__profile {
@@ -1549,26 +1560,65 @@ body.poetheme-mobile-drawer-open {
 }
 
 .poetheme-app-sidebar__nav .poetheme-sidebar-submenu .poetheme-menu-item::before {
-  position: absolute;
-  top: 1.1rem;
-  left: -0.95rem;
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.9);
-  content: "";
-}
-
-.poetheme-app-sidebar__nav .poetheme-sidebar-submenu .current-menu-item::before,
-.poetheme-app-sidebar__nav .poetheme-sidebar-submenu .current_page_item::before {
-  background: var(--poetheme-menu-active-link-color, #2563eb);
+  display: none;
+  content: none;
 }
 
 .poetheme-app-intro-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
   width: 100%;
   padding: 1.25rem clamp(1rem, 3vw, 3rem);
   border-bottom: 1px solid var(--poetheme-app-border);
   background: #f9fafb;
+}
+
+.poetheme-app-intro-strip__content {
+  min-width: 0;
+}
+
+.poetheme-app-intro-strip__nav {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.poetheme-app-intro-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.poetheme-app-intro-menu li,
+.poetheme-app-intro-menu li::marker {
+  list-style: none;
+  content: "";
+}
+
+.poetheme-app-intro-menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  border-radius: 999px;
+  color: var(--poetheme-menu-link-color, #374151);
+  font-size: 0.925rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.poetheme-app-intro-menu a:hover,
+.poetheme-app-intro-menu a:focus-visible {
+  color: var(--poetheme-menu-active-link-color, #2563eb);
+}
+
+.poetheme-app-intro-menu a:focus-visible {
+  outline: 2px solid var(--poetheme-menu-active-link-color, #2563eb);
+  outline-offset: 3px;
 }
 
 .poetheme-app-intro-strip__title {
@@ -1585,4 +1635,25 @@ body.poetheme-mobile-drawer-open {
   color: #6b7280;
   font-size: 0.925rem;
   line-height: 1.6;
+}
+
+
+@media (max-width: 767.98px) {
+  .poetheme-app-intro-strip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .poetheme-app-intro-strip__nav,
+  .poetheme-app-intro-menu {
+    width: 100%;
+  }
+
+  .poetheme-app-intro-strip__nav {
+    margin-left: 0;
+  }
+
+  .poetheme-app-intro-menu {
+    justify-content: flex-start;
+  }
 }

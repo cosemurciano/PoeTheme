@@ -34,6 +34,7 @@ if ( ! function_exists( 'poetheme_setup' ) ) {
                 'primary-left'  => __( 'Primary Left Menu', 'poetheme' ),
                 'primary-right' => __( 'Primary Right Menu', 'poetheme' ),
                 'top-info'      => __( 'Top Info Menu', 'poetheme' ),
+                'app-intro'     => __( 'App Sidebar Intro Menu', 'poetheme' ),
                 'footer'        => __( 'Footer Menu', 'poetheme' ),
             )
         );

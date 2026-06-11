@@ -228,6 +228,10 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             $link_classes = $this->get_link_classes( $depth, $has_children, $item );
             if ( ! $icon ) {
                 $link_classes .= ' poetheme-nav-link--no-icon';
+
+                if ( 'sidebar' === $this->variant ) {
+                    $link_classes .= ' poetheme-sidebar-link--no-icon';
+                }
             }
             if ( $link_classes ) {
                 $atts['class'] = trim( $link_classes );
@@ -306,11 +310,16 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
             }
 
             if ( $has_children && 'sidebar' === $this->variant ) {
-                $atts['aria-expanded'] = 'false';
-                if ( $submenu_id ) {
-                    $atts['aria-controls'] = $submenu_id;
+                $item_url        = isset( $item->url ) ? trim( (string) $item->url ) : '';
+                $is_toggle_only = '' === $item_url || '#' === $item_url;
+
+                if ( $is_toggle_only ) {
+                    $atts['aria-expanded'] = 'false';
+                    if ( $submenu_id ) {
+                        $atts['aria-controls'] = $submenu_id;
+                    }
+                    $atts['data-poetheme-sidebar-submenu-toggle'] = 'true';
                 }
-                $atts['data-poetheme-sidebar-submenu-toggle'] = 'true';
 
                 $attributes = '';
                 foreach ( $atts as $attr => $value ) {

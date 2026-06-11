@@ -123,8 +123,8 @@ function poetheme_get_default_header_options() {
         'cta_url'                      => home_url( '/' ),
         'social_links'                 => $social_defaults,
         'show_app_header_intro'        => false,
-        'app_header_intro_title'       => __( 'Impostazioni testata', 'poetheme' ),
-        'app_header_intro_description' => __( 'Configura layout, top bar, call to action e profili social.', 'poetheme' ),
+        'app_header_intro_title'       => '',
+        'app_header_intro_description' => '',
     );
 }
 
@@ -3765,11 +3765,13 @@ function poetheme_render_header_page() {
                                 <input type="checkbox" id="poetheme_header_show_app_header_intro" name="poetheme_header[show_app_header_intro]" value="1" <?php checked( ! empty( $options['show_app_header_intro'] ) ); ?> aria-describedby="poetheme-header-app-intro-help" />
                                 <?php esc_html_e( 'Mostra fascia descrittiva nel layout App Sidebar.', 'poetheme' ); ?>
                             </label>
-                            <p id="poetheme-header-app-intro-help" class="description poetheme-field__help"><?php esc_html_e( 'Queste impostazioni si applicano al layout App Sidebar e visualizzano una fascia sopra il contenuto destro.', 'poetheme' ); ?></p>
+                            <p id="poetheme-header-app-intro-help" class="description poetheme-field__help"><?php esc_html_e( 'Queste impostazioni si applicano al layout App Sidebar e visualizzano una fascia sopra il contenuto destro. Se titolo, descrizione e menu fascia sono vuoti, la fascia non viene mostrata.', 'poetheme' ); ?></p>
                             <label for="poetheme_header_app_intro_title" class="poetheme-field__label"><?php esc_html_e( 'Titolo fascia', 'poetheme' ); ?></label>
-                            <input type="text" id="poetheme_header_app_intro_title" name="poetheme_header[app_header_intro_title]" value="<?php echo esc_attr( $options['app_header_intro_title'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Impostazioni testata', 'poetheme' ); ?>" />
+                            <input type="text" id="poetheme_header_app_intro_title" name="poetheme_header[app_header_intro_title]" value="<?php echo esc_attr( $options['app_header_intro_title'] ); ?>" class="regular-text" aria-describedby="poetheme-header-app-intro-title-help" />
+                            <p id="poetheme-header-app-intro-title-help" class="description poetheme-field__help"><?php esc_html_e( 'Se il campo resta vuoto, non verrà mostrato alcun titolo nella fascia.', 'poetheme' ); ?></p>
                             <label for="poetheme_header_app_intro_description" class="poetheme-field__label"><?php esc_html_e( 'Descrizione fascia', 'poetheme' ); ?></label>
-                            <textarea id="poetheme_header_app_intro_description" name="poetheme_header[app_header_intro_description]" class="large-text" rows="3" placeholder="<?php esc_attr_e( 'Configura layout, top bar, call to action e profili social.', 'poetheme' ); ?>"><?php echo esc_textarea( $options['app_header_intro_description'] ); ?></textarea>
+                            <textarea id="poetheme_header_app_intro_description" name="poetheme_header[app_header_intro_description]" class="large-text" rows="3" aria-describedby="poetheme-header-app-intro-description-help"><?php echo esc_textarea( $options['app_header_intro_description'] ); ?></textarea>
+                            <p id="poetheme-header-app-intro-description-help" class="description poetheme-field__help"><?php esc_html_e( 'Se il campo resta vuoto, non verrà mostrata alcuna descrizione nella fascia.', 'poetheme' ); ?></p>
                         </td>
                     </tr>
                     <tr class="poetheme-field">
