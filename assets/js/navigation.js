@@ -11,6 +11,10 @@
 
         menus.forEach(function (menu) {
             var variant = menu.getAttribute('data-variant') || 'desktop';
+            if (variant === 'sidebar') {
+                return;
+            }
+
             if (variant === 'mobile') {
                 setupMobileMenu(menu, navBreakpoint);
             } else {
