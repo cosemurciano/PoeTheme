@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.9.0
+- Corretto l'output del CSS inline (`inc/head-output.php`): rimosso `esc_html()` che
+  trasformava i combinatori figlio `>` in `&gt;`, invalidando le regole dei colori del menu.
+- Tailwind CSS migrato da CDN (v2.2.19) a build locale purgato e minificato (v3), abilitando
+  le utility con valori arbitrari già usate nei template e rimuovendo il payload CDN.
+- Rifattorizzato `inc/admin/options.php` in moduli separati sotto `inc/admin/options/`
+  senza modifiche di comportamento.
+- Aggiunto file di traduzione `en_US` generato da `poetheme.pot`.
+
+## 1.8.7
+- Rimossi i placeholder automatici dalla fascia App Sidebar (Style 9), aggiunto il menu
+  opzionale `app-intro` a destra, corrette le icone assenti senza pallini e i sottomenu
+  chiusi di default.
+
+## 1.8.6
+- Style 9 – App Sidebar con menu accordion verticale senza conflitto JS, rispetto completo
+  delle impostazioni titolo/breadcrumb e nuova fascia descrittiva configurabile.
+
+## 1.8.5
+- App Sidebar: titolo pagina conforme a `enable_subheader`/`show_title`/`hide_title`/`title_tag`,
+  variante menu `sidebar` accordion multilivello e drawer mobile da destra con overlay.
+
+## 1.8.4
+- Aggiunto header layout Style 9 – App Sidebar con sidebar verticale collassabile, topbar
+  contenuto con titolo/breadcrumb e profilo sito/autore.
+
 ## 1.8.3
 - Introdotta gerarchia tipografica default per heading H1–H6 frontend/editor.
 
