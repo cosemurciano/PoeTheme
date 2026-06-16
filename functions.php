@@ -20,7 +20,7 @@ require_once POETHEME_DIR . '/inc/security.php';
 // -----------------------------------------------------------------------------
 // Theme options and admin schema.
 // -----------------------------------------------------------------------------
-require_once POETHEME_DIR . '/inc/admin/options.php';
+require_once POETHEME_DIR . '/inc/admin/options/loader.php';
 require_once POETHEME_DIR . '/inc/admin/schema.php';
 
 // -----------------------------------------------------------------------------
