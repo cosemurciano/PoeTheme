@@ -379,7 +379,7 @@ function poetheme_output_inline_css() {
 
     $output .= $css;
 
-    printf( '<style id="poetheme-inline-css">%s</style>', esc_html( $output ) );
+    printf( '<style id="poetheme-inline-css">%s</style>', $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS already sanitized via poetheme_sanitize_inline_css(); esc_html() would corrupt child combinators.
 }
 add_action( 'wp_head', 'poetheme_output_inline_css', 95 );
 

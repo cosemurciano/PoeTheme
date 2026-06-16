@@ -7,11 +7,11 @@
  *
  * Asset inventory (M5):
  * Frontend styles:
- * - poetheme-tailwind (CDN, Tailwind CSS 2.2.19)
+ * - poetheme-tailwind (local build, assets/css/tailwind.min.css, Tailwind CSS 3.x purged)
  * - poetheme-style (style.css)
  *
  * Editor styles:
- * - poetheme-editor-tailwind (CDN, Tailwind CSS 2.2.19)
+ * - poetheme-editor-tailwind (local build, assets/css/tailwind.min.css, Tailwind CSS 3.x purged)
  * - poetheme-editor-style (assets/css/editor.css)
  *
  * Frontend scripts:
@@ -47,18 +47,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function poetheme_get_cdn_asset_map() {
     return array(
-        'poetheme-tailwind' => array(
-            'src'        => 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
-            'version'    => '2.2.19',
-            'integrity'  => 'sha384-HtMZLkYo+pR5/u7zCzXxMJP6QoNnQJt1qkHM0EaOPvGDIzaVZbmYr/TlvUZ/sKAg',
-            'crossorigin' => 'anonymous',
-        ),
-        'poetheme-editor-tailwind' => array(
-            'src'        => 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
-            'version'    => '2.2.19',
-            'integrity'  => 'sha384-HtMZLkYo+pR5/u7zCzXxMJP6QoNnQJt1qkHM0EaOPvGDIzaVZbmYr/TlvUZ/sKAg',
-            'crossorigin' => 'anonymous',
-        ),
         'poetheme-alpine' => array(
             'src'        => 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js',
             'version'    => '3.13.5',
@@ -252,10 +240,7 @@ add_action( 'wp_print_scripts', 'poetheme_log_enqueued_assets', 99 );
  * Enqueue scripts and styles.
  */
 function poetheme_scripts() {
-    $tailwind     = poetheme_get_cdn_asset( 'poetheme-tailwind' );
-    $tailwind_src = isset( $tailwind['src'] ) ? $tailwind['src'] : 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
-    $tailwind_ver = isset( $tailwind['version'] ) ? $tailwind['version'] : POETHEME_VERSION;
-    wp_enqueue_style( 'poetheme-tailwind', $tailwind_src, array(), $tailwind_ver );
+    wp_enqueue_style( 'poetheme-tailwind', POETHEME_URI . '/assets/css/tailwind.min.css', array(), poetheme_get_asset_version( 'assets/css/tailwind.min.css' ) );
     wp_enqueue_style( 'poetheme-style', get_stylesheet_uri(), array( 'poetheme-tailwind' ), poetheme_get_asset_version( 'style.css' ) );
 
     if ( poetheme_should_load_alpine() ) {
@@ -311,10 +296,7 @@ add_action( 'wp_enqueue_scripts', 'poetheme_scripts' );
  * Block editor assets.
  */
 function poetheme_block_editor_assets() {
-    $tailwind     = poetheme_get_cdn_asset( 'poetheme-editor-tailwind' );
-    $tailwind_src = isset( $tailwind['src'] ) ? $tailwind['src'] : 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
-    $tailwind_ver = isset( $tailwind['version'] ) ? $tailwind['version'] : POETHEME_VERSION;
-    wp_enqueue_style( 'poetheme-editor-tailwind', $tailwind_src, array(), $tailwind_ver );
+    wp_enqueue_style( 'poetheme-editor-tailwind', POETHEME_URI . '/assets/css/tailwind.min.css', array(), poetheme_get_asset_version( 'assets/css/tailwind.min.css' ) );
     wp_enqueue_style( 'poetheme-editor-style', POETHEME_URI . '/assets/css/editor.css', array( 'poetheme-editor-tailwind' ), poetheme_get_asset_version( 'assets/css/editor.css' ) );
 
     if ( poetheme_should_load_editor_alpine() ) {

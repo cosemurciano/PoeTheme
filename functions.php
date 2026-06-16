@@ -5,7 +5,7 @@
  * @package PoeTheme
  */
 
-define( 'POETHEME_VERSION', '1.8.7' );
+define( 'POETHEME_VERSION', '1.9.0' );
 
 define( 'POETHEME_DIR', get_template_directory() );
 define( 'POETHEME_URI', get_template_directory_uri() );
@@ -20,7 +20,7 @@ require_once POETHEME_DIR . '/inc/security.php';
 // -----------------------------------------------------------------------------
 // Theme options and admin schema.
 // -----------------------------------------------------------------------------
-require_once POETHEME_DIR . '/inc/admin/options.php';
+require_once POETHEME_DIR . '/inc/admin/options/loader.php';
 require_once POETHEME_DIR . '/inc/admin/schema.php';
 
 // -----------------------------------------------------------------------------

@@ -4,14 +4,14 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.8.7
+Version: 1.9.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
 Tags: blog, accessibility-ready, custom-logo, custom-menu, rtl-language-support, translation-ready
 */
 
-/* Tailwind CSS is loaded via CDN. Use this file for additional custom styles and accessibility enhancements. */
+/* Tailwind CSS is built locally (assets/css/tailwind.min.css). Use this file for additional custom styles and accessibility enhancements. */
 
 :root {
   --poetheme-focus-color: #1e40af;
