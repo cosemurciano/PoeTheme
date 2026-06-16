@@ -1,0 +1,244 @@
+#!/usr/bin/env node
+/**
+ * Generate languages/poetheme-en_US.po from poetheme.pot.
+ *
+ * The theme's source strings are written in Italian. This produces an English
+ * (en_US) catalogue: front-end strings and the main admin labels are translated
+ * here; long-form admin descriptions are left empty and fall back to the source
+ * string (standard gettext behaviour). Re-run after updating the .pot, then
+ * `npm run build:mo` to compile the binary.
+ */
+const fs = require('fs');
+const path = require('path');
+const { po } = require('gettext-parser');
+
+const langDir = path.join(__dirname, '..', 'languages');
+const potPath = path.join(langDir, 'poetheme.pot');
+const poPath = path.join(langDir, 'poetheme-en_US.po');
+
+// Italian source string -> English translation.
+const dict = {
+  // --- Front-end: navigation & structure ---
+  'Contenuto principale': 'Main content',
+  'Menù principale': 'Main menu',
+  'Navigazione principale': 'Primary navigation',
+  'Navigazione rapida': 'Quick navigation',
+  'Apri il menù principale': 'Open main menu',
+  'Chiudi il menù principale': 'Close main menu',
+  'Apri il menu principale': 'Open main menu',
+  'Espandi menu laterale': 'Expand sidebar menu',
+  'Comprimi menu laterale': 'Collapse sidebar menu',
+  'Menu laterale del sito': 'Site sidebar menu',
+  'Apri menu mobile': 'Open mobile menu',
+  'Chiudi menu mobile': 'Close mobile menu',
+  'Apri ricerca': 'Open search',
+  'Cerca': 'Search',
+  'Cerca prodotti': 'Search products',
+  'Cerca prodotti...': 'Search products...',
+  'Autore del sito': 'Site author',
+  'Vai a %s': 'Go to %s',
+  // --- Front-end: search & 404 ---
+  'Pagina non trovata': 'Page not found',
+  'Risultati della ricerca per "%s"': 'Search results for "%s"',
+  // --- Front-end: contact actions ---
+  'Apri chat WhatsApp': 'Open WhatsApp chat',
+  'Apri la posizione su Google Maps': 'Open location on Google Maps',
+  'Chiama il numero': 'Call the number',
+  'Invia una email': 'Send an email',
+  'Informazioni rapide': 'Quick info',
+  'Informazioni': 'Information',
+  // --- Menu locations & widget areas ---
+  'Menu informazioni': 'Info menu',
+  'Menu fascia App Sidebar': 'App Sidebar strip menu',
+  'Area widget': 'Widget area',
+  'Aree servite': 'Areas served',
+  'Widget pagina': 'Page widgets',
+  'Widget Footer': 'Footer widgets',
+  // --- Admin: page & section titles ---
+  'Impostazioni generali': 'General settings',
+  'Impostazioni pagina': 'Page settings',
+  'Impostazioni sottointestazione': 'Subheader settings',
+  'Impostazioni testata': 'Header settings',
+  'Gestione Colori': 'Color management',
+  'Gestione Font': 'Font management',
+  'Tipografia': 'Typography',
+  'Tipi di carattere': 'Fonts',
+  'Globale': 'Global',
+  'Layout': 'Layout',
+  'Testata': 'Header',
+  'Sottointestazione': 'Subheader',
+  'Piè di pagina': 'Footer',
+  'Intestazione': 'Header',
+  'Barra superiore': 'Top bar',
+  'Logo': 'Logo',
+  'Call to Action': 'Call to action',
+  'Icone social': 'Social icons',
+  'CSS personalizzato': 'Custom CSS',
+  'Breadcrumb': 'Breadcrumb',
+  'Interfaccia': 'Interface',
+  'Posizione': 'Position',
+  'Dimensione': 'Size',
+  'Contenuti': 'Content',
+  'Contenuti e sfondi': 'Content and backgrounds',
+  'Trasparenza': 'Transparency',
+  'Margine': 'Margin',
+  'Padding': 'Padding',
+  'Varie': 'Miscellaneous',
+  'Comunicazione': 'Communication',
+  // --- Admin: common controls & labels ---
+  'Sì': 'Yes',
+  'No': 'No',
+  'Predefinito': 'Default',
+  'Automatico': 'Automatic',
+  'Alto': 'High',
+  'Basso': 'Low',
+  'Destra': 'Right',
+  'Sinistra': 'Left',
+  'Anteprima': 'Preview',
+  'Seleziona layout': 'Select layout',
+  'Scegli icona': 'Choose icon',
+  "Scegli un'immagine di sfondo": 'Choose a background image',
+  'Scegli immagine': 'Choose image',
+  'Scegli un logo': 'Choose a logo',
+  'Carica logo': 'Upload logo',
+  'Rimuovi logo': 'Remove logo',
+  'Rimuovi immagine': 'Remove image',
+  'Rimuovi icona': 'Remove icon',
+  'Rimuovi': 'Remove',
+  'Rimuovi fascia': 'Remove time slot',
+  'Usa immagine': 'Use image',
+  'Usa questa immagine': 'Use this image',
+  'Usa questo logo': 'Use this logo',
+  'Usa logo': 'Use logo',
+  'Seleziona immagine': 'Select image',
+  'Seleziona dal Media': 'Select from Media Library',
+  'Scegli immagine': 'Choose image',
+  'Carica un logo': 'Upload a logo',
+  'Aggiungi contatto': 'Add contact',
+  'Aggiungi fascia oraria': 'Add time slot',
+  'Scegli icona': 'Choose icon',
+  "Seleziona un'icona": 'Select an icon',
+  'Nessuna icona selezionata': 'No icon selected',
+  'Cerca tra le icone...': 'Search icons...',
+  'Nessuna icona corrisponde ai criteri di ricerca.': 'No icon matches your search.',
+  'Nessun logo selezionato.': 'No logo selected.',
+  'Nessuna immagine selezionata.': 'No image selected.',
+  'Nessun contatto ancora configurato.': 'No contact configured yet.',
+  'Nessuna fascia oraria aggiunta.': 'No time slot added.',
+  'Nessuna fascia oraria configurata.': 'No time slot configured.',
+  'Icona Lucide': 'Lucide icon',
+  // --- Admin: layout / width ---
+  'Larghezza box': 'Boxed width',
+  'Larghezza piena (100% della pagina)': 'Full width (100% of the page)',
+  'Larghezza sito (px)': 'Site width (px)',
+  'Numero di righe': 'Number of rows',
+  'Numero di righe': 'Number of rows',
+  'Layout riga %d': 'Row %d layout',
+  'Layout con sidebar verticale collassabile, logo in alto, menu laterale, titolo pagina e breadcrumb nell’area contenuto.':
+    'Layout with a collapsible vertical sidebar, logo on top, side menu, page title and breadcrumb in the content area.',
+  // --- Admin: header layout choices ---
+  'Layout 1 – Classico': 'Layout 1 – Classic',
+  'Layout 2 – Centrato': 'Layout 2 – Centered',
+  'Layout 3 – Minimal': 'Layout 3 – Minimal',
+  'Layout 4 – Vetrina': 'Layout 4 – Showcase',
+  'Layout 5 – Overlay': 'Layout 5 – Overlay',
+  'Layout 6 – Sticky': 'Layout 6 – Sticky',
+  'Layout 7 – Promo': 'Layout 7 – Promo',
+  'Layout 8 – E-commerce': 'Layout 8 – E-commerce',
+  // --- Admin: toggles (show/hide) ---
+  'Mostra il titolo della pagina': 'Show the page title',
+  'Mostra i breadcrumbs': 'Show breadcrumbs',
+  'Mostra sottointestazione': 'Show subheader',
+  'Mostra il piè di pagina': 'Show the footer',
+  'Mostra il pulsante Call to Action.': 'Show the Call to Action button.',
+  'Mostra il testo in grassetto': 'Show text in bold',
+  'Mostra il titolo del sito al posto del logo': 'Show the site title instead of the logo',
+  'Nascondi titolo pagina': 'Hide page title',
+  'Nascondi breadcrumbs': 'Hide breadcrumbs',
+  'Rimuovi il padding superiore del contenuto': 'Remove the top padding of the content',
+  'Rimuovi ombra della testata': 'Remove header shadow',
+  'Rendi la testata trasparente': 'Make the header transparent',
+  // --- Admin: schema / publisher ---
+  'SEO Schema': 'SEO Schema',
+  'Attiva output JSON-LD': 'Enable JSON-LD output',
+  'Tipologia di publisher': 'Publisher type',
+  'Tipologia di contatto': 'Contact type',
+  'Contatti del publisher': 'Publisher contacts',
+  'Orari di apertura': 'Opening hours',
+  'Fasce orarie di disponibilità': 'Availability time slots',
+  'Fascia oraria': 'Time slot',
+  'Aggiungi fascia oraria': 'Add time slot',
+  'Apre alle': 'Opens at',
+  'Chiude alle': 'Closes at',
+  'Valido dal': 'Valid from',
+  'Valido fino al': 'Valid until',
+  'Lingue supportate': 'Supported languages',
+  'Email': 'Email',
+  'Telefono': 'Phone',
+  'Contatto': 'Contact',
+  'URL di riferimento': 'Reference URL',
+  'Immagini della sede': 'Venue images',
+  // --- Days of week ---
+  'Lunedì': 'Monday',
+  'Martedì': 'Tuesday',
+  'Mercoledì': 'Wednesday',
+  'Giovedì': 'Thursday',
+  'Venerdì': 'Friday',
+  'Sabato': 'Saturday',
+  'Domenica': 'Sunday',
+  'Tutte': 'All',
+  // --- Admin: footer / credits ---
+  'Testo credits': 'Credits text',
+  'Visualizza i credits.': 'Display the credits.',
+  'Mostra la barra superiore con informazioni e social.': 'Show the top bar with info and social links.',
+  // --- Sample / demo content ---
+  'Titolo di esempio H1': 'Sample heading H1',
+  'Titolo di esempio H2': 'Sample heading H2',
+  'Titolo di esempio H3': 'Sample heading H3',
+  'Titolo di esempio H4': 'Sample heading H4',
+  'Titolo di esempio H5': 'Sample heading H5',
+  'Titolo di esempio H6': 'Sample heading H6',
+  'Titolo di pagina di esempio': 'Sample page title',
+  'Titolo di articolo di esempio': 'Sample post title',
+  'Titolo di categoria di esempio': 'Sample category title',
+  'Titolo widget di esempio': 'Sample widget title',
+  'Questo è un esempio di paragrafo con il font selezionato.':
+    'This is a sample paragraph using the selected font.',
+  'Call to action di esempio': 'Sample call to action',
+  'Testo della barra superiore di esempio.': 'Sample top bar text.',
+  'Testo del widget footer di esempio.': 'Sample footer widget text.',
+};
+
+const parsed = po.parse(fs.readFileSync(potPath));
+
+// Header for en_US.
+const h = parsed.headers;
+h.Language = 'en_US';
+h['Plural-Forms'] = 'nplurals=2; plural=(n != 1);';
+h['PO-Revision-Date'] = new Date().toISOString().replace('T', ' ').slice(0, 16) + '+0000';
+h['Last-Translator'] = 'PoeTheme';
+h['Language-Team'] = 'English';
+
+let translated = 0;
+Object.values(parsed.translations).forEach((ctx) => {
+  Object.values(ctx).forEach((entry) => {
+    if (!entry.msgid) return; // skip header
+    if (Object.prototype.hasOwnProperty.call(dict, entry.msgid)) {
+      const en = dict[entry.msgid];
+      if (entry.msgid_plural) {
+        entry.msgstr = [en, en];
+      } else {
+        entry.msgstr = [en];
+      }
+      translated += 1;
+    }
+  });
+});
+
+// gettext-parser keeps the `fuzzy` flag from the .pot header comment; drop it.
+if (parsed.translations[''] && parsed.translations[''][''] && parsed.translations[''][''].comments) {
+  delete parsed.translations[''][''].comments.flag;
+}
+
+fs.writeFileSync(poPath, po.compile(parsed));
+console.log(`Wrote ${path.basename(poPath)} (${translated} strings translated, rest fall back to source).`);
