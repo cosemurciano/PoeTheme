@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-17 07:03+0000\n"
+"PO-Revision-Date: 2026-06-17 10:15+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: English\n"
 "Language: en_US\n"
@@ -2560,3 +2560,7 @@ msgstr "Copy the link:"
 #: inc/assets.php:299
 msgid "Link copiato negli appunti."
 msgstr "Link copied to the clipboard."
+
+#: inc/template-tags.php:1268
+msgid "Potrebbe esserti utile anche"
+msgstr "You might also find useful"

@@ -53,6 +53,8 @@ get_header();
 
                 <?php comments_template(); ?>
             </article>
+
+            <?php poetheme_render_related_posts(); ?>
         <?php endwhile; ?>
 
         <div class="mt-8">

@@ -1962,3 +1962,59 @@ body.poetheme-mobile-drawer-open {
     transition: none;
   }
 }
+
+/* Numbered pagination (the_posts_pagination output). */
+.pagination .nav-links,
+.poetheme-pagination .nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.pagination .page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 0.625rem;
+  background: #ffffff;
+  color: var(--poetheme-menu-link-color, #374151);
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.pagination a.page-numbers:hover,
+.pagination a.page-numbers:focus {
+  border-color: var(--poetheme-menu-active-link-color, #2563eb);
+  color: var(--poetheme-menu-active-link-color, #2563eb);
+}
+
+.pagination .page-numbers.current {
+  background: var(--poetheme-menu-active-link-color, #2563eb);
+  border-color: var(--poetheme-menu-active-link-color, #2563eb);
+  color: #ffffff;
+}
+
+.pagination .page-numbers.dots {
+  min-width: 1.5rem;
+  border-color: transparent;
+  background: transparent;
+}
+
+.pagination .page-numbers.prev,
+.pagination .page-numbers.next {
+  padding: 0 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pagination .page-numbers {
+    transition: none;
+  }
+}

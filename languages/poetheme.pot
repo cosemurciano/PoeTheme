@@ -2559,3 +2559,7 @@ msgstr ""
 #: inc/assets.php:299
 msgid "Link copiato negli appunti."
 msgstr ""
+
+#: inc/template-tags.php:1268
+msgid "Potrebbe esserti utile anche"
+msgstr ""
