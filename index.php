@@ -6,7 +6,37 @@
  */
 
 get_header();
-?>
+
+if ( is_home() ) :
+    // Latest-posts home: card grid, three per row, no sidebar.
+    ?>
+    <section class="poetheme-home-latest space-y-8">
+        <?php if ( have_posts() ) : ?>
+            <div class="poetheme-posts poetheme-posts--cards">
+                <?php
+                while ( have_posts() ) :
+                    the_post();
+                    get_template_part( 'template-parts/loop/item', 'card' );
+                endwhile;
+                ?>
+            </div>
+
+            <div class="mt-8">
+                <?php poetheme_the_posts_navigation(); ?>
+            </div>
+        <?php else : ?>
+            <article class="bg-white rounded-lg shadow-sm p-6">
+                <header class="mb-4">
+                    <h2 class="text-2xl font-semibold"><?php esc_html_e( 'Nothing found', 'poetheme' ); ?></h2>
+                </header>
+                <p><?php esc_html_e( 'It seems we can’t find what you’re looking for. Perhaps searching can help.', 'poetheme' ); ?></p>
+                <?php get_search_form(); ?>
+            </article>
+        <?php endif; ?>
+    </section>
+    <?php
+else :
+    ?>
 <section class="grid gap-10 lg:grid-cols-[2fr,1fr]">
     <div>
         <?php
@@ -130,5 +160,7 @@ get_header();
         <?php endif; ?>
     </aside>
 </section>
-<?php
+    <?php
+endif;
+
 get_footer();
