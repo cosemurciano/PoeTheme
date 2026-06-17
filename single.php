@@ -13,7 +13,7 @@ get_header();
             <?php the_post(); ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class( 'bg-white rounded-lg shadow-sm p-6 space-y-6' ); ?> itemscope itemtype="https://schema.org/Article">
                 <header class="space-y-2">
-                    <?php if ( ! poetheme_subheader_is_enabled() ) : ?>
+                    <?php if ( ! poetheme_header_owns_page_title() ) : ?>
                         <h1 class="poetheme-post-title text-3xl font-bold" itemprop="headline"><?php the_title(); ?></h1>
                     <?php endif; ?>
                     <?php poetheme_render_post_meta(); ?>

@@ -28,7 +28,12 @@ if ( '' === trim( $description ) ) {
 
 $show_title = true;
 
-if ( poetheme_subheader_is_enabled() && poetheme_subheader_should_display_title() ) {
+if ( poetheme_is_app_sidebar_layout() ) {
+    // The App Sidebar renders the archive title in its own main header.
+    $show_title = false;
+}
+
+if ( $show_title && poetheme_subheader_is_enabled() && poetheme_subheader_should_display_title() ) {
     $subheader_options = poetheme_get_subheader_options();
     $title_tag         = isset( $subheader_options['title_tag'] ) ? strtolower( $subheader_options['title_tag'] ) : 'h1';
 

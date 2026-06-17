@@ -13,7 +13,9 @@ $sidebar_id           = 'poetheme-app-sidebar';
 $mobile_drawer_id     = 'poetheme-app-mobile-drawer';
 $subheader_options    = poetheme_get_subheader_options();
 $header_options       = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
-$show_title           = poetheme_subheader_should_display_title();
+$show_title           = poetheme_subheader_is_enabled()
+    ? poetheme_subheader_should_display_title()
+    : poetheme_should_display_page_title();
 $show_breadcrumbs     = poetheme_subheader_should_display_breadcrumbs();
 $breadcrumbs_items    = $show_breadcrumbs ? poetheme_get_breadcrumbs_items() : array();
 $title_text           = '';

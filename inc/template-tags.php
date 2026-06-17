@@ -87,6 +87,33 @@ function poetheme_subheader_is_enabled() {
 }
 
 /**
+ * Determine whether the App Sidebar (Style 9) header layout is active.
+ *
+ * In this layout the page title lives inside the App Sidebar main header, so
+ * any in-content title output must be suppressed to avoid a duplicate title.
+ *
+ * @return bool
+ */
+function poetheme_is_app_sidebar_layout() {
+    $header_options = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
+
+    return isset( $header_options['layout'] ) && 'style-9' === $header_options['layout'];
+}
+
+/**
+ * Determine whether the active header layer already renders the page title.
+ *
+ * Used by content templates to decide whether to print their own title. The
+ * App Sidebar always owns the title in its header; other layouts own it only
+ * when the subheader is enabled.
+ *
+ * @return bool
+ */
+function poetheme_header_owns_page_title() {
+    return poetheme_is_app_sidebar_layout() || poetheme_subheader_is_enabled();
+}
+
+/**
  * Determine if the current view should display the subheader title.
  *
  * @return bool
@@ -406,9 +433,7 @@ function poetheme_get_layout_container_classes( $additional = array(), $include_
  * @return string
  */
 function poetheme_get_main_classes() {
-    $header_options = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
-
-    if ( isset( $header_options['layout'] ) && 'style-9' === $header_options['layout'] ) {
+    if ( poetheme_is_app_sidebar_layout() ) {
         $classes = array( 'poetheme-app-content' );
 
         if ( poetheme_page_has_no_top_padding() ) {
