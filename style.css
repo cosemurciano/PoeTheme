@@ -1747,7 +1747,7 @@ body.poetheme-mobile-drawer-open {
 
 .poetheme-app-main-header__title-wrap {
   min-width: 0;
-  flex: 1 1 16rem;
+  flex: 1 1 auto;
 }
 
 .poetheme-app-page-title {
