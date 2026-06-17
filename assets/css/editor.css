@@ -72,3 +72,26 @@ body.block-editor-page .editor-styles-wrapper .wp-block-button__link {
   border-radius: 0.5rem;
   padding: 0.75rem 1.5rem;
 }
+
+/* Restore list markers in the block editor (Tailwind preflight removes them). */
+.editor-styles-wrapper ul,
+.editor-styles-wrapper ol,
+ul.wp-block-list,
+ol.wp-block-list {
+  margin: 1em 0;
+  padding-inline-start: 1.5em;
+}
+
+.editor-styles-wrapper ul,
+ul.wp-block-list {
+  list-style: disc;
+}
+
+.editor-styles-wrapper ol,
+ol.wp-block-list {
+  list-style: decimal;
+}
+
+.editor-styles-wrapper li {
+  margin: 0.35em 0;
+}

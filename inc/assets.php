@@ -289,6 +289,17 @@ function poetheme_scripts() {
         wp_enqueue_script( 'poetheme-media-lightbox', POETHEME_URI . '/assets/js/media-lightbox.js', array(), poetheme_get_asset_version( 'assets/js/media-lightbox.js' ), true );
         wp_script_add_data( 'poetheme-media-lightbox', 'defer', true );
     }
+
+    wp_enqueue_script( 'poetheme-scroll-actions', POETHEME_URI . '/assets/js/scroll-actions.js', array(), poetheme_get_asset_version( 'assets/js/scroll-actions.js' ), true );
+    wp_script_add_data( 'poetheme-scroll-actions', 'defer', true );
+    wp_localize_script(
+        'poetheme-scroll-actions',
+        'poethemeScrollActions',
+        array(
+            'copyPrompt' => __( 'Copia il link:', 'poetheme' ),
+            'copied'     => __( 'Link copiato negli appunti.', 'poetheme' ),
+        )
+    );
 }
 add_action( 'wp_enqueue_scripts', 'poetheme_scripts' );
 

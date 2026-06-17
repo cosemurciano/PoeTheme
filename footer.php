@@ -122,6 +122,8 @@
     </div><!-- .poetheme-app-shell -->
     <?php endif; ?>
 
+    <?php get_template_part( 'template-parts/components/scroll-actions' ); ?>
+
     <?php wp_footer(); ?>
 </body>
 </html>
