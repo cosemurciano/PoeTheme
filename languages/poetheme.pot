@@ -2535,3 +2535,27 @@ msgstr ""
 #: inc/template-tags.php:1171
 msgid "Leggi tutto"
 msgstr ""
+
+#: template-parts/components/scroll-actions.php:18
+msgid "Torna su"
+msgstr ""
+
+#: template-parts/components/scroll-actions.php:24
+msgid "Vai ai commenti"
+msgstr ""
+
+#: template-parts/components/scroll-actions.php:31
+msgid "Condividi"
+msgstr ""
+
+#: template-parts/components/scroll-actions.php:36
+msgid "Azioni rapide"
+msgstr ""
+
+#: inc/assets.php:298
+msgid "Copia il link:"
+msgstr ""
+
+#: inc/assets.php:299
+msgid "Link copiato negli appunti."
+msgstr ""

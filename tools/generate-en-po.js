@@ -193,6 +193,13 @@ const dict = {
   'Mostra la barra superiore con informazioni e social.': 'Show the top bar with info and social links.',
   // --- Listings ---
   'Leggi tutto': 'Read more',
+  // --- Floating scroll actions ---
+  'Torna su': 'Back to top',
+  'Vai ai commenti': 'Go to comments',
+  'Condividi': 'Share',
+  'Azioni rapide': 'Quick actions',
+  'Copia il link:': 'Copy the link:',
+  'Link copiato negli appunti.': 'Link copied to the clipboard.',
   // --- Sample / demo content ---
   'Titolo di esempio H1': 'Sample heading H1',
   'Titolo di esempio H2': 'Sample heading H2',
