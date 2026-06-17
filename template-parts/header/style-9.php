@@ -40,7 +40,21 @@ if ( $show_title ) {
     }
 }
 ?>
-<div class="poetheme-app-shell poetheme-app-shell--sidebar-expanded" data-poetheme-app-shell>
+<div id="poetheme-app-shell" class="poetheme-app-shell poetheme-app-shell--sidebar-expanded" data-poetheme-app-shell>
+    <script>
+        /* Apply the stored collapsed state before paint to avoid a layout flash. */
+        ( function () {
+            try {
+                if ( window.localStorage.getItem( 'poethemeAppSidebarCollapsed' ) === '1' ) {
+                    var shell = document.getElementById( 'poetheme-app-shell' );
+                    if ( shell ) {
+                        shell.classList.add( 'is-sidebar-collapsed' );
+                        shell.classList.remove( 'poetheme-app-shell--sidebar-expanded' );
+                    }
+                }
+            } catch ( error ) {}
+        }() );
+    </script>
     <aside id="<?php echo esc_attr( $sidebar_id ); ?>" class="poetheme-app-sidebar" aria-label="<?php esc_attr_e( 'Menu laterale del sito', 'poetheme' ); ?>">
         <div class="poetheme-app-sidebar__header">
             <div class="poetheme-app-sidebar__brand">
