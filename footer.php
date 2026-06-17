@@ -18,6 +18,12 @@
     $credits_text   = isset( $footer_options['credits_content'] ) ? $footer_options['credits_content'] : '';
 
     $has_widgets = false;
+    for ( $footer_index = 1; $footer_index <= ( $max_columns * 2 ); $footer_index++ ) {
+        if ( is_active_sidebar( 'footer-' . $footer_index ) ) {
+            $has_widgets = true;
+            break;
+        }
+    }
     $color_options = poetheme_get_color_options();
     $footer_widget_classes = array( 'poetheme-footer-widgets', 'bg-gray-100', 'border-t', 'border-gray-200' );
 
@@ -25,7 +31,7 @@
         $footer_widget_classes = array( 'poetheme-footer-widgets' );
     }
     ?>
-    <?php if ( $show_footer ) : ?>
+    <?php if ( $show_footer && $has_widgets ) : ?>
     <aside class="<?php echo esc_attr( implode( ' ', $footer_widget_classes ) ); ?>" aria-label="<?php esc_attr_e( 'Footer widgets', 'poetheme' ); ?>">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-8', 'flex', 'flex-col', 'gap-10' ) ) ); ?>">
             <?php for ( $row = 1; $row <= $rows_to_show; $row++ ) :
@@ -78,16 +84,11 @@
                     <?php endforeach; ?>
                 </div>
             <?php endfor; ?>
-
-            <?php if ( ! $has_widgets ) : ?>
-                <section class="text-sm text-gray-600" role="presentation">
-                    <h2 class="font-semibold text-gray-800"><?php esc_html_e( 'Widget Area', 'poetheme' ); ?></h2>
-                    <p><?php esc_html_e( 'Add widgets in the WordPress admin to replace this placeholder.', 'poetheme' ); ?></p>
-                </section>
-            <?php endif; ?>
         </div>
     </aside>
-    <?php if ( $show_credits ) : ?>
+    <?php endif; ?>
+
+    <?php if ( $show_footer && $show_credits ) : ?>
     <footer class="poetheme-footer-credits bg-white border-t border-gray-200" role="contentinfo">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-6', 'flex', 'flex-col', 'gap-4', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
             <div class="poetheme-footer-credits__content text-sm text-gray-600">
@@ -111,7 +112,6 @@
             </nav>
         </div>
     </footer>
-    <?php endif; ?>
     <?php endif; ?>
 
     <?php
