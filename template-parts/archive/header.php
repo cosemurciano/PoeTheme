@@ -26,21 +26,9 @@ if ( '' === trim( $description ) ) {
     $description = get_the_archive_description();
 }
 
-$show_title = true;
-
-if ( poetheme_is_app_sidebar_layout() ) {
-    // The App Sidebar renders the archive title in its own main header.
-    $show_title = false;
-}
-
-if ( $show_title && poetheme_subheader_is_enabled() && poetheme_subheader_should_display_title() ) {
-    $subheader_options = poetheme_get_subheader_options();
-    $title_tag         = isset( $subheader_options['title_tag'] ) ? strtolower( $subheader_options['title_tag'] ) : 'h1';
-
-    if ( 'h1' === $title_tag ) {
-        $show_title = false;
-    }
-}
+// The header layer (subheader or App Sidebar main header) owns the title when
+// present, so the archive prints its own title only when the header does not.
+$show_title = ! poetheme_header_owns_page_title();
 
 if ( ! $show_title && '' === trim( $description ) ) {
     return;
