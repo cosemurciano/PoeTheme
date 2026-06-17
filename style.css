@@ -1817,3 +1817,148 @@ body.poetheme-mobile-drawer-open {
     transition: none;
   }
 }
+
+/* Restore list markers inside post/page content (Tailwind preflight removes them). */
+.entry-content ul,
+.poetheme-content-area ul,
+.entry-content ol,
+.poetheme-content-area ol {
+  margin: 1em 0;
+  padding-inline-start: 1.5em;
+}
+
+.entry-content ul,
+.poetheme-content-area ul {
+  list-style: disc;
+}
+
+.entry-content ol,
+.poetheme-content-area ol {
+  list-style: decimal;
+}
+
+.entry-content li,
+.poetheme-content-area li {
+  margin: 0.35em 0;
+}
+
+.entry-content ul ul,
+.poetheme-content-area ul ul {
+  list-style: circle;
+}
+
+.entry-content ul ul ul,
+.poetheme-content-area ul ul ul {
+  list-style: square;
+}
+
+.entry-content ol ol,
+.poetheme-content-area ol ol {
+  list-style: lower-alpha;
+}
+
+.entry-content ol ol ol,
+.poetheme-content-area ol ol ol {
+  list-style: lower-roman;
+}
+
+/* Floating scroll actions (back to top, comments, share). */
+.poetheme-scroll-actions {
+  position: fixed;
+  bottom: 1.25rem;
+  inset-inline-end: 1.25rem;
+  z-index: 75;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(1rem);
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.poetheme-scroll-actions[hidden] {
+  display: none;
+}
+
+.poetheme-scroll-actions.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.poetheme-scroll-actions__menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.96);
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.poetheme-scroll-actions.is-open .poetheme-scroll-actions__menu {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.poetheme-scroll-actions__toggle,
+.poetheme-scroll-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--poetheme-menu-link-color, #374151);
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.16);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.poetheme-scroll-action {
+  width: 2.75rem;
+  height: 2.75rem;
+  text-decoration: none;
+}
+
+.poetheme-scroll-actions__toggle:hover,
+.poetheme-scroll-action:hover {
+  color: var(--poetheme-menu-active-link-color, #2563eb);
+  transform: translateY(-1px);
+}
+
+.poetheme-scroll-actions__toggle:focus-visible,
+.poetheme-scroll-action:focus-visible {
+  outline: 2px solid var(--poetheme-menu-active-link-color, #2563eb);
+  outline-offset: 2px;
+}
+
+.poetheme-scroll-actions__toggle-icon {
+  transition: transform 180ms ease;
+}
+
+.poetheme-scroll-actions.is-open .poetheme-scroll-actions__toggle-icon {
+  transform: rotate(45deg);
+}
+
+.poetheme-scroll-actions i[data-lucide],
+.poetheme-scroll-actions svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poetheme-scroll-actions,
+  .poetheme-scroll-actions__menu,
+  .poetheme-scroll-actions__toggle,
+  .poetheme-scroll-action,
+  .poetheme-scroll-actions__toggle-icon {
+    transition: none;
+  }
+}
