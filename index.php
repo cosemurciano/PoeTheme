@@ -12,7 +12,7 @@ get_header();
         <?php
         $showing_term_archive = is_category() || is_tag() || is_tax();
         $archive_description  = get_the_archive_description();
-        $display_archive_title = $showing_term_archive && ! poetheme_subheader_is_enabled();
+        $display_archive_title = $showing_term_archive && ! poetheme_header_owns_page_title();
 
         if ( $display_archive_title || $archive_description ) :
             ?>
@@ -35,7 +35,7 @@ get_header();
             <?php while ( have_posts() ) : the_post(); ?>
                 <article id="post-<?php the_ID(); ?>" <?php post_class( 'bg-white rounded-lg shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500' ); ?> itemscope itemtype="https://schema.org/Article">
                     <header class="mb-4">
-                        <?php if ( is_singular() && ! poetheme_subheader_is_enabled() ) : ?>
+                        <?php if ( is_singular() && ! poetheme_header_owns_page_title() ) : ?>
                             <h1 class="poetheme-post-title text-3xl font-bold mb-2" itemprop="headline"><?php the_title(); ?></h1>
                         <?php else : ?>
                             <h2 class="text-2xl font-semibold mb-2" itemprop="headline">

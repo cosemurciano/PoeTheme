@@ -13,7 +13,9 @@ $sidebar_id           = 'poetheme-app-sidebar';
 $mobile_drawer_id     = 'poetheme-app-mobile-drawer';
 $subheader_options    = poetheme_get_subheader_options();
 $header_options       = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
-$show_title           = poetheme_subheader_should_display_title();
+$show_title           = poetheme_subheader_is_enabled()
+    ? poetheme_subheader_should_display_title()
+    : poetheme_should_display_page_title();
 $show_breadcrumbs     = poetheme_subheader_should_display_breadcrumbs();
 $breadcrumbs_items    = $show_breadcrumbs ? poetheme_get_breadcrumbs_items() : array();
 $title_text           = '';
@@ -38,7 +40,21 @@ if ( $show_title ) {
     }
 }
 ?>
-<div class="poetheme-app-shell poetheme-app-shell--sidebar-expanded" data-poetheme-app-shell>
+<div id="poetheme-app-shell" class="poetheme-app-shell poetheme-app-shell--sidebar-expanded" data-poetheme-app-shell>
+    <script>
+        /* Apply the stored collapsed state before paint to avoid a layout flash. */
+        ( function () {
+            try {
+                if ( window.localStorage.getItem( 'poethemeAppSidebarCollapsed' ) === '1' ) {
+                    var shell = document.getElementById( 'poetheme-app-shell' );
+                    if ( shell ) {
+                        shell.classList.add( 'is-sidebar-collapsed' );
+                        shell.classList.remove( 'poetheme-app-shell--sidebar-expanded' );
+                    }
+                }
+            } catch ( error ) {}
+        }() );
+    </script>
     <aside id="<?php echo esc_attr( $sidebar_id ); ?>" class="poetheme-app-sidebar" aria-label="<?php esc_attr_e( 'Menu laterale del sito', 'poetheme' ); ?>">
         <div class="poetheme-app-sidebar__header">
             <div class="poetheme-app-sidebar__brand">

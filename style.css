@@ -1079,11 +1079,13 @@ body.poetheme-lightbox-open {
   box-shadow: none;
   color: var(--poetheme-menu-link-color, #374151);
   cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 .poetheme-app-sidebar__toggle:hover,
 .poetheme-app-mobile-toggle:hover,
 .poetheme-app-mobile-drawer__close:hover {
+  background: rgba(37, 99, 235, 0.08);
   color: var(--poetheme-menu-active-link-color, #2563eb);
 }
 
@@ -1159,6 +1161,7 @@ body.poetheme-lightbox-open {
   border-radius: 0.75rem;
   color: var(--poetheme-menu-link-color, #374151);
   text-decoration: none;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 .poetheme-app-sidebar__nav a:hover,
@@ -1247,6 +1250,11 @@ body.poetheme-lightbox-open {
   border-radius: 0.875rem;
   color: var(--poetheme-menu-link-color, #374151);
   text-decoration: none;
+  transition: background-color 150ms ease;
+}
+
+.poetheme-app-sidebar__profile-link:hover {
+  background: rgba(37, 99, 235, 0.06);
 }
 
 .poetheme-app-sidebar__profile-avatar {
@@ -1300,6 +1308,9 @@ body.poetheme-lightbox-open {
 }
 
 .poetheme-app-mobile-bar {
+  position: sticky;
+  top: 0;
+  z-index: 70;
   display: none;
   padding: 0.875rem clamp(1rem, 3vw, 3rem);
   border-bottom: 1px solid var(--poetheme-app-border);
@@ -1440,7 +1451,15 @@ body.poetheme-mobile-drawer-open {
   .poetheme-app-main,
   .poetheme-app-sidebar,
   .poetheme-app-mobile-overlay,
-  .poetheme-app-mobile-drawer {
+  .poetheme-app-mobile-drawer,
+  .poetheme-app-sidebar__nav a,
+  .poetheme-app-sidebar__nav .poetheme-sidebar-link,
+  .poetheme-app-sidebar__toggle,
+  .poetheme-app-mobile-toggle,
+  .poetheme-app-mobile-drawer__close,
+  .poetheme-app-sidebar__profile-link,
+  .poetheme-app-intro-menu a,
+  .poetheme-app-sidebar__nav .poetheme-submenu-indicator {
     transition: none;
   }
 }
@@ -1493,6 +1512,7 @@ body.poetheme-mobile-drawer-open {
   border-radius: 0.75rem;
   color: var(--poetheme-menu-link-color, #374151);
   font-weight: 600;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 .poetheme-app-sidebar__nav .poetheme-sidebar-link--depth-1,
@@ -1609,6 +1629,7 @@ body.poetheme-mobile-drawer-open {
   font-size: 0.925rem;
   font-weight: 700;
   text-decoration: none;
+  transition: color 150ms ease;
 }
 
 .poetheme-app-intro-menu a:hover,
@@ -1655,5 +1676,78 @@ body.poetheme-mobile-drawer-open {
 
   .poetheme-app-intro-menu {
     justify-content: flex-start;
+  }
+}
+
+/* Style 9 App Sidebar: UI/UX & responsive refinements */
+.poetheme-app-sidebar__nav .poetheme-submenu-indicator {
+  transition: transform 180ms ease;
+}
+
+/* Smooth, subtle scrollbar for the scrollable sidebar navigation. */
+.poetheme-app-sidebar__nav {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.5) transparent;
+}
+
+.poetheme-app-sidebar__nav::-webkit-scrollbar {
+  width: 8px;
+}
+
+.poetheme-app-sidebar__nav::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.4);
+  border-radius: 999px;
+}
+
+.poetheme-app-sidebar__nav:hover {
+  scrollbar-color: rgba(148, 163, 184, 0.7) transparent;
+}
+
+.poetheme-app-sidebar__nav:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.6);
+}
+
+/* Clearer wayfinding: leading accent on the active top-level item. */
+.poetheme-app-sidebar__nav .current-menu-item > a,
+.poetheme-app-sidebar__nav .current_page_item > a,
+.poetheme-app-sidebar__nav .current-menu-item > .poetheme-sidebar-item-row > .poetheme-sidebar-link,
+.poetheme-app-sidebar__nav .current_page_item > .poetheme-sidebar-item-row > .poetheme-sidebar-link {
+  box-shadow: inset 0.1875rem 0 0 0 var(--poetheme-menu-active-link-color, #2563eb);
+}
+
+.rtl .poetheme-app-sidebar__nav .current-menu-item > a,
+.rtl .poetheme-app-sidebar__nav .current_page_item > a,
+.rtl .poetheme-app-sidebar__nav .current-menu-item > .poetheme-sidebar-item-row > .poetheme-sidebar-link,
+.rtl .poetheme-app-sidebar__nav .current_page_item > .poetheme-sidebar-item-row > .poetheme-sidebar-link {
+  box-shadow: inset -0.1875rem 0 0 0 var(--poetheme-menu-active-link-color, #2563eb);
+}
+
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .current-menu-item > a,
+.poetheme-app-shell.is-sidebar-collapsed .poetheme-app-sidebar__nav .current_page_item > a {
+  box-shadow: none;
+}
+
+/* Let the main header title and breadcrumbs wrap gracefully when space is tight. */
+.poetheme-app-main-header {
+  flex-wrap: wrap;
+}
+
+.poetheme-app-main-header__title-wrap {
+  min-width: 0;
+  flex: 1 1 16rem;
+}
+
+.poetheme-app-page-title {
+  overflow-wrap: anywhere;
+}
+
+/* Tablet: trim the sidebar so the content keeps comfortable room. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .poetheme-app-shell {
+    --poetheme-app-sidebar-width: 224px;
+  }
+
+  .poetheme-app-main-header {
+    padding-top: 1.5rem;
   }
 }
