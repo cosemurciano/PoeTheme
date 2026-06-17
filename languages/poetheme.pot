@@ -2531,3 +2531,7 @@ msgstr ""
 #: inc/admin/options.php
 msgid "Se il campo resta vuoto, non verrà mostrata alcuna descrizione nella fascia."
 msgstr ""
+
+#: inc/template-tags.php:1171
+msgid "Leggi tutto"
+msgstr ""

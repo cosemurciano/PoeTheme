@@ -1168,7 +1168,7 @@ function poetheme_render_post_thumbnail( $size = 'medium_large', $class = '' ) {
  */
 function poetheme_render_read_more( $args = array() ) {
     $defaults = array(
-        'label' => __( 'Read more', 'poetheme' ),
+        'label' => __( 'Leggi tutto', 'poetheme' ),
         'class' => '',
     );
     $args = wp_parse_args( $args, $defaults );

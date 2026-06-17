@@ -12,12 +12,17 @@ get_header();
         <?php while ( have_posts() ) : ?>
             <?php the_post(); ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class( 'bg-white rounded-lg shadow-sm p-6 space-y-6' ); ?> itemscope itemtype="https://schema.org/Article">
-                <header class="space-y-2">
-                    <?php if ( ! poetheme_header_owns_page_title() ) : ?>
+                <?php if ( ! poetheme_header_owns_page_title() ) : ?>
+                    <header class="space-y-2">
                         <h1 class="poetheme-post-title text-3xl font-bold" itemprop="headline"><?php the_title(); ?></h1>
-                    <?php endif; ?>
-                    <?php poetheme_render_post_meta(); ?>
-                </header>
+                    </header>
+                <?php endif; ?>
+
+                <?php if ( has_post_thumbnail() ) : ?>
+                    <figure class="poetheme-single-featured md:hidden m-0">
+                        <?php poetheme_render_post_thumbnail( 'large', 'w-full rounded-lg' ); ?>
+                    </figure>
+                <?php endif; ?>
 
                 <div class="entry-content poetheme-content-area space-y-4 leading-relaxed" itemprop="articleBody">
                     <?php
@@ -31,7 +36,8 @@ get_header();
                     ?>
                 </div>
 
-                <footer class="text-sm text-gray-500 space-y-2">
+                <footer class="text-sm text-gray-500 space-y-3">
+                    <?php poetheme_render_post_meta( array( 'class' => 'poetheme-post-meta--footer' ) ); ?>
                     <?php
                     $tags_list = get_the_tag_list( '', ', ' );
                     if ( $tags_list ) {
