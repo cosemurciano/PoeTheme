@@ -1180,3 +1180,102 @@ function poetheme_render_read_more( $args = array() ) {
 
     echo '<a class="' . esc_attr( $classes ) . '" href="' . esc_url( get_permalink() ) . '">' . esc_html( $args['label'] ) . '</a>';
 }
+
+/**
+ * Retrieve posts related to the given post (same categories, recent fallback).
+ *
+ * @param int|null $post_id Post ID. Defaults to the current post.
+ * @param int      $number  Number of posts to return.
+ * @return WP_Post[]
+ */
+function poetheme_get_related_posts( $post_id = null, $number = 3 ) {
+    $post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+
+    if ( ! $post_id ) {
+        return array();
+    }
+
+    $number = max( 1, (int) $number );
+
+    $category_ids = wp_get_post_categories( $post_id );
+
+    $args = array(
+        'post_type'           => 'post',
+        'post_status'         => 'publish',
+        'posts_per_page'      => $number,
+        'post__not_in'        => array( $post_id ),
+        'ignore_sticky_posts' => true,
+        'no_found_rows'       => true,
+        'orderby'             => 'date',
+        'order'               => 'DESC',
+    );
+
+    if ( ! empty( $category_ids ) ) {
+        $args['category__in'] = $category_ids;
+    }
+
+    $related = get_posts( $args );
+
+    // Top up with recent posts when there are not enough related ones.
+    if ( count( $related ) < $number ) {
+        $exclude = array_merge( array( $post_id ), wp_list_pluck( $related, 'ID' ) );
+        $fill    = get_posts(
+            array(
+                'post_type'           => 'post',
+                'post_status'         => 'publish',
+                'posts_per_page'      => $number - count( $related ),
+                'post__not_in'        => $exclude,
+                'ignore_sticky_posts' => true,
+                'no_found_rows'       => true,
+                'orderby'             => 'date',
+                'order'               => 'DESC',
+            )
+        );
+        $related = array_merge( $related, $fill );
+    }
+
+    /**
+     * Filter the related posts shown after single posts.
+     *
+     * @param WP_Post[] $related Related posts.
+     * @param int       $post_id Current post ID.
+     */
+    return apply_filters( 'poetheme_related_posts', $related, $post_id );
+}
+
+/**
+ * Render the related posts section shown after the comments on single posts.
+ *
+ * @param int $number Number of related posts to display.
+ */
+function poetheme_render_related_posts( $number = 3 ) {
+    if ( ! is_singular( 'post' ) ) {
+        return;
+    }
+
+    $related = poetheme_get_related_posts( get_the_ID(), $number );
+
+    if ( empty( $related ) ) {
+        return;
+    }
+
+    global $post;
+    $original_post = $post;
+    ?>
+    <section class="poetheme-related mt-12" aria-labelledby="poetheme-related-title">
+        <h2 id="poetheme-related-title" class="poetheme-related__title text-2xl font-semibold mb-6">
+            <?php esc_html_e( 'Potrebbe esserti utile anche', 'poetheme' ); ?>
+        </h2>
+        <div class="poetheme-posts poetheme-posts--cards">
+            <?php
+            foreach ( $related as $post ) :
+                setup_postdata( $post );
+                get_template_part( 'template-parts/loop/item', 'card' );
+            endforeach;
+            wp_reset_postdata();
+            ?>
+        </div>
+    </section>
+    <?php
+    $post = $original_post;
+}

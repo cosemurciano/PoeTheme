@@ -193,6 +193,7 @@ const dict = {
   'Mostra la barra superiore con informazioni e social.': 'Show the top bar with info and social links.',
   // --- Listings ---
   'Leggi tutto': 'Read more',
+  'Potrebbe esserti utile anche': 'You might also find useful',
   // --- Floating scroll actions ---
   'Torna su': 'Back to top',
   'Vai ai commenti': 'Go to comments',
