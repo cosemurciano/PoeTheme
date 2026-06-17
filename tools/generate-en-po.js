@@ -191,6 +191,8 @@ const dict = {
   'Testo credits': 'Credits text',
   'Visualizza i credits.': 'Display the credits.',
   'Mostra la barra superiore con informazioni e social.': 'Show the top bar with info and social links.',
+  // --- Listings ---
+  'Leggi tutto': 'Read more',
   // --- Sample / demo content ---
   'Titolo di esempio H1': 'Sample heading H1',
   'Titolo di esempio H2': 'Sample heading H2',

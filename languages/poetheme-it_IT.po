@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-17 06:25+0000\n"
+"PO-Revision-Date: 2026-06-17 06:47+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: Italiano\n"
 "Language: it_IT\n"
@@ -2610,3 +2610,7 @@ msgstr "Se il campo resta vuoto, non verrà mostrato alcun titolo nella fascia."
 #: inc/admin/options.php
 msgid "Se il campo resta vuoto, non verrà mostrata alcuna descrizione nella fascia."
 msgstr "Se il campo resta vuoto, non verrà mostrata alcuna descrizione nella fascia."
+
+#: inc/template-tags.php:1171
+msgid "Leggi tutto"
+msgstr "Leggi tutto"
