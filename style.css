@@ -73,6 +73,17 @@ select:focus-visible {
   outline: 3px solid var(--poetheme-focus-color);
 }
 
+/* Clicking a link focuses it: keyboard focus keeps the visible outline above
+   (via :focus-visible), while pointer focus gets a delicate underline instead
+   of a boxed outline. */
+a:focus:not(:focus-visible) {
+  outline: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: rgba(30, 64, 175, 0.55);
+}
+
 .screen-reader-text {
   position: absolute;
   width: 1px;
@@ -1261,7 +1272,9 @@ body.poetheme-lightbox-open {
   flex: 0 0 2.5rem;
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 999px;
+  max-width: none;
+  aspect-ratio: 1;
+  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -1749,5 +1762,58 @@ body.poetheme-mobile-drawer-open {
 
   .poetheme-app-main-header {
     padding-top: 1.5rem;
+  }
+}
+
+/* Style 9 App Sidebar: collapsed-state tooltip (JS-positioned, fixed). */
+.poetheme-app-tooltip {
+  position: fixed;
+  z-index: 120;
+  max-width: 16rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.5rem;
+  background: #111827;
+  color: #ffffff;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%) translateX(-0.25rem);
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.18);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.poetheme-app-tooltip[hidden] {
+  display: none;
+}
+
+.poetheme-app-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.rtl .poetheme-app-tooltip {
+  transform: translateY(-50%) translateX(0.25rem);
+}
+
+.rtl .poetheme-app-tooltip.is-visible {
+  transform: translateY(-50%) translateX(0);
+}
+
+.poetheme-app-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  inset-inline-start: -0.25rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: inherit;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poetheme-app-tooltip {
+    transition: none;
   }
 }

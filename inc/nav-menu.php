@@ -210,6 +210,12 @@ if ( ! class_exists( 'PoeTheme_Nav_Walker' ) ) {
 
             $atts           = array();
             $atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
+
+            // Fall back to the item label so collapsed sidebar icons expose a name.
+            if ( '' === $atts['title'] && 'sidebar' === $this->variant ) {
+                $atts['title'] = wp_strip_all_tags( $item->title );
+            }
+
             $atts['target'] = ! empty( $item->target ) ? $item->target : '';
             $atts['rel']    = ! empty( $item->xfn ) ? $item->xfn : '';
             $atts['href']   = ! empty( $item->url ) ? $item->url : '';

@@ -208,6 +208,105 @@
         }
     }
 
+    function initCollapsedTooltips(shell) {
+        var sidebar = shell.querySelector('.poetheme-app-sidebar');
+
+        if (!sidebar) {
+            return;
+        }
+
+        var isRTL = document.documentElement.getAttribute('dir') === 'rtl' || document.body.classList.contains('rtl');
+        var tooltip = document.createElement('div');
+        tooltip.className = 'poetheme-app-tooltip';
+        tooltip.setAttribute('role', 'tooltip');
+        tooltip.hidden = true;
+        document.body.appendChild(tooltip);
+
+        var activeTarget = null;
+
+        function labelFor(element) {
+            var textEl = element.querySelector('.menu-item-text') || element.querySelector('.poetheme-app-sidebar__profile-name');
+            if (textEl && textEl.textContent.trim()) {
+                return textEl.textContent.trim();
+            }
+
+            return (element.getAttribute('aria-label') || element.getAttribute('title') || '').trim();
+        }
+
+        function hide() {
+            tooltip.classList.remove('is-visible');
+
+            if (activeTarget && activeTarget.hasAttribute('data-poetheme-title')) {
+                activeTarget.setAttribute('title', activeTarget.getAttribute('data-poetheme-title'));
+                activeTarget.removeAttribute('data-poetheme-title');
+            }
+
+            activeTarget = null;
+        }
+
+        function show(element) {
+            if (!shell.classList.contains('is-sidebar-collapsed')) {
+                return;
+            }
+
+            var label = labelFor(element);
+
+            if (!label) {
+                return;
+            }
+
+            activeTarget = element;
+
+            // Suppress the native title so it does not double the custom tooltip.
+            if (element.hasAttribute('title')) {
+                element.setAttribute('data-poetheme-title', element.getAttribute('title'));
+                element.removeAttribute('title');
+            }
+
+            tooltip.textContent = label;
+            tooltip.hidden = false;
+
+            var rect = element.getBoundingClientRect();
+            tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+
+            if (isRTL) {
+                tooltip.style.left = 'auto';
+                tooltip.style.right = (window.innerWidth - rect.left + 8) + 'px';
+            } else {
+                tooltip.style.right = 'auto';
+                tooltip.style.left = (rect.right + 8) + 'px';
+            }
+
+            window.requestAnimationFrame(function () {
+                tooltip.classList.add('is-visible');
+            });
+        }
+
+        tooltip.addEventListener('transitionend', function () {
+            if (!tooltip.classList.contains('is-visible')) {
+                tooltip.hidden = true;
+            }
+        });
+
+        var targets = sidebar.querySelectorAll('.poetheme-app-sidebar__nav a, .poetheme-app-sidebar__nav .poetheme-sidebar-link, .poetheme-app-sidebar__profile-link');
+
+        Array.prototype.forEach.call(targets, function (element) {
+            element.addEventListener('mouseenter', function () {
+                show(element);
+            });
+            element.addEventListener('mouseleave', hide);
+            element.addEventListener('focus', function () {
+                show(element);
+            });
+            element.addEventListener('blur', hide);
+        });
+
+        var nav = sidebar.querySelector('.poetheme-app-sidebar__nav');
+        if (nav) {
+            nav.addEventListener('scroll', hide);
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         var shell = document.querySelector('[data-poetheme-app-shell]');
         var toggle = document.querySelector('[data-poetheme-app-sidebar-toggle]');
@@ -228,5 +327,6 @@
 
         initSidebarAccordion(shell);
         initMobileDrawer(shell);
+        initCollapsedTooltips(shell);
     });
 }());

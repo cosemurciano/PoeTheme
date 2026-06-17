@@ -824,7 +824,7 @@ function poetheme_render_site_author_profile( $args = array() ) {
     $tag = $url ? 'a' : 'div';
     ?>
     <div class="poetheme-app-sidebar__profile poetheme-app-sidebar__profile--<?php echo esc_attr( $context ); ?>">
-        <<?php echo tag_escape( $tag ); ?> class="poetheme-app-sidebar__profile-link"<?php echo $url ? ' href="' . esc_url( $url ) . '"' : ''; ?> aria-label="<?php echo esc_attr( $name ); ?>">
+        <<?php echo tag_escape( $tag ); ?> class="poetheme-app-sidebar__profile-link"<?php echo $url ? ' href="' . esc_url( $url ) . '"' : ''; ?> title="<?php echo esc_attr( $name ); ?>" aria-label="<?php echo esc_attr( $name ); ?>">
             <?php echo wp_kses_post( $avatar ); ?>
             <span class="poetheme-app-sidebar__profile-text">
                 <span class="poetheme-app-sidebar__profile-name"><?php echo esc_html( $name ); ?></span>
