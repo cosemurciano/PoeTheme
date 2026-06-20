@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-20 08:52+0000\n"
+"PO-Revision-Date: 2026-06-20 09:37+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: English\n"
 "Language: en_US\n"
@@ -2620,3 +2620,11 @@ msgstr "Palette deleted."
 #: inc/admin/options/palettes.php
 msgid "Il file JSON non è valido."
 msgstr "The JSON file is not valid."
+
+#: inc/admin/options/fonts.php
+msgid "Altri font"
+msgstr "Other fonts"
+
+#: inc/admin/options/fonts.php
+msgid "Regolare"
+msgstr "Regular"

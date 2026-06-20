@@ -2619,3 +2619,11 @@ msgstr ""
 #: inc/admin/options/palettes.php
 msgid "Il file JSON non è valido."
 msgstr ""
+
+#: inc/admin/options/fonts.php
+msgid "Altri font"
+msgstr ""
+
+#: inc/admin/options/fonts.php
+msgid "Regolare"
+msgstr ""
