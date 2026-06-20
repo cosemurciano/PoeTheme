@@ -823,3 +823,27 @@
   display: flex;
   gap: 0.5rem;
 }
+
+.poetheme-studio__section {
+  font-size: 0.95rem;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.poetheme-studio__controls hr {
+  margin: 1.25rem 0;
+  border: 0;
+  border-top: 1px solid #e2e4e7;
+}
+
+.poetheme-studio__controls select[data-studio-heading-font],
+.poetheme-studio__controls select[data-studio-body-font] {
+  max-width: 100%;
+}
+
+.poetheme-studio__pv-fonts {
+  padding: 0.35rem 1.25rem 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
