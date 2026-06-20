@@ -68,10 +68,33 @@ function poetheme_studio_admin_assets( $hook ) {
     }
 
     wp_enqueue_script( 'poetheme-style-studio', POETHEME_URI . '/assets/js/style-studio.js', array(), poetheme_get_asset_version( 'assets/js/style-studio.js' ), true );
+
+    // When editing an existing palette, pass its seeds so the controls preload.
+    $edit_seeds = null;
+    $edit_name  = '';
+    $edit_id    = isset( $_GET['palette'] ) ? sanitize_text_field( wp_unslash( $_GET['palette'] ) ) : '';
+    if ( '' !== $edit_id ) {
+        $palettes = poetheme_get_style_palettes();
+        if ( isset( $palettes[ $edit_id ] ) && ! empty( $palettes[ $edit_id ]['seeds'] ) ) {
+            $edit_seeds = poetheme_sanitize_studio_seeds( $palettes[ $edit_id ]['seeds'] );
+            $edit_name  = isset( $palettes[ $edit_id ]['name'] ) ? $palettes[ $edit_id ]['name'] : '';
+        } else {
+            $edit_id = '';
+        }
+    }
+
     wp_localize_script(
         'poetheme-style-studio',
         'poethemeStudio',
         array(
+            'editSeeds' => $edit_seeds,
+            'editId'    => $edit_id,
+            'editName'  => $edit_name,
+            'editingLabel' => $edit_name ? sprintf(
+                /* translators: %s: palette name */
+                __( 'Stai modificando: %s', 'poetheme' ),
+                $edit_name
+            ) : '',
             'labels' => array(
                 'aaPass'       => __( 'AA', 'poetheme' ),
                 'aaFail'       => __( 'Insufficiente', 'poetheme' ),
@@ -99,86 +122,6 @@ function poetheme_studio_admin_assets( $hook ) {
                     'cta'           => __( 'Azione principale', 'poetheme' ),
                     'secondary'     => __( 'Secondaria', 'poetheme' ),
                     'footerHeading' => __( 'Newsletter', 'poetheme' ),
-                ),
-            ),
-            'presets' => array(
-                array(
-                    'name'           => __( 'Aziendale', 'poetheme' ),
-                    'base'           => '#2563eb',
-                    'harmony'        => 'analogous',
-                    'mode'           => 'light',
-                    'accent_buttons' => false,
-                    'base_size'      => 1.0,
-                    'ratio'          => '1.25',
-                    'density'        => 'comfortable',
-                    'radius'         => 8,
-                    'heading_pref'   => array( 'inter' ),
-                    'body_pref'      => array( 'inter', 'roboto' ),
-                ),
-                array(
-                    'name'           => __( 'Editoriale', 'poetheme' ),
-                    'base'           => '#b91c1c',
-                    'harmony'        => 'complementary',
-                    'mode'           => 'light',
-                    'accent_buttons' => false,
-                    'base_size'      => 1.05,
-                    'ratio'          => '1.333',
-                    'density'        => 'comfortable',
-                    'radius'         => 0,
-                    'heading_pref'   => array( 'playfair' ),
-                    'body_pref'      => array( 'roboto', 'inter' ),
-                ),
-                array(
-                    'name'           => __( 'Boutique', 'poetheme' ),
-                    'base'           => '#d97706',
-                    'harmony'        => 'analogous',
-                    'mode'           => 'light',
-                    'accent_buttons' => true,
-                    'base_size'      => 1.0,
-                    'ratio'          => '1.25',
-                    'density'        => 'spacious',
-                    'radius'         => 999,
-                    'heading_pref'   => array( 'playfair' ),
-                    'body_pref'      => array( 'inter' ),
-                ),
-                array(
-                    'name'           => __( 'Notturno', 'poetheme' ),
-                    'base'           => '#6366f1',
-                    'harmony'        => 'complementary',
-                    'mode'           => 'dark',
-                    'accent_buttons' => false,
-                    'base_size'      => 1.0,
-                    'ratio'          => '1.25',
-                    'density'        => 'comfortable',
-                    'radius'         => 8,
-                    'heading_pref'   => array( 'inter' ),
-                    'body_pref'      => array( 'inter', 'roboto' ),
-                ),
-                array(
-                    'name'           => __( 'Tech', 'poetheme' ),
-                    'base'           => '#06b6d4',
-                    'harmony'        => 'triadic',
-                    'mode'           => 'light',
-                    'accent_buttons' => false,
-                    'base_size'      => 1.0,
-                    'ratio'          => '1.2',
-                    'density'        => 'compact',
-                    'radius'         => 8,
-                    'heading_pref'   => array( 'inter', 'bebas' ),
-                    'body_pref'      => array( 'inter', 'roboto' ),
-                ),
-                array(
-                    'name'           => __( 'Natura', 'poetheme' ),
-                    'base'           => '#16a34a',
-                    'harmony'        => 'analogous',
-                    'mode'           => 'light',
-                    'accent_buttons' => false,
-                    'base_size'      => 1.0,
-                    'ratio'          => '1.25',
-                    'density'        => 'comfortable',
-                    'radius'         => 999,
-                    'heading_pref'   => array( 'playfair', 'inter' ),
-                    'body_pref'      => array( 'inter', 'roboto' ),
                 ),
             ),
         )
@@ -263,25 +206,29 @@ function poetheme_handle_style_studio_save() {
         $name = __( 'Palette generata', 'poetheme' );
     }
 
-    $colors = isset( $payload['colors'] ) && is_array( $payload['colors'] ) ? $payload['colors'] : array();
-    $fonts  = isset( $payload['fonts'] ) && is_array( $payload['fonts'] ) ? $payload['fonts'] : array();
-    $global = isset( $payload['global'] ) && is_array( $payload['global'] ) ? $payload['global'] : array();
-    $seeds  = isset( $payload['seeds'] ) ? poetheme_sanitize_studio_seeds( $payload['seeds'] ) : array();
-
-    $palette = array(
-        'name'    => $name,
-        'colors'  => poetheme_sanitize_color_options( $colors ),
-        'fonts'   => ! empty( $fonts ) ? poetheme_sanitize_font_options( $fonts ) : array(),
-        'global'  => ! empty( $global ) ? poetheme_sanitize_palette_global( $global ) : array(),
-        'seeds'   => $seeds,
-        'created' => time(),
-    );
+    // Seeds are authoritative: the full palette is generated server-side so the
+    // saved tokens are canonical (and editable later from these seeds).
+    $seeds = isset( $payload['seeds'] ) ? poetheme_sanitize_studio_seeds( $payload['seeds'] ) : array();
 
     $palettes = poetheme_get_style_palettes();
 
-    $id = 'pal_' . wp_generate_password( 10, false, false );
-    while ( isset( $palettes[ $id ] ) ) {
-        $id = 'pal_' . wp_generate_password( 10, false, false );
+    // Update an existing palette when an id is provided, otherwise create one.
+    $edit_id = isset( $payload['palette_id'] ) ? sanitize_text_field( (string) $payload['palette_id'] ) : '';
+    if ( '' !== $edit_id && isset( $palettes[ $edit_id ] ) ) {
+        $id     = $edit_id;
+        $origin = isset( $palettes[ $id ]['origin'] ) ? $palettes[ $id ]['origin'] : 'studio';
+    } else {
+        $id     = 'pal_' . wp_generate_password( 10, false, false );
+        while ( isset( $palettes[ $id ] ) ) {
+            $id = 'pal_' . wp_generate_password( 10, false, false );
+        }
+        $origin = 'studio';
+    }
+
+    $palette          = poetheme_studio_build_palette( $name, $seeds, $origin );
+    $palette['updated'] = time();
+    if ( isset( $palettes[ $id ]['created'] ) ) {
+        $palette['created'] = $palettes[ $id ]['created'];
     }
 
     $palettes[ $id ] = $palette;
@@ -292,8 +239,11 @@ function poetheme_handle_style_studio_save() {
         update_option( 'poetheme_active_palette', $id );
     }
 
+    $is_update = ( '' !== $edit_id && $edit_id === $id );
+    $notice    = $apply ? 'activated' : ( $is_update ? 'updated' : 'imported' );
+
     $target = admin_url( 'admin.php?page=poetheme-palette' );
-    wp_safe_redirect( add_query_arg( 'poetheme_palette_notice', $apply ? 'activated' : 'imported', $target ) );
+    wp_safe_redirect( add_query_arg( 'poetheme_palette_notice', $notice, $target ) );
     exit;
 }
 add_action( 'admin_post_poetheme_style_studio_save', 'poetheme_handle_style_studio_save' );
@@ -312,6 +262,509 @@ function poetheme_get_studio_ratios() {
         '1.414' => 1.414,
     );
 }
+
+/* -------------------------------------------------------------------------
+ * Server-side generator (canonical source of truth, mirrors style-studio.js).
+ * Lets the theme build full palettes from seeds without a browser (e.g. when
+ * seeding the default presets on activation).
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Clamp a number between a min and max.
+ *
+ * @param float $value Value.
+ * @param float $min   Minimum.
+ * @param float $max   Maximum.
+ * @return float
+ */
+function poetheme_studio_clamp( $value, $min, $max ) {
+    return max( $min, min( $max, $value ) );
+}
+
+/**
+ * Convert a hex color to an [h, s, l] array (deg, %, %).
+ *
+ * @param string $hex Hex color.
+ * @return array{0:float,1:float,2:float}
+ */
+function poetheme_studio_hex_to_hsl( $hex ) {
+    $hex = ltrim( (string) $hex, '#' );
+    if ( 3 === strlen( $hex ) ) {
+        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+    }
+    if ( 6 !== strlen( $hex ) || ! ctype_xdigit( $hex ) ) {
+        $hex = '2563eb';
+    }
+
+    $r = hexdec( substr( $hex, 0, 2 ) ) / 255;
+    $g = hexdec( substr( $hex, 2, 2 ) ) / 255;
+    $b = hexdec( substr( $hex, 4, 2 ) ) / 255;
+
+    $max = max( $r, $g, $b );
+    $min = min( $r, $g, $b );
+    $h   = 0;
+    $s   = 0;
+    $l   = ( $max + $min ) / 2;
+
+    if ( $max !== $min ) {
+        $d = $max - $min;
+        $s = $l > 0.5 ? $d / ( 2 - $max - $min ) : $d / ( $max + $min );
+        if ( $max === $r ) {
+            $h = ( $g - $b ) / $d + ( $g < $b ? 6 : 0 );
+        } elseif ( $max === $g ) {
+            $h = ( $b - $r ) / $d + 2;
+        } else {
+            $h = ( $r - $g ) / $d + 4;
+        }
+        $h /= 6;
+    }
+
+    return array( $h * 360, $s * 100, $l * 100 );
+}
+
+/**
+ * Convert HSL (deg, %, %) to a hex color.
+ *
+ * @param float $h Hue.
+ * @param float $s Saturation.
+ * @param float $l Lightness.
+ * @return string
+ */
+function poetheme_studio_hsl_to_hex( $h, $s, $l ) {
+    $h = fmod( fmod( $h, 360 ) + 360, 360 ) / 360;
+    $s = poetheme_studio_clamp( $s, 0, 100 ) / 100;
+    $l = poetheme_studio_clamp( $l, 0, 100 ) / 100;
+
+    if ( 0 === (int) ( $s * 1000 ) && 0.0 === (float) $s ) {
+        $r = $g = $b = $l;
+    } else {
+        $hue = function ( $p, $q, $t ) {
+            if ( $t < 0 ) {
+                $t += 1;
+            }
+            if ( $t > 1 ) {
+                $t -= 1;
+            }
+            if ( $t < 1 / 6 ) {
+                return $p + ( $q - $p ) * 6 * $t;
+            }
+            if ( $t < 1 / 2 ) {
+                return $q;
+            }
+            if ( $t < 2 / 3 ) {
+                return $p + ( $q - $p ) * ( 2 / 3 - $t ) * 6;
+            }
+            return $p;
+        };
+        $q = $l < 0.5 ? $l * ( 1 + $s ) : $l + $s - $l * $s;
+        $p = 2 * $l - $q;
+        $r = $hue( $p, $q, $h + 1 / 3 );
+        $g = $hue( $p, $q, $h );
+        $b = $hue( $p, $q, $h - 1 / 3 );
+    }
+
+    $to_hex = function ( $v ) {
+        $v = (int) round( poetheme_studio_clamp( $v * 255, 0, 255 ) );
+        return str_pad( dechex( $v ), 2, '0', STR_PAD_LEFT );
+    };
+
+    return '#' . $to_hex( $r ) . $to_hex( $g ) . $to_hex( $b );
+}
+
+/**
+ * Relative luminance of a hex color.
+ *
+ * @param string $hex Hex color.
+ * @return float
+ */
+function poetheme_studio_luminance( $hex ) {
+    $hex = ltrim( (string) $hex, '#' );
+    if ( 6 !== strlen( $hex ) ) {
+        $hex = '000000';
+    }
+    $channels = array(
+        hexdec( substr( $hex, 0, 2 ) ) / 255,
+        hexdec( substr( $hex, 2, 2 ) ) / 255,
+        hexdec( substr( $hex, 4, 2 ) ) / 255,
+    );
+    foreach ( $channels as $i => $v ) {
+        $channels[ $i ] = $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 );
+    }
+    return $channels[0] * 0.2126 + $channels[1] * 0.7152 + $channels[2] * 0.0722;
+}
+
+/**
+ * Pick black or white for best contrast on a background.
+ *
+ * @param string $bg Background hex.
+ * @return string
+ */
+function poetheme_studio_best_on( $bg ) {
+    $l  = poetheme_studio_luminance( $bg );
+    $cw = ( max( $l, poetheme_studio_luminance( '#ffffff' ) ) + 0.05 ) / ( min( $l, poetheme_studio_luminance( '#ffffff' ) ) + 0.05 );
+    $cd = ( max( $l, poetheme_studio_luminance( '#111827' ) ) + 0.05 ) / ( min( $l, poetheme_studio_luminance( '#111827' ) ) + 0.05 );
+    return $cw >= $cd ? '#ffffff' : '#111827';
+}
+
+/**
+ * Accent hue for a harmony rule.
+ *
+ * @param float  $h       Base hue.
+ * @param string $harmony Harmony rule.
+ * @return float
+ */
+function poetheme_studio_accent_hue( $h, $harmony ) {
+    switch ( $harmony ) {
+        case 'analogous':
+            return $h + 30;
+        case 'triadic':
+            return $h + 120;
+        case 'split':
+            return $h + 150;
+        case 'monochromatic':
+            return $h;
+        default:
+            return $h + 180;
+    }
+}
+
+/**
+ * Round to two decimals.
+ *
+ * @param float $n Number.
+ * @return float
+ */
+function poetheme_studio_round2( $n ) {
+    return round( $n * 100 ) / 100;
+}
+
+/**
+ * Generate a full palette (colors + fonts + global) from sanitized seeds.
+ *
+ * @param array $seeds Sanitized seeds (see poetheme_sanitize_studio_seeds()).
+ * @return array{colors:array,fonts:array,global:array}
+ */
+function poetheme_studio_generate_from_seeds( $seeds ) {
+    $seeds = poetheme_sanitize_studio_seeds( $seeds );
+
+    list( $bh, $bs, $bl ) = poetheme_studio_hex_to_hsl( $seeds['base'] );
+    $h    = $bh;
+    $s    = poetheme_studio_clamp( $bs, 25, 90 );
+    $a_h  = poetheme_studio_accent_hue( $h, $seeds['harmony'] );
+    $dark = 'dark' === $seeds['mode'];
+
+    $primary = poetheme_studio_hsl_to_hex( $h, $s, poetheme_studio_clamp( $bl, 38, 56 ) );
+    $accent  = poetheme_studio_hsl_to_hex( $a_h, $s, poetheme_studio_clamp( $bl, 40, 58 ) );
+    $cta_bg  = $seeds['accent_buttons'] ? $accent : $primary;
+
+    if ( $dark ) {
+        $page        = poetheme_studio_hsl_to_hex( $h, 18, 10 );
+        $surface     = poetheme_studio_hsl_to_hex( $h, 16, 14 );
+        $header_bg   = poetheme_studio_hsl_to_hex( $h, 16, 13 );
+        $footer_bg   = poetheme_studio_hsl_to_hex( $h, 18, 9 );
+        $top_bar     = poetheme_studio_hsl_to_hex( $h, 22, 7 );
+        $text        = poetheme_studio_hsl_to_hex( $h, 14, 92 );
+        $text_strong = poetheme_studio_hsl_to_hex( $h, 16, 97 );
+        $text_muted  = poetheme_studio_hsl_to_hex( $h, 12, 70 );
+        $menu_link   = $text_muted;
+        $link        = poetheme_studio_hsl_to_hex( $h, $s, 70 );
+    } else {
+        $page        = poetheme_studio_hsl_to_hex( $h, 14, 98 );
+        $surface     = '#ffffff';
+        $header_bg   = '#ffffff';
+        $footer_bg   = poetheme_studio_hsl_to_hex( $h, 14, 96 );
+        $top_bar     = poetheme_studio_hsl_to_hex( $h, 24, 12 );
+        $text        = poetheme_studio_hsl_to_hex( $h, 16, 14 );
+        $text_strong = poetheme_studio_hsl_to_hex( $h, 22, 9 );
+        $text_muted  = poetheme_studio_hsl_to_hex( $h, 10, 42 );
+        $menu_link   = poetheme_studio_hsl_to_hex( $h, 12, 32 );
+        $link        = $primary;
+    }
+
+    $on_dark = '#ffffff';
+
+    $colors = array(
+        'page_background_color'         => $page,
+        'content_background_color'      => $surface,
+        'content_text_color'            => $text,
+        'content_strong_color'          => $text_strong,
+        'content_link_color'            => $link,
+        'content_link_underline'        => false,
+        'general_link_color'            => $link,
+        'header_background_color'       => $header_bg,
+        'menu_link_color'               => $menu_link,
+        'menu_active_link_color'        => $link,
+        'cta_background_color'          => $cta_bg,
+        'cta_text_color'                => poetheme_studio_best_on( $cta_bg ),
+        'top_bar_background_color'      => $top_bar,
+        'top_bar_text_color'            => $on_dark,
+        'top_bar_link_color'            => $on_dark,
+        'top_bar_icon_color'            => $on_dark,
+        'page_title_color'              => $text_strong,
+        'post_title_color'              => $text_strong,
+        'category_title_color'          => $text_strong,
+        'footer_widget_background_color'=> $footer_bg,
+        'footer_widget_text_color'      => $text_muted,
+        'footer_widget_link_color'      => $link,
+    );
+
+    foreach ( array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) as $tag ) {
+        $colors[ 'heading_' . $tag . '_color' ] = $text_strong;
+    }
+    foreach ( array( 'h2', 'h3', 'h4', 'h5' ) as $tag ) {
+        $colors[ 'footer_widget_heading_' . $tag . '_color' ] = $text_strong;
+    }
+
+    // Typography + density.
+    $ratios   = poetheme_get_studio_ratios();
+    $ratio    = isset( $ratios[ $seeds['ratio'] ] ) ? $ratios[ $seeds['ratio'] ] : 1.25;
+    $base     = $seeds['base_size'];
+    $density  = array(
+        'compact'     => array( 'spacing' => 0.4, 'width' => 1120 ),
+        'comfortable' => array( 'spacing' => 0.75, 'width' => 1280 ),
+        'spacious'    => array( 'spacing' => 1.1, 'width' => 1440 ),
+    );
+    $d        = isset( $density[ $seeds['density'] ] ) ? $density[ $seeds['density'] ] : $density['comfortable'];
+    $exp      = array( 'h1' => 5, 'h2' => 4, 'h3' => 3, 'h4' => 2, 'h5' => 1.4, 'h6' => 0.8 );
+    $sizes    = array();
+    foreach ( $exp as $tag => $e ) {
+        $sizes[ $tag ] = poetheme_studio_round2( $base * pow( $ratio, $e ) );
+    }
+
+    $fonts = array(
+        'heading_font'                       => $seeds['heading_font'],
+        'body_font'                          => $seeds['body_font'],
+        'body_font_size'                     => poetheme_studio_round2( $base ),
+        'heading_font_size'                  => $sizes['h1'],
+        'heading_h2_font_size'               => $sizes['h2'],
+        'heading_h3_font_size'               => $sizes['h3'],
+        'heading_h4_font_size'               => $sizes['h4'],
+        'heading_h5_font_size'               => $sizes['h5'],
+        'heading_h6_font_size'               => $sizes['h6'],
+        'page_title_font_size'               => $sizes['h1'],
+        'post_title_font_size'               => $sizes['h1'],
+        'category_title_font_size'           => $sizes['h2'],
+        'footer_widget_heading_font_size'    => $sizes['h3'],
+        'footer_widget_heading_h2_font_size' => poetheme_studio_round2( $sizes['h2'] * 0.85 ),
+        'footer_widget_heading_h3_font_size' => poetheme_studio_round2( $sizes['h3'] * 0.85 ),
+        'footer_widget_heading_h4_font_size' => poetheme_studio_round2( $sizes['h4'] * 0.9 ),
+        'footer_widget_heading_h5_font_size' => poetheme_studio_round2( $sizes['h5'] * 0.9 ),
+        'footer_widget_text_font_size'       => poetheme_studio_round2( $base ),
+        'top_bar_text_font_size'             => poetheme_studio_round2( $base * 0.9 ),
+        'cta_text_font_size'                 => poetheme_studio_round2( $base ),
+        'cta_button_border_radius'           => $seeds['radius'],
+    );
+
+    $spacing = array(
+        'margin'  => array( 'top' => '0', 'right' => '', 'bottom' => $d['spacing'] . 'rem', 'left' => '' ),
+        'padding' => array( 'top' => '', 'right' => '', 'bottom' => '', 'left' => '' ),
+    );
+    foreach ( array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) as $tag ) {
+        $fonts[ 'heading_' . $tag . '_spacing' ] = $spacing;
+    }
+
+    $global = array(
+        'layout_mode' => 'full',
+        'site_width'  => $d['width'],
+    );
+
+    return array(
+        'colors' => $colors,
+        'fonts'  => $fonts,
+        'global' => $global,
+    );
+}
+
+/* -------------------------------------------------------------------------
+ * Built-in presets + default seeding on theme activation.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Built-in preset definitions (seed sets). Font preferences are resolved to
+ * available font slugs at generation time.
+ *
+ * @return array[]
+ */
+function poetheme_get_studio_presets() {
+    return array(
+        array(
+            'name'           => __( 'Aziendale', 'poetheme' ),
+            'base'           => '#2563eb',
+            'harmony'        => 'analogous',
+            'mode'           => 'light',
+            'accent_buttons' => false,
+            'base_size'      => 1.0,
+            'ratio'          => '1.25',
+            'density'        => 'comfortable',
+            'radius'         => 8,
+            'heading_pref'   => array( 'inter' ),
+            'body_pref'      => array( 'inter', 'roboto' ),
+        ),
+        array(
+            'name'           => __( 'Editoriale', 'poetheme' ),
+            'base'           => '#b91c1c',
+            'harmony'        => 'complementary',
+            'mode'           => 'light',
+            'accent_buttons' => false,
+            'base_size'      => 1.05,
+            'ratio'          => '1.333',
+            'density'        => 'comfortable',
+            'radius'         => 0,
+            'heading_pref'   => array( 'playfair' ),
+            'body_pref'      => array( 'roboto', 'inter' ),
+        ),
+        array(
+            'name'           => __( 'Boutique', 'poetheme' ),
+            'base'           => '#d97706',
+            'harmony'        => 'analogous',
+            'mode'           => 'light',
+            'accent_buttons' => true,
+            'base_size'      => 1.0,
+            'ratio'          => '1.25',
+            'density'        => 'spacious',
+            'radius'         => 999,
+            'heading_pref'   => array( 'playfair' ),
+            'body_pref'      => array( 'inter' ),
+        ),
+        array(
+            'name'           => __( 'Notturno', 'poetheme' ),
+            'base'           => '#6366f1',
+            'harmony'        => 'complementary',
+            'mode'           => 'dark',
+            'accent_buttons' => false,
+            'base_size'      => 1.0,
+            'ratio'          => '1.25',
+            'density'        => 'comfortable',
+            'radius'         => 8,
+            'heading_pref'   => array( 'inter' ),
+            'body_pref'      => array( 'inter', 'roboto' ),
+        ),
+        array(
+            'name'           => __( 'Tech', 'poetheme' ),
+            'base'           => '#06b6d4',
+            'harmony'        => 'triadic',
+            'mode'           => 'light',
+            'accent_buttons' => false,
+            'base_size'      => 1.0,
+            'ratio'          => '1.2',
+            'density'        => 'compact',
+            'radius'         => 8,
+            'heading_pref'   => array( 'inter', 'bebas' ),
+            'body_pref'      => array( 'inter', 'roboto' ),
+        ),
+        array(
+            'name'           => __( 'Natura', 'poetheme' ),
+            'base'           => '#16a34a',
+            'harmony'        => 'analogous',
+            'mode'           => 'light',
+            'accent_buttons' => false,
+            'base_size'      => 1.0,
+            'ratio'          => '1.25',
+            'density'        => 'comfortable',
+            'radius'         => 999,
+            'heading_pref'   => array( 'playfair', 'inter' ),
+            'body_pref'      => array( 'inter', 'roboto' ),
+        ),
+    );
+}
+
+/**
+ * Resolve a list of font-name preferences to an available font slug.
+ *
+ * @param array $prefs Substrings to look for (e.g. array( 'playfair' )).
+ * @return string Slug or empty string.
+ */
+function poetheme_studio_resolve_font_pref( $prefs ) {
+    if ( empty( $prefs ) || ! function_exists( 'poetheme_get_available_fonts' ) ) {
+        return '';
+    }
+
+    $available = poetheme_get_available_fonts();
+
+    foreach ( (array) $prefs as $pref ) {
+        $needle = strtolower( (string) $pref );
+        foreach ( $available as $slug => $font ) {
+            $hay = strtolower( $slug . ' ' . ( isset( $font['family'] ) ? $font['family'] : '' ) );
+            if ( false !== strpos( $hay, $needle ) ) {
+                return $slug;
+            }
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Convert a preset definition into a sanitized seeds array.
+ *
+ * @param array $preset Preset definition.
+ * @return array
+ */
+function poetheme_studio_preset_to_seeds( $preset ) {
+    return poetheme_sanitize_studio_seeds(
+        array(
+            'base'           => $preset['base'],
+            'harmony'        => $preset['harmony'],
+            'mode'           => $preset['mode'],
+            'accent_buttons' => ! empty( $preset['accent_buttons'] ),
+            'base_size'      => $preset['base_size'],
+            'ratio'          => $preset['ratio'],
+            'density'        => $preset['density'],
+            'radius'         => $preset['radius'],
+            'heading_font'   => poetheme_studio_resolve_font_pref( isset( $preset['heading_pref'] ) ? $preset['heading_pref'] : array() ),
+            'body_font'      => poetheme_studio_resolve_font_pref( isset( $preset['body_pref'] ) ? $preset['body_pref'] : array() ),
+        )
+    );
+}
+
+/**
+ * Build a stored palette array from sanitized seeds.
+ *
+ * @param string $name  Palette name.
+ * @param array  $seeds Sanitized seeds.
+ * @param string $origin 'preset' or 'studio'.
+ * @return array
+ */
+function poetheme_studio_build_palette( $name, $seeds, $origin = 'studio' ) {
+    $generated = poetheme_studio_generate_from_seeds( $seeds );
+
+    return array(
+        'name'    => $name,
+        'colors'  => poetheme_sanitize_color_options( $generated['colors'] ),
+        'fonts'   => poetheme_sanitize_font_options( $generated['fonts'] ),
+        'global'  => poetheme_sanitize_palette_global( $generated['global'] ),
+        'seeds'   => $seeds,
+        'origin'  => 'preset' === $origin ? 'preset' : 'studio',
+        'created' => time(),
+    );
+}
+
+/**
+ * Seed the built-in preset palettes on theme activation (idempotent).
+ */
+function poetheme_studio_seed_default_palettes() {
+    if ( get_option( 'poetheme_presets_seeded' ) ) {
+        return;
+    }
+
+    $palettes = poetheme_get_style_palettes();
+
+    foreach ( poetheme_get_studio_presets() as $preset ) {
+        $seeds = poetheme_studio_preset_to_seeds( $preset );
+
+        $id = 'pal_' . wp_generate_password( 10, false, false );
+        while ( isset( $palettes[ $id ] ) ) {
+            $id = 'pal_' . wp_generate_password( 10, false, false );
+        }
+
+        $palettes[ $id ] = poetheme_studio_build_palette( $preset['name'], $seeds, 'preset' );
+    }
+
+    update_option( 'poetheme_style_palettes', $palettes );
+    update_option( 'poetheme_presets_seeded', 1 );
+}
+add_action( 'after_switch_theme', 'poetheme_studio_seed_default_palettes' );
+
 
 /**
  * Render a grouped (optgroup) font select for the Style Studio.
@@ -357,19 +810,19 @@ function poetheme_render_style_studio_page() {
     <div class="wrap poetheme-options poetheme-studio">
         <h1><?php esc_html_e( 'Style Studio', 'poetheme' ); ?></h1>
         <p class="description">
-            <?php esc_html_e( 'Scegli un colore brand e una regola di armonia: il tema genera automaticamente una combinazione cromatica coerente per tutti gli elementi. Vedi l’anteprima dal vivo e i controlli di contrasto, poi salvala come template (gestibile in “Palette e stile”).', 'poetheme' ); ?>
+            <?php esc_html_e( 'Style Studio è lo strumento per creare il design del sito: scegli un colore brand, una regola di armonia e la tipografia, e il tema genera automaticamente una combinazione coerente per tutti gli elementi. Salva il risultato come palette, gestibile in “Palette e stile”.', 'poetheme' ); ?>
+        </p>
+
+        <p class="poetheme-studio__toolbar">
+            <a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=poetheme-palette' ) ); ?>">&larr; <?php esc_html_e( 'Palette e stile', 'poetheme' ); ?></a>
+            <button type="button" class="button" data-studio-random>🎲 <?php esc_html_e( 'Ispirami', 'poetheme' ); ?></button>
+            <span class="poetheme-studio__editing" data-studio-editing hidden></span>
         </p>
 
         <form action="<?php echo $post_url; ?>" method="post" class="poetheme-studio__form" data-poetheme-studio>
             <input type="hidden" name="action" value="poetheme_style_studio_save" />
             <?php wp_nonce_field( 'poetheme_style_studio_save' ); ?>
             <input type="hidden" name="poetheme_studio_payload" value="" data-studio-payload />
-
-            <div class="poetheme-studio__presets-wrap">
-                <h2 class="poetheme-studio__section"><?php esc_html_e( 'Preset pronti', 'poetheme' ); ?></h2>
-                <p class="description"><?php esc_html_e( 'Parti da uno stile predefinito con un clic, poi personalizzalo a piacere.', 'poetheme' ); ?></p>
-                <div class="poetheme-studio__presets" data-studio-presets></div>
-            </div>
 
             <div class="poetheme-studio__layout">
                 <div class="poetheme-studio__controls">
@@ -466,8 +919,12 @@ function poetheme_render_style_studio_page() {
             </div>
 
             <p class="poetheme-studio__actions">
-                <button type="submit" class="button button-secondary" name="apply" value="0"><?php esc_html_e( 'Salva come template', 'poetheme' ); ?></button>
-                <button type="submit" class="button button-primary" name="apply" value="1"><?php esc_html_e( 'Salva e applica', 'poetheme' ); ?></button>
+                <button type="submit" class="button button-secondary" name="apply" value="0" data-studio-save
+                    data-label-create="<?php esc_attr_e( 'Salva come palette', 'poetheme' ); ?>"
+                    data-label-update="<?php esc_attr_e( 'Aggiorna palette', 'poetheme' ); ?>"><?php esc_html_e( 'Salva come palette', 'poetheme' ); ?></button>
+                <button type="submit" class="button button-primary" name="apply" value="1" data-studio-save-apply
+                    data-label-create="<?php esc_attr_e( 'Salva e applica', 'poetheme' ); ?>"
+                    data-label-update="<?php esc_attr_e( 'Aggiorna e applica', 'poetheme' ); ?>"><?php esc_html_e( 'Salva e applica', 'poetheme' ); ?></button>
             </p>
         </form>
     </div>

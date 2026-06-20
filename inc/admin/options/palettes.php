@@ -105,12 +105,20 @@ function poetheme_sanitize_palette_data( $data ) {
     $fonts  = isset( $data['fonts'] ) && is_array( $data['fonts'] ) ? $data['fonts'] : array();
     $global = isset( $data['global'] ) && is_array( $data['global'] ) ? $data['global'] : array();
 
-    return array(
+    $sanitized = array(
         'name'   => $name,
         'colors' => poetheme_sanitize_color_options( $colors ),
         'fonts'  => poetheme_sanitize_font_options( $fonts ),
         'global' => poetheme_sanitize_palette_global( $global ),
     );
+
+    // Preserve generator seeds when present so the palette stays editable in
+    // Style Studio after import.
+    if ( isset( $data['seeds'] ) && is_array( $data['seeds'] ) && function_exists( 'poetheme_sanitize_studio_seeds' ) ) {
+        $sanitized['seeds'] = poetheme_sanitize_studio_seeds( $data['seeds'] );
+    }
+
+    return $sanitized;
 }
 
 /**
@@ -425,6 +433,9 @@ function poetheme_handle_palette_export() {
         'fonts'  => isset( $palette['fonts'] ) ? $palette['fonts'] : array(),
         'global' => isset( $palette['global'] ) ? $palette['global'] : array(),
     );
+    if ( ! empty( $palette['seeds'] ) ) {
+        $payload['seeds'] = $palette['seeds'];
+    }
     $slug     = sanitize_title( $payload['name'] );
     $filename = 'poetheme-palette-' . ( $slug ? $slug : $id ) . '.json';
 
@@ -441,6 +452,8 @@ add_action( 'admin_post_poetheme_palette_export', 'poetheme_handle_palette_expor
 function poetheme_get_palette_notice( $code ) {
     $notices = array(
         'imported'       => array( 'success', __( 'Palette importata con successo.', 'poetheme' ) ),
+        'created'        => array( 'success', __( 'Palette creata.', 'poetheme' ) ),
+        'updated'        => array( 'success', __( 'Palette aggiornata.', 'poetheme' ) ),
         'activated'      => array( 'success', __( 'Palette applicata.', 'poetheme' ) ),
         'deactivated'    => array( 'success', __( 'Palette disattivata. Sono ripristinate le impostazioni manuali.', 'poetheme' ) ),
         'deleted'        => array( 'success', __( 'Palette eliminata.', 'poetheme' ) ),
@@ -515,10 +528,14 @@ function poetheme_render_palette_page() {
         <?php endif; ?>
 
         <p class="description">
-            <?php esc_html_e( 'Importa un file JSON per creare una palette che assegna colori, font e dimensioni a tutti gli elementi del tema. La palette applicata sovrascrive qualsiasi impostazione e si applica a qualsiasi testata selezionata, senza modificarne la struttura. Puoi disattivarla per ripristinare le impostazioni manuali.', 'poetheme' ); ?>
+            <?php esc_html_e( 'Le palette assegnano colori, font e dimensioni a tutti gli elementi del tema. Crea o modifica una palette da Style Studio, oppure importa un file JSON condiviso. La palette applicata sovrascrive le impostazioni manuali e funziona con qualsiasi testata, senza modificarne la struttura. Puoi disattivarla per ripristinare le impostazioni manuali.', 'poetheme' ); ?>
         </p>
 
         <div class="poetheme-palette-toolbar">
+            <a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=poetheme-style-studio' ) ); ?>">
+                <?php esc_html_e( 'Crea nuova palette', 'poetheme' ); ?>
+            </a>
+
             <a class="button" href="<?php echo esc_url( $example_url ); ?>">
                 <?php esc_html_e( 'Scarica JSON di esempio', 'poetheme' ); ?>
             </a>
@@ -562,11 +579,17 @@ function poetheme_render_palette_page() {
                     $heading     = ! empty( $fonts['heading_font'] ) ? $fonts['heading_font'] : __( 'Predefinito', 'poetheme' );
                     $body        = ! empty( $fonts['body_font'] ) ? $fonts['body_font'] : __( 'Predefinito', 'poetheme' );
                     $width       = isset( $global['site_width'] ) ? (int) $global['site_width'] : 0;
+                    $is_preset   = isset( $palette['origin'] ) && 'preset' === $palette['origin'];
+                    $has_seeds   = ! empty( $palette['seeds'] );
                     $export_url  = wp_nonce_url( admin_url( 'admin-post.php?action=poetheme_palette_export&palette=' . rawurlencode( $id ) ), 'poetheme_palette_export' );
+                    $edit_url    = admin_url( 'admin.php?page=poetheme-style-studio&palette=' . rawurlencode( $id ) );
                     ?>
                     <div class="poetheme-palette-card<?php echo $is_active ? ' is-active' : ''; ?>">
                         <div class="poetheme-palette-card__head">
                             <h3><?php echo esc_html( $palette['name'] ); ?></h3>
+                            <?php if ( $is_preset ) : ?>
+                                <span class="poetheme-palette-badge poetheme-palette-badge--preset"><?php esc_html_e( 'Preset', 'poetheme' ); ?></span>
+                            <?php endif; ?>
                             <?php if ( $is_active ) : ?>
                                 <span class="poetheme-palette-badge"><?php esc_html_e( 'Attiva', 'poetheme' ); ?></span>
                             <?php endif; ?>
@@ -590,6 +613,10 @@ function poetheme_render_palette_page() {
                                     <?php wp_nonce_field( 'poetheme_palette_activate' ); ?>
                                     <?php submit_button( __( 'Applica', 'poetheme' ), 'primary', 'submit', false ); ?>
                                 </form>
+                            <?php endif; ?>
+
+                            <?php if ( $has_seeds ) : ?>
+                                <a class="button" href="<?php echo esc_url( $edit_url ); ?>"><?php esc_html_e( 'Modifica', 'poetheme' ); ?></a>
                             <?php endif; ?>
 
                             <a class="button" href="<?php echo esc_url( $export_url ); ?>"><?php esc_html_e( 'Esporta', 'poetheme' ); ?></a>

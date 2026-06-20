@@ -2907,3 +2907,43 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Natura"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Ispirami"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Stai modificando: %s"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Salva come palette"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Aggiorna palette"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Aggiorna e applica"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Palette creata."
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Palette aggiornata."
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Crea nuova palette"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Preset"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Modifica"
+msgstr ""

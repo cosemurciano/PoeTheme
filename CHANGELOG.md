@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.15.0
+- **Style Studio diventa lo strumento per creare il design del sito.** Le palette ora si creano e
+  si modificano da Style Studio; il risultato è gestito in “Palette cromatica e stile”.
+- **Preset come palette predefinite:** i 6 stili pronti (Aziendale, Editoriale, Boutique, Notturno,
+  Tech, Natura) vengono seminati come palette all’attivazione del tema e compaiono in “Palette e
+  stile” con badge “Preset”. Sono palette a tutti gli effetti: applicabili, modificabili (in Style
+  Studio) ed eliminabili.
+- **Modifica delle palette:** ogni palette generata espone “Modifica”, che apre Style Studio con i
+  suoi semi precaricati; il salvataggio aggiorna la palette esistente invece di crearne una nuova.
+- **Pulsante “Ispirami”:** genera combinazioni casuali ispirazionali (colore, armonia, modalità,
+  tipografia, densità, forme) da cui partire.
+- **Esportazione condivisibile:** l’export di una palette include ora anche i semi, così chi la
+  importa può continuare a modificarla in Style Studio.
+- **Generatore portato in PHP** come fonte canonica: consente di costruire palette complete dai semi
+  anche senza browser (seeding all’attivazione) e rende il salvataggio deterministico.
+- La galleria preset è stata rimossa dalla cima di Style Studio e aggregata in “Palette e stile”.
+
 ## 1.14.0
 - **Style Studio – preset pronti:** nuova galleria di stili one-click (Aziendale, Editoriale,
   Boutique, Notturno, Tech, Natura) in cima allo Studio. Un clic imposta colore, armonia, modalità,
