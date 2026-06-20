@@ -19,3 +19,4 @@ require_once __DIR__ . '/blog.php';
 require_once __DIR__ . '/footer.php';
 require_once __DIR__ . '/custom-css.php';
 require_once __DIR__ . '/page-meta.php';
+require_once __DIR__ . '/palettes.php';
