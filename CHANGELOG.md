@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.11.0
+- Nuovo **Style Studio** (fase 1 – motore colori): si sceglie un colore brand e una regola di
+  armonia (complementare, analoga, triade, complementare divisa, monocromatica) e il tema genera
+  automaticamente una combinazione cromatica coerente per tutti gli elementi, con **anteprima dal
+  vivo** e **controllo di contrasto WCAG**. Il risultato si salva come template (gestibile in
+  “Palette e stile”) e si può applicare/disattivare.
+- Selettore font raggruppato per **famiglia** (optgroup) con etichette di peso/stile.
+
 ## 1.10.0
 - Nuova sezione **Palette cromatica e stile**: importa file JSON che assegnano colori, font e
   dimensioni a tutti gli elementi del tema. La palette applicata sovrascrive (in modo

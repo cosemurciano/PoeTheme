@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-20 09:37+0000\n"
+"PO-Revision-Date: 2026-06-20 09:48+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: English\n"
 "Language: en_US\n"
@@ -2628,3 +2628,83 @@ msgstr "Other fonts"
 #: inc/admin/options/fonts.php
 msgid "Regolare"
 msgstr "Regular"
+
+#: inc/admin/options/style-studio.php
+msgid "Style Studio"
+msgstr "Style Studio"
+
+#: inc/admin/options/style-studio.php
+msgid "Complementare"
+msgstr "Complementary"
+
+#: inc/admin/options/style-studio.php
+msgid "Analoga"
+msgstr "Analogous"
+
+#: inc/admin/options/style-studio.php
+msgid "Triade"
+msgstr "Triadic"
+
+#: inc/admin/options/style-studio.php
+msgid "Complementare divisa"
+msgstr "Split complementary"
+
+#: inc/admin/options/style-studio.php
+msgid "Monocromatica"
+msgstr "Monochromatic"
+
+#: inc/admin/options/style-studio.php
+msgid "Nome template"
+msgstr "Template name"
+
+#: inc/admin/options/style-studio.php
+msgid "Colore brand"
+msgstr "Brand color"
+
+#: inc/admin/options/style-studio.php
+msgid "Armonia"
+msgstr "Harmony"
+
+#: inc/admin/options/style-studio.php
+msgid "Modalità"
+msgstr "Mode"
+
+#: inc/admin/options/style-studio.php
+msgid "Chiara"
+msgstr "Light"
+
+#: inc/admin/options/style-studio.php
+msgid "Scura"
+msgstr "Dark"
+
+#: inc/admin/options/style-studio.php
+msgid "Usa il colore accento per i pulsanti"
+msgstr "Use the accent color for buttons"
+
+#: inc/admin/options/style-studio.php
+msgid "Salva come template"
+msgstr "Save as template"
+
+#: inc/admin/options/style-studio.php
+msgid "Salva e applica"
+msgstr "Save and apply"
+
+#: inc/admin/options/style-studio.php
+msgid "La mia palette"
+msgstr "My palette"
+
+#: inc/admin/options/style-studio.php
+msgid "Palette generata"
+msgstr "Generated palette"
+
+#: inc/admin/options/style-studio.php
+msgid "Titolo di esempio"
+msgstr "Sample heading"
+
+#: inc/admin/options/style-studio.php
+msgid "Pulsante"
+msgstr "Button"
+
+#: inc/admin/options/style-studio.php
+msgid "Insufficiente"
+msgstr "Low"

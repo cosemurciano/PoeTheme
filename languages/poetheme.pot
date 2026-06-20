@@ -2627,3 +2627,83 @@ msgstr ""
 #: inc/admin/options/fonts.php
 msgid "Regolare"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Style Studio"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Complementare"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Analoga"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Triade"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Complementare divisa"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Monocromatica"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Nome template"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Colore brand"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Armonia"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Modalità"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Chiara"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Scura"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Usa il colore accento per i pulsanti"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Salva come template"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Salva e applica"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "La mia palette"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Palette generata"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Titolo di esempio"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Pulsante"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Insufficiente"
+msgstr ""

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-20 09:37+0000\n"
+"PO-Revision-Date: 2026-06-20 09:48+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: Italiano\n"
 "Language: it_IT\n"
@@ -2706,3 +2706,83 @@ msgstr "Altri font"
 #: inc/admin/options/fonts.php
 msgid "Regolare"
 msgstr "Regolare"
+
+#: inc/admin/options/style-studio.php
+msgid "Style Studio"
+msgstr "Style Studio"
+
+#: inc/admin/options/style-studio.php
+msgid "Complementare"
+msgstr "Complementare"
+
+#: inc/admin/options/style-studio.php
+msgid "Analoga"
+msgstr "Analoga"
+
+#: inc/admin/options/style-studio.php
+msgid "Triade"
+msgstr "Triade"
+
+#: inc/admin/options/style-studio.php
+msgid "Complementare divisa"
+msgstr "Complementare divisa"
+
+#: inc/admin/options/style-studio.php
+msgid "Monocromatica"
+msgstr "Monocromatica"
+
+#: inc/admin/options/style-studio.php
+msgid "Nome template"
+msgstr "Nome template"
+
+#: inc/admin/options/style-studio.php
+msgid "Colore brand"
+msgstr "Colore brand"
+
+#: inc/admin/options/style-studio.php
+msgid "Armonia"
+msgstr "Armonia"
+
+#: inc/admin/options/style-studio.php
+msgid "Modalità"
+msgstr "Modalità"
+
+#: inc/admin/options/style-studio.php
+msgid "Chiara"
+msgstr "Chiara"
+
+#: inc/admin/options/style-studio.php
+msgid "Scura"
+msgstr "Scura"
+
+#: inc/admin/options/style-studio.php
+msgid "Usa il colore accento per i pulsanti"
+msgstr "Usa il colore accento per i pulsanti"
+
+#: inc/admin/options/style-studio.php
+msgid "Salva come template"
+msgstr "Salva come template"
+
+#: inc/admin/options/style-studio.php
+msgid "Salva e applica"
+msgstr "Salva e applica"
+
+#: inc/admin/options/style-studio.php
+msgid "La mia palette"
+msgstr "La mia palette"
+
+#: inc/admin/options/style-studio.php
+msgid "Palette generata"
+msgstr "Palette generata"
+
+#: inc/admin/options/style-studio.php
+msgid "Titolo di esempio"
+msgstr "Titolo di esempio"
+
+#: inc/admin/options/style-studio.php
+msgid "Pulsante"
+msgstr "Pulsante"
+
+#: inc/admin/options/style-studio.php
+msgid "Insufficiente"
+msgstr "Insufficiente"
