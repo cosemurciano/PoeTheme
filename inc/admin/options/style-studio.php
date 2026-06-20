@@ -59,8 +59,9 @@ function poetheme_studio_admin_assets( $hook ) {
                 'sample'   => __( 'Titolo di esempio', 'poetheme' ),
                 'body'     => __( 'Testo di esempio con un', 'poetheme' ),
                 'link'     => __( 'collegamento', 'poetheme' ),
-                'cta'      => __( 'Pulsante', 'poetheme' ),
-                'menu'     => array( __( 'Home', 'poetheme' ), __( 'Articoli', 'poetheme' ), __( 'Contatti', 'poetheme' ) ),
+                'cta'          => __( 'Pulsante', 'poetheme' ),
+                'themeDefault' => __( 'Predefinito del tema', 'poetheme' ),
+                'menu'         => array( __( 'Home', 'poetheme' ), __( 'Articoli', 'poetheme' ), __( 'Contatti', 'poetheme' ) ),
             ),
         )
     );
@@ -88,11 +89,34 @@ function poetheme_sanitize_studio_seeds( $seeds ) {
 
     $mode = isset( $seeds['mode'] ) && 'dark' === $seeds['mode'] ? 'dark' : 'light';
 
+    $ratios = poetheme_get_studio_ratios();
+    $ratio  = isset( $seeds['ratio'] ) ? (string) $seeds['ratio'] : '1.25';
+    if ( ! isset( $ratios[ $ratio ] ) ) {
+        $ratio = '1.25';
+    }
+
+    $base_size = isset( $seeds['base_size'] ) ? (float) $seeds['base_size'] : 1.0;
+    $base_size = max( 0.8, min( 1.5, $base_size ) );
+
+    $density = isset( $seeds['density'] ) ? sanitize_key( $seeds['density'] ) : 'comfortable';
+    if ( ! in_array( $density, array( 'compact', 'comfortable', 'spacious' ), true ) ) {
+        $density = 'comfortable';
+    }
+
+    $radius = isset( $seeds['radius'] ) ? (float) $seeds['radius'] : 8.0;
+    $radius = max( 0.0, min( 999.0, $radius ) );
+
     return array(
         'base'           => $base,
         'harmony'        => $harmony,
         'mode'           => $mode,
         'accent_buttons' => ! empty( $seeds['accent_buttons'] ),
+        'heading_font'   => isset( $seeds['heading_font'] ) ? sanitize_text_field( (string) $seeds['heading_font'] ) : '',
+        'body_font'      => isset( $seeds['body_font'] ) ? sanitize_text_field( (string) $seeds['body_font'] ) : '',
+        'base_size'      => $base_size,
+        'ratio'          => $ratio,
+        'density'        => $density,
+        'radius'         => $radius,
     );
 }
 
@@ -122,13 +146,15 @@ function poetheme_handle_style_studio_save() {
     }
 
     $colors = isset( $payload['colors'] ) && is_array( $payload['colors'] ) ? $payload['colors'] : array();
+    $fonts  = isset( $payload['fonts'] ) && is_array( $payload['fonts'] ) ? $payload['fonts'] : array();
+    $global = isset( $payload['global'] ) && is_array( $payload['global'] ) ? $payload['global'] : array();
     $seeds  = isset( $payload['seeds'] ) ? poetheme_sanitize_studio_seeds( $payload['seeds'] ) : array();
 
     $palette = array(
         'name'    => $name,
         'colors'  => poetheme_sanitize_color_options( $colors ),
-        'fonts'   => array(),
-        'global'  => array(),
+        'fonts'   => ! empty( $fonts ) ? poetheme_sanitize_font_options( $fonts ) : array(),
+        'global'  => ! empty( $global ) ? poetheme_sanitize_palette_global( $global ) : array(),
         'seeds'   => $seeds,
         'created' => time(),
     );
@@ -153,6 +179,45 @@ function poetheme_handle_style_studio_save() {
     exit;
 }
 add_action( 'admin_post_poetheme_style_studio_save', 'poetheme_handle_style_studio_save' );
+
+/**
+ * Allowed modular-scale ratios (label => factor).
+ *
+ * @return array<string,float>
+ */
+function poetheme_get_studio_ratios() {
+    return array(
+        '1.125' => 1.125,
+        '1.2'   => 1.2,
+        '1.25'  => 1.25,
+        '1.333' => 1.333,
+        '1.414' => 1.414,
+    );
+}
+
+/**
+ * Render a grouped (optgroup) font select for the Style Studio.
+ *
+ * @param string $data_attr     Data attribute hook (without brackets).
+ * @param string $default_label Label for the "theme default" option.
+ */
+function poetheme_studio_render_font_select( $data_attr, $default_label ) {
+    $available = function_exists( 'poetheme_get_available_fonts' ) ? poetheme_get_available_fonts() : array();
+    ?>
+    <select <?php echo esc_attr( $data_attr ); ?> <?php disabled( empty( $available ) ); ?>>
+        <option value=""><?php echo esc_html( $default_label ); ?></option>
+        <?php foreach ( poetheme_get_font_families( $available ) as $family_label => $family_fonts ) : ?>
+            <optgroup label="<?php echo esc_attr( $family_label ); ?>">
+                <?php foreach ( $family_fonts as $font ) : ?>
+                    <option value="<?php echo esc_attr( $font['slug'] ); ?>" data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
+                        <?php echo esc_html( $font['variant_label'] ); ?>
+                    </option>
+                <?php endforeach; ?>
+            </optgroup>
+        <?php endforeach; ?>
+    </select>
+    <?php
+}
 
 /**
  * Render the Style Studio page.
@@ -221,6 +286,56 @@ function poetheme_render_style_studio_page() {
 
                     <div class="poetheme-studio__palette" data-studio-swatches aria-hidden="true"></div>
                     <div class="poetheme-studio__contrast" data-studio-contrast></div>
+
+                    <hr />
+                    <h2 class="poetheme-studio__section"><?php esc_html_e( 'Tipografia', 'poetheme' ); ?></h2>
+
+                    <p class="poetheme-field">
+                        <label><strong><?php esc_html_e( 'Font titoli', 'poetheme' ); ?></strong></label><br />
+                        <?php poetheme_studio_render_font_select( 'data-studio-heading-font', __( 'Predefinito del tema', 'poetheme' ) ); ?>
+                    </p>
+
+                    <p class="poetheme-field">
+                        <label><strong><?php esc_html_e( 'Font testo', 'poetheme' ); ?></strong></label><br />
+                        <?php poetheme_studio_render_font_select( 'data-studio-body-font', __( 'Predefinito del tema', 'poetheme' ) ); ?>
+                    </p>
+
+                    <p class="poetheme-field">
+                        <label for="poetheme-studio-base-size"><strong><?php esc_html_e( 'Dimensione base testo (rem)', 'poetheme' ); ?></strong></label><br />
+                        <input type="number" id="poetheme-studio-base-size" data-studio-base-size value="1" min="0.8" max="1.5" step="0.05" />
+                    </p>
+
+                    <p class="poetheme-field">
+                        <label for="poetheme-studio-ratio"><strong><?php esc_html_e( 'Scala tipografica', 'poetheme' ); ?></strong></label><br />
+                        <select id="poetheme-studio-ratio" data-studio-ratio>
+                            <option value="1.125"><?php esc_html_e( 'Compatta (1.125)', 'poetheme' ); ?></option>
+                            <option value="1.2"><?php esc_html_e( 'Terza minore (1.2)', 'poetheme' ); ?></option>
+                            <option value="1.25" selected><?php esc_html_e( 'Terza maggiore (1.25)', 'poetheme' ); ?></option>
+                            <option value="1.333"><?php esc_html_e( 'Quarta giusta (1.333)', 'poetheme' ); ?></option>
+                            <option value="1.414"><?php esc_html_e( 'Ampia (1.414)', 'poetheme' ); ?></option>
+                        </select>
+                    </p>
+
+                    <hr />
+                    <h2 class="poetheme-studio__section"><?php esc_html_e( 'Densità e forme', 'poetheme' ); ?></h2>
+
+                    <p class="poetheme-field">
+                        <label for="poetheme-studio-density"><strong><?php esc_html_e( 'Densità', 'poetheme' ); ?></strong></label><br />
+                        <select id="poetheme-studio-density" data-studio-density>
+                            <option value="compact"><?php esc_html_e( 'Compatta', 'poetheme' ); ?></option>
+                            <option value="comfortable" selected><?php esc_html_e( 'Comoda', 'poetheme' ); ?></option>
+                            <option value="spacious"><?php esc_html_e( 'Ariosa', 'poetheme' ); ?></option>
+                        </select>
+                    </p>
+
+                    <p class="poetheme-field">
+                        <label for="poetheme-studio-radius"><strong><?php esc_html_e( 'Arrotondamento pulsanti', 'poetheme' ); ?></strong></label><br />
+                        <select id="poetheme-studio-radius" data-studio-radius>
+                            <option value="0"><?php esc_html_e( 'Squadrato', 'poetheme' ); ?></option>
+                            <option value="8" selected><?php esc_html_e( 'Morbido', 'poetheme' ); ?></option>
+                            <option value="999"><?php esc_html_e( 'Pillola', 'poetheme' ); ?></option>
+                        </select>
+                    </p>
                 </div>
 
                 <div class="poetheme-studio__preview" data-studio-preview aria-label="<?php esc_attr_e( 'Anteprima', 'poetheme' ); ?>"></div>

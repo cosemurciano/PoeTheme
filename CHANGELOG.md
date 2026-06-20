@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.12.0
+- **Style Studio – Fase 2 (tipografia + densità):** lo Studio ora genera anche la **tipografia** e
+  la **densità** oltre ai colori. Si scelgono il **font dei titoli** e il **font del testo**
+  (menu raggruppati per famiglia), una **dimensione base** e una **scala modulare** (1.125–1.414)
+  da cui derivano automaticamente le dimensioni di tutti i titoli (H1–H6, titoli articolo/pagina,
+  intestazioni footer). I controlli di **densità** (compatta/comoda/ariosa) impostano la spaziatura
+  dei titoli e la larghezza del contenuto, mentre l’**arrotondamento** regola il raggio dei pulsanti.
+  L’anteprima riflette dimensioni, raggio e coppia di font; il risultato è salvato come template
+  completo (colori + font + layout) applicabile dalla pagina “Palette e stile”.
+
 ## 1.11.0
 - Nuovo **Style Studio** (fase 1 – motore colori): si sceglie un colore brand e una regola di
   armonia (complementare, analoga, triade, complementare divisa, monocromatica) e il tema genera

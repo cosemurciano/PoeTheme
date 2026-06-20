@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-20 09:48+0000\n"
+"PO-Revision-Date: 2026-06-20 10:01+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: Italiano\n"
 "Language: it_IT\n"
@@ -1407,7 +1407,7 @@ msgstr "Sfondo titolo H5"
 msgid "Scegli uno sfondo con supporto alla trasparenza per i titoli H5."
 msgstr "Scegli uno sfondo con supporto alla trasparenza per i titoli H5."
 
-#: inc/admin/options.php:2056
+#: inc/admin/options/style-studio.php
 msgid "Tipografia"
 msgstr "Tipografia"
 
@@ -2786,3 +2786,79 @@ msgstr "Pulsante"
 #: inc/admin/options/style-studio.php
 msgid "Insufficiente"
 msgstr "Insufficiente"
+
+#: inc/admin/options/style-studio.php
+msgid "Font titoli"
+msgstr "Font titoli"
+
+#: inc/admin/options/style-studio.php
+msgid "Font testo"
+msgstr "Font testo"
+
+#: inc/admin/options/style-studio.php
+msgid "Predefinito del tema"
+msgstr "Predefinito del tema"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione base testo (rem)"
+msgstr "Dimensione base testo (rem)"
+
+#: inc/admin/options/style-studio.php
+msgid "Scala tipografica"
+msgstr "Scala tipografica"
+
+#: inc/admin/options/style-studio.php
+msgid "Compatta (1.125)"
+msgstr "Compatta (1.125)"
+
+#: inc/admin/options/style-studio.php
+msgid "Terza minore (1.2)"
+msgstr "Terza minore (1.2)"
+
+#: inc/admin/options/style-studio.php
+msgid "Terza maggiore (1.25)"
+msgstr "Terza maggiore (1.25)"
+
+#: inc/admin/options/style-studio.php
+msgid "Quarta giusta (1.333)"
+msgstr "Quarta giusta (1.333)"
+
+#: inc/admin/options/style-studio.php
+msgid "Ampia (1.414)"
+msgstr "Ampia (1.414)"
+
+#: inc/admin/options/style-studio.php
+msgid "Densità e forme"
+msgstr "Densità e forme"
+
+#: inc/admin/options/style-studio.php
+msgid "Densità"
+msgstr "Densità"
+
+#: inc/admin/options/style-studio.php
+msgid "Compatta"
+msgstr "Compatta"
+
+#: inc/admin/options/style-studio.php
+msgid "Comoda"
+msgstr "Comoda"
+
+#: inc/admin/options/style-studio.php
+msgid "Ariosa"
+msgstr "Ariosa"
+
+#: inc/admin/options/style-studio.php
+msgid "Arrotondamento pulsanti"
+msgstr "Arrotondamento pulsanti"
+
+#: inc/admin/options/style-studio.php
+msgid "Squadrato"
+msgstr "Squadrato"
+
+#: inc/admin/options/style-studio.php
+msgid "Morbido"
+msgstr "Morbido"
+
+#: inc/admin/options/style-studio.php
+msgid "Pillola"
+msgstr "Pillola"

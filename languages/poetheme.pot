@@ -2707,3 +2707,83 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Insufficiente"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Tipografia"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Font titoli"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Font testo"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Predefinito del tema"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione base testo (rem)"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Scala tipografica"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Compatta (1.125)"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Terza minore (1.2)"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Terza maggiore (1.25)"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Quarta giusta (1.333)"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Ampia (1.414)"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Densità e forme"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Densità"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Compatta"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Comoda"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Ariosa"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Arrotondamento pulsanti"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Squadrato"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Morbido"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Pillola"
+msgstr ""
