@@ -2879,3 +2879,31 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Newsletter"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Preset pronti"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Parti da uno stile predefinito con un clic, poi personalizzalo a piacere."
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Aziendale"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Editoriale"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Boutique"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Notturno"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Natura"
+msgstr ""

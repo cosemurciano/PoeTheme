@@ -979,3 +979,53 @@
   margin-right: 0.85rem;
   font-size: 0.82rem;
 }
+
+/* Style Studio – presets gallery */
+.poetheme-studio__presets-wrap {
+  margin: 0.5rem 0 1.5rem;
+}
+
+.poetheme-studio__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.poetheme-studio__preset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 140px;
+  padding: 0.75rem;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.poetheme-studio__preset:hover,
+.poetheme-studio__preset:focus {
+  border-color: #2563eb;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.18);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.poetheme-studio__preset-swatches {
+  display: flex;
+  height: 2rem;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.poetheme-studio__preset-dot {
+  flex: 1 1 0;
+}
+
+.poetheme-studio__preset-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+}

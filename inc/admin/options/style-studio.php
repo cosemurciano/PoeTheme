@@ -101,6 +101,86 @@ function poetheme_studio_admin_assets( $hook ) {
                     'footerHeading' => __( 'Newsletter', 'poetheme' ),
                 ),
             ),
+            'presets' => array(
+                array(
+                    'name'           => __( 'Aziendale', 'poetheme' ),
+                    'base'           => '#2563eb',
+                    'harmony'        => 'analogous',
+                    'mode'           => 'light',
+                    'accent_buttons' => false,
+                    'base_size'      => 1.0,
+                    'ratio'          => '1.25',
+                    'density'        => 'comfortable',
+                    'radius'         => 8,
+                    'heading_pref'   => array( 'inter' ),
+                    'body_pref'      => array( 'inter', 'roboto' ),
+                ),
+                array(
+                    'name'           => __( 'Editoriale', 'poetheme' ),
+                    'base'           => '#b91c1c',
+                    'harmony'        => 'complementary',
+                    'mode'           => 'light',
+                    'accent_buttons' => false,
+                    'base_size'      => 1.05,
+                    'ratio'          => '1.333',
+                    'density'        => 'comfortable',
+                    'radius'         => 0,
+                    'heading_pref'   => array( 'playfair' ),
+                    'body_pref'      => array( 'roboto', 'inter' ),
+                ),
+                array(
+                    'name'           => __( 'Boutique', 'poetheme' ),
+                    'base'           => '#d97706',
+                    'harmony'        => 'analogous',
+                    'mode'           => 'light',
+                    'accent_buttons' => true,
+                    'base_size'      => 1.0,
+                    'ratio'          => '1.25',
+                    'density'        => 'spacious',
+                    'radius'         => 999,
+                    'heading_pref'   => array( 'playfair' ),
+                    'body_pref'      => array( 'inter' ),
+                ),
+                array(
+                    'name'           => __( 'Notturno', 'poetheme' ),
+                    'base'           => '#6366f1',
+                    'harmony'        => 'complementary',
+                    'mode'           => 'dark',
+                    'accent_buttons' => false,
+                    'base_size'      => 1.0,
+                    'ratio'          => '1.25',
+                    'density'        => 'comfortable',
+                    'radius'         => 8,
+                    'heading_pref'   => array( 'inter' ),
+                    'body_pref'      => array( 'inter', 'roboto' ),
+                ),
+                array(
+                    'name'           => __( 'Tech', 'poetheme' ),
+                    'base'           => '#06b6d4',
+                    'harmony'        => 'triadic',
+                    'mode'           => 'light',
+                    'accent_buttons' => false,
+                    'base_size'      => 1.0,
+                    'ratio'          => '1.2',
+                    'density'        => 'compact',
+                    'radius'         => 8,
+                    'heading_pref'   => array( 'inter', 'bebas' ),
+                    'body_pref'      => array( 'inter', 'roboto' ),
+                ),
+                array(
+                    'name'           => __( 'Natura', 'poetheme' ),
+                    'base'           => '#16a34a',
+                    'harmony'        => 'analogous',
+                    'mode'           => 'light',
+                    'accent_buttons' => false,
+                    'base_size'      => 1.0,
+                    'ratio'          => '1.25',
+                    'density'        => 'comfortable',
+                    'radius'         => 999,
+                    'heading_pref'   => array( 'playfair', 'inter' ),
+                    'body_pref'      => array( 'inter', 'roboto' ),
+                ),
+            ),
         )
     );
 }
@@ -284,6 +364,12 @@ function poetheme_render_style_studio_page() {
             <input type="hidden" name="action" value="poetheme_style_studio_save" />
             <?php wp_nonce_field( 'poetheme_style_studio_save' ); ?>
             <input type="hidden" name="poetheme_studio_payload" value="" data-studio-payload />
+
+            <div class="poetheme-studio__presets-wrap">
+                <h2 class="poetheme-studio__section"><?php esc_html_e( 'Preset pronti', 'poetheme' ); ?></h2>
+                <p class="description"><?php esc_html_e( 'Parti da uno stile predefinito con un clic, poi personalizzalo a piacere.', 'poetheme' ); ?></p>
+                <div class="poetheme-studio__presets" data-studio-presets></div>
+            </div>
 
             <div class="poetheme-studio__layout">
                 <div class="poetheme-studio__controls">
