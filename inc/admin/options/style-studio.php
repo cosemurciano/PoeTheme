@@ -48,20 +48,58 @@ function poetheme_studio_admin_assets( $hook ) {
     }
 
     wp_enqueue_style( 'poetheme-theme-options', POETHEME_URI . '/assets/css/theme-options.css', array(), poetheme_get_asset_version( 'assets/css/theme-options.css' ) );
+
+    // Register a unique @font-face per available font so the live preview can
+    // render the actually selected typeface (browsers fetch lazily on use).
+    $faces = '';
+    foreach ( poetheme_get_available_fonts() as $slug => $font ) {
+        if ( empty( $font['url'] ) ) {
+            continue;
+        }
+        $faces .= sprintf(
+            "@font-face{font-family:'poetheme-pv-%s';src:url('%s') format('%s');font-display:swap;}\n",
+            $slug,
+            $font['url'],
+            $font['format']
+        );
+    }
+    if ( '' !== $faces ) {
+        wp_add_inline_style( 'poetheme-theme-options', $faces );
+    }
+
     wp_enqueue_script( 'poetheme-style-studio', POETHEME_URI . '/assets/js/style-studio.js', array(), poetheme_get_asset_version( 'assets/js/style-studio.js' ), true );
     wp_localize_script(
         'poetheme-style-studio',
         'poethemeStudio',
         array(
             'labels' => array(
-                'aaPass'   => __( 'AA', 'poetheme' ),
-                'aaFail'   => __( 'Insufficiente', 'poetheme' ),
-                'sample'   => __( 'Titolo di esempio', 'poetheme' ),
-                'body'     => __( 'Testo di esempio con un', 'poetheme' ),
-                'link'     => __( 'collegamento', 'poetheme' ),
-                'cta'          => __( 'Pulsante', 'poetheme' ),
+                'aaPass'       => __( 'AA', 'poetheme' ),
+                'aaFail'       => __( 'Insufficiente', 'poetheme' ),
                 'themeDefault' => __( 'Predefinito del tema', 'poetheme' ),
                 'menu'         => array( __( 'Home', 'poetheme' ), __( 'Articoli', 'poetheme' ), __( 'Contatti', 'poetheme' ) ),
+                'sampleText'   => array(
+                    'brand'         => __( 'Brand', 'poetheme' ),
+                    'subscribe'     => __( 'Iscriviti', 'poetheme' ),
+                    'title'         => __( 'Titolo della pagina di esempio', 'poetheme' ),
+                    'meta'          => __( 'Di Redazione · 12 giugno 2026 · 5 min di lettura', 'poetheme' ),
+                    'lead'          => __( 'Un paragrafo introduttivo con un ', 'poetheme' ),
+                    'link'          => __( 'collegamento', 'poetheme' ),
+                    'leadEnd'       => __( ' e del testo in ', 'poetheme' ),
+                    'bold'          => __( 'grassetto', 'poetheme' ),
+                    'h2'            => __( 'Una sezione importante', 'poetheme' ),
+                    'body'          => __( 'Testo di esempio con del codice ', 'poetheme' ),
+                    'list'          => array( __( 'Primo punto elenco', 'poetheme' ), __( 'Secondo punto elenco', 'poetheme' ), __( 'Terzo punto elenco', 'poetheme' ) ),
+                    'quote'         => __( '“Una citazione che mette in risalto un concetto chiave del contenuto.”', 'poetheme' ),
+                    'image'         => __( 'Immagine in evidenza', 'poetheme' ),
+                    'caption'       => __( 'Didascalia dell’immagine di esempio.', 'poetheme' ),
+                    'h3'            => __( 'Dettagli e dati', 'poetheme' ),
+                    'steps'         => array( __( 'Primo passaggio', 'poetheme' ), __( 'Secondo passaggio', 'poetheme' ), __( 'Terzo passaggio', 'poetheme' ) ),
+                    'tableHead'     => array( __( 'Piano', 'poetheme' ), __( 'Prezzo', 'poetheme' ) ),
+                    'tableRows'     => array( array( __( 'Base', 'poetheme' ), '€9' ), array( __( 'Pro', 'poetheme' ), '€29' ) ),
+                    'cta'           => __( 'Azione principale', 'poetheme' ),
+                    'secondary'     => __( 'Secondaria', 'poetheme' ),
+                    'footerHeading' => __( 'Newsletter', 'poetheme' ),
+                ),
             ),
         )
     );
@@ -209,7 +247,7 @@ function poetheme_studio_render_font_select( $data_attr, $default_label ) {
         <?php foreach ( poetheme_get_font_families( $available ) as $family_label => $family_fonts ) : ?>
             <optgroup label="<?php echo esc_attr( $family_label ); ?>">
                 <?php foreach ( $family_fonts as $font ) : ?>
-                    <option value="<?php echo esc_attr( $font['slug'] ); ?>" data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
+                    <option value="<?php echo esc_attr( $font['slug'] ); ?>" data-font-family="<?php echo esc_attr( $font['family'] ); ?>" data-preview-family="poetheme-pv-<?php echo esc_attr( $font['slug'] ); ?>">
                         <?php echo esc_html( $font['variant_label'] ); ?>
                     </option>
                 <?php endforeach; ?>
