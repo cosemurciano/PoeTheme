@@ -309,7 +309,12 @@ function poetheme_get_font_options() {
         }
     }
 
-    return $options;
+    /**
+     * Filter the resolved font options (used by the style palette override).
+     *
+     * @param array $options Sanitized font options.
+     */
+    return apply_filters( 'poetheme_font_options', $options );
 }
 
 /**

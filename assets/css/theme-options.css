@@ -563,3 +563,118 @@
         margin-bottom: 4px;
     }
 }
+
+/* Palette cromatica e stile page */
+.poetheme-palette-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin: 1.25rem 0 1.5rem;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+}
+
+.poetheme-palette-import {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.poetheme-palette-active-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding: 0.75rem 1rem;
+  background: #f0f6fc;
+  border: 1px solid #c5d9ed;
+  border-radius: 6px;
+}
+
+.poetheme-palette-inline {
+  display: inline;
+  margin: 0;
+}
+
+.poetheme-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.poetheme-palette-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem 1.25rem;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+}
+
+.poetheme-palette-card.is-active {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+.poetheme-palette-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.poetheme-palette-card__head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.poetheme-palette-badge {
+  padding: 0.1rem 0.5rem;
+  background: #2271b1;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.poetheme-palette-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.poetheme-palette-swatch {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.poetheme-palette-meta {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: #50575e;
+}
+
+.poetheme-palette-meta li {
+  margin: 0.15rem 0;
+}
+
+.poetheme-palette-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+}

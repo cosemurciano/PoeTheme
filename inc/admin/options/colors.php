@@ -221,7 +221,12 @@ function poetheme_get_color_options() {
         $options[ $key ] = poetheme_normalize_color_value( $default_value, '' );
     }
 
-    return $options;
+    /**
+     * Filter the resolved color options (used by the style palette override).
+     *
+     * @param array $options Sanitized color options.
+     */
+    return apply_filters( 'poetheme_color_options', $options );
 }
 
 /**

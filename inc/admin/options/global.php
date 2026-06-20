@@ -185,7 +185,12 @@ function poetheme_get_global_options() {
     }
     $options['default_font_fallback'] = $fallback;
 
-    return $options;
+    /**
+     * Filter the resolved global options (used by the style palette override).
+     *
+     * @param array $options Sanitized global options.
+     */
+    return apply_filters( 'poetheme_global_options', $options );
 }
 
 

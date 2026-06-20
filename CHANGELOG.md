@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.10.0
+- Nuova sezione **Palette cromatica e stile**: importa file JSON che assegnano colori, font e
+  dimensioni a tutti gli elementi del tema. La palette applicata sovrascrive (in modo
+  reversibile) qualsiasi impostazione e si applica a qualsiasi testata selezionata senza
+  modificarne la struttura. Include download di un JSON di esempio/modello, export delle
+  palette, attivazione/disattivazione ed eliminazione, con anteprima a swatch.
+
 ## 1.9.0
 - Corretto l'output del CSS inline (`inc/head-output.php`): rimosso `esc_html()` che
   trasformava i combinatori figlio `>` in `&gt;`, invalidando le regole dei colori del menu.
