@@ -2563,3 +2563,59 @@ msgstr ""
 #: inc/template-tags.php:1268
 msgid "Potrebbe esserti utile anche"
 msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Palette cromatica e stile"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Palette e stile"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Scarica JSON di esempio"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Importa palette"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Palette disponibili"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Applica"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Esporta"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Elimina"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Attiva"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Disattiva palette"
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Palette importata con successo."
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Palette applicata."
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Palette eliminata."
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Il file JSON non è valido."
+msgstr ""

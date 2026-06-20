@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-17 10:15+0000\n"
+"PO-Revision-Date: 2026-06-20 08:52+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: English\n"
 "Language: en_US\n"
@@ -2564,3 +2564,59 @@ msgstr "Link copied to the clipboard."
 #: inc/template-tags.php:1268
 msgid "Potrebbe esserti utile anche"
 msgstr "You might also find useful"
+
+#: inc/admin/options/palettes.php
+msgid "Palette cromatica e stile"
+msgstr "Color & style palette"
+
+#: inc/admin/options/palettes.php
+msgid "Palette e stile"
+msgstr "Palettes & style"
+
+#: inc/admin/options/palettes.php
+msgid "Scarica JSON di esempio"
+msgstr "Download example JSON"
+
+#: inc/admin/options/palettes.php
+msgid "Importa palette"
+msgstr "Import palette"
+
+#: inc/admin/options/palettes.php
+msgid "Palette disponibili"
+msgstr "Available palettes"
+
+#: inc/admin/options/palettes.php
+msgid "Applica"
+msgstr "Apply"
+
+#: inc/admin/options/palettes.php
+msgid "Esporta"
+msgstr "Export"
+
+#: inc/admin/options/palettes.php
+msgid "Elimina"
+msgstr "Delete"
+
+#: inc/admin/options/palettes.php
+msgid "Attiva"
+msgstr "Active"
+
+#: inc/admin/options/palettes.php
+msgid "Disattiva palette"
+msgstr "Deactivate palette"
+
+#: inc/admin/options/palettes.php
+msgid "Palette importata con successo."
+msgstr "Palette imported successfully."
+
+#: inc/admin/options/palettes.php
+msgid "Palette applicata."
+msgstr "Palette applied."
+
+#: inc/admin/options/palettes.php
+msgid "Palette eliminata."
+msgstr "Palette deleted."
+
+#: inc/admin/options/palettes.php
+msgid "Il file JSON non è valido."
+msgstr "The JSON file is not valid."
