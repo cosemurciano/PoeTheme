@@ -163,6 +163,88 @@ function poetheme_get_available_fonts() {
 }
 
 /**
+ * Derive the base family label for a font entry.
+ *
+ * Example: "InterDisplay SemiBold" -> "Inter Display".
+ *
+ * @param array $font Font entry.
+ * @return string
+ */
+function poetheme_get_font_base_family( $font ) {
+    $family = isset( $font['family'] ) ? (string) $font['family'] : '';
+    $parts  = preg_split( '/\s+/', trim( $family ) );
+    $base   = isset( $parts[0] ) ? $parts[0] : $family;
+    $base   = preg_replace( '/([a-z0-9])([A-Z])/', '$1 $2', (string) $base );
+    $base   = trim( (string) $base );
+
+    return '' !== $base ? $base : __( 'Altri font', 'poetheme' );
+}
+
+/**
+ * Derive the weight/style label for a font entry within its family.
+ *
+ * @param array $font Font entry.
+ * @return string
+ */
+function poetheme_get_font_variant_label( $font ) {
+    $family = isset( $font['family'] ) ? (string) $font['family'] : '';
+    $parts  = preg_split( '/\s+/', trim( $family ) );
+    array_shift( $parts );
+    $label  = trim( implode( ' ', $parts ) );
+    $label  = preg_replace( '/([a-z0-9])([A-Z])/', '$1 $2', (string) $label );
+    $label  = trim( preg_replace( '/\s+/', ' ', (string) $label ) );
+
+    return '' !== $label ? $label : __( 'Regolare', 'poetheme' );
+}
+
+/**
+ * Group available fonts by base family for grouped font pickers.
+ *
+ * @param array|null $available_fonts Optional cached fonts list.
+ * @return array Map of family label => array of font entries (each with 'variant_label').
+ */
+function poetheme_get_font_families( $available_fonts = null ) {
+    if ( null === $available_fonts ) {
+        $available_fonts = poetheme_get_available_fonts();
+    }
+
+    $families = array();
+
+    foreach ( $available_fonts as $slug => $font ) {
+        $base = poetheme_get_font_base_family( $font );
+
+        if ( ! isset( $families[ $base ] ) ) {
+            $families[ $base ] = array();
+        }
+
+        $font['variant_label']      = poetheme_get_font_variant_label( $font );
+        $families[ $base ][ $slug ] = $font;
+    }
+
+    foreach ( $families as $base => $entries ) {
+        uasort(
+            $entries,
+            function ( $a, $b ) {
+                $wa = isset( $a['weight'] ) ? (int) $a['weight'] : 400;
+                $wb = isset( $b['weight'] ) ? (int) $b['weight'] : 400;
+
+                if ( $wa === $wb ) {
+                    return strcmp( (string) ( isset( $a['style'] ) ? $a['style'] : '' ), (string) ( isset( $b['style'] ) ? $b['style'] : '' ) );
+                }
+
+                return $wa <=> $wb;
+            }
+        );
+
+        $families[ $base ] = $entries;
+    }
+
+    ksort( $families );
+
+    return $families;
+}
+
+/**
  * Generate @font-face rules for the provided font slugs.
  *
  * @param array|null $font_slugs Font slugs to include. Null includes all available fonts.
@@ -1376,10 +1458,14 @@ function poetheme_render_fonts_page() {
                                                 <div class="poetheme-font-section__control">
                                                     <select class="poetheme-font-select" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $field_name ); ?>" data-preview="<?php echo esc_attr( $preview_id ); ?>"<?php echo $fallback_attr; ?> <?php disabled( empty( $available_fonts ) ); ?><?php echo $description_id ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : ''; ?>>
                                                         <option value="" <?php selected( '', $value ); ?>><?php echo esc_html( $field['default_label'] ); ?></option>
-                                                        <?php foreach ( $available_fonts as $font ) : ?>
-                                                            <option value="<?php echo esc_attr( $font['slug'] ); ?>" <?php selected( $value, $font['slug'] ); ?> data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
-                                                                <?php echo esc_html( $font['family'] ); ?>
-                                                            </option>
+                                                        <?php foreach ( poetheme_get_font_families( $available_fonts ) as $family_label => $family_fonts ) : ?>
+                                                            <optgroup label="<?php echo esc_attr( $family_label ); ?>">
+                                                                <?php foreach ( $family_fonts as $font ) : ?>
+                                                                    <option value="<?php echo esc_attr( $font['slug'] ); ?>" <?php selected( $value, $font['slug'] ); ?> data-font-family="<?php echo esc_attr( $font['family'] ); ?>">
+                                                                        <?php echo esc_html( $font['variant_label'] ); ?>
+                                                                    </option>
+                                                                <?php endforeach; ?>
+                                                            </optgroup>
                                                         <?php endforeach; ?>
                                                     </select>
                                                     <?php if ( ! empty( $field['description'] ) ) : ?>

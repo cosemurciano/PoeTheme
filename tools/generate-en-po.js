@@ -54,6 +54,9 @@ const dict = {
   'Aree servite': 'Areas served',
   'Widget pagina': 'Page widgets',
   'Widget Footer': 'Footer widgets',
+  // --- Fonts ---
+  'Altri font': 'Other fonts',
+  'Regolare': 'Regular',
   // --- Style palettes ---
   'Palette cromatica e stile': 'Color & style palette',
   'Palette e stile': 'Palettes & style',
