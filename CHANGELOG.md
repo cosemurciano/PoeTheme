@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.14.0
+- **Style Studio – preset pronti:** nuova galleria di stili one-click (Aziendale, Editoriale,
+  Boutique, Notturno, Tech, Natura) in cima allo Studio. Un clic imposta colore, armonia, modalità,
+  coppia di font, scala, densità e arrotondamento; da lì si può personalizzare e salvare come
+  template. I preset suggeriscono i font in base alle famiglie disponibili (con fallback al
+  predefinito del tema se non presenti).
+
 ## 1.13.0
 - **Style Studio – anteprima migliorata:** l’anteprima ora mostra una pagina d’esempio molto più
   ricca (titolo, meta, paragrafo introduttivo, sezioni H2/H3, elenchi puntati e numerati, citazione,

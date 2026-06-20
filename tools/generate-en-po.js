@@ -118,6 +118,12 @@ const dict = {
   'Prezzo': 'Price',
   'Azione principale': 'Primary action',
   'Secondaria': 'Secondary',
+  'Preset pronti': 'Ready-made presets',
+  'Parti da uno stile predefinito con un clic, poi personalizzalo a piacere.': 'Start from a predefined style with one click, then customize it as you like.',
+  'Aziendale': 'Corporate',
+  'Editoriale': 'Editorial',
+  'Notturno': 'Nocturne',
+  'Natura': 'Nature',
   // --- Fonts ---
   'Altri font': 'Other fonts',
   'Regolare': 'Regular',

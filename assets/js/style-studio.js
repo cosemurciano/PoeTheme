@@ -437,6 +437,7 @@
         var swatches = root.querySelector('[data-studio-swatches]');
         var contrastBox = root.querySelector('[data-studio-contrast]');
         var preview = root.querySelector('[data-studio-preview]');
+        var presetsBox = root.querySelector('[data-studio-presets]');
 
         function selectedText(select) {
             if (!select || select.selectedIndex < 0) { return ''; }
@@ -516,6 +517,57 @@
             node.addEventListener('input', update);
         });
 
+        /* ----- presets ----- */
+
+        function resolveFont(select, prefs) {
+            if (!select || !prefs || !prefs.length) { return ''; }
+            for (var p = 0; p < prefs.length; p++) {
+                var needle = String(prefs[p]).toLowerCase();
+                for (var i = 0; i < select.options.length; i++) {
+                    var opt = select.options[i];
+                    if (!opt.value) { continue; }
+                    var hay = (opt.value + ' ' + opt.textContent + ' ' + (opt.getAttribute('data-font-family') || '')).toLowerCase();
+                    if (hay.indexOf(needle) !== -1) { return opt.value; }
+                }
+            }
+            return '';
+        }
+
+        function applyPreset(p) {
+            baseHex.value = p.base;
+            base.value = p.base;
+            harmony.value = p.harmony;
+            mode.value = p.mode;
+            accentButtons.checked = !!p.accent_buttons;
+            baseSize.value = p.base_size;
+            ratio.value = String(p.ratio);
+            density.value = p.density;
+            radius.value = String(p.radius);
+            if (headingFont) { headingFont.value = resolveFont(headingFont, p.heading_pref); }
+            if (bodyFont) { bodyFont.value = resolveFont(bodyFont, p.body_pref); }
+            if (p.name) { nameInput.value = p.name; }
+            update();
+        }
+
+        function renderPresets() {
+            var presets = cfg().presets;
+            if (!presetsBox || !presets || !presets.length) { return; }
+            presetsBox.innerHTML = '';
+            presets.forEach(function (p) {
+                var meta = generate({ base: p.base, harmony: p.harmony, mode: p.mode, accent_buttons: p.accent_buttons }).meta;
+                var card = el('button', { type: 'button', className: 'poetheme-studio__preset' });
+                var strip = el('span', { className: 'poetheme-studio__preset-swatches' });
+                [meta.primary, meta.accent, meta.surface, meta.text].forEach(function (c) {
+                    strip.appendChild(el('span', { className: 'poetheme-studio__preset-dot', style: 'background:' + c }));
+                });
+                card.appendChild(strip);
+                card.appendChild(el('span', { className: 'poetheme-studio__preset-name' }, p.name));
+                card.addEventListener('click', function () { applyPreset(p); });
+                presetsBox.appendChild(card);
+            });
+        }
+
+        renderPresets();
         update();
     });
 }());
