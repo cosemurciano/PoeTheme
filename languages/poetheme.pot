@@ -2787,3 +2787,95 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Pillola"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Iscriviti"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Titolo della pagina di esempio"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Di Redazione · 12 giugno 2026 · 5 min di lettura"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Un paragrafo introduttivo con un "
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid " e del testo in "
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "grassetto"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Una sezione importante"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Testo di esempio con del codice "
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Primo punto elenco"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Secondo punto elenco"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Terzo punto elenco"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "“Una citazione che mette in risalto un concetto chiave del contenuto.”"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Immagine in evidenza"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Didascalia dell’immagine di esempio."
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dettagli e dati"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Primo passaggio"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Secondo passaggio"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Terzo passaggio"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Piano"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Prezzo"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Azione principale"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Secondaria"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Newsletter"
+msgstr ""

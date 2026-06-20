@@ -300,35 +300,116 @@
         container.appendChild(badge('Top bar', contrast(colors.top_bar_text_color, colors.top_bar_background_color)));
     }
 
-    function renderPreview(container, colors, type, fontNames) {
-        var labels = cfg().labels || {};
-        var radius = type.radius >= 100 ? '999px' : type.radius + 'px';
-        container.innerHTML = '';
-        var frame = el('div', { className: 'poetheme-studio__device', style: 'background:' + colors.page_background_color });
+    function fam(family) {
+        return family ? "'" + family + "', sans-serif" : 'inherit';
+    }
 
+    function renderPreview(container, colors, type, fontInfo) {
+        var t = cfg().labels || {};
+        var s = t.sampleText || {};
+        var radius = type.radius >= 100 ? '999px' : type.radius + 'px';
+        var headingFam = fam(fontInfo.headingFamily);
+        var bodyFam = fam(fontInfo.bodyFamily);
+
+        container.innerHTML = '';
+        var frame = el('div', { className: 'poetheme-studio__device', style: 'background:' + colors.page_background_color + ';font-family:' + bodyFam });
+
+        function heading(tag, size, text) {
+            return el(tag, { style: 'color:' + colors.heading_h1_color + ';font-size:' + size + 'rem;font-family:' + headingFam }, text);
+        }
+
+        /* Header with brand, nav and a CTA */
         var header = el('div', { className: 'poetheme-studio__pv-header', style: 'background:' + colors.header_background_color });
-        header.appendChild(el('span', { className: 'poetheme-studio__pv-brand', style: 'color:' + colors.content_strong_color }, 'Brand'));
+        header.appendChild(el('span', { className: 'poetheme-studio__pv-brand', style: 'color:' + colors.content_strong_color + ';font-family:' + headingFam }, s.brand || 'Brand'));
+        var right = el('span', { style: 'display:flex;align-items:center;gap:1rem' });
         var nav = el('span', { className: 'poetheme-studio__pv-nav' });
-        (labels.menu || ['Home', 'Blog', 'Contatti']).forEach(function (item, i) {
+        (t.menu || ['Home', 'Blog', 'Contatti']).forEach(function (item, i) {
             nav.appendChild(el('a', { style: 'color:' + (i === 0 ? colors.menu_active_link_color : colors.menu_link_color) }, item));
         });
-        header.appendChild(nav);
+        right.appendChild(nav);
+        right.appendChild(el('span', { className: 'poetheme-studio__pv-cta', style: 'background:' + colors.cta_background_color + ';color:' + colors.cta_text_color + ';border-radius:' + radius }, s.subscribe || 'Iscriviti'));
+        header.appendChild(right);
         frame.appendChild(header);
 
+        /* Hero / page title */
+        var hero = el('div', { className: 'poetheme-studio__pv-hero' });
+        hero.appendChild(heading('h1', type.sizes.h1, s.title || 'Titolo della pagina'));
+        hero.appendChild(el('p', { className: 'poetheme-studio__pv-meta', style: 'color:' + colors.content_text_color }, s.meta || 'Di Redazione · 12 giugno 2026 · 5 min'));
+        frame.appendChild(hero);
+
+        /* Article card with diverse content */
         var card = el('div', { className: 'poetheme-studio__pv-card', style: 'background:' + colors.content_background_color });
-        card.appendChild(el('h3', { style: 'color:' + colors.heading_h1_color + ';font-size:' + type.sizes.h2 + 'rem;line-height:1.15' }, labels.sample || 'Sample heading'));
-        var p = el('p', { style: 'color:' + colors.content_text_color + ';font-size:' + type.base + 'rem' });
-        p.appendChild(document.createTextNode((labels.body || 'Sample text with a') + ' '));
-        p.appendChild(el('a', { style: 'color:' + colors.content_link_color }, labels.link || 'link'));
-        p.appendChild(document.createTextNode('.'));
-        card.appendChild(p);
-        card.appendChild(el('span', { className: 'poetheme-studio__pv-cta', style: 'background:' + colors.cta_background_color + ';color:' + colors.cta_text_color + ';border-radius:' + radius + ';font-size:' + type.base + 'rem' }, labels.cta || 'Button'));
+
+        var lead = el('p', { style: 'color:' + colors.content_text_color + ';font-size:' + round2(type.base * 1.05) + 'rem' });
+        lead.appendChild(document.createTextNode((s.lead || 'Un paragrafo introduttivo con un ') + ''));
+        lead.appendChild(el('a', { style: 'color:' + colors.content_link_color }, s.link || 'collegamento'));
+        lead.appendChild(document.createTextNode((s.leadEnd || ' e del testo in ') + ''));
+        lead.appendChild(el('strong', null, s.bold || 'grassetto'));
+        lead.appendChild(document.createTextNode('.'));
+        card.appendChild(lead);
+
+        card.appendChild(heading('h2', type.sizes.h2, s.h2 || 'Una sezione importante'));
+        var p2 = el('p', { style: 'color:' + colors.content_text_color });
+        p2.appendChild(document.createTextNode((s.body || 'Testo di esempio con codice ') + ''));
+        p2.appendChild(el('code', { className: 'poetheme-studio__pv-code' }, 'inline'));
+        p2.appendChild(document.createTextNode('.'));
+        card.appendChild(p2);
+
+        var ul = el('ul', { style: 'color:' + colors.content_text_color });
+        (s.list || ['Primo punto elenco', 'Secondo punto elenco', 'Terzo punto elenco']).forEach(function (li) {
+            ul.appendChild(el('li', null, li));
+        });
+        card.appendChild(ul);
+
+        card.appendChild(el('blockquote', { style: 'color:' + colors.content_strong_color }, s.quote || '“Una citazione che mette in risalto un concetto chiave del contenuto.”'));
+
+        /* Figure / image placeholder */
+        var figure = el('figure', { className: 'poetheme-studio__pv-figure' });
+        figure.appendChild(el('div', { className: 'poetheme-studio__pv-image', style: 'background:linear-gradient(135deg,' + colors.cta_background_color + ',' + colors.menu_active_link_color + ')' }, s.image || 'Immagine'));
+        figure.appendChild(el('figcaption', { className: 'poetheme-studio__pv-figcaption', style: 'color:' + colors.content_text_color }, s.caption || 'Didascalia dell’immagine di esempio.'));
+        card.appendChild(figure);
+
+        card.appendChild(heading('h3', type.sizes.h3, s.h3 || 'Dettagli e dati'));
+        var ol = el('ol', { style: 'color:' + colors.content_text_color });
+        (s.steps || ['Primo passaggio', 'Secondo passaggio', 'Terzo passaggio']).forEach(function (li) {
+            ol.appendChild(el('li', null, li));
+        });
+        card.appendChild(ol);
+
+        /* Table */
+        var table = el('table', { className: 'poetheme-studio__pv-table', style: 'color:' + colors.content_text_color });
+        var thead = el('tr', null);
+        (s.tableHead || ['Piano', 'Prezzo']).forEach(function (h) {
+            thead.appendChild(el('th', { style: 'color:' + colors.content_strong_color }, h));
+        });
+        table.appendChild(thead);
+        (s.tableRows || [['Base', '€9'], ['Pro', '€29']]).forEach(function (row) {
+            var tr = el('tr', null);
+            row.forEach(function (cell) { tr.appendChild(el('td', null, cell)); });
+            table.appendChild(tr);
+        });
+        card.appendChild(table);
+
+        /* Buttons row */
+        var buttons = el('div', { className: 'poetheme-studio__pv-buttons' });
+        buttons.appendChild(el('span', { className: 'poetheme-studio__pv-cta', style: 'background:' + colors.cta_background_color + ';color:' + colors.cta_text_color + ';border-radius:' + radius }, s.cta || 'Azione principale'));
+        buttons.appendChild(el('span', { className: 'poetheme-studio__pv-btn-outline', style: 'color:' + colors.content_link_color + ';border-radius:' + radius }, s.secondary || 'Secondaria'));
+        card.appendChild(buttons);
+
         frame.appendChild(card);
 
-        var meta = el('div', { className: 'poetheme-studio__pv-fonts' }, (fontNames.heading || '') + ' / ' + (fontNames.body || ''));
-        frame.appendChild(meta);
+        /* Font caption */
+        frame.appendChild(el('div', { className: 'poetheme-studio__pv-fonts' }, (fontInfo.headingName || (t.themeDefault || '')) + ' · ' + (fontInfo.bodyName || (t.themeDefault || ''))));
 
-        var footer = el('div', { className: 'poetheme-studio__pv-footer', style: 'background:' + colors.footer_widget_background_color + ';color:' + colors.footer_widget_text_color }, '© ' + new Date().getFullYear());
+        /* Footer with widget */
+        var footer = el('div', { className: 'poetheme-studio__pv-footer', style: 'background:' + colors.footer_widget_background_color + ';color:' + colors.footer_widget_text_color });
+        footer.appendChild(el('h4', { style: 'color:' + colors.heading_h1_color + ';font-family:' + headingFam + ';font-size:' + type.sizes.h5 + 'rem' }, s.footerHeading || 'Newsletter'));
+        var fnav = el('div', null);
+        (t.menu || ['Home', 'Blog', 'Contatti']).forEach(function (item) {
+            fnav.appendChild(el('a', { style: 'color:' + colors.footer_widget_link_color }, item));
+        });
+        footer.appendChild(fnav);
+        footer.appendChild(el('div', { style: 'margin-top:0.6rem;opacity:0.7' }, '© ' + new Date().getFullYear() + ' Brand'));
         frame.appendChild(footer);
 
         container.appendChild(frame);
@@ -365,6 +446,13 @@
             return (group + opt.textContent.trim()).trim();
         }
 
+        function selectedFamily(select) {
+            if (!select || select.selectedIndex < 0) { return ''; }
+            var opt = select.options[select.selectedIndex];
+            if (!opt || !opt.value) { return ''; }
+            return opt.getAttribute('data-preview-family') || '';
+        }
+
         function colorSeeds() {
             return {
                 base: baseHex.value,
@@ -393,8 +481,10 @@
             renderSwatches(swatches, color.meta);
             renderContrast(contrastBox, color.colors);
             renderPreview(preview, color.colors, type, {
-                heading: selectedText(headingFont) || (cfg().labels || {}).themeDefault,
-                body: selectedText(bodyFont) || (cfg().labels || {}).themeDefault
+                headingFamily: selectedFamily(headingFont),
+                bodyFamily: selectedFamily(bodyFont),
+                headingName: selectedText(headingFont),
+                bodyName: selectedText(bodyFont)
             });
             payload.value = JSON.stringify({
                 name: nameInput.value,

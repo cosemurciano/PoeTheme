@@ -682,8 +682,8 @@
 /* Style Studio */
 .poetheme-studio__layout {
   display: grid;
-  grid-template-columns: minmax(260px, 360px) 1fr;
-  gap: 1.5rem;
+  grid-template-columns: minmax(340px, 440px) 1fr;
+  gap: 1.75rem;
   align-items: start;
   margin-top: 1rem;
 }
@@ -846,4 +846,136 @@
   letter-spacing: 0.02em;
   text-transform: uppercase;
   opacity: 0.55;
+}
+
+/* Style Studio – richer preview content */
+.poetheme-studio__pv-header .poetheme-studio__pv-cta {
+  margin: 0;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+}
+
+.poetheme-studio__pv-hero {
+  padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.poetheme-studio__pv-hero h1 {
+  margin: 0 0 0.35rem;
+  line-height: 1.1;
+}
+
+.poetheme-studio__pv-meta {
+  font-size: 0.78rem;
+  opacity: 0.75;
+  margin: 0 0 0.5rem;
+}
+
+.poetheme-studio__pv-card {
+  margin: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.08);
+}
+
+.poetheme-studio__pv-card h2,
+.poetheme-studio__pv-card h3 {
+  margin: 1.1rem 0 0.5rem;
+  line-height: 1.2;
+}
+
+.poetheme-studio__pv-card p {
+  margin: 0 0 0.75rem;
+  line-height: 1.6;
+}
+
+.poetheme-studio__pv-card ul,
+.poetheme-studio__pv-card ol {
+  margin: 0 0 0.85rem 1.25rem;
+  line-height: 1.6;
+}
+
+.poetheme-studio__pv-card li {
+  margin-bottom: 0.25rem;
+}
+
+.poetheme-studio__pv-card blockquote {
+  margin: 0 0 0.9rem;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-left: 4px solid currentColor;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.poetheme-studio__pv-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: rgba(120, 120, 120, 0.14);
+}
+
+.poetheme-studio__pv-figure {
+  margin: 0 0 0.9rem;
+}
+
+.poetheme-studio__pv-image {
+  height: 110px;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5rem 0.75rem;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.poetheme-studio__pv-figcaption {
+  font-size: 0.74rem;
+  opacity: 0.7;
+  margin-top: 0.3rem;
+}
+
+.poetheme-studio__pv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 0 0 1rem;
+}
+
+.poetheme-studio__pv-table th,
+.poetheme-studio__pv-table td {
+  border: 1px solid rgba(120, 120, 120, 0.25);
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+}
+
+.poetheme-studio__pv-buttons {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.poetheme-studio__pv-btn-outline {
+  display: inline-block;
+  padding: 0.5rem 1.1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: transparent;
+  border: 2px solid currentColor;
+}
+
+.poetheme-studio__pv-footer {
+  padding: 1.25rem 1.5rem;
+  font-size: 0.85rem;
+}
+
+.poetheme-studio__pv-footer h4 {
+  margin: 0 0 0.4rem;
+}
+
+.poetheme-studio__pv-footer a {
+  text-decoration: none;
+  margin-right: 0.85rem;
+  font-size: 0.82rem;
 }

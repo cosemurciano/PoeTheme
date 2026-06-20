@@ -209,6 +209,60 @@ function poetheme_add_options_pages() {
 }
 add_action( 'admin_menu', 'poetheme_add_options_pages' );
 
+/**
+ * Reorder the PoeTheme submenu into a more meaningful flow.
+ *
+ * Runs late (priority 999) so it also covers pages registered by other modules
+ * (Style Studio, palettes). Style Studio and the palette manager are grouped
+ * right after the global settings; the remaining items keep a logical grouping
+ * (granular managers, structural areas, then advanced tools).
+ */
+function poetheme_reorder_admin_submenu() {
+    global $submenu;
+
+    if ( empty( $submenu['poetheme-settings'] ) ) {
+        return;
+    }
+
+    $order = array(
+        'poetheme-settings',
+        'poetheme-style-studio',
+        'poetheme-palette',
+        'poetheme-colors',
+        'poetheme-fonts',
+        'poetheme-logo',
+        'poetheme-header',
+        'poetheme-subheader',
+        'poetheme-blog',
+        'poetheme-footer',
+        'poetheme-custom-css',
+        'poetheme-seo-schema',
+    );
+
+    $by_slug = array();
+    foreach ( $submenu['poetheme-settings'] as $item ) {
+        if ( isset( $item[2] ) ) {
+            $by_slug[ $item[2] ] = $item;
+        }
+    }
+
+    $sorted = array();
+    foreach ( $order as $slug ) {
+        if ( isset( $by_slug[ $slug ] ) ) {
+            $sorted[] = $by_slug[ $slug ];
+            unset( $by_slug[ $slug ] );
+        }
+    }
+
+    // Append any pages not listed above so nothing disappears.
+    foreach ( $by_slug as $item ) {
+        $sorted[] = $item;
+    }
+
+    $submenu['poetheme-settings'] = array_values( $sorted );
+}
+add_action( 'admin_menu', 'poetheme_reorder_admin_submenu', 999 );
+
 function poetheme_options_admin_assets( $hook ) {
     $style_screens = array(
         'toplevel_page_poetheme-settings',

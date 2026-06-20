@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.13.0
+- **Style Studio – anteprima migliorata:** l’anteprima ora mostra una pagina d’esempio molto più
+  ricca (titolo, meta, paragrafo introduttivo, sezioni H2/H3, elenchi puntati e numerati, citazione,
+  immagine con didascalia, tabella, codice inline, pulsanti primario/secondario, footer con widget),
+  così da valutare meglio lo stile su contenuti reali.
+- **Font reali nell’anteprima:** selezionando il font dei titoli o del testo, l’anteprima viene
+  renderizzata con il carattere effettivo (caricato via `@font-face` dedicati, fetch pigro all’uso).
+- **Layout dello Studio:** colonna dei controlli a sinistra più larga e area di anteprima a destra
+  più spaziosa.
+- **Menu di amministrazione riordinato:** voci raggruppate in modo più logico, con **Style Studio**
+  in 2ª posizione e **Palette e stile** in 3ª, subito dopo “Globale”.
+
 ## 1.12.0
 - **Style Studio – Fase 2 (tipografia + densità):** lo Studio ora genera anche la **tipografia** e
   la **densità** oltre ai colori. Si scelgono il **font dei titoli** e il **font del testo**
