@@ -68,6 +68,8 @@ const dict = {
   'Chiara': 'Light',
   'Scura': 'Dark',
   'Usa il colore accento per i pulsanti': 'Use the accent color for buttons',
+  'Usa il colore del brand per i pulsanti': 'Use the brand color for buttons',
+  '. Questo testo di esempio serve a valutare leggibilità, interlinea e lunghezza delle righe su più frasi, così da capire come appariranno i contenuti reali del sito una volta pubblicati.': '. This sample text helps assess readability, line height and line length across several sentences, to see how the real site content will look once published.',
   'Salva come template': 'Save as template',
   'Salva e applica': 'Save and apply',
   'La mia palette': 'My palette',

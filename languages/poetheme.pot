@@ -3135,3 +3135,11 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Riporta il template allo stato iniziale"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Usa il colore del brand per i pulsanti"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid ". Questo testo di esempio serve a valutare leggibilità, interlinea e lunghezza delle righe su più frasi, così da capire come appariranno i contenuti reali del sito una volta pubblicati."
+msgstr ""

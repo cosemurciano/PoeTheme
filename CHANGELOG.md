@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.20.0
+- **Colori e Font ora gestiti da Style Studio:** le pagine *Gestione Colori* e *Gestione Font* sono
+  state rimosse dal menu e qualsiasi accesso diretto viene reindirizzato a Style Studio. Le opzioni
+  non-stilistiche (immagine di sfondo, lightbox) erano già in “Globale”.
+- **“Armonia” ora visibile:** il colore di armonia (accento) viene usato come colore dei **pulsanti
+  CTA per default**, così cambiando regola di armonia l’effetto è subito evidente; l’opzione
+  diventa “Usa il colore del brand per i pulsanti”.
+- **Anteprima:** paragrafo introduttivo più lungo (per valutare leggibilità e interlinea) e
+  **sottolineatura dei link** ora riflessa nell’anteprima quando l’opzione è attiva.
+
 ## 1.19.0
 - **Fix dimensioni in Advanced:** i campi numerici usano ora `step="any"`, quindi i valori generati
   (es. 1,56rem) non vengono più segnalati come non validi dal browser.

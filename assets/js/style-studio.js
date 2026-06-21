@@ -127,7 +127,9 @@
 
         var primary = hsl(h, s, clamp(base.l, 38, 56));
         var accent = hsl(aH, s, clamp(base.l, 40, 58));
-        var ctaBg = seeds.accent_buttons ? accent : primary;
+        // The harmony accent drives the CTA by default so the harmony choice is
+        // always visible; the toggle switches the CTA back to the brand color.
+        var ctaBg = seeds.accent_buttons ? primary : accent;
 
         var page, surface, text, textStrong, textMuted, headerBg, footerBg, topBar;
 
@@ -342,12 +344,15 @@
         /* Article card with diverse content */
         var card = el('div', { className: 'poetheme-studio__pv-card', style: 'background:' + colors.content_background_color });
 
+        var underline = ( colors.content_link_underline === true || colors.content_link_underline === '1' || colors.content_link_underline === 1 );
+        var linkStyle = 'color:' + colors.content_link_color + ';text-decoration:' + ( underline ? 'underline' : 'none' );
+
         var lead = el('p', { style: 'color:' + colors.content_text_color + ';font-size:' + round2(type.base * 1.05) + 'rem' });
         lead.appendChild(document.createTextNode((s.lead || 'Un paragrafo introduttivo con un ') + ''));
-        lead.appendChild(el('a', { style: 'color:' + colors.content_link_color }, s.link || 'collegamento'));
+        lead.appendChild(el('a', { style: linkStyle }, s.link || 'collegamento'));
         lead.appendChild(document.createTextNode((s.leadEnd || ' e del testo in ') + ''));
         lead.appendChild(el('strong', null, s.bold || 'grassetto'));
-        lead.appendChild(document.createTextNode('.'));
+        lead.appendChild(document.createTextNode((s.leadTail || '. Questo testo di esempio serve a valutare leggibilità, interlinea e lunghezza delle righe su più frasi, così da capire come appariranno i contenuti reali del sito una volta pubblicati.')));
         card.appendChild(lead);
 
         card.appendChild(heading('h2', type.sizes.h2, s.h2 || 'Una sezione importante'));

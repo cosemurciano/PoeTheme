@@ -128,6 +128,7 @@ function poetheme_studio_admin_assets( $hook ) {
                     'link'          => __( 'collegamento', 'poetheme' ),
                     'leadEnd'       => __( ' e del testo in ', 'poetheme' ),
                     'bold'          => __( 'grassetto', 'poetheme' ),
+                    'leadTail'      => __( '. Questo testo di esempio serve a valutare leggibilità, interlinea e lunghezza delle righe su più frasi, così da capire come appariranno i contenuti reali del sito una volta pubblicati.', 'poetheme' ),
                     'h2'            => __( 'Una sezione importante', 'poetheme' ),
                     'body'          => __( 'Testo di esempio con del codice ', 'poetheme' ),
                     'list'          => array( __( 'Primo punto elenco', 'poetheme' ), __( 'Secondo punto elenco', 'poetheme' ), __( 'Terzo punto elenco', 'poetheme' ) ),
@@ -517,7 +518,9 @@ function poetheme_studio_generate_from_seeds( $seeds ) {
 
     $primary = poetheme_studio_hsl_to_hex( $h, $s, poetheme_studio_clamp( $bl, 38, 56 ) );
     $accent  = poetheme_studio_hsl_to_hex( $a_h, $s, poetheme_studio_clamp( $bl, 40, 58 ) );
-    $cta_bg  = $seeds['accent_buttons'] ? $accent : $primary;
+    // Accent drives the CTA by default (keeps the harmony visible); the toggle
+    // switches it back to the brand color.
+    $cta_bg  = $seeds['accent_buttons'] ? $primary : $accent;
 
     if ( $dark ) {
         $page        = poetheme_studio_hsl_to_hex( $h, 18, 10 );
@@ -1050,7 +1053,7 @@ function poetheme_render_style_studio_page() {
                     <p class="poetheme-field">
                         <label>
                             <input type="checkbox" data-studio-accent-buttons />
-                            <?php esc_html_e( 'Usa il colore accento per i pulsanti', 'poetheme' ); ?>
+                            <?php esc_html_e( 'Usa il colore del brand per i pulsanti', 'poetheme' ); ?>
                         </label>
                     </p>
 
