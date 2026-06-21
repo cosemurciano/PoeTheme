@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.19.0
+- **Fix dimensioni in Advanced:** i campi numerici usano ora `step="any"`, quindi i valori generati
+  (es. 1,56rem) non vengono più segnalati come non validi dal browser.
+- **Advanced completo:** aggiunti gli ultimi token mancanti — sfondi di titoli, titoli footer e voci
+  di menu (con opzione **Trasparente**), dimensioni di CTA/top bar/footer/titoli footer, e gli
+  interruttori **testata trasparente**, **nascondi ombra testata**, **footer trasparente**. Ora
+  Style Studio copre l’insieme delle impostazioni di colore e tipografia.
+- **Pulsante Reset:** a destra di “Salva/Applica”, riporta il template allo stato iniziale (semi +
+  personalizzazioni) scartando le modifiche non salvate.
+
 ## 1.18.0
 - **Style Studio Advanced – tipografia fine:** nuovi controlli **interlinea testo**, **interlinea
   titoli** e **spaziatura titoli** (margine sotto gli H1–H6). L’interlinea è una nuova opzione del

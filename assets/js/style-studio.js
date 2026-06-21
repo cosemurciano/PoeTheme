@@ -449,13 +449,13 @@
         var FONT_TYPES = { size: 1, radius: 1, lineheight: 1, spacing: 1 };
 
         function bucketFor(type) {
-            if (type === 'color' || type === 'bool') { return overrides.colors; }
+            if (type === 'color' || type === 'bool' || type === 'bgcolor') { return overrides.colors; }
             if (FONT_TYPES[type]) { return overrides.fonts; }
             return overrides.global;
         }
 
         function sourceFor(type, gen) {
-            if (type === 'color' || type === 'bool') { return gen.colors; }
+            if (type === 'color' || type === 'bool' || type === 'bgcolor') { return gen.colors; }
             if (FONT_TYPES[type]) { return gen.fonts; }
             return gen.global;
         }
@@ -469,11 +469,17 @@
                 var source = sourceFor(type, gen);
                 var input = field.querySelector('[data-adv-input]');
                 var reset = field.querySelector('[data-adv-reset]');
+                var transparent = field.querySelector('[data-adv-transparent]');
                 var overridden = Object.prototype.hasOwnProperty.call(bucket, repr);
                 var value = overridden ? bucket[repr] : source[repr];
                 if (input) {
                     if (type === 'bool') {
                         input.checked = ( value === true || value === '1' || value === 1 );
+                    } else if (type === 'bgcolor') {
+                        var isTransparent = ( value === undefined || value === null || value === '' || value === 'transparent' );
+                        if (transparent) { transparent.checked = isTransparent; }
+                        input.disabled = isTransparent;
+                        if (!isTransparent) { input.value = value; }
                     } else if (type === 'spacing') {
                         var bottom = value && value.margin ? parseFloat(value.margin.bottom) : NaN;
                         input.value = isNaN(bottom) ? 0 : bottom;
@@ -615,6 +621,7 @@
             var type = field.getAttribute('data-adv-type');
             var input = field.querySelector('[data-adv-input]');
             var reset = field.querySelector('[data-adv-reset]');
+            var transparent = field.querySelector('[data-adv-transparent]');
 
             if (input) {
                 var onChange = function () {
@@ -622,6 +629,8 @@
                     var value;
                     if (type === 'bool') {
                         value = input.checked;
+                    } else if (type === 'bgcolor') {
+                        value = ( transparent && transparent.checked ) ? '' : input.value;
                     } else if (type === 'spacing') {
                         value = spacingGroup(parseFloat(input.value) || 0);
                     } else {
@@ -632,6 +641,7 @@
                 };
                 input.addEventListener('input', onChange);
                 input.addEventListener('change', onChange);
+                if (transparent) { transparent.addEventListener('change', onChange); }
             }
             if (reset) {
                 reset.addEventListener('click', function () {
@@ -735,6 +745,33 @@
                 };
             }
             applySeeds(ed);
+        }
+
+        /* ----- reset to the template's initial state ----- */
+
+        function currentSeeds() {
+            var cs = colorSeeds();
+            var ts = typeSeeds();
+            return {
+                base: cs.base, harmony: cs.harmony, mode: cs.mode, accent_buttons: cs.accent_buttons,
+                heading_font: ts.heading_font, body_font: ts.body_font, base_size: ts.base_size,
+                ratio: String(ratio.value), density: ts.density, radius: ts.radius
+            };
+        }
+
+        function cloneOverrides(o) {
+            return { colors: JSON.parse(JSON.stringify(o.colors)), fonts: JSON.parse(JSON.stringify(o.fonts)), global: JSON.parse(JSON.stringify(o.global)) };
+        }
+
+        var initialState = { name: nameInput.value, seeds: currentSeeds(), overrides: cloneOverrides(overrides) };
+
+        var resetBtn = root.querySelector('[data-studio-reset]');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function () {
+                nameInput.value = initialState.name;
+                overrides = cloneOverrides(initialState.overrides);
+                applySeeds(initialState.seeds);
+            });
         }
 
         setSaveLabels();
