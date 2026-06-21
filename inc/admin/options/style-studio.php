@@ -14,6 +14,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Render a "managed by Style Studio" notice for the legacy Colors/Fonts pages.
+ */
+function poetheme_studio_legacy_notice() {
+    $url = admin_url( 'admin.php?page=poetheme-style-studio' );
+    ?>
+    <div class="notice notice-info poetheme-legacy-notice" style="margin-top:1rem;">
+        <p>
+            <strong><?php esc_html_e( 'Gestito da Style Studio', 'poetheme' ); ?></strong> —
+            <?php esc_html_e( 'Colori, font e dimensioni si configurano ora da Style Studio, in modo coordinato e con anteprima dal vivo. Questa pagina resta disponibile per le impostazioni avanzate non ancora migrate.', 'poetheme' ); ?>
+            <a class="button button-primary" href="<?php echo esc_url( $url ); ?>" style="margin-left:.5rem;"><?php esc_html_e( 'Apri Style Studio', 'poetheme' ); ?></a>
+        </p>
+    </div>
+    <?php
+}
+
+/**
  * Allowed harmony rules.
  *
  * @return string[]
@@ -411,6 +427,48 @@ function poetheme_studio_best_on( $bg ) {
 }
 
 /**
+ * WCAG contrast ratio between two hex colors.
+ *
+ * @param string $a Hex color.
+ * @param string $b Hex color.
+ * @return float
+ */
+function poetheme_studio_contrast( $a, $b ) {
+    $la = poetheme_studio_luminance( $a );
+    $lb = poetheme_studio_luminance( $b );
+    return ( max( $la, $lb ) + 0.05 ) / ( min( $la, $lb ) + 0.05 );
+}
+
+/**
+ * Auto-optimize the menu colors for readability when the header background is
+ * manually overridden (and the menu colors themselves are not overridden).
+ *
+ * @param array $colors    Merged colors (token => value).
+ * @param array $ov_colors User color overrides.
+ * @return array
+ */
+function poetheme_studio_optimize_menu_colors( $colors, $ov_colors ) {
+    if ( ! isset( $ov_colors['header_background_color'] ) || empty( $colors['header_background_color'] ) ) {
+        return $colors;
+    }
+
+    $hb = $colors['header_background_color'];
+    $on = poetheme_studio_best_on( $hb );
+
+    if ( ! isset( $ov_colors['menu_link_color'] ) ) {
+        $colors['menu_link_color'] = '#ffffff' === $on ? '#e5e7eb' : '#374151';
+    }
+
+    if ( ! isset( $ov_colors['menu_active_link_color'] ) && ! empty( $colors['menu_active_link_color'] ) ) {
+        if ( poetheme_studio_contrast( $colors['menu_active_link_color'], $hb ) < 3.0 ) {
+            $colors['menu_active_link_color'] = $on;
+        }
+    }
+
+    return $colors;
+}
+
+/**
  * Accent hue for a harmony rule.
  *
  * @param float  $h       Base hue.
@@ -557,6 +615,8 @@ function poetheme_studio_generate_from_seeds( $seeds ) {
         'top_bar_text_font_size'             => poetheme_studio_round2( $base * 0.9 ),
         'cta_text_font_size'                 => poetheme_studio_round2( $base ),
         'cta_button_border_radius'           => $seeds['radius'],
+        'body_line_height'                   => 1.6,
+        'heading_line_height'                => 1.2,
     );
 
     $spacing = array(
@@ -738,7 +798,8 @@ function poetheme_studio_build_palette( $name, $seeds, $origin = 'studio', $over
     $ov_global = isset( $overrides['global'] ) && is_array( $overrides['global'] ) ? $overrides['global'] : array();
 
     // Generated tokens first, then manual overrides on top, then sanitize.
-    $colors = poetheme_sanitize_color_options( array_merge( $generated['colors'], $ov_colors ) );
+    $merged_colors = poetheme_studio_optimize_menu_colors( array_merge( $generated['colors'], $ov_colors ), $ov_colors );
+    $colors = poetheme_sanitize_color_options( $merged_colors );
     $fonts  = poetheme_sanitize_font_options( array_merge( $generated['fonts'], $ov_fonts ) );
     $global = poetheme_sanitize_palette_global( array_merge( $generated['global'], $ov_global ) );
 
@@ -848,6 +909,9 @@ function poetheme_get_studio_advanced_fields() {
             array( 'label' => __( 'Dimensione H4', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h4_font_size' ) ),
             array( 'label' => __( 'Dimensione H5', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h5_font_size' ) ),
             array( 'label' => __( 'Dimensione H6', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h6_font_size' ) ),
+            array( 'label' => __( 'Interlinea testo', 'poetheme' ), 'type' => 'lineheight', 'keys' => array( 'body_line_height' ) ),
+            array( 'label' => __( 'Interlinea titoli', 'poetheme' ), 'type' => 'lineheight', 'keys' => array( 'heading_line_height' ) ),
+            array( 'label' => __( 'Spaziatura titoli', 'poetheme' ), 'type' => 'spacing', 'keys' => array( 'heading_h1_spacing', 'heading_h2_spacing', 'heading_h3_spacing', 'heading_h4_spacing', 'heading_h5_spacing', 'heading_h6_spacing' ) ),
         ),
         'layout' => array(
             array( 'label' => __( 'Larghezza sito', 'poetheme' ), 'type' => 'width', 'keys' => array( 'site_width' ) ),
@@ -877,6 +941,12 @@ function poetheme_studio_render_advanced_field( $field ) {
                     break;
                 case 'size':
                     echo '<input type="number" data-adv-input min="0.5" max="6" step="0.05" value="1" /><span class="poetheme-studio__adv-unit">rem</span>';
+                    break;
+                case 'lineheight':
+                    echo '<input type="number" data-adv-input min="1" max="2.4" step="0.05" value="1.6" />';
+                    break;
+                case 'spacing':
+                    echo '<input type="number" data-adv-input min="0" max="4" step="0.05" value="0.75" /><span class="poetheme-studio__adv-unit">rem</span>';
                     break;
                 case 'radius':
                     echo '<input type="number" data-adv-input min="0" max="999" step="1" value="8" /><span class="poetheme-studio__adv-unit">px</span>';

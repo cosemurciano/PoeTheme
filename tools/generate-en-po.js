@@ -161,6 +161,12 @@ const dict = {
   'Sottolinea i link': 'Underline links',
   'Largo': 'Wide',
   'Riquadro': 'Boxed',
+  'Interlinea testo': 'Text line height',
+  'Interlinea titoli': 'Heading line height',
+  'Spaziatura titoli': 'Heading spacing',
+  'Gestito da Style Studio': 'Managed by Style Studio',
+  'Colori, font e dimensioni si configurano ora da Style Studio, in modo coordinato e con anteprima dal vivo. Questa pagina resta disponibile per le impostazioni avanzate non ancora migrate.': 'Colors, fonts and sizes are now configured from Style Studio, in a coordinated way with a live preview. This page remains available for advanced settings not yet migrated.',
+  'Apri Style Studio': 'Open Style Studio',
   // --- Fonts ---
   'Altri font': 'Other fonts',
   'Regolare': 'Regular',

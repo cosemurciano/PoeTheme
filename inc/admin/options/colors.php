@@ -669,6 +669,7 @@ function poetheme_render_colors_page() {
     ?>
     <div class="wrap poetheme-admin poetheme-color-settings">
         <h1><?php esc_html_e( 'Gestione Colori', 'poetheme' ); ?></h1>
+        <?php if ( function_exists( 'poetheme_studio_legacy_notice' ) ) { poetheme_studio_legacy_notice(); } ?>
 
         <form action="options.php" method="post">
             <?php settings_fields( 'poetheme_colors_group' ); ?>
