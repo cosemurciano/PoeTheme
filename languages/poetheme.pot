@@ -3151,3 +3151,7 @@ msgstr ""
 #: inc/admin/options/footer.php
 msgid "Scegli se visualizzare una o due righe di widget nel piè di pagina. Il layout della seconda riga resta memorizzato: se torni da 1 a 2 righe, viene ripristinata l’ultima configurazione."
 msgstr ""
+
+#: inc/admin/options/global.php
+msgid "Configura layout e opzioni di sfondo globali. Colori e font si gestiscono da Style Studio."
+msgstr ""

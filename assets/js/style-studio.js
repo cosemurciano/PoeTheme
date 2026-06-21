@@ -255,7 +255,6 @@
         });
 
         var global = {
-            layout_mode: 'full',
             site_width: density.width
         };
 

@@ -169,6 +169,7 @@ const dict = {
   'Gestito da Style Studio': 'Managed by Style Studio',
   'Colori, font e dimensioni si configurano ora da Style Studio, in modo coordinato e con anteprima dal vivo. Questa pagina resta disponibile per le impostazioni avanzate non ancora migrate.': 'Colors, fonts and sizes are now configured from Style Studio, in a coordinated way with a live preview. This page remains available for advanced settings not yet migrated.',
   'Apri Style Studio': 'Open Style Studio',
+  'Configura layout e opzioni di sfondo globali. Colori e font si gestiscono da Style Studio.': 'Configure global layout and background options. Colors and fonts are managed from Style Studio.',
   'Se non carichi un logo qui e non mostri il titolo, viene usato il logo impostato nel Personalizza di WordPress (se presente).': 'If you do not upload a logo here and do not show the title, the logo set in the WordPress Customizer is used (if any).',
   'Scegli se visualizzare una o due righe di widget nel piè di pagina. Il layout della seconda riga resta memorizzato: se torni da 1 a 2 righe, viene ripristinata l’ultima configurazione.': 'Choose whether to show one or two rows of widgets in the footer. The second row layout is remembered: if you switch back from 1 to 2 rows, the last configuration is restored.',
   'Sfondo voci di menu': 'Menu items background',

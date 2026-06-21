@@ -257,7 +257,7 @@ function poetheme_render_global_page() {
             <div class="poetheme-panel">
                 <div class="poetheme-panel__header">
                     <h2><?php esc_html_e( 'Impostazioni globali', 'poetheme' ); ?></h2>
-                    <p class="description"><?php esc_html_e( 'Configura layout, font di default e opzioni di sfondo globali.', 'poetheme' ); ?></p>
+                    <p class="description"><?php esc_html_e( 'Configura layout e opzioni di sfondo globali. Colori e font si gestiscono da Style Studio.', 'poetheme' ); ?></p>
                 </div>
                 <div class="poetheme-panel__body">
                     <table class="form-table poetheme-fields" role="presentation">
@@ -285,21 +285,6 @@ function poetheme_render_global_page() {
                                 <td class="poetheme-field__control">
                                     <input type="number" name="poetheme_global[site_width]" id="<?php echo esc_attr( $width_id ); ?>" value="<?php echo esc_attr( $site_width ); ?>" min="960" max="1920" step="10" class="small-text" aria-describedby="poetheme-global-width-help">
                                     <p id="poetheme-global-width-help" class="description poetheme-field__help"><?php esc_html_e( 'Imposta la larghezza massima del sito per il layout Box. Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
-                                </td>
-                            </tr>
-                            <tr class="poetheme-field">
-                                <th scope="row" class="poetheme-field__label"><label for="<?php echo esc_attr( $default_font_id ); ?>"><?php esc_html_e( 'Font globale predefinito', 'poetheme' ); ?></label></th>
-                                <td class="poetheme-field__control">
-                                    <select id="<?php echo esc_attr( $default_font_id ); ?>" name="poetheme_global[default_font]" aria-describedby="poetheme-global-default-font-help">
-                                        <option value="">&mdash; <?php esc_html_e( 'Usa il font di sistema', 'poetheme' ); ?> &mdash;</option>
-                                        <?php foreach ( $available_fonts as $slug => $font_data ) : ?>
-                                            <option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $default_font, $slug ); ?>><?php echo esc_html( $font_data['family'] ); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <p id="poetheme-global-default-font-help" class="description poetheme-field__help"><?php esc_html_e( 'Questo font verrà usato in tutto il sito se non ne imposti uno specifico nelle sezioni dedicate.', 'poetheme' ); ?></p>
-                                    <label class="screen-reader-text" for="<?php echo esc_attr( $default_fallback_id ); ?>"><?php esc_html_e( 'Font alternativi', 'poetheme' ); ?></label>
-                                    <input type="text" class="regular-text" id="<?php echo esc_attr( $default_fallback_id ); ?>" name="poetheme_global[default_font_fallback]" value="<?php echo esc_attr( $default_font_fallback ); ?>" placeholder="Arial, Helvetica, sans-serif" aria-describedby="poetheme-global-default-font-fallback-help" />
-                                    <p id="poetheme-global-default-font-fallback-help" class="description poetheme-field__help"><?php esc_html_e( 'Elenca i font alternativi da usare se il font principale non è disponibile (esempio: "Arial, Helvetica, sans-serif").', 'poetheme' ); ?></p>
                                 </td>
                             </tr>
                             <tr class="poetheme-field">

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.22.0
+- **Layout pieno/box ora funziona con le palette:** il generatore non forza più `layout_mode` su
+  ogni palette, quindi la scelta “Larghezza piena / Box” (in Globale o nello Studio avanzato) viene
+  rispettata. Migrazione automatica che ripulisce le palette già salvate (mantiene il layout scelto
+  esplicitamente).
+- **Dimensione testo applicata anche a elenchi:** la dimensione del corpo testo ora copre
+  esplicitamente paragrafi, elenchi puntati/numerati e definizioni nel contenuto.
+- **Rimosso “Font globale predefinito”** dalla pagina Globale: font e colori si gestiscono dalle
+  palette di Style Studio.
+
 ## 1.21.0
 - **Rifiniture moduli admin** (dalla verifica):
   - *Logo*: nota esplicita sul fallback al logo del Personalizza di WordPress; corretta un’incoerenza

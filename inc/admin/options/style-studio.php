@@ -630,9 +630,11 @@ function poetheme_studio_generate_from_seeds( $seeds ) {
         $fonts[ 'heading_' . $tag . '_spacing' ] = $spacing;
     }
 
+    // Only the content width is derived from density. The layout mode (full vs
+    // boxed) is NOT forced here, so an active palette respects the site-wide
+    // layout choice unless it is explicitly overridden in the advanced panel.
     $global = array(
-        'layout_mode' => 'full',
-        'site_width'  => $d['width'],
+        'site_width' => $d['width'],
     );
 
     return array(
@@ -804,7 +806,18 @@ function poetheme_studio_build_palette( $name, $seeds, $origin = 'studio', $over
     $merged_colors = poetheme_studio_optimize_menu_colors( array_merge( $generated['colors'], $ov_colors ), $ov_colors );
     $colors = poetheme_sanitize_color_options( $merged_colors );
     $fonts  = poetheme_sanitize_font_options( array_merge( $generated['fonts'], $ov_fonts ) );
-    $global = poetheme_sanitize_palette_global( array_merge( $generated['global'], $ov_global ) );
+
+    // Build the global subset preserving ONLY the keys actually provided, so the
+    // palette never forces a layout it wasn't told to (e.g. site-wide full/boxed
+    // choice is respected unless the layout was overridden in the studio).
+    $global        = array();
+    $merged_global = array_merge( $generated['global'], $ov_global );
+    if ( isset( $merged_global['site_width'] ) ) {
+        $global['site_width'] = max( 960, min( 1920, absint( $merged_global['site_width'] ) ) );
+    }
+    if ( isset( $merged_global['layout_mode'] ) ) {
+        $global['layout_mode'] = in_array( $merged_global['layout_mode'], array( 'full', 'boxed' ), true ) ? $merged_global['layout_mode'] : 'full';
+    }
 
     // Store only the overridden keys (sanitized) so they remain editable.
     $stored_overrides = array(
@@ -850,6 +863,38 @@ function poetheme_studio_seed_default_palettes() {
     update_option( 'poetheme_presets_seeded', 1 );
 }
 add_action( 'after_switch_theme', 'poetheme_studio_seed_default_palettes' );
+
+/**
+ * One-time migration: drop the previously force-injected `layout_mode` from
+ * stored palettes so an active palette no longer pins the layout to "full".
+ * Palettes where the layout was explicitly chosen (it lives in overrides.global)
+ * keep their value.
+ */
+function poetheme_studio_migrate_palette_layout() {
+    if ( get_option( 'poetheme_palette_layout_migrated' ) ) {
+        return;
+    }
+
+    $palettes = poetheme_get_style_palettes();
+    $changed  = false;
+
+    foreach ( $palettes as $id => $palette ) {
+        if ( isset( $palette['global']['layout_mode'] ) ) {
+            $explicit = isset( $palette['overrides']['global']['layout_mode'] );
+            if ( ! $explicit ) {
+                unset( $palettes[ $id ]['global']['layout_mode'] );
+                $changed = true;
+            }
+        }
+    }
+
+    if ( $changed ) {
+        update_option( 'poetheme_style_palettes', $palettes );
+    }
+
+    update_option( 'poetheme_palette_layout_migrated', 1 );
+}
+add_action( 'admin_init', 'poetheme_studio_migrate_palette_layout' );
 
 
 /**
