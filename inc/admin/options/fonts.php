@@ -903,6 +903,23 @@ function poetheme_get_font_field_config() {
                 'max'         => 3,
                 'step'        => 0.05,
                 'default'     => 1,
+                // Target the body plus the main content text and lists explicitly
+                // so paragraphs, list items and nested lists all pick up the size.
+                'selectors'   => array(
+                    'body',
+                    'button',
+                    'input',
+                    'select',
+                    'textarea',
+                    'main',
+                    'main p',
+                    'main li',
+                    'main ul',
+                    'main ol',
+                    'main dd',
+                    'main dt',
+                    '.entry-content',
+                ),
             ),
         ),
         'cta_text_color' => array(
