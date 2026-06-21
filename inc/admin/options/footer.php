@@ -186,7 +186,7 @@ function poetheme_render_footer_page() {
                                         <option value="1" <?php selected( $rows, 1 ); ?>><?php esc_html_e( '1 riga', 'poetheme' ); ?></option>
                                         <option value="2" <?php selected( $rows, 2 ); ?>><?php esc_html_e( '2 righe', 'poetheme' ); ?></option>
                                     </select>
-                                    <p id="poetheme-footer-rows-help" class="description poetheme-field__help"><?php esc_html_e( 'Scegli se visualizzare una o due righe di widget nel piè di pagina.', 'poetheme' ); ?></p>
+                                    <p id="poetheme-footer-rows-help" class="description poetheme-field__help"><?php esc_html_e( 'Scegli se visualizzare una o due righe di widget nel piè di pagina. Il layout della seconda riga resta memorizzato: se torni da 1 a 2 righe, viene ripristinata l’ultima configurazione.', 'poetheme' ); ?></p>
                                 </td>
                             </tr>
                     <?php for ( $row = 1; $row <= 2; $row++ ) :

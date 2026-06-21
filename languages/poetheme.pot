@@ -3143,3 +3143,11 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid ". Questo testo di esempio serve a valutare leggibilità, interlinea e lunghezza delle righe su più frasi, così da capire come appariranno i contenuti reali del sito una volta pubblicati."
 msgstr ""
+
+#: inc/admin/options/header.php
+msgid "Se non carichi un logo qui e non mostri il titolo, viene usato il logo impostato nel Personalizza di WordPress (se presente)."
+msgstr ""
+
+#: inc/admin/options/footer.php
+msgid "Scegli se visualizzare una o due righe di widget nel piè di pagina. Il layout della seconda riga resta memorizzato: se torni da 1 a 2 righe, viene ripristinata l’ultima configurazione."
+msgstr ""

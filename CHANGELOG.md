@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.21.0
+- **Rifiniture moduli admin** (dalla verifica):
+  - *Logo*: nota esplicita sul fallback al logo del Personalizza di WordPress; corretta un’incoerenza
+    minore di escaping nell’altezza del logo.
+  - *Piè di pagina*: avviso che il layout della seconda riga resta memorizzato quando si passa da 2 a
+    1 riga e si torna a 2.
+  - Verificate come già corrette le note di visibilità della fascia “App Sidebar” e il limite di 10
+    caratteri del separatore breadcrumb (maxlength + clamp lato server).
+
 ## 1.20.0
 - **Colori e Font ora gestiti da Style Studio:** le pagine *Gestione Colori* e *Gestione Font* sono
   state rimosse dal menu e qualsiasi accesso diretto viene reindirizzato a Style Studio. Le opzioni

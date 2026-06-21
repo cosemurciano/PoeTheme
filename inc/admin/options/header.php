@@ -519,6 +519,7 @@ function poetheme_render_logo_page() {
                                     <input type="checkbox" id="poetheme_logo_show_site_title" name="poetheme_logo[show_site_title]" value="1" <?php checked( $show_site_title ); ?> />
                                     <?php esc_html_e( 'Mostra il titolo del sito al posto del logo', 'poetheme' ); ?>
                                 </label>
+                                <p class="description poetheme-field__help"><?php esc_html_e( 'Se non carichi un logo qui e non mostri il titolo, viene usato il logo impostato nel Personalizza di WordPress (se presente).', 'poetheme' ); ?></p>
                             </div>
                         </div>
                     </div>
