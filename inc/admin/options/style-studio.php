@@ -70,14 +70,16 @@ function poetheme_studio_admin_assets( $hook ) {
     wp_enqueue_script( 'poetheme-style-studio', POETHEME_URI . '/assets/js/style-studio.js', array(), poetheme_get_asset_version( 'assets/js/style-studio.js' ), true );
 
     // When editing an existing palette, pass its seeds so the controls preload.
-    $edit_seeds = null;
-    $edit_name  = '';
-    $edit_id    = isset( $_GET['palette'] ) ? sanitize_text_field( wp_unslash( $_GET['palette'] ) ) : '';
+    $edit_seeds     = null;
+    $edit_name      = '';
+    $edit_overrides = null;
+    $edit_id        = isset( $_GET['palette'] ) ? sanitize_text_field( wp_unslash( $_GET['palette'] ) ) : '';
     if ( '' !== $edit_id ) {
         $palettes = poetheme_get_style_palettes();
         if ( isset( $palettes[ $edit_id ] ) && ! empty( $palettes[ $edit_id ]['seeds'] ) ) {
-            $edit_seeds = poetheme_sanitize_studio_seeds( $palettes[ $edit_id ]['seeds'] );
-            $edit_name  = isset( $palettes[ $edit_id ]['name'] ) ? $palettes[ $edit_id ]['name'] : '';
+            $edit_seeds     = poetheme_sanitize_studio_seeds( $palettes[ $edit_id ]['seeds'] );
+            $edit_name      = isset( $palettes[ $edit_id ]['name'] ) ? $palettes[ $edit_id ]['name'] : '';
+            $edit_overrides = isset( $palettes[ $edit_id ]['overrides'] ) ? $palettes[ $edit_id ]['overrides'] : null;
         } else {
             $edit_id = '';
         }
@@ -87,9 +89,10 @@ function poetheme_studio_admin_assets( $hook ) {
         'poetheme-style-studio',
         'poethemeStudio',
         array(
-            'editSeeds' => $edit_seeds,
-            'editId'    => $edit_id,
-            'editName'  => $edit_name,
+            'editSeeds'     => $edit_seeds,
+            'editId'        => $edit_id,
+            'editName'      => $edit_name,
+            'editOverrides' => $edit_overrides,
             'editingLabel' => $edit_name ? sprintf(
                 /* translators: %s: palette name */
                 __( 'Stai modificando: %s', 'poetheme' ),
@@ -208,7 +211,8 @@ function poetheme_handle_style_studio_save() {
 
     // Seeds are authoritative: the full palette is generated server-side so the
     // saved tokens are canonical (and editable later from these seeds).
-    $seeds = isset( $payload['seeds'] ) ? poetheme_sanitize_studio_seeds( $payload['seeds'] ) : array();
+    $seeds     = isset( $payload['seeds'] ) ? poetheme_sanitize_studio_seeds( $payload['seeds'] ) : array();
+    $overrides = isset( $payload['overrides'] ) && is_array( $payload['overrides'] ) ? $payload['overrides'] : array();
 
     $palettes = poetheme_get_style_palettes();
 
@@ -225,7 +229,7 @@ function poetheme_handle_style_studio_save() {
         $origin = 'studio';
     }
 
-    $palette          = poetheme_studio_build_palette( $name, $seeds, $origin );
+    $palette          = poetheme_studio_build_palette( $name, $seeds, $origin, $overrides );
     $palette['updated'] = time();
     if ( isset( $palettes[ $id ]['created'] ) ) {
         $palette['created'] = $palettes[ $id ]['created'];
@@ -718,24 +722,42 @@ function poetheme_studio_preset_to_seeds( $preset ) {
 }
 
 /**
- * Build a stored palette array from sanitized seeds.
+ * Build a stored palette array from sanitized seeds (+ optional advanced overrides).
  *
- * @param string $name  Palette name.
- * @param array  $seeds Sanitized seeds.
- * @param string $origin 'preset' or 'studio'.
+ * @param string $name      Palette name.
+ * @param array  $seeds     Sanitized seeds.
+ * @param string $origin    'preset' or 'studio'.
+ * @param array  $overrides Optional manual token overrides: array( 'colors' => [], 'fonts' => [] ).
  * @return array
  */
-function poetheme_studio_build_palette( $name, $seeds, $origin = 'studio' ) {
+function poetheme_studio_build_palette( $name, $seeds, $origin = 'studio', $overrides = array() ) {
     $generated = poetheme_studio_generate_from_seeds( $seeds );
 
+    $ov_colors = isset( $overrides['colors'] ) && is_array( $overrides['colors'] ) ? $overrides['colors'] : array();
+    $ov_fonts  = isset( $overrides['fonts'] ) && is_array( $overrides['fonts'] ) ? $overrides['fonts'] : array();
+    $ov_global = isset( $overrides['global'] ) && is_array( $overrides['global'] ) ? $overrides['global'] : array();
+
+    // Generated tokens first, then manual overrides on top, then sanitize.
+    $colors = poetheme_sanitize_color_options( array_merge( $generated['colors'], $ov_colors ) );
+    $fonts  = poetheme_sanitize_font_options( array_merge( $generated['fonts'], $ov_fonts ) );
+    $global = poetheme_sanitize_palette_global( array_merge( $generated['global'], $ov_global ) );
+
+    // Store only the overridden keys (sanitized) so they remain editable.
+    $stored_overrides = array(
+        'colors' => array_intersect_key( $colors, $ov_colors ),
+        'fonts'  => array_intersect_key( $fonts, $ov_fonts ),
+        'global' => array_intersect_key( $global, $ov_global ),
+    );
+
     return array(
-        'name'    => $name,
-        'colors'  => poetheme_sanitize_color_options( $generated['colors'] ),
-        'fonts'   => poetheme_sanitize_font_options( $generated['fonts'] ),
-        'global'  => poetheme_sanitize_palette_global( $generated['global'] ),
-        'seeds'   => $seeds,
-        'origin'  => 'preset' === $origin ? 'preset' : 'studio',
-        'created' => time(),
+        'name'      => $name,
+        'colors'    => $colors,
+        'fonts'     => $fonts,
+        'global'    => $global,
+        'seeds'     => $seeds,
+        'overrides' => $stored_overrides,
+        'origin'    => 'preset' === $origin ? 'preset' : 'studio',
+        'created'   => time(),
     );
 }
 
@@ -787,6 +809,92 @@ function poetheme_studio_render_font_select( $data_attr, $default_label ) {
             </optgroup>
         <?php endforeach; ?>
     </select>
+    <?php
+}
+
+/**
+ * Advanced (per-token) override controls for Style Studio.
+ *
+ * Each field maps a single control to one or more real token keys; editing it
+ * overrides all listed keys on top of the generated value. The first key is the
+ * representative used to display the current value. The control type drives the
+ * input and which override bucket it belongs to (colors / fonts / global).
+ *
+ * @return array{colors:array,sizes:array,layout:array}
+ */
+function poetheme_get_studio_advanced_fields() {
+    return array(
+        'colors' => array(
+            array( 'label' => __( 'Sfondo pagina', 'poetheme' ), 'type' => 'color', 'keys' => array( 'page_background_color' ) ),
+            array( 'label' => __( 'Sfondo contenuto', 'poetheme' ), 'type' => 'color', 'keys' => array( 'content_background_color' ) ),
+            array( 'label' => __( 'Testo', 'poetheme' ), 'type' => 'color', 'keys' => array( 'content_text_color' ) ),
+            array( 'label' => __( 'Titoli', 'poetheme' ), 'type' => 'color', 'keys' => array( 'heading_h1_color', 'heading_h2_color', 'heading_h3_color', 'heading_h4_color', 'heading_h5_color', 'heading_h6_color', 'content_strong_color', 'page_title_color', 'post_title_color', 'category_title_color' ) ),
+            array( 'label' => __( 'Link', 'poetheme' ), 'type' => 'color', 'keys' => array( 'content_link_color', 'general_link_color', 'menu_active_link_color', 'footer_widget_link_color' ) ),
+            array( 'label' => __( 'Voci di menu', 'poetheme' ), 'type' => 'color', 'keys' => array( 'menu_link_color' ) ),
+            array( 'label' => __( 'Sfondo testata', 'poetheme' ), 'type' => 'color', 'keys' => array( 'header_background_color' ) ),
+            array( 'label' => __( 'Sfondo pulsante CTA', 'poetheme' ), 'type' => 'color', 'keys' => array( 'cta_background_color' ) ),
+            array( 'label' => __( 'Testo pulsante CTA', 'poetheme' ), 'type' => 'color', 'keys' => array( 'cta_text_color' ) ),
+            array( 'label' => __( 'Sfondo top bar', 'poetheme' ), 'type' => 'color', 'keys' => array( 'top_bar_background_color' ) ),
+            array( 'label' => __( 'Testo top bar', 'poetheme' ), 'type' => 'color', 'keys' => array( 'top_bar_text_color', 'top_bar_link_color', 'top_bar_icon_color' ) ),
+            array( 'label' => __( 'Sfondo footer', 'poetheme' ), 'type' => 'color', 'keys' => array( 'footer_widget_background_color' ) ),
+            array( 'label' => __( 'Testo footer', 'poetheme' ), 'type' => 'color', 'keys' => array( 'footer_widget_text_color' ) ),
+            array( 'label' => __( 'Titoli footer', 'poetheme' ), 'type' => 'color', 'keys' => array( 'footer_widget_heading_h2_color', 'footer_widget_heading_h3_color', 'footer_widget_heading_h4_color', 'footer_widget_heading_h5_color' ) ),
+        ),
+        'sizes'  => array(
+            array( 'label' => __( 'Dimensione testo', 'poetheme' ), 'type' => 'size', 'keys' => array( 'body_font_size' ) ),
+            array( 'label' => __( 'Dimensione H1', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_font_size', 'page_title_font_size', 'post_title_font_size' ) ),
+            array( 'label' => __( 'Dimensione H2', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h2_font_size', 'category_title_font_size' ) ),
+            array( 'label' => __( 'Dimensione H3', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h3_font_size' ) ),
+            array( 'label' => __( 'Dimensione H4', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h4_font_size' ) ),
+            array( 'label' => __( 'Dimensione H5', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h5_font_size' ) ),
+            array( 'label' => __( 'Dimensione H6', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h6_font_size' ) ),
+        ),
+        'layout' => array(
+            array( 'label' => __( 'Larghezza sito', 'poetheme' ), 'type' => 'width', 'keys' => array( 'site_width' ) ),
+            array( 'label' => __( 'Layout', 'poetheme' ), 'type' => 'layout', 'keys' => array( 'layout_mode' ) ),
+            array( 'label' => __( 'Raggio pulsanti', 'poetheme' ), 'type' => 'radius', 'keys' => array( 'cta_button_border_radius' ) ),
+            array( 'label' => __( 'Sottolinea i link', 'poetheme' ), 'type' => 'bool', 'keys' => array( 'content_link_underline' ) ),
+        ),
+    );
+}
+
+/**
+ * Render a single advanced override control.
+ *
+ * @param array $field Field definition (label, type, keys).
+ */
+function poetheme_studio_render_advanced_field( $field ) {
+    $type = $field['type'];
+    $keys = implode( ',', $field['keys'] );
+    ?>
+    <div class="poetheme-studio__adv-field" data-adv-keys="<?php echo esc_attr( $keys ); ?>" data-adv-type="<?php echo esc_attr( $type ); ?>">
+        <span class="poetheme-studio__adv-label"><?php echo esc_html( $field['label'] ); ?></span>
+        <span class="poetheme-studio__adv-control">
+            <?php
+            switch ( $type ) {
+                case 'color':
+                    echo '<input type="color" data-adv-input value="#000000" />';
+                    break;
+                case 'size':
+                    echo '<input type="number" data-adv-input min="0.5" max="6" step="0.05" value="1" /><span class="poetheme-studio__adv-unit">rem</span>';
+                    break;
+                case 'radius':
+                    echo '<input type="number" data-adv-input min="0" max="999" step="1" value="8" /><span class="poetheme-studio__adv-unit">px</span>';
+                    break;
+                case 'width':
+                    echo '<input type="number" data-adv-input min="960" max="1920" step="10" value="1280" /><span class="poetheme-studio__adv-unit">px</span>';
+                    break;
+                case 'bool':
+                    echo '<input type="checkbox" data-adv-input />';
+                    break;
+                case 'layout':
+                    echo '<select data-adv-input><option value="full">' . esc_html__( 'Largo', 'poetheme' ) . '</option><option value="boxed">' . esc_html__( 'Riquadro', 'poetheme' ) . '</option></select>';
+                    break;
+            }
+            ?>
+            <button type="button" class="poetheme-studio__adv-reset" data-adv-reset title="<?php esc_attr_e( 'Reimposta al valore generato', 'poetheme' ); ?>" hidden>↺</button>
+        </span>
+    </div>
     <?php
 }
 
@@ -917,6 +1025,41 @@ function poetheme_render_style_studio_page() {
 
                 <div class="poetheme-studio__preview" data-studio-preview aria-label="<?php esc_attr_e( 'Anteprima', 'poetheme' ); ?>"></div>
             </div>
+
+            <?php $advanced = poetheme_get_studio_advanced_fields(); ?>
+            <details class="poetheme-studio__advanced" data-studio-advanced>
+                <summary>
+                    <strong><?php esc_html_e( 'Personalizzazione avanzata', 'poetheme' ); ?></strong>
+                    <span class="poetheme-studio__adv-hint"><?php esc_html_e( 'Rifinisci i singoli colori e le dimensioni partendo dai valori generati.', 'poetheme' ); ?></span>
+                </summary>
+
+                <div class="poetheme-studio__adv-body">
+                    <p class="poetheme-studio__adv-actions">
+                        <button type="button" class="button button-link" data-studio-adv-reset-all><?php esc_html_e( 'Reimposta tutte le personalizzazioni', 'poetheme' ); ?></button>
+                    </p>
+
+                    <h3 class="poetheme-studio__section"><?php esc_html_e( 'Colori', 'poetheme' ); ?></h3>
+                    <div class="poetheme-studio__adv-grid">
+                        <?php foreach ( $advanced['colors'] as $field ) {
+                            poetheme_studio_render_advanced_field( $field );
+                        } ?>
+                    </div>
+
+                    <h3 class="poetheme-studio__section"><?php esc_html_e( 'Dimensioni testo', 'poetheme' ); ?></h3>
+                    <div class="poetheme-studio__adv-grid">
+                        <?php foreach ( $advanced['sizes'] as $field ) {
+                            poetheme_studio_render_advanced_field( $field );
+                        } ?>
+                    </div>
+
+                    <h3 class="poetheme-studio__section"><?php esc_html_e( 'Layout e dettagli', 'poetheme' ); ?></h3>
+                    <div class="poetheme-studio__adv-grid">
+                        <?php foreach ( $advanced['layout'] as $field ) {
+                            poetheme_studio_render_advanced_field( $field );
+                        } ?>
+                    </div>
+                </div>
+            </details>
 
             <p class="poetheme-studio__actions">
                 <button type="submit" class="button button-secondary" name="apply" value="0" data-studio-save

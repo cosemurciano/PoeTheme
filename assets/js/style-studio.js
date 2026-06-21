@@ -438,6 +438,46 @@
         var contrastBox = root.querySelector('[data-studio-contrast]');
         var preview = root.querySelector('[data-studio-preview]');
         var presetsBox = root.querySelector('[data-studio-presets]');
+        var advFields = Array.prototype.slice.call(root.querySelectorAll('[data-adv-keys]'));
+        var advResetAll = root.querySelector('[data-studio-adv-reset-all]');
+
+        // Advanced per-token overrides applied on top of the generated values.
+        var overrides = { colors: {}, fonts: {}, global: {} };
+
+        function bucketFor(type) {
+            if (type === 'color' || type === 'bool') { return overrides.colors; }
+            if (type === 'size' || type === 'radius') { return overrides.fonts; }
+            return overrides.global;
+        }
+
+        function sourceFor(type, gen) {
+            if (type === 'color' || type === 'bool') { return gen.colors; }
+            if (type === 'size' || type === 'radius') { return gen.fonts; }
+            return gen.global;
+        }
+
+        function renderAdvanced(gen) {
+            advFields.forEach(function (field) {
+                var keys = field.getAttribute('data-adv-keys').split(',');
+                var type = field.getAttribute('data-adv-type');
+                var repr = keys[0];
+                var bucket = bucketFor(type);
+                var source = sourceFor(type, gen);
+                var input = field.querySelector('[data-adv-input]');
+                var reset = field.querySelector('[data-adv-reset]');
+                var overridden = Object.prototype.hasOwnProperty.call(bucket, repr);
+                var value = overridden ? bucket[repr] : source[repr];
+                if (input) {
+                    if (type === 'bool') {
+                        input.checked = ( value === true || value === '1' || value === 1 );
+                    } else if (value !== undefined && value !== null) {
+                        input.value = value;
+                    }
+                }
+                if (reset) { reset.hidden = !overridden; }
+                field.classList.toggle('is-overridden', overridden);
+            });
+        }
 
         function selectedText(select) {
             if (!select || select.selectedIndex < 0) { return ''; }
@@ -479,20 +519,45 @@
             var ts = typeSeeds();
             var color = generate(cs);
             var type = generateType(ts);
+
+            // Apply advanced overrides on top of the generated tokens.
+            var finalColors = {};
+            var k;
+            for (k in color.colors) { if (color.colors.hasOwnProperty(k)) { finalColors[k] = color.colors[k]; } }
+            for (k in overrides.colors) { if (overrides.colors.hasOwnProperty(k)) { finalColors[k] = overrides.colors[k]; } }
+
+            var finalFonts = {};
+            for (k in type.fonts) { if (type.fonts.hasOwnProperty(k)) { finalFonts[k] = type.fonts[k]; } }
+            for (k in overrides.fonts) { if (overrides.fonts.hasOwnProperty(k)) { finalFonts[k] = overrides.fonts[k]; } }
+
+            var finalType = {
+                sizes: {
+                    h1: parseFloat(finalFonts.heading_font_size) || type.sizes.h1,
+                    h2: parseFloat(finalFonts.heading_h2_font_size) || type.sizes.h2,
+                    h3: parseFloat(finalFonts.heading_h3_font_size) || type.sizes.h3
+                },
+                base: parseFloat(finalFonts.body_font_size) || type.base,
+                radius: parseFloat(finalFonts.cta_button_border_radius)
+            };
+            if (isNaN(finalType.radius)) { finalType.radius = type.radius; }
+
             renderSwatches(swatches, color.meta);
-            renderContrast(contrastBox, color.colors);
-            renderPreview(preview, color.colors, type, {
+            renderContrast(contrastBox, finalColors);
+            renderPreview(preview, finalColors, finalType, {
                 headingFamily: selectedFamily(headingFont),
                 bodyFamily: selectedFamily(bodyFont),
                 headingName: selectedText(headingFont),
                 bodyName: selectedText(bodyFont)
             });
+            renderAdvanced({ colors: color.colors, fonts: type.fonts, global: type.global });
+
             payload.value = JSON.stringify({
                 name: nameInput.value,
                 palette_id: editId,
                 seeds: { base: cs.base, harmony: cs.harmony, mode: cs.mode, accent_buttons: cs.accent_buttons,
                     heading_font: ts.heading_font, body_font: ts.body_font, base_size: ts.base_size,
-                    ratio: String(ratio.value), density: ts.density, radius: ts.radius }
+                    ratio: String(ratio.value), density: ts.density, radius: ts.radius },
+                overrides: overrides
             });
         }
 
@@ -514,6 +579,40 @@
             node.addEventListener('change', update);
             node.addEventListener('input', update);
         });
+
+        /* ----- advanced overrides wiring ----- */
+
+        advFields.forEach(function (field) {
+            var keys = field.getAttribute('data-adv-keys').split(',');
+            var type = field.getAttribute('data-adv-type');
+            var input = field.querySelector('[data-adv-input]');
+            var reset = field.querySelector('[data-adv-reset]');
+
+            if (input) {
+                var onChange = function () {
+                    var bucket = bucketFor(type);
+                    var value = type === 'bool' ? input.checked : input.value;
+                    keys.forEach(function (key) { bucket[key] = value; });
+                    update();
+                };
+                input.addEventListener('input', onChange);
+                input.addEventListener('change', onChange);
+            }
+            if (reset) {
+                reset.addEventListener('click', function () {
+                    var bucket = bucketFor(type);
+                    keys.forEach(function (key) { delete bucket[key]; });
+                    update();
+                });
+            }
+        });
+
+        if (advResetAll) {
+            advResetAll.addEventListener('click', function () {
+                overrides = { colors: {}, fonts: {}, global: {} };
+                update();
+            });
+        }
 
         /* ----- edit mode + inspiration ----- */
 
@@ -563,6 +662,7 @@
         }
 
         function inspire() {
+            overrides = { colors: {}, fonts: {}, global: {} };
             var hue = Math.floor(Math.random() * 360);
             var sat = 55 + Math.floor(Math.random() * 35);
             var lig = 40 + Math.floor(Math.random() * 12);
@@ -590,6 +690,14 @@
             if (editingBox && cfg().editingLabel) {
                 editingBox.textContent = cfg().editingLabel;
                 editingBox.hidden = false;
+            }
+            var eo = cfg().editOverrides;
+            if (eo) {
+                overrides = {
+                    colors: eo.colors && typeof eo.colors === 'object' ? eo.colors : {},
+                    fonts: eo.fonts && typeof eo.fonts === 'object' ? eo.fonts : {},
+                    global: eo.global && typeof eo.global === 'object' ? eo.global : {}
+                };
             }
             applySeeds(ed);
         }

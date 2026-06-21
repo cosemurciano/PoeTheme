@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-20 22:24+0000\n"
+"PO-Revision-Date: 2026-06-21 06:41+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: English\n"
 "Language: en_US\n"
@@ -2944,3 +2944,111 @@ msgstr "Preset"
 #: inc/admin/options/palettes.php
 msgid "Modifica"
 msgstr "Edit"
+
+#: inc/admin/options/style-studio.php
+msgid "Personalizzazione avanzata"
+msgstr "Advanced customization"
+
+#: inc/admin/options/style-studio.php
+msgid "Rifinisci i singoli colori e le dimensioni partendo dai valori generati."
+msgstr "Refine individual colors and sizes starting from the generated values."
+
+#: inc/admin/options/style-studio.php
+msgid "Reimposta tutte le personalizzazioni"
+msgstr "Reset all customizations"
+
+#: inc/admin/options/style-studio.php
+msgid "Reimposta al valore generato"
+msgstr "Reset to the generated value"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensioni testo"
+msgstr "Text sizes"
+
+#: inc/admin/options/style-studio.php
+msgid "Voci di menu"
+msgstr "Menu items"
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo pulsante CTA"
+msgstr "CTA button background"
+
+#: inc/admin/options/style-studio.php
+msgid "Testo pulsante CTA"
+msgstr "CTA button text"
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo top bar"
+msgstr "Top bar background"
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo footer"
+msgstr "Footer background"
+
+#: inc/admin/options/style-studio.php
+msgid "Testo footer"
+msgstr "Footer text"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione testo"
+msgstr "Text size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H1"
+msgstr "H1 size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H2"
+msgstr "H2 size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H3"
+msgstr "H3 size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H4"
+msgstr "H4 size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H5"
+msgstr "H5 size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H6"
+msgstr "H6 size"
+
+#: inc/admin/options/style-studio.php
+msgid "Titoli"
+msgstr "Headings"
+
+#: inc/admin/options/style-studio.php
+msgid "Testo top bar"
+msgstr "Top bar text"
+
+#: inc/admin/options/style-studio.php
+msgid "Titoli footer"
+msgstr "Footer headings"
+
+#: inc/admin/options/style-studio.php
+msgid "Layout e dettagli"
+msgstr "Layout and details"
+
+#: inc/admin/options/style-studio.php
+msgid "Larghezza sito"
+msgstr "Site width"
+
+#: inc/admin/options/style-studio.php
+msgid "Raggio pulsanti"
+msgstr "Button radius"
+
+#: inc/admin/options/style-studio.php
+msgid "Sottolinea i link"
+msgstr "Underline links"
+
+#: inc/admin/options/style-studio.php
+msgid "Largo"
+msgstr "Wide"
+
+#: inc/admin/options/style-studio.php
+msgid "Riquadro"
+msgstr "Boxed"
