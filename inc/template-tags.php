@@ -695,7 +695,7 @@ function poetheme_the_logo() {
         }
 
         if ( $logo_height > 0 ) {
-            $image_attributes['style'] = 'height:' . $logo_height . 'px;width:auto;';
+            $image_attributes['style'] = 'height:' . absint( $logo_height ) . 'px;width:auto;';
         }
 
         $logo_markup = wp_get_attachment_image( $logo_id, 'full', false, $image_attributes );
