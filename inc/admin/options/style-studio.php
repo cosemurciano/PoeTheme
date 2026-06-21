@@ -128,6 +128,7 @@ function poetheme_studio_admin_assets( $hook ) {
                     'link'          => __( 'collegamento', 'poetheme' ),
                     'leadEnd'       => __( ' e del testo in ', 'poetheme' ),
                     'bold'          => __( 'grassetto', 'poetheme' ),
+                    'leadTail'      => __( '. Questo testo di esempio serve a valutare leggibilità, interlinea e lunghezza delle righe su più frasi, così da capire come appariranno i contenuti reali del sito una volta pubblicati.', 'poetheme' ),
                     'h2'            => __( 'Una sezione importante', 'poetheme' ),
                     'body'          => __( 'Testo di esempio con del codice ', 'poetheme' ),
                     'list'          => array( __( 'Primo punto elenco', 'poetheme' ), __( 'Secondo punto elenco', 'poetheme' ), __( 'Terzo punto elenco', 'poetheme' ) ),
@@ -517,7 +518,9 @@ function poetheme_studio_generate_from_seeds( $seeds ) {
 
     $primary = poetheme_studio_hsl_to_hex( $h, $s, poetheme_studio_clamp( $bl, 38, 56 ) );
     $accent  = poetheme_studio_hsl_to_hex( $a_h, $s, poetheme_studio_clamp( $bl, 40, 58 ) );
-    $cta_bg  = $seeds['accent_buttons'] ? $accent : $primary;
+    // Accent drives the CTA by default (keeps the harmony visible); the toggle
+    // switches it back to the brand color.
+    $cta_bg  = $seeds['accent_buttons'] ? $primary : $accent;
 
     if ( $dark ) {
         $page        = poetheme_studio_hsl_to_hex( $h, 18, 10 );
@@ -900,6 +903,10 @@ function poetheme_get_studio_advanced_fields() {
             array( 'label' => __( 'Sfondo footer', 'poetheme' ), 'type' => 'color', 'keys' => array( 'footer_widget_background_color' ) ),
             array( 'label' => __( 'Testo footer', 'poetheme' ), 'type' => 'color', 'keys' => array( 'footer_widget_text_color' ) ),
             array( 'label' => __( 'Titoli footer', 'poetheme' ), 'type' => 'color', 'keys' => array( 'footer_widget_heading_h2_color', 'footer_widget_heading_h3_color', 'footer_widget_heading_h4_color', 'footer_widget_heading_h5_color' ) ),
+            array( 'label' => __( 'Sfondo voci di menu', 'poetheme' ), 'type' => 'bgcolor', 'keys' => array( 'menu_link_background_color' ) ),
+            array( 'label' => __( 'Sfondo voce attiva', 'poetheme' ), 'type' => 'bgcolor', 'keys' => array( 'menu_active_link_background' ) ),
+            array( 'label' => __( 'Sfondo titoli', 'poetheme' ), 'type' => 'bgcolor', 'keys' => array( 'heading_h1_background', 'heading_h2_background', 'heading_h3_background', 'heading_h4_background', 'heading_h5_background', 'heading_h6_background', 'page_title_background', 'post_title_background', 'category_title_background' ) ),
+            array( 'label' => __( 'Sfondo titoli footer', 'poetheme' ), 'type' => 'bgcolor', 'keys' => array( 'footer_widget_heading_h2_background', 'footer_widget_heading_h3_background', 'footer_widget_heading_h4_background', 'footer_widget_heading_h5_background' ) ),
         ),
         'sizes'  => array(
             array( 'label' => __( 'Dimensione testo', 'poetheme' ), 'type' => 'size', 'keys' => array( 'body_font_size' ) ),
@@ -909,6 +916,10 @@ function poetheme_get_studio_advanced_fields() {
             array( 'label' => __( 'Dimensione H4', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h4_font_size' ) ),
             array( 'label' => __( 'Dimensione H5', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h5_font_size' ) ),
             array( 'label' => __( 'Dimensione H6', 'poetheme' ), 'type' => 'size', 'keys' => array( 'heading_h6_font_size' ) ),
+            array( 'label' => __( 'Dimensione testo CTA', 'poetheme' ), 'type' => 'size', 'keys' => array( 'cta_text_font_size' ) ),
+            array( 'label' => __( 'Dimensione testo top bar', 'poetheme' ), 'type' => 'size', 'keys' => array( 'top_bar_text_font_size' ) ),
+            array( 'label' => __( 'Dimensione testo footer', 'poetheme' ), 'type' => 'size', 'keys' => array( 'footer_widget_text_font_size' ) ),
+            array( 'label' => __( 'Dimensione titoli footer', 'poetheme' ), 'type' => 'size', 'keys' => array( 'footer_widget_heading_font_size', 'footer_widget_heading_h2_font_size', 'footer_widget_heading_h3_font_size', 'footer_widget_heading_h4_font_size', 'footer_widget_heading_h5_font_size' ) ),
             array( 'label' => __( 'Interlinea testo', 'poetheme' ), 'type' => 'lineheight', 'keys' => array( 'body_line_height' ) ),
             array( 'label' => __( 'Interlinea titoli', 'poetheme' ), 'type' => 'lineheight', 'keys' => array( 'heading_line_height' ) ),
             array( 'label' => __( 'Spaziatura titoli', 'poetheme' ), 'type' => 'spacing', 'keys' => array( 'heading_h1_spacing', 'heading_h2_spacing', 'heading_h3_spacing', 'heading_h4_spacing', 'heading_h5_spacing', 'heading_h6_spacing' ) ),
@@ -918,6 +929,9 @@ function poetheme_get_studio_advanced_fields() {
             array( 'label' => __( 'Layout', 'poetheme' ), 'type' => 'layout', 'keys' => array( 'layout_mode' ) ),
             array( 'label' => __( 'Raggio pulsanti', 'poetheme' ), 'type' => 'radius', 'keys' => array( 'cta_button_border_radius' ) ),
             array( 'label' => __( 'Sottolinea i link', 'poetheme' ), 'type' => 'bool', 'keys' => array( 'content_link_underline' ) ),
+            array( 'label' => __( 'Testata trasparente', 'poetheme' ), 'type' => 'bool', 'keys' => array( 'header_background_transparent' ) ),
+            array( 'label' => __( 'Nascondi ombra testata', 'poetheme' ), 'type' => 'bool', 'keys' => array( 'header_disable_shadow' ) ),
+            array( 'label' => __( 'Footer trasparente', 'poetheme' ), 'type' => 'bool', 'keys' => array( 'footer_widget_background_transparent' ) ),
         ),
     );
 }
@@ -939,14 +953,18 @@ function poetheme_studio_render_advanced_field( $field ) {
                 case 'color':
                     echo '<input type="color" data-adv-input value="#000000" />';
                     break;
+                case 'bgcolor':
+                    echo '<label class="poetheme-studio__adv-transparent"><input type="checkbox" data-adv-transparent /> ' . esc_html__( 'Trasparente', 'poetheme' ) . '</label>';
+                    echo '<input type="color" data-adv-input value="#ffffff" />';
+                    break;
                 case 'size':
-                    echo '<input type="number" data-adv-input min="0.5" max="6" step="0.05" value="1" /><span class="poetheme-studio__adv-unit">rem</span>';
+                    echo '<input type="number" data-adv-input min="0.5" max="8" step="any" value="1" /><span class="poetheme-studio__adv-unit">rem</span>';
                     break;
                 case 'lineheight':
-                    echo '<input type="number" data-adv-input min="1" max="2.4" step="0.05" value="1.6" />';
+                    echo '<input type="number" data-adv-input min="1" max="2.4" step="any" value="1.6" />';
                     break;
                 case 'spacing':
-                    echo '<input type="number" data-adv-input min="0" max="4" step="0.05" value="0.75" /><span class="poetheme-studio__adv-unit">rem</span>';
+                    echo '<input type="number" data-adv-input min="0" max="8" step="any" value="0.75" /><span class="poetheme-studio__adv-unit">rem</span>';
                     break;
                 case 'radius':
                     echo '<input type="number" data-adv-input min="0" max="999" step="1" value="8" /><span class="poetheme-studio__adv-unit">px</span>';
@@ -1035,7 +1053,7 @@ function poetheme_render_style_studio_page() {
                     <p class="poetheme-field">
                         <label>
                             <input type="checkbox" data-studio-accent-buttons />
-                            <?php esc_html_e( 'Usa il colore accento per i pulsanti', 'poetheme' ); ?>
+                            <?php esc_html_e( 'Usa il colore del brand per i pulsanti', 'poetheme' ); ?>
                         </label>
                     </p>
 
@@ -1138,6 +1156,7 @@ function poetheme_render_style_studio_page() {
                 <button type="submit" class="button button-primary" name="apply" value="1" data-studio-save-apply
                     data-label-create="<?php esc_attr_e( 'Salva e applica', 'poetheme' ); ?>"
                     data-label-update="<?php esc_attr_e( 'Aggiorna e applica', 'poetheme' ); ?>"><?php esc_html_e( 'Salva e applica', 'poetheme' ); ?></button>
+                <button type="button" class="button" data-studio-reset title="<?php esc_attr_e( 'Riporta il template allo stato iniziale', 'poetheme' ); ?>"><?php esc_html_e( 'Reset', 'poetheme' ); ?></button>
             </p>
         </form>
     </div>

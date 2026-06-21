@@ -3079,3 +3079,67 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Apri Style Studio"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo voci di menu"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo voce attiva"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo titoli"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo titoli footer"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione testo CTA"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione testo top bar"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione testo footer"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione titoli footer"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Testata trasparente"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Nascondi ombra testata"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Footer trasparente"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Trasparente"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Reset"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Riporta il template allo stato iniziale"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Usa il colore del brand per i pulsanti"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid ". Questo testo di esempio serve a valutare leggibilità, interlinea e lunghezza delle righe su più frasi, così da capire come appariranno i contenuti reali del sito una volta pubblicati."
+msgstr ""

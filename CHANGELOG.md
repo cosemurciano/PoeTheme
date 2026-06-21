@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.20.0
+- **Colori e Font ora gestiti da Style Studio:** le pagine *Gestione Colori* e *Gestione Font* sono
+  state rimosse dal menu e qualsiasi accesso diretto viene reindirizzato a Style Studio. Le opzioni
+  non-stilistiche (immagine di sfondo, lightbox) erano già in “Globale”.
+- **“Armonia” ora visibile:** il colore di armonia (accento) viene usato come colore dei **pulsanti
+  CTA per default**, così cambiando regola di armonia l’effetto è subito evidente; l’opzione
+  diventa “Usa il colore del brand per i pulsanti”.
+- **Anteprima:** paragrafo introduttivo più lungo (per valutare leggibilità e interlinea) e
+  **sottolineatura dei link** ora riflessa nell’anteprima quando l’opzione è attiva.
+
+## 1.19.0
+- **Fix dimensioni in Advanced:** i campi numerici usano ora `step="any"`, quindi i valori generati
+  (es. 1,56rem) non vengono più segnalati come non validi dal browser.
+- **Advanced completo:** aggiunti gli ultimi token mancanti — sfondi di titoli, titoli footer e voci
+  di menu (con opzione **Trasparente**), dimensioni di CTA/top bar/footer/titoli footer, e gli
+  interruttori **testata trasparente**, **nascondi ombra testata**, **footer trasparente**. Ora
+  Style Studio copre l’insieme delle impostazioni di colore e tipografia.
+- **Pulsante Reset:** a destra di “Salva/Applica”, riporta il template allo stato iniziale (semi +
+  personalizzazioni) scartando le modifiche non salvate.
+
 ## 1.18.0
 - **Style Studio Advanced – tipografia fine:** nuovi controlli **interlinea testo**, **interlinea
   titoli** e **spaziatura titoli** (margine sotto gli H1–H6). L’interlinea è una nuova opzione del

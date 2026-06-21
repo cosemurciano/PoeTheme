@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-21 06:59+0000\n"
+"PO-Revision-Date: 2026-06-21 07:34+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: English\n"
 "Language: en_US\n"
@@ -3082,3 +3082,73 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Apri Style Studio"
 msgstr "Open Style Studio"
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo voci di menu"
+msgstr "Menu items background"
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo voce attiva"
+msgstr "Active item background"
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo titoli"
+msgstr "Headings background"
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo titoli footer"
+msgstr "Footer headings background"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione testo CTA"
+msgstr "CTA text size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione testo top bar"
+msgstr "Top bar text size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione testo footer"
+msgstr "Footer text size"
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione titoli footer"
+msgstr "Footer headings size"
+
+#: inc/admin/options/style-studio.php
+msgid "Testata trasparente"
+msgstr "Transparent header"
+
+#: inc/admin/options/style-studio.php
+msgid "Nascondi ombra testata"
+msgstr "Hide header shadow"
+
+#: inc/admin/options/style-studio.php
+msgid "Footer trasparente"
+msgstr "Transparent footer"
+
+#: inc/admin/options/style-studio.php
+msgid "Trasparente"
+msgstr "Transparent"
+
+#: inc/admin/options/style-studio.php
+msgid "Reset"
+msgstr "Reset"
+
+#: inc/admin/options/style-studio.php
+msgid "Riporta il template allo stato iniziale"
+msgstr "Reset the template to its initial state"
+
+#: inc/admin/options/style-studio.php
+msgid "Usa il colore del brand per i pulsanti"
+msgstr "Use the brand color for buttons"
+
+#: inc/admin/options/style-studio.php
+msgid ""
+". Questo testo di esempio serve a valutare leggibilità, interlinea e "
+"lunghezza delle righe su più frasi, così da capire come appariranno i "
+"contenuti reali del sito una volta pubblicati."
+msgstr ""
+". This sample text helps assess readability, line height and line length "
+"across several sentences, to see how the real site content will look once "
+"published."

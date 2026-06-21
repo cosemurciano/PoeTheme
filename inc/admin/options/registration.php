@@ -228,8 +228,6 @@ function poetheme_reorder_admin_submenu() {
         'poetheme-settings',
         'poetheme-style-studio',
         'poetheme-palette',
-        'poetheme-colors',
-        'poetheme-fonts',
         'poetheme-logo',
         'poetheme-header',
         'poetheme-subheader',
@@ -239,11 +237,19 @@ function poetheme_reorder_admin_submenu() {
         'poetheme-seo-schema',
     );
 
+    // Colors and Fonts are now managed by Style Studio: hide their menu entries
+    // (the pages themselves redirect to Style Studio, see below).
+    $hidden = array( 'poetheme-colors', 'poetheme-fonts' );
+
     $by_slug = array();
     foreach ( $submenu['poetheme-settings'] as $item ) {
         if ( isset( $item[2] ) ) {
             $by_slug[ $item[2] ] = $item;
         }
+    }
+
+    foreach ( $hidden as $slug ) {
+        unset( $by_slug[ $slug ] );
     }
 
     $sorted = array();
@@ -262,6 +268,27 @@ function poetheme_reorder_admin_submenu() {
     $submenu['poetheme-settings'] = array_values( $sorted );
 }
 add_action( 'admin_menu', 'poetheme_reorder_admin_submenu', 999 );
+
+/**
+ * Redirect the legacy Colors/Fonts pages to Style Studio.
+ *
+ * Colors, fonts and sizes are now configured from Style Studio (palettes). The
+ * pages stay registered so their settings/options keep working, but any direct
+ * visit is sent to Style Studio.
+ */
+function poetheme_redirect_legacy_style_pages() {
+    if ( ! is_admin() ) {
+        return;
+    }
+
+    $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+
+    if ( in_array( $page, array( 'poetheme-colors', 'poetheme-fonts' ), true ) ) {
+        wp_safe_redirect( admin_url( 'admin.php?page=poetheme-style-studio' ) );
+        exit;
+    }
+}
+add_action( 'admin_init', 'poetheme_redirect_legacy_style_pages' );
 
 function poetheme_options_admin_assets( $hook ) {
     $style_screens = array(

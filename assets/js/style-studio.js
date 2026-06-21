@@ -127,7 +127,9 @@
 
         var primary = hsl(h, s, clamp(base.l, 38, 56));
         var accent = hsl(aH, s, clamp(base.l, 40, 58));
-        var ctaBg = seeds.accent_buttons ? accent : primary;
+        // The harmony accent drives the CTA by default so the harmony choice is
+        // always visible; the toggle switches the CTA back to the brand color.
+        var ctaBg = seeds.accent_buttons ? primary : accent;
 
         var page, surface, text, textStrong, textMuted, headerBg, footerBg, topBar;
 
@@ -342,12 +344,15 @@
         /* Article card with diverse content */
         var card = el('div', { className: 'poetheme-studio__pv-card', style: 'background:' + colors.content_background_color });
 
+        var underline = ( colors.content_link_underline === true || colors.content_link_underline === '1' || colors.content_link_underline === 1 );
+        var linkStyle = 'color:' + colors.content_link_color + ';text-decoration:' + ( underline ? 'underline' : 'none' );
+
         var lead = el('p', { style: 'color:' + colors.content_text_color + ';font-size:' + round2(type.base * 1.05) + 'rem' });
         lead.appendChild(document.createTextNode((s.lead || 'Un paragrafo introduttivo con un ') + ''));
-        lead.appendChild(el('a', { style: 'color:' + colors.content_link_color }, s.link || 'collegamento'));
+        lead.appendChild(el('a', { style: linkStyle }, s.link || 'collegamento'));
         lead.appendChild(document.createTextNode((s.leadEnd || ' e del testo in ') + ''));
         lead.appendChild(el('strong', null, s.bold || 'grassetto'));
-        lead.appendChild(document.createTextNode('.'));
+        lead.appendChild(document.createTextNode((s.leadTail || '. Questo testo di esempio serve a valutare leggibilità, interlinea e lunghezza delle righe su più frasi, così da capire come appariranno i contenuti reali del sito una volta pubblicati.')));
         card.appendChild(lead);
 
         card.appendChild(heading('h2', type.sizes.h2, s.h2 || 'Una sezione importante'));
@@ -449,13 +454,13 @@
         var FONT_TYPES = { size: 1, radius: 1, lineheight: 1, spacing: 1 };
 
         function bucketFor(type) {
-            if (type === 'color' || type === 'bool') { return overrides.colors; }
+            if (type === 'color' || type === 'bool' || type === 'bgcolor') { return overrides.colors; }
             if (FONT_TYPES[type]) { return overrides.fonts; }
             return overrides.global;
         }
 
         function sourceFor(type, gen) {
-            if (type === 'color' || type === 'bool') { return gen.colors; }
+            if (type === 'color' || type === 'bool' || type === 'bgcolor') { return gen.colors; }
             if (FONT_TYPES[type]) { return gen.fonts; }
             return gen.global;
         }
@@ -469,11 +474,17 @@
                 var source = sourceFor(type, gen);
                 var input = field.querySelector('[data-adv-input]');
                 var reset = field.querySelector('[data-adv-reset]');
+                var transparent = field.querySelector('[data-adv-transparent]');
                 var overridden = Object.prototype.hasOwnProperty.call(bucket, repr);
                 var value = overridden ? bucket[repr] : source[repr];
                 if (input) {
                     if (type === 'bool') {
                         input.checked = ( value === true || value === '1' || value === 1 );
+                    } else if (type === 'bgcolor') {
+                        var isTransparent = ( value === undefined || value === null || value === '' || value === 'transparent' );
+                        if (transparent) { transparent.checked = isTransparent; }
+                        input.disabled = isTransparent;
+                        if (!isTransparent) { input.value = value; }
                     } else if (type === 'spacing') {
                         var bottom = value && value.margin ? parseFloat(value.margin.bottom) : NaN;
                         input.value = isNaN(bottom) ? 0 : bottom;
@@ -615,6 +626,7 @@
             var type = field.getAttribute('data-adv-type');
             var input = field.querySelector('[data-adv-input]');
             var reset = field.querySelector('[data-adv-reset]');
+            var transparent = field.querySelector('[data-adv-transparent]');
 
             if (input) {
                 var onChange = function () {
@@ -622,6 +634,8 @@
                     var value;
                     if (type === 'bool') {
                         value = input.checked;
+                    } else if (type === 'bgcolor') {
+                        value = ( transparent && transparent.checked ) ? '' : input.value;
                     } else if (type === 'spacing') {
                         value = spacingGroup(parseFloat(input.value) || 0);
                     } else {
@@ -632,6 +646,7 @@
                 };
                 input.addEventListener('input', onChange);
                 input.addEventListener('change', onChange);
+                if (transparent) { transparent.addEventListener('change', onChange); }
             }
             if (reset) {
                 reset.addEventListener('click', function () {
@@ -735,6 +750,33 @@
                 };
             }
             applySeeds(ed);
+        }
+
+        /* ----- reset to the template's initial state ----- */
+
+        function currentSeeds() {
+            var cs = colorSeeds();
+            var ts = typeSeeds();
+            return {
+                base: cs.base, harmony: cs.harmony, mode: cs.mode, accent_buttons: cs.accent_buttons,
+                heading_font: ts.heading_font, body_font: ts.body_font, base_size: ts.base_size,
+                ratio: String(ratio.value), density: ts.density, radius: ts.radius
+            };
+        }
+
+        function cloneOverrides(o) {
+            return { colors: JSON.parse(JSON.stringify(o.colors)), fonts: JSON.parse(JSON.stringify(o.fonts)), global: JSON.parse(JSON.stringify(o.global)) };
+        }
+
+        var initialState = { name: nameInput.value, seeds: currentSeeds(), overrides: cloneOverrides(overrides) };
+
+        var resetBtn = root.querySelector('[data-studio-reset]');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function () {
+                nameInput.value = initialState.name;
+                overrides = cloneOverrides(initialState.overrides);
+                applySeeds(initialState.seeds);
+            });
         }
 
         setSaveLabels();
