@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-21 06:41+0000\n"
+"PO-Revision-Date: 2026-06-21 06:59+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: Italiano\n"
 "Language: it_IT\n"
@@ -3130,3 +3130,33 @@ msgstr "Largo"
 #: inc/admin/options/style-studio.php
 msgid "Riquadro"
 msgstr "Riquadro"
+
+#: inc/admin/options/style-studio.php
+msgid "Interlinea testo"
+msgstr "Interlinea testo"
+
+#: inc/admin/options/style-studio.php
+msgid "Interlinea titoli"
+msgstr "Interlinea titoli"
+
+#: inc/admin/options/style-studio.php
+msgid "Spaziatura titoli"
+msgstr "Spaziatura titoli"
+
+#: inc/admin/options/style-studio.php
+msgid "Gestito da Style Studio"
+msgstr "Gestito da Style Studio"
+
+#: inc/admin/options/style-studio.php
+msgid ""
+"Colori, font e dimensioni si configurano ora da Style Studio, in modo "
+"coordinato e con anteprima dal vivo. Questa pagina resta disponibile per le "
+"impostazioni avanzate non ancora migrate."
+msgstr ""
+"Colori, font e dimensioni si configurano ora da Style Studio, in modo "
+"coordinato e con anteprima dal vivo. Questa pagina resta disponibile per le "
+"impostazioni avanzate non ancora migrate."
+
+#: inc/admin/options/style-studio.php
+msgid "Apri Style Studio"
+msgstr "Apri Style Studio"

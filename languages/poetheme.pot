@@ -3055,3 +3055,27 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Riquadro"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Interlinea testo"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Interlinea titoli"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Spaziatura titoli"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Gestito da Style Studio"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Colori, font e dimensioni si configurano ora da Style Studio, in modo coordinato e con anteprima dal vivo. Questa pagina resta disponibile per le impostazioni avanzate non ancora migrate."
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Apri Style Studio"
+msgstr ""

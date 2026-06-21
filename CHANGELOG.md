@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.18.0
+- **Style Studio Advanced – tipografia fine:** nuovi controlli **interlinea testo**, **interlinea
+  titoli** e **spaziatura titoli** (margine sotto gli H1–H6). L’interlinea è una nuova opzione del
+  tema, generata nelle palette e resa sul front-end.
+- **Menu auto-ottimizzato:** impostando uno **sfondo personalizzato per la testata**, i colori delle
+  voci di menu vengono adattati automaticamente per restare leggibili (a meno che non siano già
+  personalizzati a mano), sia in anteprima che nel salvataggio.
+- **Avviso “Gestito da Style Studio”** in cima alle pagine *Gestione Colori* e *Gestione Font*, con
+  link diretto a Style Studio (le pagine restano disponibili per le impostazioni non ancora migrate).
+- Verificato che sfondo pagina e sfondo testata sono pienamente applicati sul front-end.
+
 ## 1.17.0
 - **Style Studio Advanced – più token:** la “Personalizzazione avanzata” copre ora anche il **testo
   della top bar**, i **titoli del footer**, e una nuova sezione **“Layout e dettagli”** con

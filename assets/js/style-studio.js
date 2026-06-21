@@ -243,7 +243,9 @@
             footer_widget_text_font_size: round2(base),
             top_bar_text_font_size: round2(base * 0.9),
             cta_text_font_size: round2(base),
-            cta_button_border_radius: seeds.radius
+            cta_button_border_radius: seeds.radius,
+            body_line_height: 1.6,
+            heading_line_height: 1.2
         };
 
         ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(function (tag) {
@@ -444,15 +446,17 @@
         // Advanced per-token overrides applied on top of the generated values.
         var overrides = { colors: {}, fonts: {}, global: {} };
 
+        var FONT_TYPES = { size: 1, radius: 1, lineheight: 1, spacing: 1 };
+
         function bucketFor(type) {
             if (type === 'color' || type === 'bool') { return overrides.colors; }
-            if (type === 'size' || type === 'radius') { return overrides.fonts; }
+            if (FONT_TYPES[type]) { return overrides.fonts; }
             return overrides.global;
         }
 
         function sourceFor(type, gen) {
             if (type === 'color' || type === 'bool') { return gen.colors; }
-            if (type === 'size' || type === 'radius') { return gen.fonts; }
+            if (FONT_TYPES[type]) { return gen.fonts; }
             return gen.global;
         }
 
@@ -470,6 +474,9 @@
                 if (input) {
                     if (type === 'bool') {
                         input.checked = ( value === true || value === '1' || value === 1 );
+                    } else if (type === 'spacing') {
+                        var bottom = value && value.margin ? parseFloat(value.margin.bottom) : NaN;
+                        input.value = isNaN(bottom) ? 0 : bottom;
                     } else if (value !== undefined && value !== null) {
                         input.value = value;
                     }
@@ -514,6 +521,19 @@
             };
         }
 
+        function optimizeMenu(colors) {
+            if (!Object.prototype.hasOwnProperty.call(overrides.colors, 'header_background_color')) { return; }
+            var hb = colors.header_background_color;
+            if (!Object.prototype.hasOwnProperty.call(overrides.colors, 'menu_link_color')) {
+                colors.menu_link_color = bestOn(hb) === '#ffffff' ? '#e5e7eb' : '#374151';
+            }
+            if (!Object.prototype.hasOwnProperty.call(overrides.colors, 'menu_active_link_color')) {
+                if (contrast(colors.menu_active_link_color, hb) < 3) {
+                    colors.menu_active_link_color = bestOn(hb);
+                }
+            }
+        }
+
         function update() {
             var cs = colorSeeds();
             var ts = typeSeeds();
@@ -529,6 +549,14 @@
             var finalFonts = {};
             for (k in type.fonts) { if (type.fonts.hasOwnProperty(k)) { finalFonts[k] = type.fonts[k]; } }
             for (k in overrides.fonts) { if (overrides.fonts.hasOwnProperty(k)) { finalFonts[k] = overrides.fonts[k]; } }
+
+            var finalGlobal = {};
+            for (k in type.global) { if (type.global.hasOwnProperty(k)) { finalGlobal[k] = type.global[k]; } }
+            for (k in overrides.global) { if (overrides.global.hasOwnProperty(k)) { finalGlobal[k] = overrides.global[k]; } }
+
+            // Auto-optimize menu colors for readability when the header background
+            // is manually overridden (unless the menu colors are overridden too).
+            optimizeMenu(finalColors);
 
             var finalType = {
                 sizes: {
@@ -549,7 +577,7 @@
                 headingName: selectedText(headingFont),
                 bodyName: selectedText(bodyFont)
             });
-            renderAdvanced({ colors: color.colors, fonts: type.fonts, global: type.global });
+            renderAdvanced({ colors: finalColors, fonts: finalFonts, global: finalGlobal });
 
             payload.value = JSON.stringify({
                 name: nameInput.value,
@@ -591,7 +619,14 @@
             if (input) {
                 var onChange = function () {
                     var bucket = bucketFor(type);
-                    var value = type === 'bool' ? input.checked : input.value;
+                    var value;
+                    if (type === 'bool') {
+                        value = input.checked;
+                    } else if (type === 'spacing') {
+                        value = spacingGroup(parseFloat(input.value) || 0);
+                    } else {
+                        value = input.value;
+                    }
                     keys.forEach(function (key) { bucket[key] = value; });
                     update();
                 };

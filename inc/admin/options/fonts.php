@@ -298,10 +298,12 @@ function poetheme_generate_font_face_css( $font_slugs = null ) {
 
 function poetheme_get_default_font_options() {
     $defaults = array(
-        'body_font'        => '',
-        'body_fallback'    => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-        'heading_font'     => '',
-        'heading_fallback' => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        'body_font'           => '',
+        'body_fallback'       => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        'heading_font'        => '',
+        'heading_fallback'    => 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        'body_line_height'    => 1.6,
+        'heading_line_height' => 1.2,
     );
 
     foreach ( poetheme_get_font_field_config() as $field ) {
@@ -553,6 +555,25 @@ function poetheme_sanitize_font_options( $input ) {
 
     $output['body_fallback']    = $body_fallback ? $body_fallback : $default['body_fallback'];
     $output['heading_fallback'] = $heading_fallback ? $heading_fallback : $default['heading_fallback'];
+
+    foreach ( array( 'body_line_height', 'heading_line_height' ) as $lh_key ) {
+        $lh_default = isset( $default[ $lh_key ] ) ? (float) $default[ $lh_key ] : 1.5;
+        $raw        = isset( $input[ $lh_key ] ) ? trim( (string) $input[ $lh_key ] ) : '';
+
+        if ( '' === $raw ) {
+            $output[ $lh_key ] = $lh_default;
+            continue;
+        }
+
+        $normalized = str_replace( ',', '.', $raw );
+
+        if ( ! is_numeric( $normalized ) ) {
+            $output[ $lh_key ] = $lh_default;
+            continue;
+        }
+
+        $output[ $lh_key ] = max( 1.0, min( 2.4, (float) $normalized ) );
+    }
 
     return $output;
 }
@@ -818,6 +839,20 @@ function poetheme_prepare_font_styles() {
 
     if ( $spacing_rules ) {
         $css_rules .= $spacing_rules;
+    }
+
+    $line_height_rules = '';
+    $body_lh           = isset( $options['body_line_height'] ) ? $options['body_line_height'] : '';
+    if ( is_numeric( $body_lh ) && (float) $body_lh > 0 ) {
+        $line_height_rules .= 'body.poetheme-has-font-settings,body.poetheme-has-font-settings main,body.poetheme-has-font-settings main p,body.poetheme-has-font-settings main li{line-height:' . poetheme_format_number_for_css( $body_lh ) . ';}';
+    }
+    $heading_lh = isset( $options['heading_line_height'] ) ? $options['heading_line_height'] : '';
+    if ( is_numeric( $heading_lh ) && (float) $heading_lh > 0 ) {
+        $line_height_rules .= 'body.poetheme-has-font-settings :where(h1,h2,h3,h4,h5,h6),body.poetheme-has-font-settings .poetheme-page-title,body.poetheme-has-font-settings .poetheme-post-title,body.poetheme-has-font-settings .poetheme-category-title{line-height:' . poetheme_format_number_for_css( $heading_lh ) . ';}';
+    }
+
+    if ( $line_height_rules ) {
+        $css_rules .= $line_height_rules;
     }
 
     $cache = array(
@@ -1364,6 +1399,7 @@ function poetheme_render_fonts_page() {
     ?>
     <div class="wrap poetheme-admin poetheme-font-settings">
         <h1><?php esc_html_e( 'Gestione Font', 'poetheme' ); ?></h1>
+        <?php if ( function_exists( 'poetheme_studio_legacy_notice' ) ) { poetheme_studio_legacy_notice(); } ?>
 
         <?php if ( $font_faces ) : ?>
             <style id="poetheme-font-settings-admin">
