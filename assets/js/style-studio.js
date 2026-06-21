@@ -489,12 +489,10 @@
             });
             payload.value = JSON.stringify({
                 name: nameInput.value,
+                palette_id: editId,
                 seeds: { base: cs.base, harmony: cs.harmony, mode: cs.mode, accent_buttons: cs.accent_buttons,
                     heading_font: ts.heading_font, body_font: ts.body_font, base_size: ts.base_size,
-                    ratio: String(ratio.value), density: ts.density, radius: ts.radius },
-                colors: color.colors,
-                fonts: type.fonts,
-                global: type.global
+                    ratio: String(ratio.value), density: ts.density, radius: ts.radius }
             });
         }
 
@@ -517,57 +515,86 @@
             node.addEventListener('input', update);
         });
 
-        /* ----- presets ----- */
+        /* ----- edit mode + inspiration ----- */
 
-        function resolveFont(select, prefs) {
-            if (!select || !prefs || !prefs.length) { return ''; }
-            for (var p = 0; p < prefs.length; p++) {
-                var needle = String(prefs[p]).toLowerCase();
-                for (var i = 0; i < select.options.length; i++) {
-                    var opt = select.options[i];
-                    if (!opt.value) { continue; }
-                    var hay = (opt.value + ' ' + opt.textContent + ' ' + (opt.getAttribute('data-font-family') || '')).toLowerCase();
-                    if (hay.indexOf(needle) !== -1) { return opt.value; }
-                }
-            }
-            return '';
-        }
+        var editId = '';
+        var editingBox = root.querySelector('[data-studio-editing]');
+        var saveBtn = root.querySelector('[data-studio-save]');
+        var saveApplyBtn = root.querySelector('[data-studio-save-apply]');
+        var randomBtn = root.querySelector('[data-studio-random]');
 
-        function applyPreset(p) {
-            baseHex.value = p.base;
-            base.value = p.base;
-            harmony.value = p.harmony;
-            mode.value = p.mode;
-            accentButtons.checked = !!p.accent_buttons;
-            baseSize.value = p.base_size;
-            ratio.value = String(p.ratio);
-            density.value = p.density;
-            radius.value = String(p.radius);
-            if (headingFont) { headingFont.value = resolveFont(headingFont, p.heading_pref); }
-            if (bodyFont) { bodyFont.value = resolveFont(bodyFont, p.body_pref); }
-            if (p.name) { nameInput.value = p.name; }
-            update();
-        }
-
-        function renderPresets() {
-            var presets = cfg().presets;
-            if (!presetsBox || !presets || !presets.length) { return; }
-            presetsBox.innerHTML = '';
-            presets.forEach(function (p) {
-                var meta = generate({ base: p.base, harmony: p.harmony, mode: p.mode, accent_buttons: p.accent_buttons }).meta;
-                var card = el('button', { type: 'button', className: 'poetheme-studio__preset' });
-                var strip = el('span', { className: 'poetheme-studio__preset-swatches' });
-                [meta.primary, meta.accent, meta.surface, meta.text].forEach(function (c) {
-                    strip.appendChild(el('span', { className: 'poetheme-studio__preset-dot', style: 'background:' + c }));
-                });
-                card.appendChild(strip);
-                card.appendChild(el('span', { className: 'poetheme-studio__preset-name' }, p.name));
-                card.addEventListener('click', function () { applyPreset(p); });
-                presetsBox.appendChild(card);
+        function setSaveLabels() {
+            var mode = editId ? 'update' : 'create';
+            [saveBtn, saveApplyBtn].forEach(function (btn) {
+                if (!btn) { return; }
+                var label = btn.getAttribute('data-label-' + mode);
+                if (label) { btn.textContent = label; }
             });
         }
 
-        renderPresets();
+        function applySeeds(seeds) {
+            if (!seeds) { return; }
+            if (seeds.base) { baseHex.value = seeds.base; base.value = seeds.base; }
+            if (seeds.harmony) { harmony.value = seeds.harmony; }
+            if (seeds.mode) { mode.value = seeds.mode; }
+            accentButtons.checked = !!seeds.accent_buttons;
+            if (seeds.base_size) { baseSize.value = seeds.base_size; }
+            if (seeds.ratio) { ratio.value = String(seeds.ratio); }
+            if (seeds.density) { density.value = seeds.density; }
+            if (seeds.radius !== undefined && seeds.radius !== null) { radius.value = String(seeds.radius); }
+            if (headingFont) { headingFont.value = seeds.heading_font || ''; }
+            if (bodyFont) { bodyFont.value = seeds.body_font || ''; }
+            update();
+        }
+
+        function pick(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function randomFont(select) {
+            if (!select || select.options.length <= 1) { return ''; }
+            // Bias toward an actual font (skip the empty default ~30% of the time).
+            if (Math.random() < 0.3) { return ''; }
+            var opts = [];
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].value) { opts.push(select.options[i].value); }
+            }
+            return opts.length ? pick(opts) : '';
+        }
+
+        function inspire() {
+            var hue = Math.floor(Math.random() * 360);
+            var sat = 55 + Math.floor(Math.random() * 35);
+            var lig = 40 + Math.floor(Math.random() * 12);
+            applySeeds({
+                base: hsl(hue, sat, lig),
+                harmony: pick(['complementary', 'analogous', 'triadic', 'split', 'monochromatic']),
+                mode: Math.random() < 0.2 ? 'dark' : 'light',
+                accent_buttons: Math.random() < 0.5,
+                base_size: pick(['0.95', '1', '1', '1.05']),
+                ratio: pick(['1.125', '1.2', '1.25', '1.333', '1.414']),
+                density: pick(['compact', 'comfortable', 'comfortable', 'spacious']),
+                radius: pick(['0', '8', '8', '999']),
+                heading_font: randomFont(headingFont),
+                body_font: randomFont(bodyFont)
+            });
+        }
+
+        if (randomBtn) { randomBtn.addEventListener('click', inspire); }
+
+        // Preload when editing an existing palette.
+        var ed = cfg().editSeeds;
+        if (ed && cfg().editId) {
+            editId = cfg().editId;
+            if (cfg().editName) { nameInput.value = cfg().editName; }
+            if (editingBox && cfg().editingLabel) {
+                editingBox.textContent = cfg().editingLabel;
+                editingBox.hidden = false;
+            }
+            applySeeds(ed);
+        }
+
+        setSaveLabels();
         update();
     });
 }());
