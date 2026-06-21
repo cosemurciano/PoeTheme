@@ -2947,3 +2947,79 @@ msgstr ""
 #: inc/admin/options/palettes.php
 msgid "Modifica"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Personalizzazione avanzata"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Rifinisci i singoli colori e le dimensioni partendo dai valori generati."
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Reimposta tutte le personalizzazioni"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Reimposta al valore generato"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensioni testo"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Voci di menu"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo pulsante CTA"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Testo pulsante CTA"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo top bar"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Sfondo footer"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Testo footer"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione testo"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H1"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H2"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H3"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H4"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H5"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Dimensione H6"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Titoli"
+msgstr ""
