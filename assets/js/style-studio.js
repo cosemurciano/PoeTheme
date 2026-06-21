@@ -442,25 +442,37 @@
         var advResetAll = root.querySelector('[data-studio-adv-reset-all]');
 
         // Advanced per-token overrides applied on top of the generated values.
-        var overrides = { colors: {}, fonts: {} };
+        var overrides = { colors: {}, fonts: {}, global: {} };
 
         function bucketFor(type) {
-            return type === 'color' ? overrides.colors : overrides.fonts;
+            if (type === 'color' || type === 'bool') { return overrides.colors; }
+            if (type === 'size' || type === 'radius') { return overrides.fonts; }
+            return overrides.global;
         }
 
-        function renderAdvanced(genColors, genFonts) {
+        function sourceFor(type, gen) {
+            if (type === 'color' || type === 'bool') { return gen.colors; }
+            if (type === 'size' || type === 'radius') { return gen.fonts; }
+            return gen.global;
+        }
+
+        function renderAdvanced(gen) {
             advFields.forEach(function (field) {
                 var keys = field.getAttribute('data-adv-keys').split(',');
                 var type = field.getAttribute('data-adv-type');
                 var repr = keys[0];
                 var bucket = bucketFor(type);
-                var source = type === 'color' ? genColors : genFonts;
+                var source = sourceFor(type, gen);
                 var input = field.querySelector('[data-adv-input]');
                 var reset = field.querySelector('[data-adv-reset]');
                 var overridden = Object.prototype.hasOwnProperty.call(bucket, repr);
                 var value = overridden ? bucket[repr] : source[repr];
-                if (value !== undefined && value !== null && input) {
-                    input.value = value;
+                if (input) {
+                    if (type === 'bool') {
+                        input.checked = ( value === true || value === '1' || value === 1 );
+                    } else if (value !== undefined && value !== null) {
+                        input.value = value;
+                    }
                 }
                 if (reset) { reset.hidden = !overridden; }
                 field.classList.toggle('is-overridden', overridden);
@@ -537,7 +549,7 @@
                 headingName: selectedText(headingFont),
                 bodyName: selectedText(bodyFont)
             });
-            renderAdvanced(color.colors, type.fonts);
+            renderAdvanced({ colors: color.colors, fonts: type.fonts, global: type.global });
 
             payload.value = JSON.stringify({
                 name: nameInput.value,
@@ -577,12 +589,14 @@
             var reset = field.querySelector('[data-adv-reset]');
 
             if (input) {
-                input.addEventListener('input', function () {
+                var onChange = function () {
                     var bucket = bucketFor(type);
-                    var value = input.value;
+                    var value = type === 'bool' ? input.checked : input.value;
                     keys.forEach(function (key) { bucket[key] = value; });
                     update();
-                });
+                };
+                input.addEventListener('input', onChange);
+                input.addEventListener('change', onChange);
             }
             if (reset) {
                 reset.addEventListener('click', function () {
@@ -595,7 +609,7 @@
 
         if (advResetAll) {
             advResetAll.addEventListener('click', function () {
-                overrides = { colors: {}, fonts: {} };
+                overrides = { colors: {}, fonts: {}, global: {} };
                 update();
             });
         }
@@ -648,7 +662,7 @@
         }
 
         function inspire() {
-            overrides = { colors: {}, fonts: {} };
+            overrides = { colors: {}, fonts: {}, global: {} };
             var hue = Math.floor(Math.random() * 360);
             var sat = 55 + Math.floor(Math.random() * 35);
             var lig = 40 + Math.floor(Math.random() * 12);
@@ -681,7 +695,8 @@
             if (eo) {
                 overrides = {
                     colors: eo.colors && typeof eo.colors === 'object' ? eo.colors : {},
-                    fonts: eo.fonts && typeof eo.fonts === 'object' ? eo.fonts : {}
+                    fonts: eo.fonts && typeof eo.fonts === 'object' ? eo.fonts : {},
+                    global: eo.global && typeof eo.global === 'object' ? eo.global : {}
                 };
             }
             applySeeds(ed);

@@ -3023,3 +3023,35 @@ msgstr ""
 #: inc/admin/options/style-studio.php
 msgid "Titoli"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Testo top bar"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Titoli footer"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Layout e dettagli"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Larghezza sito"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Raggio pulsanti"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Sottolinea i link"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Largo"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Riquadro"
+msgstr ""

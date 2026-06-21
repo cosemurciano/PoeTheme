@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.17.0
+- **Style Studio Advanced – più token:** la “Personalizzazione avanzata” copre ora anche il **testo
+  della top bar**, i **titoli del footer**, e una nuova sezione **“Layout e dettagli”** con
+  **larghezza sito**, **layout** (largo/riquadro), **raggio dei pulsanti** (px) e **sottolineatura
+  dei link**. Gli override di tipo layout vengono salvati nel blocco `global` della palette. Avvicina
+  Style Studio alla copertura completa delle pagine “Gestione Colori/Font”.
+
 ## 1.16.0
 - **Style Studio Advanced:** nuova sezione “Personalizzazione avanzata” nello Studio che parte dai
   valori generati e consente di sovrascrivere i singoli token — colori principali (sfondo, testo,
