@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.23.0
+- **Font e dimensioni ora applicati ai titoli (H1–H6) sul front-end:** le regole di font/dimensione
+  venivano battute dalla regola base del tema (`:where(h1):not([class*="-font-size"])`, specificità
+  superiore). Ora le regole di font (famiglia, dimensione, raggio, spaziatura) sono "scoped" sotto
+  `body.poetheme-has-font-settings`, così vincono correttamente. Anche le **liste** e il **testo del
+  contenuto** ricevono la dimensione impostata.
+- **Anteprima dello Studio:** la dimensione del testo ora scala anche paragrafi ed elenchi del
+  contenuto d'esempio (prima solo il paragrafo introduttivo).
+- **Testata Classic:** lo sfondo della testata viene ora applicato in modo garantito (stile inline
+  che segue colori/palette), così il colore impostato è sempre rispettato.
+
 ## 1.22.0
 - **Layout pieno/box ora funziona con le palette:** il generatore non forza più `layout_mode` su
   ogni palette, quindi la scelta “Larghezza piena / Box” (in Globale o nello Studio avanzato) viene

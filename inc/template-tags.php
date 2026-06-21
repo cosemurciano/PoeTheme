@@ -842,6 +842,35 @@ function poetheme_render_site_author_profile( $args = array() ) {
  *
  * @return array
  */
+/**
+ * Build the inline background-color style for the site header.
+ *
+ * Guarantees the header background follows the resolved color options (theme or
+ * active palette) regardless of CSS cascade/specificity. Returns an empty string
+ * when no explicit background should be set.
+ *
+ * @return string e.g. ' style="background-color:#fff;"' or ''.
+ */
+function poetheme_get_header_inline_style() {
+    if ( ! function_exists( 'poetheme_get_color_options' ) ) {
+        return '';
+    }
+
+    $colors = poetheme_get_color_options();
+
+    if ( ! empty( $colors['header_background_transparent'] ) ) {
+        return ' style="background-color:transparent !important;"';
+    }
+
+    $background = ! empty( $colors['header_background_color'] ) ? $colors['header_background_color'] : '';
+
+    if ( '' === $background ) {
+        return '';
+    }
+
+    return ' style="background-color:' . esc_attr( $background ) . ' !important;"';
+}
+
 function poetheme_get_header_context() {
     $options = poetheme_get_header_options();
 
