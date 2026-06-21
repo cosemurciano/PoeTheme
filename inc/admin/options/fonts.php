@@ -625,6 +625,35 @@ function poetheme_build_font_stack( $font_slug, $fallback, $available_fonts = nu
 }
 
 /**
+ * Scope a list of CSS selectors under the font-settings body class so the rules
+ * win over the theme's base heading styles (which use `:where(...):not([class*="-font-size"])`,
+ * specificity (0,1,0), higher than a bare `h1`).
+ *
+ * @param array $selectors Raw selectors (e.g. h1, body, main li).
+ * @return string Comma-joined scoped selector list.
+ */
+function poetheme_scope_font_selectors( $selectors ) {
+    $scoped = array();
+
+    foreach ( (array) $selectors as $selector ) {
+        $selector = trim( $selector );
+        if ( '' === $selector ) {
+            continue;
+        }
+
+        if ( 'body' === $selector ) {
+            $scoped[] = 'body.poetheme-has-font-settings';
+        } elseif ( 0 === strpos( $selector, 'body ' ) ) {
+            $scoped[] = 'body.poetheme-has-font-settings ' . substr( $selector, 5 );
+        } else {
+            $scoped[] = 'body.poetheme-has-font-settings ' . $selector;
+        }
+    }
+
+    return implode( ',', $scoped );
+}
+
+/**
  * Prepare font styles (font-face rules and CSS stacks).
  *
  * @return array
@@ -704,7 +733,7 @@ function poetheme_prepare_font_styles() {
             $selectors = array_filter( array_map( 'trim', (array) $field['selectors'] ) );
 
             if ( $selectors ) {
-                $css_rules .= implode( ',', $selectors ) . '{font-family:' . $stack . ';}';
+                $css_rules .= poetheme_scope_font_selectors( $selectors ) . '{font-family:' . $stack . ';}';
             }
         }
     }
@@ -737,7 +766,7 @@ function poetheme_prepare_font_styles() {
             continue;
         }
 
-        $size_rules .= implode( ',', $size_selectors ) . '{font-size:' . poetheme_format_number_for_css( $size_val ) . 'rem;}';
+        $size_rules .= poetheme_scope_font_selectors( $size_selectors ) . '{font-size:' . poetheme_format_number_for_css( $size_val ) . 'rem;}';
     }
 
     $radius_rules = '';
@@ -774,7 +803,7 @@ function poetheme_prepare_font_styles() {
 
         $unit = ! empty( $field['border_radius']['unit'] ) ? $field['border_radius']['unit'] : 'px';
 
-        $radius_rules .= implode( ',', $radius_selectors ) . '{border-radius:' . poetheme_format_number_for_css( $radius_val ) . $unit . ';}';
+        $radius_rules .= poetheme_scope_font_selectors( $radius_selectors ) . '{border-radius:' . poetheme_format_number_for_css( $radius_val ) . $unit . ';}';
     }
 
     $spacing_rules = '';
@@ -811,7 +840,7 @@ function poetheme_prepare_font_styles() {
             continue;
         }
 
-        $spacing_rules .= implode( ',', $spacing_selectors ) . '{' . $declarations . ';}';
+        $spacing_rules .= poetheme_scope_font_selectors( $spacing_selectors ) . '{' . $declarations . ';}';
     }
 
     $global_rules = '';

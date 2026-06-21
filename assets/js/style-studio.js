@@ -341,7 +341,7 @@
         frame.appendChild(hero);
 
         /* Article card with diverse content */
-        var card = el('div', { className: 'poetheme-studio__pv-card', style: 'background:' + colors.content_background_color });
+        var card = el('div', { className: 'poetheme-studio__pv-card', style: 'background:' + colors.content_background_color + ';font-size:' + type.base + 'rem' });
 
         var underline = ( colors.content_link_underline === true || colors.content_link_underline === '1' || colors.content_link_underline === 1 );
         var linkStyle = 'color:' + colors.content_link_color + ';text-decoration:' + ( underline ? 'underline' : 'none' );
