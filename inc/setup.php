@@ -106,7 +106,9 @@ add_filter( 'body_class', 'poetheme_body_classes' );
 function poetheme_font_body_class( $classes ) {
     $font_styles = poetheme_prepare_font_styles();
 
-    if ( ! empty( $font_styles['used_fonts'] ) ) {
+    $has_palette = ! is_admin() && function_exists( 'poetheme_get_active_palette' ) && poetheme_get_active_palette();
+
+    if ( ( ! empty( $font_styles['used_fonts'] ) || $has_palette ) && ! in_array( 'poetheme-has-font-settings', $classes, true ) ) {
         $classes[] = 'poetheme-has-font-settings';
     }
 

@@ -237,9 +237,10 @@ function poetheme_reorder_admin_submenu() {
     );
 
     // Colors and Fonts are managed by Style Studio (their pages redirect there).
-    // Style Studio itself is reachable only from the "Palette e stile" gallery
-    // (Create / Edit), so its menu entry is hidden too.
-    $hidden = array( 'poetheme-colors', 'poetheme-fonts', 'poetheme-style-studio' );
+    // Style Studio itself stays registered (so it remains accessible from the
+    // "Palette e stile" gallery via Create / Edit) but its menu link is hidden
+    // with CSS — removing it from $submenu would break WP's access check.
+    $hidden = array( 'poetheme-colors', 'poetheme-fonts' );
 
     $by_slug = array();
     foreach ( $submenu['poetheme-settings'] as $item ) {
@@ -289,6 +290,15 @@ function poetheme_redirect_legacy_style_pages() {
     }
 }
 add_action( 'admin_init', 'poetheme_redirect_legacy_style_pages' );
+
+/**
+ * Hide the Style Studio submenu link (the page stays accessible from the palette
+ * gallery, but it is not exposed as a standalone menu item).
+ */
+function poetheme_hide_studio_menu_item() {
+    echo '<style id="poetheme-hide-studio-menu">#adminmenu a[href$="page=poetheme-style-studio"]{display:none !important;}</style>';
+}
+add_action( 'admin_head', 'poetheme_hide_studio_menu_item' );
 
 function poetheme_options_admin_assets( $hook ) {
     $style_screens = array(
