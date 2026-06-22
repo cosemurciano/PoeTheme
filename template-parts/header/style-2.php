@@ -136,7 +136,7 @@ $mobile_right_items = $right_location ? poetheme_get_navigation_menu_items( $rig
         </div>
     <?php endif; ?>
 
-    <div class="poetheme-header__main border-b border-blue-100">
+    <div class="poetheme-header__main">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
             <div class="poetheme-header__split flex items-center justify-between gap-4 md:gap-6">
                 <div class="poetheme-header__split-menu poetheme-header__split-menu--left hidden md:flex items-center justify-start">
@@ -202,7 +202,7 @@ $mobile_right_items = $right_location ? poetheme_get_navigation_menu_items( $rig
         <div class="absolute inset-0 bg-gray-900/50" @click="mobileOpen = false" aria-hidden="true"></div>
 
         <div
-            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col bg-white shadow-xl"
+            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col poetheme-mobile-panel bg-white shadow-xl"
             x-transition:enter="transition ease-in-out duration-300"
             x-transition:enter-start="translate-x-full"
             x-transition:enter-end="translate-x-0"
@@ -229,7 +229,7 @@ $mobile_right_items = $right_location ? poetheme_get_navigation_menu_items( $rig
                 </nav>
 
                 <?php if ( $has_top_menu ) : ?>
-                    <nav aria-label="<?php esc_attr_e( 'Informazioni rapide', 'poetheme' ); ?>" class="border-t border-gray-200 pt-6">
+                    <nav aria-label="<?php esc_attr_e( 'Informazioni rapide', 'poetheme' ); ?>" class="pt-6">
                         <?php
                         poetheme_render_navigation_menu(
                             'top-info',

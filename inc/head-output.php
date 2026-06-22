@@ -192,6 +192,15 @@ function poetheme_get_design_settings_css() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-nav--location-primary a,body.poetheme-has-color-settings .poetheme-nav--location-primary-left a,body.poetheme-has-color-settings .poetheme-nav--location-primary-right a{color:var(--poetheme-menu-link-color) !important;background-color:var(--poetheme-menu-link-background) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-nav--location-primary .current-menu-item > a,body.poetheme-has-color-settings .poetheme-nav--location-primary .current_page_item > a,body.poetheme-has-color-settings .poetheme-nav--location-primary a:hover,body.poetheme-has-color-settings .poetheme-nav--location-primary a:focus,body.poetheme-has-color-settings .poetheme-nav--location-primary-left .current-menu-item > a,body.poetheme-has-color-settings .poetheme-nav--location-primary-left .current_page_item > a,body.poetheme-has-color-settings .poetheme-nav--location-primary-left a:hover,body.poetheme-has-color-settings .poetheme-nav--location-primary-left a:focus,body.poetheme-has-color-settings .poetheme-nav--location-primary-right .current-menu-item > a,body.poetheme-has-color-settings .poetheme-nav--location-primary-right .current_page_item > a,body.poetheme-has-color-settings .poetheme-nav--location-primary-right a:hover,body.poetheme-has-color-settings .poetheme-nav--location-primary-right a:focus{color:var(--poetheme-menu-active-link-color) !important;background-color:var(--poetheme-menu-active-background) !important;}';
 
+    // Mobile slide-in menu: the panel is a content surface, so it follows the
+    // content background/text colors (the header menu colors are tuned for the
+    // header bar and could be unreadable on the panel).
+    $styles .= 'body.poetheme-has-color-settings .poetheme-mobile-panel{background-color:var(--poetheme-content-background-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-mobile-panel__title{color:var(--poetheme-content-strong-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-mobile-panel__header button{color:var(--poetheme-content-text-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav a:not(.poetheme-cta-button){color:var(--poetheme-content-text-color) !important;background-color:transparent !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav .current-menu-item > a:not(.poetheme-cta-button),body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav .current_page_item > a:not(.poetheme-cta-button),body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav a:not(.poetheme-cta-button):hover,body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav a:not(.poetheme-cta-button):focus{color:var(--poetheme-content-link-color) !important;}';
+
     $styles .= 'body.poetheme-has-color-settings .poetheme-cta-button{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-cta-button:hover,body.poetheme-has-color-settings .poetheme-cta-button:focus{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;}';
 
@@ -267,6 +276,12 @@ function poetheme_get_design_settings_css() {
     }
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets a{color:var(--poetheme-footer-widget-link-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-footer-widgets a:hover,body.poetheme-has-color-settings .poetheme-footer-widgets a:focus{color:var(--poetheme-footer-widget-link-color) !important;}';
+
+    // Footer credits bar follows the footer palette (background, text and links),
+    // so it never stays white in dark mode.
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-credits{background-color:var(--poetheme-footer-widget-background) !important;color:var(--poetheme-footer-widget-text-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-credits .poetheme-footer-credits__content,body.poetheme-has-color-settings .poetheme-footer-credits p,body.poetheme-has-color-settings .poetheme-footer-credits span{color:var(--poetheme-footer-widget-text-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-footer-credits a{color:var(--poetheme-footer-widget-link-color) !important;}';
 
     if ( $styles ) {
         $styles = poetheme_sanitize_inline_css( $styles );
