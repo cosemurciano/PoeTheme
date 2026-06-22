@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.26.0
+- **Font dei titoli ora rispettato (fix):** gli elementi specifici (titolo pagina/articolo/categoria,
+  intestazioni footer, CTA, ecc.) senza un font dedicato non vengono più forzati sul font di sistema:
+  ereditano il font dei titoli/testo. Prima la regola più specifica (es. `.poetheme-page-title`)
+  sovrascriveva il font scelto per gli H.
+- **Sfondo testata applicato su tutte le testate:** lo stile inline garantito dello sfondo testata
+  (che segue colori/palette) è stato esteso a tutte le testate standard (style 1–8), non solo la
+  Classic.
+
 ## 1.25.0
 - **Fix accesso a Style Studio:** la pagina era diventata inaccessibile (“Non hai il permesso…”)
   perché rimossa da `$submenu`. Ora resta registrata e accessibile (dalla galleria); il link nel

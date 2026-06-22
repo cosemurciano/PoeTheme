@@ -64,7 +64,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
 ?>
 <header
     class="poetheme-site-header poetheme-site-header--style-8 poetheme-header poetheme-header--style-8"
-    role="banner"
+    role="banner"<?php echo poetheme_get_header_inline_style(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- value escaped via esc_attr() inside the helper. ?>
     x-data="{ mobileOpen: false }"
     x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
 >
