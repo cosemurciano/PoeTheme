@@ -3155,3 +3155,11 @@ msgstr ""
 #: inc/admin/options/global.php
 msgid "Configura layout e opzioni di sfondo globali. Colori e font si gestiscono da Style Studio."
 msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Questa è la galleria delle palette: assegnano colori, font e dimensioni a tutti gli elementi del tema. Scegli quale applicare, oppure crea/modifica una palette da Style Studio (anche importando un file JSON condiviso). C’è sempre una palette attiva: se non ne scegli una, viene usata la prima."
+msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "Nessuna palette disponibile. Crea la tua prima palette da Style Studio."
+msgstr ""

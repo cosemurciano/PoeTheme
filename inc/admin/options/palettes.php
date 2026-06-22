@@ -44,10 +44,25 @@ function poetheme_get_style_palettes() {
 /**
  * Retrieve the active palette id.
  *
+ * There is always one active palette: if none is set (or the stored one no
+ * longer exists), the first available palette is used as the default.
+ *
  * @return string
  */
 function poetheme_get_active_palette_id() {
-    return (string) get_option( 'poetheme_active_palette', '' );
+    $id       = (string) get_option( 'poetheme_active_palette', '' );
+    $palettes = poetheme_get_style_palettes();
+
+    if ( '' !== $id && isset( $palettes[ $id ] ) ) {
+        return $id;
+    }
+
+    if ( ! empty( $palettes ) ) {
+        $keys = array_keys( $palettes );
+        return (string) $keys[0];
+    }
+
+    return '';
 }
 
 /**
@@ -528,7 +543,7 @@ function poetheme_render_palette_page() {
         <?php endif; ?>
 
         <p class="description">
-            <?php esc_html_e( 'Le palette assegnano colori, font e dimensioni a tutti gli elementi del tema. Crea o modifica una palette da Style Studio, oppure importa un file JSON condiviso. La palette applicata sovrascrive le impostazioni manuali e funziona con qualsiasi testata, senza modificarne la struttura. Puoi disattivarla per ripristinare le impostazioni manuali.', 'poetheme' ); ?>
+            <?php esc_html_e( 'Questa è la galleria delle palette: assegnano colori, font e dimensioni a tutti gli elementi del tema. Scegli quale applicare, oppure crea/modifica una palette da Style Studio (anche importando un file JSON condiviso). C’è sempre una palette attiva: se non ne scegli una, viene usata la prima.', 'poetheme' ); ?>
         </p>
 
         <div class="poetheme-palette-toolbar">
@@ -557,18 +572,13 @@ function poetheme_render_palette_page() {
                     '<strong>' . esc_html( $palettes[ $active_id ]['name'] ) . '</strong>'
                 );
                 ?>
-                <form class="poetheme-palette-inline" action="<?php echo $post_url; ?>" method="post">
-                    <input type="hidden" name="action" value="poetheme_palette_deactivate" />
-                    <?php wp_nonce_field( 'poetheme_palette_deactivate' ); ?>
-                    <?php submit_button( __( 'Disattiva palette', 'poetheme' ), 'secondary', 'submit', false ); ?>
-                </form>
             </p>
         <?php endif; ?>
 
         <h2><?php esc_html_e( 'Palette disponibili', 'poetheme' ); ?></h2>
 
         <?php if ( empty( $palettes ) ) : ?>
-            <p><?php esc_html_e( 'Nessuna palette importata. Scarica il JSON di esempio, modificalo e importalo per creare la tua prima palette.', 'poetheme' ); ?></p>
+            <p><?php esc_html_e( 'Nessuna palette disponibile. Crea la tua prima palette da Style Studio.', 'poetheme' ); ?></p>
         <?php else : ?>
             <div class="poetheme-palette-grid">
                 <?php foreach ( $palettes as $id => $palette ) :

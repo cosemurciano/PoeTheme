@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.24.0
+- **C’è sempre una palette attiva:** se non ne scegli una viene usata la prima (di default). Rimosso
+  il pulsante “Disattiva palette”. Questo garantisce anche che la tipografia della palette (font e
+  dimensioni di H1–H6, liste, testo) sia sempre applicata sul front-end, perché la classe che attiva
+  gli stili è ora sempre presente.
+- **Style Studio accessibile solo da “Palette cromatica e stile”:** la voce Style Studio è stata
+  tolta dal menu del tema. La pagina “Palette e stile” diventa la **galleria** da cui scegliere e
+  gestire le palette; “Crea nuova palette” e “Modifica” aprono Style Studio.
+
 ## 1.23.0
 - **Font e dimensioni ora applicati ai titoli (H1–H6) sul front-end:** le regole di font/dimensione
   venivano battute dalla regola base del tema (`:where(h1):not([class*="-font-size"])`, specificità

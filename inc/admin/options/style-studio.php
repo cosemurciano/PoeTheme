@@ -861,6 +861,15 @@ function poetheme_studio_seed_default_palettes() {
 
     update_option( 'poetheme_style_palettes', $palettes );
     update_option( 'poetheme_presets_seeded', 1 );
+
+    // Ensure there is always an active palette (default to the first one).
+    $active = (string) get_option( 'poetheme_active_palette', '' );
+    if ( '' === $active || ! isset( $palettes[ $active ] ) ) {
+        $keys = array_keys( $palettes );
+        if ( ! empty( $keys ) ) {
+            update_option( 'poetheme_active_palette', $keys[0] );
+        }
+    }
 }
 add_action( 'after_switch_theme', 'poetheme_studio_seed_default_palettes' );
 
