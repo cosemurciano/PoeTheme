@@ -260,11 +260,9 @@ function poetheme_handle_style_studio_save() {
         update_option( 'poetheme_active_palette', $id );
     }
 
-    $is_update = ( '' !== $edit_id && $edit_id === $id );
-    $notice    = $apply ? 'activated' : ( $is_update ? 'updated' : 'imported' );
-
-    $target = admin_url( 'admin.php?page=poetheme-palette' );
-    wp_safe_redirect( add_query_arg( 'poetheme_palette_notice', $notice, $target ) );
+    // Stay in Style Studio editing the saved palette (with a success notice).
+    $target = admin_url( 'admin.php?page=poetheme-style-studio&palette=' . rawurlencode( $id ) );
+    wp_safe_redirect( add_query_arg( 'poetheme_studio_notice', $apply ? 'applied' : 'saved', $target ) );
     exit;
 }
 add_action( 'admin_post_poetheme_style_studio_save', 'poetheme_handle_style_studio_save' );
@@ -1059,6 +1057,13 @@ function poetheme_render_style_studio_page() {
     ?>
     <div class="wrap poetheme-options poetheme-studio">
         <h1><?php esc_html_e( 'Style Studio', 'poetheme' ); ?></h1>
+        <?php
+        $studio_notice = isset( $_GET['poetheme_studio_notice'] ) ? sanitize_key( wp_unslash( $_GET['poetheme_studio_notice'] ) ) : '';
+        if ( 'saved' === $studio_notice || 'applied' === $studio_notice ) :
+            $studio_message = 'applied' === $studio_notice ? __( 'Palette salvata e applicata.', 'poetheme' ) : __( 'Palette salvata.', 'poetheme' );
+            ?>
+            <div class="notice notice-success is-dismissible"><p><?php echo esc_html( $studio_message ); ?></p></div>
+        <?php endif; ?>
         <p class="description">
             <?php esc_html_e( 'Style Studio è lo strumento per creare il design del sito: scegli un colore brand, una regola di armonia e la tipografia, e il tema genera automaticamente una combinazione coerente per tutti gli elementi. Salva il risultato come palette, gestibile in “Palette e stile”.', 'poetheme' ); ?>
         </p>
@@ -1205,12 +1210,13 @@ function poetheme_render_style_studio_page() {
 
             <p class="poetheme-studio__actions">
                 <button type="submit" class="button button-secondary" name="apply" value="0" data-studio-save
-                    data-label-create="<?php esc_attr_e( 'Salva come palette', 'poetheme' ); ?>"
-                    data-label-update="<?php esc_attr_e( 'Aggiorna palette', 'poetheme' ); ?>"><?php esc_html_e( 'Salva come palette', 'poetheme' ); ?></button>
+                    data-label-create="<?php esc_attr_e( 'Salva palette', 'poetheme' ); ?>"
+                    data-label-update="<?php esc_attr_e( 'Salva palette', 'poetheme' ); ?>"><?php esc_html_e( 'Salva palette', 'poetheme' ); ?></button>
                 <button type="submit" class="button button-primary" name="apply" value="1" data-studio-save-apply
                     data-label-create="<?php esc_attr_e( 'Salva e applica', 'poetheme' ); ?>"
-                    data-label-update="<?php esc_attr_e( 'Aggiorna e applica', 'poetheme' ); ?>"><?php esc_html_e( 'Salva e applica', 'poetheme' ); ?></button>
-                <button type="button" class="button" data-studio-reset title="<?php esc_attr_e( 'Riporta il template allo stato iniziale', 'poetheme' ); ?>"><?php esc_html_e( 'Reset', 'poetheme' ); ?></button>
+                    data-label-update="<?php esc_attr_e( 'Salva e applica', 'poetheme' ); ?>"><?php esc_html_e( 'Salva e applica', 'poetheme' ); ?></button>
+                <a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=poetheme-palette' ) ); ?>"><?php esc_html_e( 'Torna a Palette e stile', 'poetheme' ); ?></a>
+                <button type="button" class="button button-link" data-studio-reset title="<?php esc_attr_e( 'Riporta il template allo stato iniziale', 'poetheme' ); ?>"><?php esc_html_e( 'Reset', 'poetheme' ); ?></button>
             </p>
         </form>
     </div>
