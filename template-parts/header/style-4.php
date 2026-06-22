@@ -75,7 +75,7 @@ if ( function_exists( 'yith_wcwl_object_id' ) ) {
 ?>
 <header
     class="poetheme-site-header poetheme-site-header--style-4 poetheme-header poetheme-header--style-4"
-    role="banner"<?php echo poetheme_get_header_inline_style(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- value escaped via esc_attr() inside the helper. ?>
+    role="banner"
     x-data="{ mobileOpen: false }"
     x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
 >

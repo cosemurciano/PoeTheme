@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.32.0
+- **Home blog senza nome sito nel contenuto:** quando la home mostra l'elenco degli ultimi articoli
+  (senza una pagina articoli statica), il nome del sito non viene più stampato come titolo della
+  sottointestazione prima degli articoli.
+- **Testata 2 (Split semitrasparente) corretta:** lo sfondo solido forzato (stile inline + regola
+  `!important`) rendeva l'header opaco, annullando l'effetto. Ora l'elemento header della testata 2 è
+  trasparente e solo la barra interna (`.poetheme-header__main`) è semitrasparente, tinta col colore
+  della palette (frosted). Le altre testate continuano a usare lo sfondo solido della palette.
+- **Pulizia:** rimosso lo stile inline dello sfondo header da tutte le testate (ridondante dopo il
+  fix di salvataggio: lo sfondo arriva già dalla variabile CSS della palette).
+
 ## 1.31.0
 - **Fix CTA in testata:** il pulsante CTA dentro al menu non prendeva i colori della palette perché
   la regola dei link del menu (più specifica) lo sovrascriveva. Ora le regole colore del menu
