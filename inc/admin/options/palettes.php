@@ -616,27 +616,33 @@ function poetheme_render_palette_page() {
                         </ul>
 
                         <div class="poetheme-palette-card__actions">
-                            <?php if ( ! $is_active ) : ?>
-                                <form class="poetheme-palette-inline" action="<?php echo $post_url; ?>" method="post">
-                                    <input type="hidden" name="action" value="poetheme_palette_activate" />
+                            <div class="poetheme-palette-card__actions-left">
+                                <?php if ( ! $is_active ) : ?>
+                                    <form class="poetheme-palette-inline" action="<?php echo $post_url; ?>" method="post">
+                                        <input type="hidden" name="action" value="poetheme_palette_activate" />
+                                        <input type="hidden" name="palette" value="<?php echo esc_attr( $id ); ?>" />
+                                        <?php wp_nonce_field( 'poetheme_palette_activate' ); ?>
+                                        <button type="submit" class="button button-primary poetheme-palette-apply"><?php esc_html_e( 'Applica', 'poetheme' ); ?></button>
+                                    </form>
+                                <?php else : ?>
+                                    <span class="poetheme-palette-applied"><span class="dashicons dashicons-yes"></span><?php esc_html_e( 'In uso', 'poetheme' ); ?></span>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="poetheme-palette-card__actions-right">
+                                <?php if ( $has_seeds ) : ?>
+                                    <a class="poetheme-icon-btn" href="<?php echo esc_url( $edit_url ); ?>" title="<?php esc_attr_e( 'Modifica', 'poetheme' ); ?>" aria-label="<?php esc_attr_e( 'Modifica', 'poetheme' ); ?>"><span class="dashicons dashicons-edit" aria-hidden="true"></span></a>
+                                <?php endif; ?>
+
+                                <a class="poetheme-icon-btn" href="<?php echo esc_url( $export_url ); ?>" title="<?php esc_attr_e( 'Esporta', 'poetheme' ); ?>" aria-label="<?php esc_attr_e( 'Esporta', 'poetheme' ); ?>"><span class="dashicons dashicons-download" aria-hidden="true"></span></a>
+
+                                <form class="poetheme-palette-inline" action="<?php echo $post_url; ?>" method="post" onsubmit="return confirm('<?php echo esc_js( __( 'Eliminare questa palette?', 'poetheme' ) ); ?>');">
+                                    <input type="hidden" name="action" value="poetheme_palette_delete" />
                                     <input type="hidden" name="palette" value="<?php echo esc_attr( $id ); ?>" />
-                                    <?php wp_nonce_field( 'poetheme_palette_activate' ); ?>
-                                    <?php submit_button( __( 'Applica', 'poetheme' ), 'primary', 'submit', false ); ?>
+                                    <?php wp_nonce_field( 'poetheme_palette_delete' ); ?>
+                                    <button type="submit" class="poetheme-icon-btn poetheme-icon-btn--danger" title="<?php esc_attr_e( 'Elimina', 'poetheme' ); ?>" aria-label="<?php esc_attr_e( 'Elimina', 'poetheme' ); ?>"><span class="dashicons dashicons-trash" aria-hidden="true"></span></button>
                                 </form>
-                            <?php endif; ?>
-
-                            <?php if ( $has_seeds ) : ?>
-                                <a class="button" href="<?php echo esc_url( $edit_url ); ?>"><?php esc_html_e( 'Modifica', 'poetheme' ); ?></a>
-                            <?php endif; ?>
-
-                            <a class="button" href="<?php echo esc_url( $export_url ); ?>"><?php esc_html_e( 'Esporta', 'poetheme' ); ?></a>
-
-                            <form class="poetheme-palette-inline" action="<?php echo $post_url; ?>" method="post" onsubmit="return confirm('<?php echo esc_js( __( 'Eliminare questa palette?', 'poetheme' ) ); ?>');">
-                                <input type="hidden" name="action" value="poetheme_palette_delete" />
-                                <input type="hidden" name="palette" value="<?php echo esc_attr( $id ); ?>" />
-                                <?php wp_nonce_field( 'poetheme_palette_delete' ); ?>
-                                <?php submit_button( __( 'Elimina', 'poetheme' ), 'delete', 'submit', false ); ?>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>

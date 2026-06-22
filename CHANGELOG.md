@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.25.0
+- **Fix accesso a Style Studio:** la pagina era diventata inaccessibile (“Non hai il permesso…”)
+  perché rimossa da `$submenu`. Ora resta registrata e accessibile (dalla galleria); il link nel
+  menu è nascosto via CSS.
+- **Azioni delle palette a icone:** nelle card, “Applica” è un piccolo pulsante a pillola a sinistra;
+  a destra le azioni Modifica/Esporta/Elimina come icone, tutto su un’unica riga. La palette in uso
+  mostra l’indicatore “In uso”.
+- **Tipografia front-end più robusta:** la classe che attiva gli stili dei font viene aggiunta anche
+  quando una palette è attiva, così font e dimensioni dei titoli si applicano sempre.
+
 ## 1.24.0
 - **C’è sempre una palette attiva:** se non ne scegli una viene usata la prima (di default). Rimosso
   il pulsante “Disattiva palette”. Questo garantisce anche che la tipografia della palette (font e

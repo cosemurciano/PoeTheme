@@ -136,6 +136,7 @@ const dict = {
   'Crea nuova palette': 'Create new palette',
   'Preset': 'Preset',
   'Modifica': 'Edit',
+  'In uso': 'In use',
   'Personalizzazione avanzata': 'Advanced customization',
   'Rifinisci i singoli colori e le dimensioni partendo dai valori generati.': 'Refine individual colors and sizes starting from the generated values.',
   'Reimposta tutte le personalizzazioni': 'Reset all customizations',

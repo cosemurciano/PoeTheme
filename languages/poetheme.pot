@@ -3163,3 +3163,7 @@ msgstr ""
 #: inc/admin/options/palettes.php
 msgid "Nessuna palette disponibile. Crea la tua prima palette da Style Studio."
 msgstr ""
+
+#: inc/admin/options/palettes.php
+msgid "In uso"
+msgstr ""
