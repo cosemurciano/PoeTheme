@@ -155,6 +155,9 @@
 
         var onDark = '#ffffff';
         var link = dark ? hsl(h, s, 70) : primary;
+        // Headings use a harmonized, brand-tinted color (not just near-black/white)
+        // while keeping strong contrast on the content surface.
+        var headingColor = dark ? hsl(h, clamp(s, 28, 62), 84) : hsl(h, clamp(s, 32, 72), 26);
 
         var colors = {
             page_background_color: page,
@@ -173,19 +176,19 @@
             top_bar_text_color: onDark,
             top_bar_link_color: onDark,
             top_bar_icon_color: onDark,
-            page_title_color: textStrong,
-            post_title_color: textStrong,
-            category_title_color: textStrong,
+            page_title_color: headingColor,
+            post_title_color: headingColor,
+            category_title_color: headingColor,
             footer_widget_background_color: footerBg,
             footer_widget_text_color: textMuted,
             footer_widget_link_color: link
         };
 
         ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(function (tag) {
-            colors['heading_' + tag + '_color'] = textStrong;
+            colors['heading_' + tag + '_color'] = headingColor;
         });
         ['h2', 'h3', 'h4', 'h5'].forEach(function (tag) {
-            colors['footer_widget_heading_' + tag + '_color'] = textStrong;
+            colors['footer_widget_heading_' + tag + '_color'] = headingColor;
         });
 
         return {
