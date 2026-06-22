@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.29.0
+- **Colori dei titoli armonizzati:** l'algoritmo delle palette assegna ora agli H (H1–H6, titoli
+  pagina/articolo/categoria, intestazioni footer) un colore **coordinato col brand** (non più solo
+  nero/bianco), mantenendo un buon contrasto. Una migrazione rigenera le palette esistenti dai loro
+  semi (preservando le personalizzazioni) così il nuovo colore si applica anche ai preset salvati.
+- **Stili obsoleti rimossi/portati sotto palette:** i pulsanti **“Leggi di più”** (`.poetheme-read-more`)
+  usavano un blu fisso e le **card degli articoli** (`.poetheme-post-item`) uno sfondo bianco fisso,
+  ignorando la palette. Ora seguono i colori CTA/contenuto della palette.
+
 ## 1.28.0
 - **Footer gestito dalla palette:** rimosse le classi hardcoded (`bg-white`, `bg-gray-100`,
   `border-t`) dal footer. La barra dei crediti ora segue lo sfondo, il testo e i link del footer

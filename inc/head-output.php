@@ -204,6 +204,12 @@ function poetheme_get_design_settings_css() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-cta-button{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-cta-button:hover,body.poetheme-has-color-settings .poetheme-cta-button:focus{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;}';
 
+    // "Read more" buttons and post cards follow the palette (legacy hardcoded
+    // colors in style.css used a fixed blue / white that ignored the palette).
+    $styles .= 'body.poetheme-has-color-settings .poetheme-read-more{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-read-more--outline{background-color:transparent !important;color:var(--poetheme-content-link-color) !important;border-color:var(--poetheme-content-link-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-post-item{background-color:var(--poetheme-content-background-color) !important;}';
+
     $styles .= 'body.poetheme-has-color-settings .poetheme-top-bar{background-color:var(--poetheme-top-bar-background) !important;color:var(--poetheme-top-bar-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-top-bar,body.poetheme-has-color-settings .poetheme-top-bar p,body.poetheme-has-color-settings .poetheme-top-bar span{color:var(--poetheme-top-bar-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-top-bar a{color:var(--poetheme-top-bar-link-color) !important;}';

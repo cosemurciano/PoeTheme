@@ -546,6 +546,11 @@ function poetheme_studio_generate_from_seeds( $seeds ) {
 
     $on_dark = '#ffffff';
 
+    // Headings use a harmonized, brand-tinted color (not just near-black/white).
+    $heading_color = $dark
+        ? poetheme_studio_hsl_to_hex( $h, poetheme_studio_clamp( $s, 28, 62 ), 84 )
+        : poetheme_studio_hsl_to_hex( $h, poetheme_studio_clamp( $s, 32, 72 ), 26 );
+
     $colors = array(
         'page_background_color'         => $page,
         'content_background_color'      => $surface,
@@ -563,19 +568,19 @@ function poetheme_studio_generate_from_seeds( $seeds ) {
         'top_bar_text_color'            => $on_dark,
         'top_bar_link_color'            => $on_dark,
         'top_bar_icon_color'            => $on_dark,
-        'page_title_color'              => $text_strong,
-        'post_title_color'              => $text_strong,
-        'category_title_color'          => $text_strong,
+        'page_title_color'              => $heading_color,
+        'post_title_color'              => $heading_color,
+        'category_title_color'          => $heading_color,
         'footer_widget_background_color'=> $footer_bg,
         'footer_widget_text_color'      => $text_muted,
         'footer_widget_link_color'      => $link,
     );
 
     foreach ( array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) as $tag ) {
-        $colors[ 'heading_' . $tag . '_color' ] = $text_strong;
+        $colors[ 'heading_' . $tag . '_color' ] = $heading_color;
     }
     foreach ( array( 'h2', 'h3', 'h4', 'h5' ) as $tag ) {
-        $colors[ 'footer_widget_heading_' . $tag . '_color' ] = $text_strong;
+        $colors[ 'footer_widget_heading_' . $tag . '_color' ] = $heading_color;
     }
 
     // Typography + density.
@@ -902,6 +907,50 @@ function poetheme_studio_migrate_palette_layout() {
     update_option( 'poetheme_palette_layout_migrated', 1 );
 }
 add_action( 'admin_init', 'poetheme_studio_migrate_palette_layout' );
+
+/**
+ * Regenerate stored palettes from their seeds when the generator algorithm
+ * changes, so existing palettes (including seeded presets) pick up improvements
+ * such as harmonized heading colors. User overrides are preserved (re-applied on
+ * top of the freshly generated tokens). Gated by a version bump.
+ */
+function poetheme_studio_regenerate_palettes() {
+    $version = 2; // Bump when generated tokens change and palettes should refresh.
+
+    if ( (int) get_option( 'poetheme_palette_gen_version', 0 ) >= $version ) {
+        return;
+    }
+
+    $palettes = poetheme_get_style_palettes();
+    $changed  = false;
+
+    foreach ( $palettes as $id => $palette ) {
+        if ( empty( $palette['seeds'] ) ) {
+            continue;
+        }
+
+        $rebuilt = poetheme_studio_build_palette(
+            isset( $palette['name'] ) ? $palette['name'] : '',
+            $palette['seeds'],
+            isset( $palette['origin'] ) ? $palette['origin'] : 'studio',
+            isset( $palette['overrides'] ) ? $palette['overrides'] : array()
+        );
+
+        if ( isset( $palette['created'] ) ) {
+            $rebuilt['created'] = $palette['created'];
+        }
+
+        $palettes[ $id ] = $rebuilt;
+        $changed         = true;
+    }
+
+    if ( $changed ) {
+        update_option( 'poetheme_style_palettes', $palettes );
+    }
+
+    update_option( 'poetheme_palette_gen_version', $version );
+}
+add_action( 'admin_init', 'poetheme_studio_regenerate_palettes' );
 
 
 /**
