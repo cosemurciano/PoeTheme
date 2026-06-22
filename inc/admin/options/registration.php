@@ -226,7 +226,6 @@ function poetheme_reorder_admin_submenu() {
 
     $order = array(
         'poetheme-settings',
-        'poetheme-style-studio',
         'poetheme-palette',
         'poetheme-logo',
         'poetheme-header',
@@ -237,9 +236,10 @@ function poetheme_reorder_admin_submenu() {
         'poetheme-seo-schema',
     );
 
-    // Colors and Fonts are now managed by Style Studio: hide their menu entries
-    // (the pages themselves redirect to Style Studio, see below).
-    $hidden = array( 'poetheme-colors', 'poetheme-fonts' );
+    // Colors and Fonts are managed by Style Studio (their pages redirect there).
+    // Style Studio itself is reachable only from the "Palette e stile" gallery
+    // (Create / Edit), so its menu entry is hidden too.
+    $hidden = array( 'poetheme-colors', 'poetheme-fonts', 'poetheme-style-studio' );
 
     $by_slug = array();
     foreach ( $submenu['poetheme-settings'] as $item ) {
