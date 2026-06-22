@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.31.0
+- **Fix CTA in testata:** il pulsante CTA dentro al menu non prendeva i colori della palette perché
+  la regola dei link del menu (più specifica) lo sovrascriveva. Ora le regole colore del menu
+  escludono `.poetheme-cta-button` (`:not(.poetheme-cta-button)`), quindi il CTA usa correttamente i
+  colori CTA della palette.
+- **Raggio pulsanti uniforme:** il raggio degli angoli della palette si applica ora a **tutti** i
+  pulsanti (CTA testata, “Leggi tutto”, invio commenti, generici) e non solo al CTA. Allineato il
+  massimo a 999px per supportare lo stile “pillola”.
+
 ## 1.30.0
 - **Pulsanti sotto palette + hover:** tutti i pulsanti (CTA, “Leggi di più”, **invio commento** —
   prima `bg-indigo-600` fisso) usano i colori CTA della palette, con uno **stato hover più scuro**
