@@ -122,7 +122,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
         </div>
     <?php endif; ?>
 
-    <div class="border-b border-rose-100">
+    <div class="">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
             <div class="flex items-center justify-center">
                 <div class="flex w-full items-center justify-between md:w-auto md:justify-center">
@@ -136,7 +136,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
         </div>
     </div>
 
-    <div class="poetheme-nav-desktop border-b border-rose-100 hidden md:block">
+    <div class="poetheme-nav-desktop hidden md:block">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-3' ) ) ); ?>">
             <nav class="nav-primary flex items-center justify-center" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                 <?php
@@ -170,7 +170,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
         <div class="absolute inset-0 bg-gray-900/50" @click="mobileOpen = false" aria-hidden="true"></div>
 
         <div
-            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col bg-white shadow-xl"
+            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col poetheme-mobile-panel bg-white shadow-xl"
             x-transition:enter="transition ease-in-out duration-300"
             x-transition:enter-start="translate-x-full"
             x-transition:enter-end="translate-x-0"

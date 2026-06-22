@@ -121,7 +121,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
         </div>
     <?php endif; ?>
 
-    <div class="border-b border-gray-200">
+    <div class="">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-4' ) ) ); ?>">
             <div class="flex items-center justify-between gap-6">
                 <div class="flex w-full items-center justify-between gap-4 md:w-auto">
@@ -165,7 +165,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
         <div class="absolute inset-0 bg-gray-900/50" @click="mobileOpen = false" aria-hidden="true"></div>
 
         <div
-            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col bg-white shadow-xl"
+            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col poetheme-mobile-panel bg-white shadow-xl"
             x-transition:enter="transition ease-in-out duration-300"
             x-transition:enter-start="translate-x-full"
             x-transition:enter-end="translate-x-0"
@@ -197,7 +197,7 @@ $has_top_menu = has_nav_menu( 'top-info' );
                 </nav>
 
                 <?php if ( $has_top_menu ) : ?>
-                    <nav aria-label="<?php esc_attr_e( 'Informazioni rapide', 'poetheme' ); ?>" class="border-t border-gray-200 pt-6">
+                    <nav aria-label="<?php esc_attr_e( 'Informazioni rapide', 'poetheme' ); ?>" class="pt-6">
                         <?php
                         poetheme_render_navigation_menu(
                             'top-info',

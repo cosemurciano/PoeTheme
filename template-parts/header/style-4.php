@@ -132,7 +132,7 @@ if ( function_exists( 'yith_wcwl_object_id' ) ) {
         </div>
     <?php endif; ?>
 
-    <div class="border-b border-gray-200">
+    <div class="">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
             <div class="flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
@@ -169,7 +169,7 @@ if ( function_exists( 'yith_wcwl_object_id' ) ) {
         </div>
     </div>
 
-    <div class="poetheme-nav-desktop border-b border-gray-200 hidden md:block">
+    <div class="poetheme-nav-desktop hidden md:block">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-3' ) ) ); ?>">
             <nav class="nav-primary flex items-center justify-between" aria-label="<?php esc_attr_e( 'Primary navigation', 'poetheme' ); ?>">
                 <?php
@@ -203,7 +203,7 @@ if ( function_exists( 'yith_wcwl_object_id' ) ) {
         <div class="absolute inset-0 bg-gray-900/50" @click="mobileOpen = false" aria-hidden="true"></div>
 
         <div
-            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col bg-white shadow-xl"
+            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col poetheme-mobile-panel bg-white shadow-xl"
             x-transition:enter="transition ease-in-out duration-300"
             x-transition:enter-start="translate-x-full"
             x-transition:enter-end="translate-x-0"
@@ -220,7 +220,7 @@ if ( function_exists( 'yith_wcwl_object_id' ) ) {
             </div>
 
             <div class="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-6">
-                <div class="border-b border-gray-200 pb-6">
+                <div class="pb-6">
                     <?php get_search_form(); ?>
                 </div>
 
@@ -239,7 +239,7 @@ if ( function_exists( 'yith_wcwl_object_id' ) ) {
                 </nav>
 
                 <?php if ( $account_url || $wishlist_url || $cart_url ) : ?>
-                    <div class="flex items-center gap-4 border-t border-gray-200 pt-6 text-gray-700">
+                    <div class="flex items-center gap-4 pt-6 text-gray-700">
                         <?php if ( $account_url ) : ?>
                             <a class="hover:text-blue-600 transition" href="<?php echo esc_url( $account_url ); ?>" aria-label="<?php esc_attr_e( 'Account', 'poetheme' ); ?>">
                                 <i data-lucide="user" class="w-5 h-5"></i>

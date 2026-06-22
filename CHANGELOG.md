@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.28.0
+- **Footer gestito dalla palette:** rimosse le classi hardcoded (`bg-white`, `bg-gray-100`,
+  `border-t`) dal footer. La barra dei crediti ora segue lo sfondo, il testo e i link del footer
+  della palette (niente più fondo bianco in modalità scura).
+- **Bordi testate rimossi:** eliminati i bordi hardcoded `border-t`/`border-b` (non gestiti dalla
+  palette) da tutte le testate (style 1–9).
+- **Menu mobile (smartphone) gestito dalla palette:** il pannello a scomparsa è ora una superficie di
+  contenuto (sfondo = sfondo contenuto, testo/titolo/chiudi = colori contenuto, link attivi = colore
+  link), così resta sempre leggibile a prescindere dai colori del menu in testata.
+
 ## 1.27.0
 - **Fix sfondo testata (e tutti gli override avanzati) non memorizzati:** modificando una palette con
   bucket di override vuoti (es. i preset), `wp_localize_script` li passava come array JS; aggiungendo

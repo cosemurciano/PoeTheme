@@ -25,11 +25,9 @@
         }
     }
     $color_options = poetheme_get_color_options();
-    $footer_widget_classes = array( 'poetheme-footer-widgets', 'bg-gray-100', 'border-t', 'border-gray-200' );
-
-    if ( ! empty( $color_options['footer_widget_background_transparent'] ) ) {
-        $footer_widget_classes = array( 'poetheme-footer-widgets' );
-    }
+    // Background and borders are driven by the active palette (see head-output),
+    // not by hardcoded utility classes that would override it (e.g. in dark mode).
+    $footer_widget_classes = array( 'poetheme-footer-widgets' );
     ?>
     <?php if ( $show_footer && $has_widgets ) : ?>
     <aside class="<?php echo esc_attr( implode( ' ', $footer_widget_classes ) ); ?>" aria-label="<?php esc_attr_e( 'Footer widgets', 'poetheme' ); ?>">
@@ -89,7 +87,7 @@
     <?php endif; ?>
 
     <?php if ( $show_footer && $show_credits ) : ?>
-    <footer class="poetheme-footer-credits bg-white border-t border-gray-200" role="contentinfo">
+    <footer class="poetheme-footer-credits" role="contentinfo">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-6', 'flex', 'flex-col', 'gap-4', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
             <div class="poetheme-footer-credits__content text-sm text-gray-600">
                 <?php if ( $credits_text ) : ?>

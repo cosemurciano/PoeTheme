@@ -88,7 +88,7 @@ $search_url      = get_search_link();
     x-effect="document.documentElement.classList.toggle('overflow-hidden', mobileOpen); document.body.classList.toggle('overflow-hidden', mobileOpen);"
 >
     <?php if ( $show_top_bar && ( $has_top_items || $has_social || $has_top_menu ) ) : ?>
-        <div class="poetheme-top-bar bg-gray-50 text-xs text-gray-600 border-b border-gray-200">
+        <div class="poetheme-top-bar bg-gray-50 text-xs text-gray-600">
             <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-2', 'flex', 'flex-col', 'gap-3', 'md:flex-row', 'md:items-center', 'md:justify-between' ) ) ); ?>">
                 <?php if ( $has_top_items ) : ?>
                     <?php
@@ -140,7 +140,7 @@ $search_url      = get_search_link();
         </div>
     <?php endif; ?>
 
-    <div class="border-b border-gray-200">
+    <div class="">
         <div class="<?php echo esc_attr( poetheme_get_layout_container_classes( array( 'py-5' ) ) ); ?>">
             <div class="md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6 flex items-center justify-between gap-4">
                 <div class="hidden md:flex items-center justify-start">
@@ -224,7 +224,7 @@ $search_url      = get_search_link();
         <div class="absolute inset-0 bg-gray-900/50" @click="mobileOpen = false" aria-hidden="true"></div>
 
         <div
-            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col bg-white shadow-xl"
+            class="relative ml-auto flex h-full w-11/12 max-w-xs flex-col poetheme-mobile-panel bg-white shadow-xl"
             x-transition:enter="transition ease-in-out duration-300"
             x-transition:enter-start="translate-x-full"
             x-transition:enter-end="translate-x-0"
@@ -269,7 +269,7 @@ $search_url      = get_search_link();
                 </nav>
 
                 <?php if ( $has_top_menu ) : ?>
-                    <nav aria-label="<?php esc_attr_e( 'Informazioni rapide', 'poetheme' ); ?>" class="border-t border-gray-200 pt-6">
+                    <nav aria-label="<?php esc_attr_e( 'Informazioni rapide', 'poetheme' ); ?>" class="pt-6">
                         <?php
                         poetheme_render_navigation_menu(
                             'top-info',
