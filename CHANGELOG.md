@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.30.0
+- **Pulsanti sotto palette + hover:** tutti i pulsanti (CTA, “Leggi di più”, **invio commento** —
+  prima `bg-indigo-600` fisso) usano i colori CTA della palette, con uno **stato hover più scuro**
+  (prima l'hover manteneva lo stesso colore). La variante outline del “Leggi di più” usa il colore link.
+- **Altri elementi sotto palette:** meta degli articoli e didascalie dei media seguono il colore del
+  testo del contenuto (attenuato).
+- **Algoritmo potenziato – auto-contrasto:** il generatore garantisce ora il contrasto **WCAG AA** di
+  testo, link e titoli sulla superficie del contenuto, regolando la luminosità senza cambiare tinta.
+  Le palette esistenti vengono rigenerate (versione generatore aggiornata) preservando le personalizzazioni.
+
 ## 1.29.0
 - **Colori dei titoli armonizzati:** l'algoritmo delle palette assegna ora agli H (H1–H6, titoli
   pagina/articolo/categoria, intestazioni footer) un colore **coordinato col brand** (non più solo

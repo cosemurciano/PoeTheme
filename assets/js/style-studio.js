@@ -106,6 +106,22 @@
         return contrast(bg, '#ffffff') >= contrast(bg, '#111827') ? '#ffffff' : '#111827';
     }
 
+    // Nudge a foreground color's lightness (keeping its hue/saturation) until it
+    // reaches the target contrast against the background. Falls back to black/white.
+    function adjustContrast(fg, bg, min) {
+        if (contrast(fg, bg) >= min) { return fg; }
+        var c = hexToHsl(fg);
+        var dir = luminance(bg) > 0.38 ? -1 : 1;
+        var l = c.l;
+        for (var i = 0; i < 100; i++) {
+            l += dir * 2;
+            if (l < 0 || l > 100) { break; }
+            var candidate = hsl(c.h, c.s, l);
+            if (contrast(candidate, bg) >= min) { return candidate; }
+        }
+        return bestOn(bg);
+    }
+
     /* ---------- harmony + token generation ---------- */
 
     function accentHue(h, harmony) {
@@ -158,6 +174,13 @@
         // Headings use a harmonized, brand-tinted color (not just near-black/white)
         // while keeping strong contrast on the content surface.
         var headingColor = dark ? hsl(h, clamp(s, 28, 62), 84) : hsl(h, clamp(s, 32, 72), 26);
+
+        // Auto-contrast pass: guarantee readable (WCAG AA) text, links and
+        // headings against the content surface, keeping their hue.
+        text = adjustContrast(text, surface, 4.5);
+        textStrong = adjustContrast(textStrong, surface, 4.5);
+        link = adjustContrast(link, surface, 4.5);
+        headingColor = adjustContrast(headingColor, surface, 4.5);
 
         var colors = {
             page_background_color: page,

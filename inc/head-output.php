@@ -201,14 +201,29 @@ function poetheme_get_design_settings_css() {
     $styles .= 'body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav a:not(.poetheme-cta-button){color:var(--poetheme-content-text-color) !important;background-color:transparent !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav .current-menu-item > a:not(.poetheme-cta-button),body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav .current_page_item > a:not(.poetheme-cta-button),body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav a:not(.poetheme-cta-button):hover,body.poetheme-has-color-settings .poetheme-mobile-panel .poetheme-nav a:not(.poetheme-cta-button):focus{color:var(--poetheme-content-link-color) !important;}';
 
-    $styles .= 'body.poetheme-has-color-settings .poetheme-cta-button{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;}';
-    $styles .= 'body.poetheme-has-color-settings .poetheme-cta-button:hover,body.poetheme-has-color-settings .poetheme-cta-button:focus{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;}';
+    // Buttons follow the palette CTA colors, with a darker hover state (the
+    // hover used to keep the same color). The selector also covers the comments
+    // submit button and other generic theme submit buttons.
+    $btn_base  = array();
+    $btn_hover = array();
+    foreach ( array( '.poetheme-cta-button', '.poetheme-button', '.comment-form .submit', '.comment-respond .submit' ) as $sel ) {
+        $btn_base[]  = 'body.poetheme-has-color-settings ' . $sel;
+        $btn_hover[] = 'body.poetheme-has-color-settings ' . $sel . ':hover';
+        $btn_hover[] = 'body.poetheme-has-color-settings ' . $sel . ':focus';
+    }
+    $styles .= implode( ',', $btn_base ) . '{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;border-color:var(--poetheme-cta-background-color) !important;}';
+    $styles .= implode( ',', $btn_hover ) . '{background-color:color-mix(in srgb, var(--poetheme-cta-background-color) 86%, #000) !important;color:var(--poetheme-cta-text-color) !important;}';
 
     // "Read more" buttons and post cards follow the palette (legacy hardcoded
     // colors in style.css used a fixed blue / white that ignored the palette).
     $styles .= 'body.poetheme-has-color-settings .poetheme-read-more{background-color:var(--poetheme-cta-background-color) !important;color:var(--poetheme-cta-text-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-read-more:hover,body.poetheme-has-color-settings .poetheme-read-more:focus{background-color:color-mix(in srgb, var(--poetheme-cta-background-color) 86%, #000) !important;color:var(--poetheme-cta-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-read-more--outline{background-color:transparent !important;color:var(--poetheme-content-link-color) !important;border-color:var(--poetheme-content-link-color) !important;}';
+    $styles .= 'body.poetheme-has-color-settings .poetheme-read-more--outline:hover,body.poetheme-has-color-settings .poetheme-read-more--outline:focus{background-color:color-mix(in srgb, var(--poetheme-content-link-color) 12%, transparent) !important;color:var(--poetheme-content-link-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-post-item{background-color:var(--poetheme-content-background-color) !important;}';
+
+    // Post meta and media captions follow the content text color (muted).
+    $styles .= 'body.poetheme-has-color-settings .poetheme-post-meta,body.poetheme-has-color-settings .poetheme-post-meta__separator,body.poetheme-has-color-settings .wp-caption-text,body.poetheme-has-color-settings .gallery-caption,body.poetheme-has-color-settings .blocks-gallery-item figcaption{color:var(--poetheme-content-text-color) !important;opacity:0.72;}';
 
     $styles .= 'body.poetheme-has-color-settings .poetheme-top-bar{background-color:var(--poetheme-top-bar-background) !important;color:var(--poetheme-top-bar-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings .poetheme-top-bar,body.poetheme-has-color-settings .poetheme-top-bar p,body.poetheme-has-color-settings .poetheme-top-bar span{color:var(--poetheme-top-bar-text-color) !important;}';

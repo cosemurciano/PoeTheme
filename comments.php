@@ -58,7 +58,7 @@ if ( post_password_required() ) {
             'title_reply_before' => '<h2 id="reply-title" class="text-xl font-semibold mt-8">',
             'title_reply_after'  => '</h2>',
             'class_form'         => 'mt-6 space-y-6',
-            'class_submit'       => 'bg-indigo-600 text-white px-4 py-2 rounded-md focus:ring-4 focus:ring-indigo-300',
+            'class_submit'       => 'poetheme-cta-button submit px-4 py-2 rounded-md',
             'comment_field'      => sprintf(
                 '<p class="comment-form-comment space-y-2"><label for="comment" class="font-medium">%1$s</label><textarea id="comment" name="comment" class="%2$s" rows="6" required></textarea></p>',
                 esc_html__( 'Comment', 'poetheme' ),
