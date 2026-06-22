@@ -729,7 +729,16 @@ function poetheme_prepare_font_styles() {
             $heading_stack = $stack;
         }
 
-        if ( ! empty( $field['selectors'] ) ) {
+        // Only emit a font-family rule for an element when it has its OWN font
+        // selected. body_font / heading_font are the base fonts and always emit
+        // (falling back to the system stack). Secondary elements (titles, footer
+        // headings, CTA, etc.) with no specific font are left to inherit from the
+        // heading/body rules instead of being forced onto the fallback stack —
+        // otherwise their more specific selector (e.g. .poetheme-page-title) would
+        // override the chosen heading font.
+        $is_primary_font = in_array( $key, array( 'body_font', 'heading_font' ), true );
+
+        if ( ! empty( $field['selectors'] ) && ( '' !== $value || $is_primary_font ) ) {
             $selectors = array_filter( array_map( 'trim', (array) $field['selectors'] ) );
 
             if ( $selectors ) {
