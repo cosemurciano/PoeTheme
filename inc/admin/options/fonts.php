@@ -982,12 +982,20 @@ function poetheme_get_font_field_config() {
             'border_radius'   => array(
                 'option_key'  => 'cta_button_border_radius',
                 'label'       => __( 'Raggio angoli pulsante (px)', 'poetheme' ),
-                'description' => __( 'Imposta un raggio uniforme per tutti gli angoli del pulsante Call to Action.', 'poetheme' ),
+                'description' => __( 'Imposta un raggio uniforme per tutti gli angoli dei pulsanti.', 'poetheme' ),
                 'min'         => 0,
-                'max'         => 200,
+                'max'         => 999,
                 'step'        => 1,
                 'unit'        => 'px',
                 'default'     => '',
+                // Apply the same radius to every button type for consistency.
+                'selectors'   => array(
+                    '.poetheme-cta-button',
+                    '.poetheme-read-more',
+                    '.poetheme-button',
+                    '.comment-form .submit',
+                    '.comment-respond .submit',
+                ),
             ),
         ),
         'footer_widget_heading_color' => array(
