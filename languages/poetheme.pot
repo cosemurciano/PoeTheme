@@ -3167,3 +3167,19 @@ msgstr ""
 #: inc/admin/options/palettes.php
 msgid "In uso"
 msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Palette salvata e applicata."
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Palette salvata."
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Salva palette"
+msgstr ""
+
+#: inc/admin/options/style-studio.php
+msgid "Torna a Palette e stile"
+msgstr ""

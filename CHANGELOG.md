@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.27.0
+- **Fix sfondo testata (e tutti gli override avanzati) non memorizzati:** modificando una palette con
+  bucket di override vuoti (es. i preset), `wp_localize_script` li passava come array JS; aggiungendo
+  una chiave e serializzando in JSON le chiavi venivano perse. Ora i bucket sono normalizzati a
+  oggetti, quindi gli override (incluso lo sfondo testata) vengono salvati e applicati.
+- **Flusso di salvataggio in Style Studio:** dopo “Salva palette” o “Salva e applica” si **resta in
+  Style Studio** (sulla stessa palette) con un avviso di conferma. I pulsanti sono ora “Salva
+  palette” e “Salva e applica”, con accanto un pulsante **“Torna a Palette e stile”**.
+
 ## 1.26.0
 - **Font dei titoli ora rispettato (fix):** gli elementi specifici (titolo pagina/articolo/categoria,
   intestazioni footer, CTA, ecc.) senza un font dedicato non vengono più forzati sul font di sistema:

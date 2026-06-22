@@ -742,10 +742,16 @@
             }
             var eo = cfg().editOverrides;
             if (eo) {
+                // wp_localize_script encodes empty PHP arrays as JS arrays ([]),
+                // not objects. Adding string keys to an array and JSON.stringify-ing
+                // it silently drops them, so normalize each bucket to a plain object.
+                var asObject = function (v) {
+                    return ( v && typeof v === 'object' && !Array.isArray(v) ) ? v : {};
+                };
                 overrides = {
-                    colors: eo.colors && typeof eo.colors === 'object' ? eo.colors : {},
-                    fonts: eo.fonts && typeof eo.fonts === 'object' ? eo.fonts : {},
-                    global: eo.global && typeof eo.global === 'object' ? eo.global : {}
+                    colors: asObject(eo.colors),
+                    fonts: asObject(eo.fonts),
+                    global: asObject(eo.global)
                 };
             }
             applySeeds(ed);

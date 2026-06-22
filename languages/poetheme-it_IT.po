@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PoeTheme 1.8.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-14 17:37+0000\n"
-"PO-Revision-Date: 2026-06-22 06:43+0000\n"
+"PO-Revision-Date: 2026-06-22 07:18+0000\n"
 "Last-Translator: PoeTheme\n"
 "Language-Team: Italiano\n"
 "Language: it_IT\n"
@@ -3276,3 +3276,19 @@ msgstr "Nessuna palette disponibile. Crea la tua prima palette da Style Studio."
 #: inc/admin/options/palettes.php
 msgid "In uso"
 msgstr "In uso"
+
+#: inc/admin/options/style-studio.php
+msgid "Palette salvata e applicata."
+msgstr "Palette salvata e applicata."
+
+#: inc/admin/options/style-studio.php
+msgid "Palette salvata."
+msgstr "Palette salvata."
+
+#: inc/admin/options/style-studio.php
+msgid "Salva palette"
+msgstr "Salva palette"
+
+#: inc/admin/options/style-studio.php
+msgid "Torna a Palette e stile"
+msgstr "Torna a Palette e stile"
