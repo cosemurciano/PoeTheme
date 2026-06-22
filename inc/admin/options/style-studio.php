@@ -426,6 +426,37 @@ function poetheme_studio_best_on( $bg ) {
 }
 
 /**
+ * Nudge a foreground color's lightness (keeping its hue/saturation) until it
+ * reaches the target contrast ratio against the background.
+ *
+ * @param string $fg  Foreground hex.
+ * @param string $bg  Background hex.
+ * @param float  $min Minimum contrast ratio.
+ * @return string
+ */
+function poetheme_studio_adjust_contrast( $fg, $bg, $min ) {
+    if ( poetheme_studio_contrast( $fg, $bg ) >= $min ) {
+        return $fg;
+    }
+
+    list( $h, $sat, $l ) = poetheme_studio_hex_to_hsl( $fg );
+    $dir = poetheme_studio_luminance( $bg ) > 0.38 ? -1 : 1;
+
+    for ( $i = 0; $i < 100; $i++ ) {
+        $l += $dir * 2;
+        if ( $l < 0 || $l > 100 ) {
+            break;
+        }
+        $candidate = poetheme_studio_hsl_to_hex( $h, $sat, $l );
+        if ( poetheme_studio_contrast( $candidate, $bg ) >= $min ) {
+            return $candidate;
+        }
+    }
+
+    return poetheme_studio_best_on( $bg );
+}
+
+/**
  * WCAG contrast ratio between two hex colors.
  *
  * @param string $a Hex color.
@@ -550,6 +581,13 @@ function poetheme_studio_generate_from_seeds( $seeds ) {
     $heading_color = $dark
         ? poetheme_studio_hsl_to_hex( $h, poetheme_studio_clamp( $s, 28, 62 ), 84 )
         : poetheme_studio_hsl_to_hex( $h, poetheme_studio_clamp( $s, 32, 72 ), 26 );
+
+    // Auto-contrast pass: guarantee readable (WCAG AA) text, links and headings
+    // against the content surface, keeping their hue.
+    $text          = poetheme_studio_adjust_contrast( $text, $surface, 4.5 );
+    $text_strong   = poetheme_studio_adjust_contrast( $text_strong, $surface, 4.5 );
+    $link          = poetheme_studio_adjust_contrast( $link, $surface, 4.5 );
+    $heading_color = poetheme_studio_adjust_contrast( $heading_color, $surface, 4.5 );
 
     $colors = array(
         'page_background_color'         => $page,
@@ -915,7 +953,7 @@ add_action( 'admin_init', 'poetheme_studio_migrate_palette_layout' );
  * top of the freshly generated tokens). Gated by a version bump.
  */
 function poetheme_studio_regenerate_palettes() {
-    $version = 2; // Bump when generated tokens change and palettes should refresh.
+    $version = 3; // Bump when generated tokens change and palettes should refresh.
 
     if ( (int) get_option( 'poetheme_palette_gen_version', 0 ) >= $version ) {
         return;
