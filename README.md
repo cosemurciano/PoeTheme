@@ -2,13 +2,15 @@
 
 Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'editor a blocchi di Gutenberg.
 
-**Stato del tema:** Core Stable (release-ready).
+**Stato del tema:** Core Stable (release-ready). **Versione corrente: 1.32.0.**
 
 ## Changelog
-- 1.8.7: rimossi i placeholder automatici dalla fascia App Sidebar, aggiunto il menu opzionale a destra, corrette icone assenti senza pallini/bullet e sottomenu chiusi di default.
-- 1.8.6: corretto **Style 9 – App Sidebar** con menu accordion verticale senza conflitto JS, rispetto completo delle impostazioni titolo/breadcrumb e nuova fascia descrittiva configurabile sopra il contenuto destro.
-- 1.8.4: aggiunto header layout **Style 9 – App Sidebar** con sidebar verticale collassabile, topbar contenuto con titolo/breadcrumb e profilo sito/autore.
-- 1.8.3: introdotta gerarchia tipografica default per heading H1–H6 frontend/editor.
+Lo storico completo e versionato è in [`CHANGELOG.md`](CHANGELOG.md). Di seguito i punti salienti delle release recenti (la lista integrale, dalla 1.8.x alla 1.32.0, è nel changelog).
+
+- **1.10.0 → 1.32.0 — Style Studio e palette cromatiche:** introduzione e progressiva maturazione del sistema di design centralizzato (vedi sezione dedicata più sotto). Generatore di palette dai semi (colore brand + regola di armonia), tipografia e densità, personalizzazione avanzata dei singoli token, auto-contrasto **WCAG AA** e gestione dei preset come palette a tutti gli effetti.
+- **1.30–1.32:** tutti i pulsanti, i meta articolo, il footer e le testate seguono i colori della palette; auto-contrasto WCAG AA su testo/link/titoli; fix Testata 2 (Split semitrasparente) e home blog senza nome sito nel contenuto.
+- **1.9.0:** fix output CSS inline (`inc/head-output.php`), Tailwind CSS migrato da CDN a build locale purgata e minificata (v3), refactor di `inc/admin/options.php` in moduli sotto `inc/admin/options/`, traduzione `en_US`.
+- **1.8.x:** header **Style 9 – App Sidebar** (sidebar verticale collassabile, accordion multilivello, drawer mobile) e gerarchia tipografica default per heading H1–H6.
 
 ## Milestone completate (M1–M8)
 - M1–M3: architettura modulare e sicurezza.
@@ -27,6 +29,23 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 - Opzioni tema dedicate (Generale e Logo) per personalizzare tagline, breadcrumb e branding.
 - UI admin delle opzioni migliorata con form più leggibili, coerenti e responsive.
 - Nuovo header **Style 9 – App Sidebar**, pensato per siti editoriali, dashboard-like, documentazioni, portali e progetti con navigazione laterale persistente.
+- **Style Studio e palette cromatiche:** sistema di design centralizzato per generare, personalizzare e applicare l'intera identità visiva del sito (vedi sezione dedicata).
+
+## Style Studio e palette cromatiche
+Introdotto dalla 1.10 e maturato fino alla 1.32, **Style Studio** è lo strumento con cui si costruisce il design del sito. Sostituisce le vecchie pagine "Gestione Colori" e "Gestione Font" (rimosse dal menu e reindirizzate allo Studio).
+
+**Come funziona**
+- Si parte da un **colore brand** e una **regola di armonia** (complementare, analoga, triade, complementare divisa, monocromatica): il generatore produce una combinazione cromatica coerente per tutti gli elementi del tema, con **anteprima dal vivo** e **controllo di contrasto WCAG**.
+- Si scelgono **tipografia** (font titoli + font testo, raggruppati per famiglia), **dimensione base** e **scala modulare**, **densità** (compatta/comoda/ariosa) e **arrotondamento** dei pulsanti.
+- La **Personalizzazione avanzata** consente di sovrascrivere i singoli token (sfondi, testo, titoli, link, menu, testata, CTA, top bar, footer; dimensioni base e H1–H6; interlinea e spaziatura titoli; larghezza sito, layout largo/box, raggio pulsanti, sottolineatura link). Gli override sono azzerabili singolarmente o in blocco.
+- **Auto-contrasto WCAG AA:** il generatore garantisce il contrasto di testo, link e titoli sulla superficie del contenuto regolando la luminosità senza cambiare tinta; i colori dei titoli sono armonizzati col brand.
+
+**Palette come oggetti di prima classe**
+- Le combinazioni si salvano come **palette** applicabili, modificabili (riaprendo Style Studio con i semi precaricati) ed eliminabili, gestite dalla pagina **"Palette cromatica e stile"** (la galleria).
+- **6 preset** pronti (Aziendale, Editoriale, Boutique, Notturno, Tech, Natura) vengono seminati all'attivazione del tema come palette con badge "Preset".
+- **C'è sempre una palette attiva** (in mancanza di scelta si usa la prima): questo garantisce che colori e tipografia della palette siano sempre applicati sul front-end.
+- **Import/Export JSON** condivisibile (l'export include i semi, così l'importatore può continuare a modificare la palette in Style Studio).
+- Il **generatore è implementato in PHP** come fonte canonica, per un seeding e un salvataggio deterministici anche senza browser.
 
 ## SEO & Schema Policy
 Il tema gestisce un set minimo di dati strutturati JSON-LD e breadcrumb HTML in modo compatibile con i plugin SEO più diffusi.
@@ -63,24 +82,15 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 
 
 
-## Note versione 1.8.7
-- Rimossi i placeholder automatici dalla fascia descrittiva dello **Style 9 – App Sidebar**: titolo e descrizione vuoti non producono più testi frontend.
-- Aggiunto il menu WordPress opzionale `app-intro` per mostrare link nella parte destra della fascia App Sidebar.
-- Corretto il menu laterale App Sidebar per evitare bullet, pallini o cerchi grigi quando una voce non ha un’icona assegnata.
-- I sottomenu della sidebar sono chiusi di default e si aprono solo tramite interazione esplicita, mantenendo link e pulsante toggle separati quando la voce ha un URL reale.
+## Note implementative — header Style 9 (App Sidebar)
+> Dettaglio tecnico del layout App Sidebar. Per lo storico versione-per-versione fai riferimento a [`CHANGELOG.md`](CHANGELOG.md).
 
-## Note versione 1.8.6
-- `navigation.js` ignora esplicitamente la variante `sidebar`, lasciando il controllo dell’accordion laterale a `app-sidebar.js` senza handler hover/focusout desktop.
-- Il menu sinistro dello **Style 9 – App Sidebar** usa un accordion verticale multilivello con sottovoci nel flusso, indicatori indentati, stato attivo evidenziato e terzo livello visibile senza flyout laterale.
-- Il layout Style 9 rispetta `poetheme_subheader_should_display_title()`, `title_tag`, `hide_title`, `poetheme_subheader_should_display_breadcrumbs()` e `hide_breadcrumbs`.
-- Aggiunte opzioni admin per mostrare/nascondere e personalizzare la fascia descrittiva “Impostazioni testata” sopra la colonna contenuto destra del layout App Sidebar.
-
-## Note versione 1.8.5
-- Corretto il layout **Style 9 – App Sidebar** affinché il titolo pagina rispetti `enable_subheader`, `show_title`, `hide_title` e il tag `title_tag` configurato.
-- Aggiunta variante menu `sidebar` con accordion verticale multilivello per evitare il clipping del terzo livello sotto il contenuto principale.
-- Aggiunto drawer mobile da destra con overlay, chiusura via ESC/click overlay e stato ARIA aggiornato.
-- Spostato il profilo autore in fondo al drawer mobile mantenendo la versione desktop nella sidebar.
-- Aggiornata l’icona del toggle sidebar con SVG inline a pannello laterale, senza sfondo o bordo.
+- La fascia descrittiva non produce testi frontend quando titolo e descrizione sono vuoti; menu WordPress opzionale `app-intro` per i link nella parte destra della fascia.
+- Il menu laterale non mostra bullet/pallini quando una voce non ha un'icona; i sottomenu sono chiusi di default e si aprono solo su interazione esplicita, mantenendo link e toggle separati quando la voce ha un URL reale.
+- `navigation.js` ignora esplicitamente la variante `sidebar`, lasciando il controllo dell'accordion laterale a `app-sidebar.js` senza handler hover/focusout desktop.
+- Il menu sinistro usa un accordion verticale multilivello con sottovoci nel flusso, indicatori indentati, stato attivo evidenziato e terzo livello visibile senza flyout laterale.
+- Il layout rispetta `poetheme_subheader_should_display_title()`, `title_tag`, `hide_title`, `poetheme_subheader_should_display_breadcrumbs()`, `hide_breadcrumbs`, `enable_subheader` e `show_title`.
+- Drawer mobile da destra con overlay, chiusura via ESC/click overlay e stato ARIA aggiornato; profilo autore in fondo al drawer mobile e nella sidebar desktop.
 
 ## Checklist audit Style 9 – App Sidebar
 - **Applicate:** layout header selezionato, logo via `poetheme_the_logo()`, menu primary, `enable_subheader`, `show_title`, `show_breadcrumbs`, `title_tag`, `breadcrumbs_separator`, `hide_title`, `hide_breadcrumbs`, remove top padding, colori dinamici per titolo/menu/sidebar, layout contenuto fluido, responsive menu e supporto RTL di base.
@@ -216,11 +226,12 @@ Il file `theme.json` è la fonte principale dei token del design system. I valor
 **Spacing:**
 - Scala base: `xs` → `3xl` (0.25rem → 4rem)
 
-## Token precedence (theme.json vs opzioni tema)
-Per evitare duplicazioni e garantire retrocompatibilità:
+## Token precedence (theme.json vs palette vs opzioni tema)
+Per evitare duplicazioni e garantire retrocompatibilità, i livelli si sovrappongono in ordine crescente di priorità:
 1. `theme.json` definisce i **default** del design system (colori, tipografia, layout).
 2. Le opzioni tema salvate in admin, se presenti, **sovrascrivono** i default tramite CSS inline deterministico (M3) in `inc/head-output.php`.
-3. Obiettivo futuro: migrazione progressiva delle opzioni verso preset e/o variations, riducendo l'inline CSS dinamico.
+3. La **palette attiva di Style Studio** è il livello effettivo del design: genera colori e tipografia dai semi (più eventuali `overrides` avanzati) e viene sempre applicata sul front-end. C'è sempre una palette attiva.
+4. Obiettivo futuro: consolidare progressivamente i token verso preset/variations, riducendo l'inline CSS dinamico.
 
 ## Installazione
 1. Copia la cartella del tema in `wp-content/themes/poetheme`.
