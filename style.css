@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.33.0
+Version: 1.34.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -2016,5 +2016,106 @@ body.poetheme-mobile-drawer-open {
 @media (prefers-reduced-motion: reduce) {
   .pagination .page-numbers {
     transition: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+ * Header Style 10 — Palladio · Sambiasi
+ * Testata editoriale dedicata al plugin; segue la palette (variabili --poetheme-*)
+ * con fallback caldi. Layout responsive con drawer mobile.
+ * -------------------------------------------------------------------------- */
+.poetheme-header--style-10 {
+  background: var(--poetheme-header-background-color, #f7f2e7);
+  border-bottom: 1px solid color-mix(in srgb, var(--poetheme-content-text-color, #2e2a23) 14%, transparent);
+}
+
+.poetheme-header--style-10__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.poetheme-header--style-10__brand {
+  font-family: var(--poetheme-heading-font-family, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+.poetheme-header--style-10__brand a,
+.poetheme-header--style-10__brand .poetheme-logo-text {
+  color: var(--poetheme-page-title-color, #2e2a23);
+  text-decoration: none;
+}
+
+.poetheme-header--style-10__nav {
+  display: none;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.poetheme-header--style-10__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.poetheme-header--style-10__menu a {
+  color: var(--poetheme-menu-link-color, #2e2a23);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.poetheme-header--style-10__menu a:hover {
+  color: var(--poetheme-menu-active-link-color, #6e2b2b);
+}
+
+.poetheme-header--style-10__cta {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: 2px;
+  background: var(--poetheme-cta-background-color, #6e2b2b);
+  color: var(--poetheme-cta-text-color, #f7f2e7);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid var(--poetheme-cta-background-color, #6e2b2b);
+  transition: opacity 0.15s ease;
+}
+
+.poetheme-header--style-10__cta:hover {
+  opacity: 0.9;
+}
+
+.poetheme-header--style-10__toggle {
+  color: var(--poetheme-menu-link-color, #2e2a23);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.poetheme-header--style-10__panel {
+  background: var(--poetheme-content-background-color, #fffdf8);
+  color: var(--poetheme-content-text-color, #2e2a23);
+}
+
+.poetheme-header--style-10__cta--mobile {
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .poetheme-header--style-10__nav {
+    display: flex;
+  }
+  .poetheme-header--style-10__toggle {
+    display: none;
   }
 }

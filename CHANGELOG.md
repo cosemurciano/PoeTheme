@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.34.0
+- **Nuova testata Style 10 — "Palladio · Sambiasi":** header editoriale dedicato al plugin Palladio con nome/logo del progetto, navigazione, switcher lingua del plugin (shortcode `[palladio_lang_switcher]`) e CTA "Richiedi una visita". Responsive con drawer mobile; segue la palette e i font del tema (variabili `--poetheme-*`) con fallback caldi. Selezionabile da **Impostazioni testata**.
+
 ## 1.33.0
 - **Nuovo preset "Sambiasi":** aggiunta una palette Style Studio dalla direzione visiva editoriale (carta calda `#f7f2e7`, bordeaux `#6e2b2b`, oro `#a4906a`), con titoli serif, CTA bordeaux e piè di pagina scuro. Pensata per armonizzare header e footer del tema con le schede immobiliari del plugin Palladio.
 - **Preset con override cromatici:** il seeding dei preset può ora includere override dei singoli token (non solo i semi), così un preset può fissare esattamente la propria palette. Le installazioni già inizializzate ricevono i nuovi preset tramite un backfill idempotente eseguito una sola volta (rispetta i preset eventualmente eliminati dall'utente).
