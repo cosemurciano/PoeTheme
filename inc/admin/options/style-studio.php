@@ -775,6 +775,53 @@ function poetheme_get_studio_presets() {
             'heading_pref'   => array( 'playfair', 'inter' ),
             'body_pref'      => array( 'inter', 'roboto' ),
         ),
+        // Direzione visiva editoriale "Sambiasi": carta calda, bordeaux e oro,
+        // titoli serif e piè di pagina scuro. Pensata per armonizzarsi con le
+        // schede immobiliari del plugin Palladio.
+        array(
+            'name'           => __( 'Sambiasi', 'poetheme' ),
+            'base'           => '#6e2b2b',
+            'harmony'        => 'analogous',
+            'mode'           => 'light',
+            'accent_buttons' => true,
+            'base_size'      => 1.05,
+            'ratio'          => '1.333',
+            'density'        => 'comfortable',
+            'radius'         => 2,
+            'heading_pref'   => array( 'playfair', 'cormorant', 'marcellus' ),
+            'body_pref'      => array( 'inter', 'hanken' ),
+            'overrides'      => array(
+                'colors' => array(
+                    'page_background_color'          => '#f7f2e7',
+                    'content_background_color'       => '#fffdf8',
+                    'content_text_color'             => '#2e2a23',
+                    'content_strong_color'           => '#2e2a23',
+                    'content_link_color'             => '#8d754f',
+                    'general_link_color'             => '#8d754f',
+                    'header_background_color'         => '#f7f2e7',
+                    'menu_link_color'                 => '#2e2a23',
+                    'menu_active_link_color'          => '#6e2b2b',
+                    'cta_background_color'            => '#6e2b2b',
+                    'cta_text_color'                  => '#f7f2e7',
+                    'page_title_color'                => '#2e2a23',
+                    'post_title_color'                => '#2e2a23',
+                    'category_title_color'            => '#2e2a23',
+                    'heading_h1_color'                => '#2e2a23',
+                    'heading_h2_color'                => '#2e2a23',
+                    'heading_h3_color'                => '#6e2b2b',
+                    'heading_h4_color'                => '#6e2b2b',
+                    'heading_h5_color'                => '#7a6f57',
+                    'heading_h6_color'                => '#7a6f57',
+                    'footer_widget_background_color'  => '#2e2a23',
+                    'footer_widget_text_color'        => '#cbbc9a',
+                    'footer_widget_link_color'        => '#c2a878',
+                    'footer_widget_heading_h2_color'  => '#f2ead9',
+                    'footer_widget_heading_h3_color'  => '#f2ead9',
+                    'footer_widget_heading_h4_color'  => '#f2ead9',
+                    'footer_widget_heading_h5_color'  => '#f2ead9',
+                ),
+            ),
+        ),
     );
 }
 
@@ -890,18 +937,20 @@ function poetheme_studio_seed_default_palettes() {
     $palettes = poetheme_get_style_palettes();
 
     foreach ( poetheme_get_studio_presets() as $preset ) {
-        $seeds = poetheme_studio_preset_to_seeds( $preset );
+        $seeds     = poetheme_studio_preset_to_seeds( $preset );
+        $overrides = isset( $preset['overrides'] ) && is_array( $preset['overrides'] ) ? $preset['overrides'] : array();
 
         $id = 'pal_' . wp_generate_password( 10, false, false );
         while ( isset( $palettes[ $id ] ) ) {
             $id = 'pal_' . wp_generate_password( 10, false, false );
         }
 
-        $palettes[ $id ] = poetheme_studio_build_palette( $preset['name'], $seeds, 'preset' );
+        $palettes[ $id ] = poetheme_studio_build_palette( $preset['name'], $seeds, 'preset', $overrides );
     }
 
     update_option( 'poetheme_style_palettes', $palettes );
     update_option( 'poetheme_presets_seeded', 1 );
+    update_option( 'poetheme_presets_version', 2 );
 
     // Ensure there is always an active palette (default to the first one).
     $active = (string) get_option( 'poetheme_active_palette', '' );
@@ -913,6 +962,45 @@ function poetheme_studio_seed_default_palettes() {
     }
 }
 add_action( 'after_switch_theme', 'poetheme_studio_seed_default_palettes' );
+
+/**
+ * Backfill new built-in presets on already-seeded installs (idempotent, once).
+ *
+ * Adds presets introduced after the first seeding (e.g. "Sambiasi") without
+ * re-adding presets the user may have deleted: it runs a single time, gated by
+ * the presets version, and only inserts presets whose name is not present.
+ */
+function poetheme_studio_backfill_presets() {
+    if ( ! get_option( 'poetheme_presets_seeded' ) ) {
+        return; // Fresh installs are handled by the activation seeder.
+    }
+    if ( (int) get_option( 'poetheme_presets_version', 1 ) >= 2 ) {
+        return;
+    }
+
+    $palettes = poetheme_get_style_palettes();
+    $existing = wp_list_pluck( $palettes, 'name' );
+
+    foreach ( poetheme_get_studio_presets() as $preset ) {
+        if ( in_array( $preset['name'], $existing, true ) ) {
+            continue;
+        }
+
+        $seeds     = poetheme_studio_preset_to_seeds( $preset );
+        $overrides = isset( $preset['overrides'] ) && is_array( $preset['overrides'] ) ? $preset['overrides'] : array();
+
+        $id = 'pal_' . wp_generate_password( 10, false, false );
+        while ( isset( $palettes[ $id ] ) ) {
+            $id = 'pal_' . wp_generate_password( 10, false, false );
+        }
+
+        $palettes[ $id ] = poetheme_studio_build_palette( $preset['name'], $seeds, 'preset', $overrides );
+    }
+
+    update_option( 'poetheme_style_palettes', $palettes );
+    update_option( 'poetheme_presets_version', 2 );
+}
+add_action( 'admin_init', 'poetheme_studio_backfill_presets' );
 
 /**
  * One-time migration: drop the previously force-injected `layout_mode` from

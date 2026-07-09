@@ -5,8 +5,9 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 **Stato del tema:** Core Stable (release-ready). **Versione corrente: 1.32.0.**
 
 ## Changelog
-Lo storico completo e versionato è in [`CHANGELOG.md`](CHANGELOG.md). Di seguito i punti salienti delle release recenti (la lista integrale, dalla 1.8.x alla 1.32.0, è nel changelog).
+Lo storico completo e versionato è in [`CHANGELOG.md`](CHANGELOG.md). Di seguito i punti salienti delle release recenti (la lista integrale, dalla 1.8.x alla 1.33.0, è nel changelog).
 
+- **1.33.0 — Preset "Sambiasi":** palette editoriale (carta calda, bordeaux, oro) con titoli serif e footer scuro, coordinata con le schede immobiliari del plugin Palladio; i preset possono ora fissare override cromatici, con backfill idempotente per le installazioni esistenti.
 - **1.10.0 → 1.32.0 — Style Studio e palette cromatiche:** introduzione e progressiva maturazione del sistema di design centralizzato (vedi sezione dedicata più sotto). Generatore di palette dai semi (colore brand + regola di armonia), tipografia e densità, personalizzazione avanzata dei singoli token, auto-contrasto **WCAG AA** e gestione dei preset come palette a tutti gli effetti.
 - **1.30–1.32:** tutti i pulsanti, i meta articolo, il footer e le testate seguono i colori della palette; auto-contrasto WCAG AA su testo/link/titoli; fix Testata 2 (Split semitrasparente) e home blog senza nome sito nel contenuto.
 - **1.9.0:** fix output CSS inline (`inc/head-output.php`), Tailwind CSS migrato da CDN a build locale purgata e minificata (v3), refactor di `inc/admin/options.php` in moduli sotto `inc/admin/options/`, traduzione `en_US`.

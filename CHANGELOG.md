@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.33.0
+- **Nuovo preset "Sambiasi":** aggiunta una palette Style Studio dalla direzione visiva editoriale (carta calda `#f7f2e7`, bordeaux `#6e2b2b`, oro `#a4906a`), con titoli serif, CTA bordeaux e piè di pagina scuro. Pensata per armonizzare header e footer del tema con le schede immobiliari del plugin Palladio.
+- **Preset con override cromatici:** il seeding dei preset può ora includere override dei singoli token (non solo i semi), così un preset può fissare esattamente la propria palette. Le installazioni già inizializzate ricevono i nuovi preset tramite un backfill idempotente eseguito una sola volta (rispetta i preset eventualmente eliminati dall'utente).
+
 ## 1.32.0
 - **Home blog senza nome sito nel contenuto:** quando la home mostra l'elenco degli ultimi articoli
   (senza una pagina articoli statica), il nome del sito non viene più stampato come titolo della
