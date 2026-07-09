@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.34.1
+- **Allineamento testata Style 10 (Palladio):** lo Style 10 non stampa più il subheader del tema (titolo pagina + breadcrumb) e non “possiede” il titolo, evitando la duplicazione sopra l'hero editoriale delle schede del plugin Palladio (che rendono il proprio titolo). Coerente con lo Style 9 – App Sidebar.
+
 ## 1.34.0
 - **Nuova testata Style 10 — "Palladio · Sambiasi":** header editoriale dedicato al plugin Palladio con nome/logo del progetto, navigazione, switcher lingua del plugin (shortcode `[palladio_lang_switcher]`) e CTA "Richiedi una visita". Responsive con drawer mobile; segue la palette e i font del tema (variabili `--poetheme-*`) con fallback caldi. Selezionabile da **Impostazioni testata**.
 
