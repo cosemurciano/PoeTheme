@@ -91,6 +91,11 @@ function poetheme_get_header_layout_choices() {
             'image'       => '',
             'preview'     => 'app-sidebar',
         ),
+        'style-10' => array(
+            'label'       => __( 'Palladio · Sambiasi', 'poetheme' ),
+            'description' => __( 'Testata editoriale dedicata al plugin Palladio: nome/logo del progetto, navigazione, switcher lingua e CTA “Richiedi una visita”. Segue la palette e i font del tema, responsive con drawer mobile.', 'poetheme' ),
+            'image'       => '',
+        ),
     );
 }
 

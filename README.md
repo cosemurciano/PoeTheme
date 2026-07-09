@@ -7,6 +7,7 @@ Tema WordPress moderno sviluppato da Cosè Murciano con pieno supporto per l'edi
 ## Changelog
 Lo storico completo e versionato è in [`CHANGELOG.md`](CHANGELOG.md). Di seguito i punti salienti delle release recenti (la lista integrale, dalla 1.8.x alla 1.33.0, è nel changelog).
 
+- **1.34.0 — Testata "Palladio · Sambiasi":** nuovo header Style 10 dedicato al plugin Palladio (nome/logo, navigazione, switcher lingua, CTA), responsive e coordinato con la palette del tema.
 - **1.33.0 — Preset "Sambiasi":** palette editoriale (carta calda, bordeaux, oro) con titoli serif e footer scuro, coordinata con le schede immobiliari del plugin Palladio; i preset possono ora fissare override cromatici, con backfill idempotente per le installazioni esistenti.
 - **1.10.0 → 1.32.0 — Style Studio e palette cromatiche:** introduzione e progressiva maturazione del sistema di design centralizzato (vedi sezione dedicata più sotto). Generatore di palette dai semi (colore brand + regola di armonia), tipografia e densità, personalizzazione avanzata dei singoli token, auto-contrasto **WCAG AA** e gestione dei preset come palette a tutti gli effetti.
 - **1.30–1.32:** tutti i pulsanti, i meta articolo, il footer e le testate seguono i colori della palette; auto-contrasto WCAG AA su testo/link/titoli; fix Testata 2 (Split semitrasparente) e home blog senza nome sito nel contenuto.
@@ -140,6 +141,7 @@ Obiettivo: garantire la conformità a livello di tema (struttura, navigazione, f
 - Style 7 (Stack | Left): nessuna modifica (layout conforme).
 - Style 8 (Plain): nessuna modifica (layout conforme).
 - Style 9 (App Sidebar): sidebar verticale collassabile con logo in alto, menu laterale, titolo pagina e breadcrumb nell’area contenuto, profilo sito/autore in basso.
+- Style 10 (Palladio · Sambiasi): testata editoriale dedicata al plugin Palladio — nome/logo del progetto, navigazione, switcher lingua del plugin e CTA "Richiedi una visita"; responsive con drawer mobile, palette e font del tema.
 
 ## Asset Policy (M5)
 - Preferire asset locali e versionati.
