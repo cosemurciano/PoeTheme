@@ -110,6 +110,13 @@ function poetheme_is_app_sidebar_layout() {
  * @return bool
  */
 function poetheme_header_owns_page_title() {
+    // Style 10 (Palladio) non stampa il subheader: non possiede il titolo, che
+    // è reso dai template del plugin (hero editoriale).
+    $header_options = function_exists( 'poetheme_get_header_options' ) ? poetheme_get_header_options() : array();
+    if ( isset( $header_options['layout'] ) && 'style-10' === $header_options['layout'] ) {
+        return false;
+    }
+
     return poetheme_is_app_sidebar_layout() || poetheme_subheader_is_enabled();
 }
 

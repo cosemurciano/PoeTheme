@@ -31,6 +31,6 @@ get_template_part( $template_slug, null, $header_context );
 ?>
 
 <main id="primary-content" class="<?php echo esc_attr( poetheme_get_main_classes() ); ?>" tabindex="-1">
-    <?php if ( 'style-9' !== $layout ) : ?>
+    <?php if ( ! in_array( $layout, array( 'style-9', 'style-10' ), true ) ) : ?>
         <?php poetheme_render_subheader(); ?>
     <?php endif; ?>
