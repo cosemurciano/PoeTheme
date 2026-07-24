@@ -178,8 +178,10 @@ function poetheme_get_design_settings_css() {
 
     $styles .= 'body.poetheme-has-color-settings #primary-content .entry-content a{color:var(--poetheme-general-link-color) !important;}';
 
+    // Solo il colore base sul contenitore: la regola granulare con !important
+    // su p/li/span/td/th/dd/dt sovrascriveva anche gli stili dei plugin
+    // (es. le pagine editoriali Palladio) ed è stata rimossa.
     $styles .= 'body.poetheme-has-color-settings main{color:var(--poetheme-content-text-color) !important;}';
-    $styles .= 'body.poetheme-has-color-settings main p,body.poetheme-has-color-settings main li,body.poetheme-has-color-settings main span,body.poetheme-has-color-settings main td,body.poetheme-has-color-settings main th,body.poetheme-has-color-settings main dd,body.poetheme-has-color-settings main dt{color:var(--poetheme-content-text-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings main strong,body.poetheme-has-color-settings main b{color:var(--poetheme-content-strong-color) !important;}';
     $styles .= 'body.poetheme-has-color-settings main a{color:var(--poetheme-content-link-color) !important;text-decoration:var(--poetheme-content-link-decoration) !important;}';
     $styles .= 'body.poetheme-has-color-settings main a:hover,body.poetheme-has-color-settings main a:focus{color:var(--poetheme-content-link-color) !important;}';

@@ -879,11 +879,10 @@ function poetheme_prepare_font_styles() {
         $css_rules .= $spacing_rules;
     }
 
+    // L'interlinea del corpo NON viene più emessa: la regola su
+    // body/main/p/li sovrascriveva anche i contenuti dei plugin
+    // (es. le pagine editoriali Palladio). Resta solo quella dei titoli.
     $line_height_rules = '';
-    $body_lh           = isset( $options['body_line_height'] ) ? $options['body_line_height'] : '';
-    if ( is_numeric( $body_lh ) && (float) $body_lh > 0 ) {
-        $line_height_rules .= 'body.poetheme-has-font-settings,body.poetheme-has-font-settings main,body.poetheme-has-font-settings main p,body.poetheme-has-font-settings main li{line-height:' . poetheme_format_number_for_css( $body_lh ) . ';}';
-    }
     $heading_lh = isset( $options['heading_line_height'] ) ? $options['heading_line_height'] : '';
     if ( is_numeric( $heading_lh ) && (float) $heading_lh > 0 ) {
         $line_height_rules .= 'body.poetheme-has-font-settings :where(h1,h2,h3,h4,h5,h6),body.poetheme-has-font-settings .poetheme-page-title,body.poetheme-has-font-settings .poetheme-post-title,body.poetheme-has-font-settings .poetheme-category-title{line-height:' . poetheme_format_number_for_css( $heading_lh ) . ';}';
