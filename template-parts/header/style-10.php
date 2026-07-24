@@ -23,7 +23,15 @@ $context  = wp_parse_args( $args, $defaults );
 
 $cta_text = trim( (string) $context['cta_text'] );
 $cta_url  = $context['cta_url'];
-$show_cta = ! empty( $context['show_cta'] ) && '' !== $cta_text;
+
+// Default coerente con Palladio: CTA verso il modulo contatti unico.
+if ( '' === $cta_text ) {
+	$cta_text = __( 'Richiedi una visita', 'poetheme' );
+}
+if ( empty( $cta_url ) ) {
+	$cta_url = '#palladio-contact';
+}
+$show_cta = ! empty( $context['show_cta'] );
 
 $has_menu = has_nav_menu( 'primary' );
 

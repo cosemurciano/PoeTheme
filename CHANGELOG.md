@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.35.0
+- **Style 10 — barra editoriale scura (riferimento Sambiasi):** la testata Palladio è ora la barra scura del riferimento visivo: brand in serif crema, navigazione maiuscoletta crema con voce attiva/hover in oro (sottolineatura fine), switcher lingua del plugin stilizzato sui codici brevi (`.palladio-lang`, corrente in oro) e CTA testuale oro "Richiedi una visita" (non più bottone pieno) con default automatico verso il modulo contatti (`#palladio-contact`). Drawer mobile scuro coerente.
+- **Pagine Palladio full-bleed:** su schede e archivi del plugin (edificio, unità, scenari, storia e homepage-edificio) il `main` non impone più container, max-width né padding (`poetheme-palladio-main`): spariscono le fasce laterali e i disallineamenti delle sezioni a piena larghezza. Lo sfondo del body segue la carta editoriale (`#f7f2e7`) con `overflow-x: hidden`.
+
 ## 1.34.1
 - **Allineamento testata Style 10 (Palladio):** lo Style 10 non stampa più il subheader del tema (titolo pagina + breadcrumb) e non “possiede” il titolo, evitando la duplicazione sopra l'hero editoriale delle schede del plugin Palladio (che rendono il proprio titolo). Coerente con lo Style 9 – App Sidebar.
 
