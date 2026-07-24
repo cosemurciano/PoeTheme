@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.35.1
+Version: 1.35.2
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -1915,7 +1915,10 @@ body.poetheme-mobile-drawer-open {
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 999px;
   background: #ffffff;
-  color: var(--poetheme-menu-link-color, #374151);
+  /* Colore dedicato: i cerchi sono bianchi, quindi NON deve seguire il colore
+   * dei link del menu (che palette come Sambiasi impostano chiaro per la
+   * testata scura, rendendo le icone invisibili quando non attive). */
+  color: var(--poetheme-scroll-action-color, var(--poetheme-content-text-color, #374151));
   box-shadow: 0 8px 24px rgba(17, 24, 39, 0.16);
   cursor: pointer;
   transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
@@ -1929,13 +1932,13 @@ body.poetheme-mobile-drawer-open {
 
 .poetheme-scroll-actions__toggle:hover,
 .poetheme-scroll-action:hover {
-  color: var(--poetheme-menu-active-link-color, #2563eb);
+  color: var(--poetheme-scroll-action-active-color, var(--poetheme-cta-background-color, #2563eb));
   transform: translateY(-1px);
 }
 
 .poetheme-scroll-actions__toggle:focus-visible,
 .poetheme-scroll-action:focus-visible {
-  outline: 2px solid var(--poetheme-menu-active-link-color, #2563eb);
+  outline: 2px solid var(--poetheme-scroll-action-active-color, var(--poetheme-cta-background-color, #2563eb));
   outline-offset: 2px;
 }
 
@@ -2056,7 +2059,9 @@ body.poetheme-mobile-drawer-open {
   text-decoration: none;
 }
 
-.poetheme-header--style-10__brand img {
+/* Senza "Altezza logo" configurata (stile inline dal tema) applica un tetto
+ * di cortesia; con l'opzione impostata vince la dimensione scelta in admin. */
+.poetheme-header--style-10__brand img:not([style]) {
   max-height: 3rem;
   width: auto;
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.35.2
+- **Logo Style 10 — ridimensionamento corretto:** il tetto `max-height: 3rem` della testata Palladio · Sambiasi sovrascriveva l'opzione "Altezza logo" del tema (stile inline). Ora il tetto si applica solo ai loghi senza altezza configurata (`img:not([style])`): con l'opzione impostata vince la dimensione scelta in admin.
+- **Icone scroll actions — colore non più sovrascritto:** i pulsanti flottanti (torna su, commenti, condividi) usavano il colore dei link del menu; con palette pensate per testate scure (es. Sambiasi, link chiari) le icone diventavano invisibili sui cerchi bianchi quando non attive. Ora usano una catena di variabili dedicata: `--poetheme-scroll-action-color` → colore testo contenuto; hover/focus `--poetheme-scroll-action-active-color` → colore CTA.
+
 ## 1.35.1
 - **Rimossa la "Dimensione testo (rem)" globale del contenuto:** la regola generata (`body.poetheme-has-font-settings` su body, form, `main p/li/ul/ol/dd/dt` e `.entry-content`) forzava un'unica dimensione su quasi tutto il testo, schiacciando ogni scala tipografica — plugin Palladio incluso. Il campo non viene più emesso né mostrato; l'eventuale valore salvato (`body_font_size`) resta nel database ma è inerte. La dimensione base torna quella del tema/CSS.
 
