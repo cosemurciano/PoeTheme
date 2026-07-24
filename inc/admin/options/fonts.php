@@ -933,32 +933,10 @@ function poetheme_get_font_field_config() {
                 'select',
                 'textarea',
             ),
-            'size'            => array(
-                'option_key'  => 'body_font_size',
-                'label'       => __( 'Dimensione testo (rem)', 'poetheme' ),
-                'description' => __( 'Imposta la dimensione base del font per il contenuto usando i rem.', 'poetheme' ),
-                'min'         => 0.5,
-                'max'         => 3,
-                'step'        => 0.05,
-                'default'     => 1,
-                // Target the body plus the main content text and lists explicitly
-                // so paragraphs, list items and nested lists all pick up the size.
-                'selectors'   => array(
-                    'body',
-                    'button',
-                    'input',
-                    'select',
-                    'textarea',
-                    'main',
-                    'main p',
-                    'main li',
-                    'main ul',
-                    'main ol',
-                    'main dd',
-                    'main dt',
-                    '.entry-content',
-                ),
-            ),
+            // NOTA: la "Dimensione testo (rem)" globale è stata rimossa — la
+            // regola generata (body + form + main p/li + .entry-content) era
+            // troppo aggressiva e sovrascriveva ogni scala tipografica, plugin
+            // Palladio incluso. La dimensione base resta quella del tema/CSS.
         ),
         'cta_text_color' => array(
             'option_key'      => 'cta_text_font',

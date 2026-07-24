@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.35.1
+- **Rimossa la "Dimensione testo (rem)" globale del contenuto:** la regola generata (`body.poetheme-has-font-settings` su body, form, `main p/li/ul/ol/dd/dt` e `.entry-content`) forzava un'unica dimensione su quasi tutto il testo, schiacciando ogni scala tipografica — plugin Palladio incluso. Il campo non viene più emesso né mostrato; l'eventuale valore salvato (`body_font_size`) resta nel database ma è inerte. La dimensione base torna quella del tema/CSS.
+
 ## 1.35.0
 - **Style 10 — barra editoriale scura (riferimento Sambiasi):** la testata Palladio è ora la barra scura del riferimento visivo: brand in serif crema, navigazione maiuscoletta crema con voce attiva/hover in oro (sottolineatura fine), switcher lingua del plugin stilizzato sui codici brevi (`.palladio-lang`, corrente in oro) e CTA testuale oro "Richiedi una visita" (non più bottone pieno) con default automatico verso il modulo contatti (`#palladio-contact`). Drawer mobile scuro coerente.
 - **Pagine Palladio full-bleed:** su schede e archivi del plugin (edificio, unità, scenari, storia e homepage-edificio) il `main` non impone più container, max-width né padding (`poetheme-palladio-main`): spariscono le fasce laterali e i disallineamenti delle sezioni a piena larghezza. Lo sfondo del body segue la carta editoriale (`#f7f2e7`) con `overflow-x: hidden`.
