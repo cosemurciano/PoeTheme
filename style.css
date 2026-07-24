@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.34.1
+Version: 1.35.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -2021,12 +2021,16 @@ body.poetheme-mobile-drawer-open {
 
 /* -----------------------------------------------------------------------------
  * Header Style 10 — Palladio · Sambiasi
- * Testata editoriale dedicata al plugin; segue la palette (variabili --poetheme-*)
- * con fallback caldi. Layout responsive con drawer mobile.
+ * Barra editoriale scura sopra il hero (come da direzione visiva): brand in
+ * serif crema, navigazione maiuscoletta crema con voce attiva oro, switcher
+ * lingua e CTA testuale oro. Palette sovrascrivibile via variabili --poetheme-*.
  * -------------------------------------------------------------------------- */
 .poetheme-header--style-10 {
-  background: var(--poetheme-header-background-color, #f7f2e7);
-  border-bottom: 1px solid color-mix(in srgb, var(--poetheme-content-text-color, #2e2a23) 14%, transparent);
+  --pt10-bg: var(--poetheme-header-background-color, #241f18);
+  --pt10-ink: #f2ead9;
+  --pt10-gold: #c2a878;
+  background: var(--pt10-bg);
+  border-bottom: 1px solid rgba(242, 234, 217, 0.12);
 }
 
 .poetheme-header--style-10__bar {
@@ -2037,16 +2041,24 @@ body.poetheme-mobile-drawer-open {
 }
 
 .poetheme-header--style-10__brand {
-  font-family: var(--poetheme-heading-font-family, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-family: var(--poetheme-heading-font-family, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
   letter-spacing: 0.01em;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .poetheme-header--style-10__brand a,
 .poetheme-header--style-10__brand .poetheme-logo-text {
-  color: var(--poetheme-page-title-color, #2e2a23);
+  color: var(--pt10-ink);
   text-decoration: none;
+}
+
+.poetheme-header--style-10__brand img {
+  max-height: 3rem;
+  width: auto;
 }
 
 .poetheme-header--style-10__nav {
@@ -2062,53 +2074,99 @@ body.poetheme-mobile-drawer-open {
 }
 
 .poetheme-header--style-10__menu a {
-  color: var(--poetheme-menu-link-color, #2e2a23);
+  color: rgba(242, 234, 217, 0.82);
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  font-size: 0.74rem;
   font-weight: 600;
-  transition: color 0.15s ease;
+  padding-bottom: 4px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .poetheme-header--style-10__menu a:hover {
-  color: var(--poetheme-menu-active-link-color, #6e2b2b);
+  color: var(--pt10-gold);
 }
 
+.poetheme-header--style-10__menu .current-menu-item > a,
+.poetheme-header--style-10__menu .current_page_item > a,
+.poetheme-header--style-10__menu .current-menu-ancestor > a {
+  color: var(--pt10-gold);
+  border-bottom-color: var(--pt10-gold);
+}
+
+/* Switcher lingua del plugin: codici brevi in crema, attivo oro. */
+.poetheme-header--style-10__lang,
+.poetheme-header--style-10__lang a {
+  color: rgba(242, 234, 217, 0.7);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+}
+
+.poetheme-header--style-10__lang .palladio-lang {
+  color: rgba(242, 234, 217, 0.7);
+  margin-left: 0.6rem;
+}
+
+.poetheme-header--style-10__lang a.palladio-lang:hover,
+.poetheme-header--style-10__lang .palladio-lang.is-current {
+  color: var(--pt10-gold);
+}
+
+/* CTA testuale oro, come da riferimento (niente bottone pieno). */
 .poetheme-header--style-10__cta {
   display: inline-block;
-  padding: 0.6rem 1.25rem;
-  border-radius: 2px;
-  background: var(--poetheme-cta-background-color, #6e2b2b);
-  color: var(--poetheme-cta-text-color, #f7f2e7);
+  padding: 0.35rem 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--pt10-gold);
+  border-radius: 0;
+  color: var(--pt10-gold);
   font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
   text-decoration: none;
   white-space: nowrap;
-  border: 1px solid var(--poetheme-cta-background-color, #6e2b2b);
-  transition: opacity 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .poetheme-header--style-10__cta:hover {
-  opacity: 0.9;
+  color: var(--pt10-ink);
+  border-bottom-color: var(--pt10-ink);
+  opacity: 1;
 }
 
 .poetheme-header--style-10__toggle {
-  color: var(--poetheme-menu-link-color, #2e2a23);
+  color: var(--pt10-ink);
   background: transparent;
   border: 0;
   cursor: pointer;
 }
 
 .poetheme-header--style-10__panel {
-  background: var(--poetheme-content-background-color, #fffdf8);
-  color: var(--poetheme-content-text-color, #2e2a23);
+  background: #241f18;
+  color: var(--pt10-ink);
+}
+
+.poetheme-header--style-10__panel .poetheme-mobile-panel__title,
+.poetheme-header--style-10__panel a {
+  color: var(--pt10-ink);
+}
+
+.poetheme-header--style-10__panel .current-menu-item > a {
+  color: var(--pt10-gold);
 }
 
 .poetheme-header--style-10__cta--mobile {
   display: inline-flex;
   width: 100%;
   justify-content: center;
+  border: 1px solid var(--pt10-gold);
+  padding: 0.6rem 1rem;
 }
 
 @media (min-width: 768px) {
@@ -2118,4 +2176,21 @@ body.poetheme-mobile-drawer-open {
   .poetheme-header--style-10__toggle {
     display: none;
   }
+}
+
+/* -----------------------------------------------------------------------------
+ * Pagine Palladio — allineamento tema/plugin
+ * Il contenuto è full-bleed: il main non impone container, padding né sfondo;
+ * lo sfondo del body segue la carta editoriale (niente fasce grigie laterali).
+ * -------------------------------------------------------------------------- */
+.poetheme-palladio-main {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+
+body.palladio {
+  background: #f7f2e7;
+  overflow-x: hidden;
 }

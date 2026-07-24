@@ -437,11 +437,37 @@ function poetheme_get_layout_container_classes( $additional = array(), $include_
 }
 
 /**
- * Retrieve main element classes accounting for page settings.
+ * Indica se la richiesta corrente è una pagina del plugin Palladio.
+ *
+ * @return bool
+ */
+function poetheme_is_palladio_request() {
+    $types = array( 'pll_edificio', 'pll_unita', 'pll_scenario', 'pll_storia' );
+
+    if ( is_singular( $types ) || is_post_type_archive( $types ) ) {
+        return true;
+    }
+
+    // Homepage servita dalla landing di un edificio Palladio.
+    if ( is_front_page() && (int) get_option( 'palladio_home_building', 0 ) > 0 ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get main element classes.
  *
  * @return string
  */
 function poetheme_get_main_classes() {
+    // Le pagine Palladio sono full-bleed: nessun container, nessun padding —
+    // il plugin gestisce larghezze e sezioni a piena larghezza da solo.
+    if ( function_exists( 'palladio' ) && poetheme_is_palladio_request() ) {
+        return 'poetheme-palladio-main';
+    }
+
     if ( poetheme_is_app_sidebar_layout() ) {
         $classes = array( 'poetheme-app-content' );
 
