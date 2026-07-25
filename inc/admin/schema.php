@@ -1333,6 +1333,13 @@ function poetheme_schema_output_jsonld() {
       'url'   => $canonical,
       'name'  => wp_get_document_title(),
     ) );
+  } elseif ( function_exists( 'palladio' ) && function_exists( 'poetheme_is_palladio_request' ) && poetheme_is_palladio_request() ) {
+    // Viste Palladio: il plugin emette il proprio grafo (RealEstateListing,
+    // ApartmentComplex, Offer, AboutPage...). Il tema aggiunge solo publisher
+    // e breadcrumb, senza duplicare il nodo pagina.
+    if ( $publisher_id ) {
+      $graph[] = $publisher;
+    }
   } else {
     $graph[] = poetheme_schema_filter_empty_values( array(
       '@type' => 'WebPage',
