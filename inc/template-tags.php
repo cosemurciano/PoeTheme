@@ -448,9 +448,15 @@ function poetheme_is_palladio_request() {
         return true;
     }
 
-    // Homepage servita dalla landing di un edificio Palladio.
-    if ( is_front_page() && (int) get_option( 'palladio_home_building', 0 ) > 0 ) {
-        return true;
+    // Homepage servita dalla landing di un edificio Palladio (standard
+    // WordPress: Impostazioni → Lettura; fallback sulla vecchia option).
+    if ( is_front_page() ) {
+        if ( function_exists( 'palladio_home_building_id' ) ) {
+            return palladio_home_building_id() > 0;
+        }
+        if ( (int) get_option( 'palladio_home_building', 0 ) > 0 ) {
+            return true;
+        }
     }
 
     return false;
