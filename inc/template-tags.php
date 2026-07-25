@@ -442,7 +442,7 @@ function poetheme_get_layout_container_classes( $additional = array(), $include_
  * @return bool
  */
 function poetheme_is_palladio_request() {
-    $types = array( 'pll_edificio', 'pll_unita', 'pll_scenario', 'pll_storia' );
+    $types = array( 'pll_edificio', 'pll_unita', 'pll_scenario', 'pll_storia', 'pll_territorio' );
 
     if ( is_singular( $types ) || is_post_type_archive( $types ) ) {
         return true;
