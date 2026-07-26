@@ -1065,6 +1065,8 @@ function poetheme_schema_has_seo_plugin() {
     || defined( 'SEOPRESS_VERSION' )
     || function_exists( 'seopress_get_service' )
     || class_exists( 'SEOPress\\Main\\WP' )
+    || defined( 'AIOSEO_VERSION' )
+    || function_exists( 'aioseo' )
   );
 }
 
