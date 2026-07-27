@@ -392,7 +392,8 @@ function poetheme_render_header_page() {
                             <label for="poetheme_header_cta_text" class="screen-reader-text"><?php esc_html_e( 'Testo pulsante', 'poetheme' ); ?></label>
                             <input type="text" id="poetheme_header_cta_text" name="poetheme_header[cta_text]" value="<?php echo esc_attr( $options['cta_text'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Get Started', 'poetheme' ); ?>" />
                             <label for="poetheme_header_cta_url" class="screen-reader-text"><?php esc_html_e( 'Link pulsante', 'poetheme' ); ?></label>
-                            <input type="url" id="poetheme_header_cta_url" name="poetheme_header[cta_url]" value="<?php echo esc_attr( $options['cta_url'] ); ?>" class="regular-text" placeholder="<?php echo esc_attr( home_url( '/' ) ); ?>" />
+                            <input type="text" id="poetheme_header_cta_url" name="poetheme_header[cta_url]" value="<?php echo esc_attr( $options['cta_url'] ); ?>" class="regular-text" placeholder="#palladio-contact" />
+                            <p class="description"><?php esc_html_e( 'URL completo, percorso relativo o àncora. Con “#palladio-contact” il pulsante salta al modulo contatti della pagina corrente, in qualunque lingua.', 'poetheme' ); ?></p>
                         </td>
                     </tr>
                     <tr class="poetheme-field">
