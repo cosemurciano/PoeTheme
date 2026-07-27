@@ -967,11 +967,26 @@ function poetheme_get_header_context() {
     }
 
     $cta_text = isset( $options['cta_text'] ) ? sanitize_text_field( $options['cta_text'] ) : '';
-    $cta_url  = '';
+
+    // Etichetta CTA tradotta nella lingua della pagina (dizionario Palladio
+    // "Testi statici"): il valore è un'opzione, non passa da gettext.
+    if ( '' !== $cta_text && ! is_admin() && class_exists( 'Palladio_I18n_Strings' ) ) {
+        $cta_text = Palladio_I18n_Strings::translate_text( $cta_text );
+    }
+
+    $cta_url = '';
     if ( ! empty( $options['cta_url'] ) ) {
         $cta_url = $options['cta_url'];
     } elseif ( ! empty( $cta_text ) ) {
         $cta_url = home_url( '/' );
+    }
+
+    // CTA verso il modulo contatti Palladio: se l'URL termina con l'àncora
+    // #palladio-contact (o è solo l'àncora), il link resta nella PAGINA
+    // CORRENTE — così salta al form nella lingua giusta, senza tornare
+    // alla home italiana.
+    if ( $cta_url && '#palladio-contact' === substr( $cta_url, -17 ) ) {
+        $cta_url = '#palladio-contact';
     }
 
     $social_links = array();
