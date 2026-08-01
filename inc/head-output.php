@@ -324,10 +324,6 @@ function poetheme_get_design_settings_css() {
  * @return string
  */
 function poetheme_get_custom_css() {
-    if ( ! poetheme_user_can_manage_options() ) {
-        return '';
-    }
-
     $custom_css = get_option( 'poetheme_custom_css', '' );
 
     if ( empty( $custom_css ) ) {
