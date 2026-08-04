@@ -31,6 +31,71 @@
 	</wp:term>
 	<generator>PoeTheme site-rebuild</generator>
 	<item>
+		<title><![CDATA[Modulo di contatto 1]]></title>
+		<link>https://www.beb-algiardino.com/?post_type=wpcf7_contact_form&#038;p=5</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?post_type=wpcf7_contact_form&#038;p=5</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>5</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[modulo-di-contatto-1]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>0</wp:menu_order>
+		<wp:post_type><![CDATA[wpcf7_contact_form]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_form]]></wp:meta_key>
+			<wp:meta_value><![CDATA[<label> Il tuo nome (richiesto)
+    [text* your-name] </label>
+
+<label> La tua email (richiesto)
+    [email* your-email] </label>
+
+<label> Oggetto
+    [text your-subject] </label>
+
+<label> Il tuo messaggio
+    [textarea your-message] </label>
+
+[submit "Invia"]]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_mail]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:9:{s:6:"active";b:1;s:7:"subject";s:37:"B&B Al Giardino Lecce: [your-subject]";s:6:"sender";s:42:"[your-name] <wordpress@beb-algiardino.com>";s:9:"recipient";s:23:"info@beb-algiardino.com";s:4:"body";s:214:"Da: [your-name] <[your-email]>
+Oggetto: [your-subject]
+
+Corpo del messaggio:
+[your-message]
+
+-- 
+Questa e-mail è stata inviata dal modulo di contatto del sito B&B Al Giardino Lecce (https://www.beb-algiardino.com)";s:18:"additional_headers";s:22:"Reply-To: [your-email]";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_mail_2]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:9:{s:6:"active";b:0;s:7:"subject";s:41:"B&B Al Giardino Lecce: conferma ricezione";s:6:"sender";s:52:"B&B Al Giardino Lecce <wordpress@beb-algiardino.com>";s:9:"recipient";s:12:"[your-email]";s:4:"body";s:155:"Corpo del messaggio:
+[your-message]
+
+-- 
+Questa e-mail è una conferma di ricezione inviata dal sito B&B Al Giardino Lecce (https://www.beb-algiardino.com)";s:18:"additional_headers";s:33:"Reply-To: info@beb-algiardino.com";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_locale]]></wp:meta_key>
+			<wp:meta_value><![CDATA[it_IT]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_additional_settings]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
 		<title><![CDATA[Home]]></title>
 		<link>https://www.beb-algiardino.com/</link>
 		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
@@ -41,7 +106,7 @@
 <h2 class="pt-green">Benvenuti al bed and breakfast<br />"Al Giardino" Lecce</h2>
 <p>In zona residenziale tranquilla, <strong>vicina a Piazza Mazzini</strong> a 200 mt. dal Centro Commerciale &#8220;<strong>Centrum</strong>&#8221;, offriamo una comoda sistemazione in ampie camere con balconi e terrazze con vista giardino.<br />
 Ampio <strong>parcheggio gratuito davanti al b&amp;b</strong>, possibilità di <strong>parcheggio interno su richiesta</strong> nel viale del giardino.</p>
-<p><strong>Colazione all&#8217;italiana</strong>, servita nella bella stagione sulla terrazza, dalle ore 9 alle ore 10, in alternativa la colazione è offerta presso un rinomato bar della zona</p>
+<p><strong>Colazione</strong> offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino</p>
 [/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
 <div class="ptg ptg-cols-3"><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8667.jpg"><img src="/wp-content/uploads/2019/07/DSCN8667-1024x768.jpg" alt="Camera del B&amp;B Al Giardino Lecce" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8671.jpg"><img src="/wp-content/uploads/2019/07/DSCN8671-1024x768.jpg" alt="Camera matrimoniale del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8668.jpg"><img src="/wp-content/uploads/2019/07/DSCN8668-1024x768.jpg" alt="Interni del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8652.jpg"><img src="/wp-content/uploads/2019/07/DSCN8652-1024x768.jpg" alt="Bagno privato del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8648.jpg"><img src="/wp-content/uploads/2019/07/DSCN8648-1024x768.jpg" alt="Camera Standard del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8640.jpg"><img src="/wp-content/uploads/2019/07/DSCN8640-1024x768.jpg" alt="Camera Family del B&amp;B Al Giardino" loading="lazy" /></a></div>
 [/vc_column_text][/vc_column][/vc_row]
@@ -91,7 +156,7 @@ Ampio <strong>parcheggio gratuito davanti al b&amp;b</strong>, possibilità di <
 <p>Situato in una tranquilla zona residenziale, vicina a <strong>Piazza Mazzini a Lecce</strong> ed a 200 m dal Centrum, il <strong>B&amp;B Al Giardino</strong> è ubicato al primo piano di una <strong>villetta immersa nel verde</strong>, a pochi minuti dal centro storico della città.</p>
 <p>E&#8217; composto da 3 confortevoli camere climatizzate ed accessoriate, ciascuna con propri servizi privati, a cui si accede da un ingresso indipendente.<br />
 Ampio <strong>parcheggio gratuito davanti al b&amp;b</strong>, possibilità di <strong>parcheggio interno su richiesta</strong> nel viale del giardino.<br />
-La colazione su richiesta può essere offerta in camera; inoltre nella stagione estiva è servita sulla terrazza dalle h.9,00 alle 10,00; in alternativa è offerta presso rinomato Lounge Bar della città nei pressi della casa.</p>
+Colazione offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino.</p>
 [/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
 <p>La sua <strong>posizione strategica</strong> vi consentirà di soddisfare agevolmente ogni Vostra esigenza di shopping e di raggiungere celermente le marine di Lecce e le più rinomate località del Salento, evitando il traffico della città ed intercettando gli svincoli delle tangenziali; è pertanto luogo ideale sia per una piacevole vacanza che per un soggiorno lavorativo.</p>
 <p>A disposizione degli ospiti materiale informativo sulla città e provincia; deposito bagagli per partenze tardive, servizio transfer su richiesta da/per la stazione ferroviaria di Lecce e da/per Airport City Terminal. Nelle vicinanze del B&amp;b fermata autobus per i maggiori centri d&#8217;interesse della città, per lo Stadio di Via del Mare, per il polo fieristico della città LecceFiere e per la marina di S.Cataldo.</p>
@@ -182,7 +247,7 @@ La colazione su richiesta può essere offerta in camera; inoltre nella stagione 
 <div class="ptg ptg-cols-4"><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8652.jpg"><img src="/wp-content/uploads/2019/07/DSCN8652.jpg" alt="Bagno privato delle camere" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8671-1.jpg"><img src="/wp-content/uploads/2019/07/DSCN8671-1.jpg" alt="Camera con balcone" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8675.jpg"><img src="/wp-content/uploads/2019/07/DSCN8675.jpg" alt="Terrazza con vista giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8653.jpg"><img src="/wp-content/uploads/2019/07/DSCN8653.jpg" alt="Dettaglio del bagno" loading="lazy" /></a></div>
 [/vc_column_text][/vc_column][/vc_row]
 [vc_row][vc_column width="1/2"][vc_column_text]
-<p>Colazione all&#8217;italiana, servita nella stagione estiva sulla terrazza, dalle ore 9 alle ore 10, in alternativa la colazione è offerta presso un rinomato lounge bar della zona.</p>
+<p>Colazione offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino.</p>
 [/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
 <p>Servizio transfer su richiesta da/per la Stazione Ferroviaria di Lecce e da/per Airport Terminal City. Materiale informativo sulla città.<br />
 Al fine di offrirVi un ulteriore servizio di qualità ed un prezzo migliore, il nostro B&amp;B è convenzionato con ristoranti e pizzerie.</p>
@@ -396,24 +461,20 @@ Tel. 0832 458137 Cell. 333 6848593</p>
 		<dc:creator><![CDATA[admin]]></dc:creator>
 		<guid isPermaLink="false">https://www.beb-algiardino.com/?page_id=16</guid>
 		<description></description>
-		<content:encoded><![CDATA[[vc_row][vc_column][vc_column_text]
-<h2 class="pt-green">Contattaci</h2>
-<p>Per informazioni, disponibilità e prenotazioni contattateci ai recapiti indicati: saremo lieti di rispondere ad ogni vostra richiesta.</p>
-[/vc_column_text][/vc_column][/vc_row]
-[vc_row el_class="pt-panel" css=".vc_custom_1562340000001{background-color: #f7f7f7 !important;}"][vc_column width="1/2"][vc_column_text]
-<h3 class="pt-green">B&amp;B Al Giardino</h3>
-<p>Via Francesco Scarpa, 7 &#8211; 73100 Lecce<br />
-<b>COORDINATE GPS</b>: 40.35843, 18.1839202</p>
-<ul class="pt-contact-list">
-<li>Telefono: <a href="tel:+390832458137">+39 0832 458137</a></li>
-<li>Cellulare: <a href="tel:+393336848593">+39 333 6848593</a></li>
-<li>E-mail: <a href="mailto:info@beb-algiardino.com">info@beb-algiardino.com</a></li>
-</ul>
+		<content:encoded><![CDATA[[vc_row][vc_column width="1/4"][vc_column_text]
+<h3 class="pt-green">AL GIARDINO b&amp;b</h3>
+<p>Via Francesco Scarpa, 7<br />
+73100 Lecce<br />
+Tel. +39 0832 458137<br />
+Cell. +39 333 6848593<br />
+CIS: LE07503561000013453<br />
+e-mail: <a href="mailto:info@beb-algiardino.com">info@beb-algiardino.com</a></p>
 <p><a class="pt-btn pt-btn-wa" href="https://api.whatsapp.com/send?phone=393336848593" target="_blank" rel="noopener noreferrer">Scrivici su WhatsApp</a></p>
 <p><a href="https://www.facebook.com/algiardinolecce/" target="_blank" rel="noopener noreferrer">Facebook</a> &#183; <a href="https://www.instagram.com/beb.algiardino.lecce/" target="_blank" rel="noopener noreferrer">Instagram</a></p>
-<p><small>CIS LE07503561000013453</small></p>
-[/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
-<div class="pt-map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3040.2744971710144!2d18.181932115224164!3d40.35843746710691!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13442ef72c4bfcbd%3A0xa0fdf7c7455be0ba!2sBed+%26+Breakfast+Al+Giardino!5e0!3m2!1sit!2sit!4v1562331335588!5m2!1sit!2sit" width="600" height="450" style="border:0" allowfullscreen loading="lazy" title="Mappa: B&amp;B Al Giardino, Via Francesco Scarpa 7, Lecce"></iframe></div>
+[/vc_column_text][/vc_column][vc_column width="3/4"][vc_column_text]
+<h3 class="pt-green">Inviaci una richiesta compilando il modulo</h3>
+[/vc_column_text][vc_column_text]
+[contact-form-7 title="Modulo di contatto 1"]
 [/vc_column_text][/vc_column][/vc_row]
 ]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -435,15 +496,15 @@ Tel. 0832 458137 Cell. 333 6848593</p>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_wpb_shortcodes_custom_css]]></wp:meta_key>
-			<wp:meta_value><![CDATA[.vc_custom_1562340000001{background-color: #f7f7f7 !important;}]]></wp:meta_value>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_aioseop_title]]></wp:meta_key>
-			<wp:meta_value><![CDATA[Contatta il B&B Al Giardino Lecce | Telefono, e-mail, WhatsApp]]></wp:meta_value>
+			<wp:meta_value><![CDATA[Contatti B&B nel centro di Lecce | B&B Al Giardino Lecce]]></wp:meta_value>
 		</wp:postmeta>
 		<wp:postmeta>
 			<wp:meta_key><![CDATA[_aioseop_description]]></wp:meta_key>
-			<wp:meta_value><![CDATA[Contatta il B&B Al Giardino di Lecce: Via Francesco Scarpa 7, tel. 0832 458137, cell. 333 6848593, info@beb-algiardino.com]]></wp:meta_value>
+			<wp:meta_value><![CDATA[Qualità e convenienza nel b&b a 5 minuti dalla Sant'Antonio a Fulgenzio. Gentili e cordiali per un rilassante soggiorno, per sentirti a casa lontano da casa.]]></wp:meta_value>
 		</wp:postmeta>
 	</item>
 	<item>

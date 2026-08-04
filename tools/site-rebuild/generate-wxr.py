@@ -78,7 +78,7 @@ HOME_CONTENT = dedent("""\
     <h2 class="pt-green">Benvenuti al bed and breakfast<br />"Al Giardino" Lecce</h2>
     <p>In zona residenziale tranquilla, <strong>vicina a Piazza Mazzini</strong> a 200 mt. dal Centro Commerciale &#8220;<strong>Centrum</strong>&#8221;, offriamo una comoda sistemazione in ampie camere con balconi e terrazze con vista giardino.<br />
     Ampio <strong>parcheggio gratuito davanti al b&amp;b</strong>, possibilità di <strong>parcheggio interno su richiesta</strong> nel viale del giardino.</p>
-    <p><strong>Colazione all&#8217;italiana</strong>, servita nella bella stagione sulla terrazza, dalle ore 9 alle ore 10, in alternativa la colazione è offerta presso un rinomato bar della zona</p>
+    <p><strong>Colazione</strong> offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino</p>
     [/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
     {slider}
     [/vc_column_text][/vc_column][/vc_row]
@@ -113,7 +113,7 @@ ILBB_CONTENT = dedent("""\
     <p>Situato in una tranquilla zona residenziale, vicina a <strong>Piazza Mazzini a Lecce</strong> ed a 200 m dal Centrum, il <strong>B&amp;B Al Giardino</strong> è ubicato al primo piano di una <strong>villetta immersa nel verde</strong>, a pochi minuti dal centro storico della città.</p>
     <p>E&#8217; composto da 3 confortevoli camere climatizzate ed accessoriate, ciascuna con propri servizi privati, a cui si accede da un ingresso indipendente.<br />
     Ampio <strong>parcheggio gratuito davanti al b&amp;b</strong>, possibilità di <strong>parcheggio interno su richiesta</strong> nel viale del giardino.<br />
-    La colazione su richiesta può essere offerta in camera; inoltre nella stagione estiva è servita sulla terrazza dalle h.9,00 alle 10,00; in alternativa è offerta presso rinomato Lounge Bar della città nei pressi della casa.</p>
+    Colazione offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino.</p>
     [/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
     <p>La sua <strong>posizione strategica</strong> vi consentirà di soddisfare agevolmente ogni Vostra esigenza di shopping e di raggiungere celermente le marine di Lecce e le più rinomate località del Salento, evitando il traffico della città ed intercettando gli svincoli delle tangenziali; è pertanto luogo ideale sia per una piacevole vacanza che per un soggiorno lavorativo.</p>
     <p>A disposizione degli ospiti materiale informativo sulla città e provincia; deposito bagagli per partenze tardive, servizio transfer su richiesta da/per la stazione ferroviaria di Lecce e da/per Airport City Terminal. Nelle vicinanze del B&amp;b fermata autobus per i maggiori centri d&#8217;interesse della città, per lo Stadio di Via del Mare, per il polo fieristico della città LecceFiere e per la marina di S.Cataldo.</p>
@@ -206,7 +206,7 @@ CAMERE_CONTENT = dedent("""\
     {extra}
     [/vc_column_text][/vc_column][/vc_row]
     [vc_row][vc_column width="1/2"][vc_column_text]
-    <p>Colazione all&#8217;italiana, servita nella stagione estiva sulla terrazza, dalle ore 9 alle ore 10, in alternativa la colazione è offerta presso un rinomato lounge bar della zona.</p>
+    <p>Colazione offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino.</p>
     [/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
     <p>Servizio transfer su richiesta da/per la Stazione Ferroviaria di Lecce e da/per Airport Terminal City. Materiale informativo sulla città.<br />
     Al fine di offrirVi un ulteriore servizio di qualità ed un prezzo migliore, il nostro B&amp;B è convenzionato con ristoranti e pizzerie.</p>
@@ -343,32 +343,89 @@ DOVE_CONTENT = dedent("""\
 """).format(up=UP, map=MAP_IFRAME, css2=CSS_DOVE_ROW2, mq=MAPS_Q)
 
 # ---------------------------------------------------------------------------
-# CONTATTACI (ID 16) - pagina ricostruita (snapshot non disponibile)
+# CONTATTACI (ID 16) - dallo snapshot 20250206145942 (struttura originale:
+# colonna indirizzo 1/4 + modulo Contact Form 7 3/4)
 # ---------------------------------------------------------------------------
 
-CSS_CONTATTI_ROW1 = css_attr(1562340000001, "background-color: #f7f7f7 !important;")
+CF7_FORM_ID = 5
+CF7_FORM_TITLE = "Modulo di contatto 1"
 
 CONTATTI_CONTENT = dedent("""\
-    [vc_row][vc_column][vc_column_text]
-    <h2 class="pt-green">Contattaci</h2>
-    <p>Per informazioni, disponibilità e prenotazioni contattateci ai recapiti indicati: saremo lieti di rispondere ad ogni vostra richiesta.</p>
-    [/vc_column_text][/vc_column][/vc_row]
-    [vc_row el_class="pt-panel" css="{css1}"][vc_column width="1/2"][vc_column_text]
-    <h3 class="pt-green">B&amp;B Al Giardino</h3>
-    <p>Via Francesco Scarpa, 7 &#8211; 73100 Lecce<br />
-    <b>COORDINATE GPS</b>: 40.35843, 18.1839202</p>
-    <ul class="pt-contact-list">
-    <li>Telefono: <a href="tel:+390832458137">+39 0832 458137</a></li>
-    <li>Cellulare: <a href="tel:+393336848593">+39 333 6848593</a></li>
-    <li>E-mail: <a href="mailto:info@beb-algiardino.com">info@beb-algiardino.com</a></li>
-    </ul>
+    [vc_row][vc_column width="1/4"][vc_column_text]
+    <h3 class="pt-green">AL GIARDINO b&amp;b</h3>
+    <p>Via Francesco Scarpa, 7<br />
+    73100 Lecce<br />
+    Tel. +39 0832 458137<br />
+    Cell. +39 333 6848593<br />
+    CIS: LE07503561000013453<br />
+    e-mail: <a href="mailto:info@beb-algiardino.com">info@beb-algiardino.com</a></p>
     <p><a class="pt-btn pt-btn-wa" href="https://api.whatsapp.com/send?phone=393336848593" target="_blank" rel="noopener noreferrer">Scrivici su WhatsApp</a></p>
     <p><a href="https://www.facebook.com/algiardinolecce/" target="_blank" rel="noopener noreferrer">Facebook</a> &#183; <a href="https://www.instagram.com/beb.algiardino.lecce/" target="_blank" rel="noopener noreferrer">Instagram</a></p>
-    <p><small>CIS LE07503561000013453</small></p>
-    [/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
-    {map}
+    [/vc_column_text][/vc_column][vc_column width="3/4"][vc_column_text]
+    <h3 class="pt-green">Inviaci una richiesta compilando il modulo</h3>
+    [/vc_column_text][vc_column_text]
+    [contact-form-7 title="{cf7_title}"]
     [/vc_column_text][/vc_column][/vc_row]
-""").format(css1=CSS_CONTATTI_ROW1, map=MAP_IFRAME)
+""").format(cf7_title=CF7_FORM_TITLE)
+
+# Template del modulo CF7 (identico ai campi del modulo originale, form id 5).
+CF7_FORM_TEMPLATE = (
+    "<label> Il tuo nome (richiesto)\n    [text* your-name] </label>\n\n"
+    "<label> La tua email (richiesto)\n    [email* your-email] </label>\n\n"
+    "<label> Oggetto\n    [text your-subject] </label>\n\n"
+    "<label> Il tuo messaggio\n    [textarea your-message] </label>\n\n"
+    '[submit "Invia"]'
+)
+
+
+def php_serialize(value):
+    """Serializzazione PHP minimale (bool, int, str, dict) per i meta CF7."""
+    if isinstance(value, bool):
+        return "b:1;" if value else "b:0;"
+    if isinstance(value, int):
+        return "i:{v};".format(v=value)
+    if isinstance(value, str):
+        raw = value.encode("utf-8")
+        return 's:{n}:"{v}";'.format(n=len(raw), v=value)
+    if isinstance(value, dict):
+        parts = "".join(php_serialize(k) + php_serialize(v) for k, v in value.items())
+        return "a:{n}:{{{p}}}".format(n=len(value), p=parts)
+    raise TypeError(type(value))
+
+
+CF7_MAIL = {
+    "active": True,
+    "subject": "B&B Al Giardino Lecce: [your-subject]",
+    "sender": "[your-name] <wordpress@beb-algiardino.com>",
+    "recipient": "info@beb-algiardino.com",
+    "body": (
+        "Da: [your-name] <[your-email]>\n"
+        "Oggetto: [your-subject]\n\n"
+        "Corpo del messaggio:\n[your-message]\n\n"
+        "-- \nQuesta e-mail è stata inviata dal modulo di contatto del sito "
+        "B&B Al Giardino Lecce (https://www.beb-algiardino.com)"
+    ),
+    "additional_headers": "Reply-To: [your-email]",
+    "attachments": "",
+    "use_html": False,
+    "exclude_blank": False,
+}
+
+CF7_MAIL_2 = {
+    "active": False,
+    "subject": "B&B Al Giardino Lecce: conferma ricezione",
+    "sender": "B&B Al Giardino Lecce <wordpress@beb-algiardino.com>",
+    "recipient": "[your-email]",
+    "body": (
+        "Corpo del messaggio:\n[your-message]\n\n"
+        "-- \nQuesta e-mail è una conferma di ricezione inviata dal sito "
+        "B&B Al Giardino Lecce (https://www.beb-algiardino.com)"
+    ),
+    "additional_headers": "Reply-To: info@beb-algiardino.com",
+    "attachments": "",
+    "use_html": False,
+    "exclude_blank": False,
+}
 
 # ---------------------------------------------------------------------------
 # Definizione pagine
@@ -413,9 +470,9 @@ PAGES = [
     {
         "id": 16, "title": "Contattaci", "slug": "contattaci", "order": 5,
         "content": CONTATTI_CONTENT,
-        "css": [CSS_CONTATTI_ROW1],
-        "seo_title": "Contatta il B&B Al Giardino Lecce | Telefono, e-mail, WhatsApp",
-        "seo_desc": "Contatta il B&B Al Giardino di Lecce: Via Francesco Scarpa 7, tel. 0832 458137, cell. 333 6848593, info@beb-algiardino.com",
+        "css": [],
+        "seo_title": "Contatti B&B nel centro di Lecce | B&B Al Giardino Lecce",
+        "seo_desc": "Qualità e convenienza nel b&b a 5 minuti dalla Sant'Antonio a Fulgenzio. Gentili e cordiali per un rilassante soggiorno, per sentirti a casa lontano da casa.",
     },
 ]
 
@@ -531,6 +588,46 @@ def menu_item(m):
     )
 
 
+def cf7_item():
+    metas = [
+        meta("_form", CF7_FORM_TEMPLATE),
+        meta("_mail", php_serialize(CF7_MAIL)),
+        meta("_mail_2", php_serialize(CF7_MAIL_2)),
+        meta("_locale", "it_IT"),
+        meta("_additional_settings", ""),
+    ]
+    return (
+        "\t<item>\n"
+        "\t\t<title>{title}</title>\n"
+        "\t\t<link>{site}/?post_type=wpcf7_contact_form&#038;p={id}</link>\n"
+        "\t\t<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>\n"
+        "\t\t<dc:creator>{author}</dc:creator>\n"
+        '\t\t<guid isPermaLink="false">{site}/?post_type=wpcf7_contact_form&#038;p={id}</guid>\n'
+        "\t\t<description></description>\n"
+        "\t\t<content:encoded>{empty}</content:encoded>\n"
+        "\t\t<excerpt:encoded>{empty}</excerpt:encoded>\n"
+        "\t\t<wp:post_id>{id}</wp:post_id>\n"
+        "\t\t<wp:post_date>{date}</wp:post_date>\n"
+        "\t\t<wp:post_date_gmt>{date}</wp:post_date_gmt>\n"
+        "\t\t<wp:comment_status>{closed}</wp:comment_status>\n"
+        "\t\t<wp:ping_status>{closed}</wp:ping_status>\n"
+        "\t\t<wp:post_name>{slug}</wp:post_name>\n"
+        "\t\t<wp:status>{publish}</wp:status>\n"
+        "\t\t<wp:post_parent>0</wp:post_parent>\n"
+        "\t\t<wp:menu_order>0</wp:menu_order>\n"
+        "\t\t<wp:post_type>{ptype}</wp:post_type>\n"
+        "\t\t<wp:post_password>{empty}</wp:post_password>\n"
+        "\t\t<wp:is_sticky>0</wp:is_sticky>\n"
+        "{metas}"
+        "\t</item>\n"
+    ).format(
+        title=cdata(CF7_FORM_TITLE), site=SITE, id=CF7_FORM_ID, author=cdata(AUTHOR),
+        empty=cdata(""), date=cdata(DATE), closed=cdata("closed"),
+        slug=cdata("modulo-di-contatto-1"), publish=cdata("publish"),
+        ptype=cdata("wpcf7_contact_form"), metas="".join(metas),
+    )
+
+
 def build():
     head = (
         '<?xml version="1.0" encoding="UTF-8" ?>\n'
@@ -571,7 +668,8 @@ def build():
         menuname=cdata("Menu principale"),
     )
 
-    body = "".join(page_item(p) for p in PAGES)
+    body = cf7_item()
+    body += "".join(page_item(p) for p in PAGES)
     body += "".join(menu_item(m) for m in MENU)
 
     xml = head + body + "</channel>\n</rss>\n"
