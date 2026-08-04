@@ -1,0 +1,841 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:wp="http://wordpress.org/export/1.2/"
+>
+<channel>
+	<title>B&amp;B Al Giardino Lecce</title>
+	<link>https://www.beb-algiardino.com</link>
+	<description>Bed and breakfast in centro a Lecce | Salento</description>
+	<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+	<language>it-IT</language>
+	<wp:wxr_version>1.2</wp:wxr_version>
+	<wp:base_site_url>https://www.beb-algiardino.com</wp:base_site_url>
+	<wp:base_blog_url>https://www.beb-algiardino.com</wp:base_blog_url>
+	<wp:author>
+		<wp:author_id>1</wp:author_id>
+		<wp:author_login><![CDATA[admin]]></wp:author_login>
+		<wp:author_email><![CDATA[info@beb-algiardino.com]]></wp:author_email>
+		<wp:author_display_name><![CDATA[admin]]></wp:author_display_name>
+		<wp:author_first_name><![CDATA[]]></wp:author_first_name>
+		<wp:author_last_name><![CDATA[]]></wp:author_last_name>
+	</wp:author>
+	<wp:term>
+		<wp:term_id>2</wp:term_id>
+		<wp:term_taxonomy><![CDATA[nav_menu]]></wp:term_taxonomy>
+		<wp:term_slug><![CDATA[menu-principale]]></wp:term_slug>
+		<wp:term_name><![CDATA[Menu principale]]></wp:term_name>
+	</wp:term>
+	<generator>PoeTheme site-rebuild</generator>
+	<item>
+		<title><![CDATA[Modulo di contatto 1]]></title>
+		<link>https://www.beb-algiardino.com/?post_type=wpcf7_contact_form&#038;p=5</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?post_type=wpcf7_contact_form&#038;p=5</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>5</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[modulo-di-contatto-1]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>0</wp:menu_order>
+		<wp:post_type><![CDATA[wpcf7_contact_form]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_form]]></wp:meta_key>
+			<wp:meta_value><![CDATA[<label> Il tuo nome (richiesto)
+    [text* your-name] </label>
+
+<label> La tua email (richiesto)
+    [email* your-email] </label>
+
+<label> Oggetto
+    [text your-subject] </label>
+
+<label> Il tuo messaggio
+    [textarea your-message] </label>
+
+[submit "Invia"]]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_mail]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:9:{s:6:"active";b:1;s:7:"subject";s:37:"B&B Al Giardino Lecce: [your-subject]";s:6:"sender";s:42:"[your-name] <wordpress@beb-algiardino.com>";s:9:"recipient";s:23:"info@beb-algiardino.com";s:4:"body";s:214:"Da: [your-name] <[your-email]>
+Oggetto: [your-subject]
+
+Corpo del messaggio:
+[your-message]
+
+-- 
+Questa e-mail è stata inviata dal modulo di contatto del sito B&B Al Giardino Lecce (https://www.beb-algiardino.com)";s:18:"additional_headers";s:22:"Reply-To: [your-email]";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_mail_2]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:9:{s:6:"active";b:0;s:7:"subject";s:41:"B&B Al Giardino Lecce: conferma ricezione";s:6:"sender";s:52:"B&B Al Giardino Lecce <wordpress@beb-algiardino.com>";s:9:"recipient";s:12:"[your-email]";s:4:"body";s:155:"Corpo del messaggio:
+[your-message]
+
+-- 
+Questa e-mail è una conferma di ricezione inviata dal sito B&B Al Giardino Lecce (https://www.beb-algiardino.com)";s:18:"additional_headers";s:33:"Reply-To: info@beb-algiardino.com";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_locale]]></wp:meta_key>
+			<wp:meta_value><![CDATA[it_IT]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_additional_settings]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Home]]></title>
+		<link>https://www.beb-algiardino.com/</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?page_id=2</guid>
+		<description></description>
+		<content:encoded><![CDATA[[vc_row el_class="pt-panel" css=".vc_custom_1562339348767{background-color: rgba(133,193,60,0.22) !important;}"][vc_column width="1/2"][vc_column_text]
+<h2 class="pt-green">Benvenuti al bed and breakfast<br />"Al Giardino" Lecce</h2>
+<p>In zona residenziale tranquilla, <strong>vicina a Piazza Mazzini</strong> a 200 mt. dal Centro Commerciale &#8220;<strong>Centrum</strong>&#8221;, offriamo una comoda sistemazione in ampie camere con balconi e terrazze con vista giardino.<br />
+Ampio <strong>parcheggio gratuito davanti al b&amp;b</strong>, possibilità di <strong>parcheggio interno su richiesta</strong> nel viale del giardino.</p>
+<p><strong>Colazione</strong> offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino</p>
+[/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
+<div class="ptg ptg-cols-3"><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8667.jpg"><img src="/wp-content/uploads/2019/07/DSCN8667-1024x768.jpg" alt="Camera del B&amp;B Al Giardino Lecce" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8671.jpg"><img src="/wp-content/uploads/2019/07/DSCN8671-1024x768.jpg" alt="Camera matrimoniale del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8668.jpg"><img src="/wp-content/uploads/2019/07/DSCN8668-1024x768.jpg" alt="Interni del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8652.jpg"><img src="/wp-content/uploads/2019/07/DSCN8652-1024x768.jpg" alt="Bagno privato del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8648.jpg"><img src="/wp-content/uploads/2019/07/DSCN8648-1024x768.jpg" alt="Camera Standard del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8640.jpg"><img src="/wp-content/uploads/2019/07/DSCN8640-1024x768.jpg" alt="Camera Family del B&amp;B Al Giardino" loading="lazy" /></a></div>
+[/vc_column_text][/vc_column][/vc_row]
+[vc_row el_class="pt-panel pt-hero" css=".vc_custom_1593611540997{background-image: url(/wp-content/uploads/2019/07/lecce.jpg) !important;background-position: center !important;background-repeat: no-repeat !important;background-size: cover !important;}"][vc_column][vc_column_text]
+<h3 class="pt-hero-title">Servizi del b&amp;b</h3>
+<div class="pt-hero-box"><p>Bagno privato, phon, TV Led 22&#8243;, riscaldamento/climatizzatore autonomo, luci d&#8217;emergenza, frigobar in ciascuna camera, pulizia quotidiana delle camere e dei bagni (eccetto i giorni festivi), letti con materassi ortopedici, <strong>internet wireless gratuita</strong>. Deposito bagagli per partenze tardive; Servizio transfer su richiesta da/per la Stazione Ferroviaria di Lecce e da/per Airport Terminal City. Materiale informativo sulla città.</p></div>
+[/vc_column_text][/vc_column][/vc_row]
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>2</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[home]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>0</wp:menu_order>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_vc_js_status]]></wp:meta_key>
+			<wp:meta_value><![CDATA[true]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_shortcodes_custom_css]]></wp:meta_key>
+			<wp:meta_value><![CDATA[.vc_custom_1562339348767{background-color: rgba(133,193,60,0.22) !important;}.vc_custom_1593611540997{background-image: url(/wp-content/uploads/2019/07/lecce.jpg) !important;background-position: center !important;background-repeat: no-repeat !important;background-size: cover !important;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_title]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Al Giardino - Bed and breakfast in centro a Lecce | Salento]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_description]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Soggiorna Al Giardino, un bed & breakfast romantico a due passi dal meglio che Lecce ha da offrire. Le camere sono dotate di parcheggio interno]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Il b&b Al Giardino]]></title>
+		<link>https://www.beb-algiardino.com/il-bed-and-breackfast-lecce-al-giardino/</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?page_id=8</guid>
+		<description></description>
+		<content:encoded><![CDATA[[vc_row][vc_column width="1/2"][vc_column_text]
+<p>Situato in una tranquilla zona residenziale, vicina a <strong>Piazza Mazzini a Lecce</strong> ed a 200 m dal Centrum, il <strong>B&amp;B Al Giardino</strong> è ubicato al primo piano di una <strong>villetta immersa nel verde</strong>, a pochi minuti dal centro storico della città.</p>
+<p>E&#8217; composto da 3 confortevoli camere climatizzate ed accessoriate, ciascuna con propri servizi privati, a cui si accede da un ingresso indipendente.<br />
+Ampio <strong>parcheggio gratuito davanti al b&amp;b</strong>, possibilità di <strong>parcheggio interno su richiesta</strong> nel viale del giardino.<br />
+Colazione offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino.</p>
+[/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
+<p>La sua <strong>posizione strategica</strong> vi consentirà di soddisfare agevolmente ogni Vostra esigenza di shopping e di raggiungere celermente le marine di Lecce e le più rinomate località del Salento, evitando il traffico della città ed intercettando gli svincoli delle tangenziali; è pertanto luogo ideale sia per una piacevole vacanza che per un soggiorno lavorativo.</p>
+<p>A disposizione degli ospiti materiale informativo sulla città e provincia; deposito bagagli per partenze tardive, servizio transfer su richiesta da/per la stazione ferroviaria di Lecce e da/per Airport City Terminal. Nelle vicinanze del B&amp;b fermata autobus per i maggiori centri d&#8217;interesse della città, per lo Stadio di Via del Mare, per il polo fieristico della città LecceFiere e per la marina di S.Cataldo.</p>
+[/vc_column_text][/vc_column][/vc_row]
+[vc_row el_class="pt-panel" css=".vc_custom_1562317637817{background-color: #f7f7f7 !important;}"][vc_column][vc_column_text]
+<h3 class="pt-green pt-center">Il giardino</h3>
+<div class="ptg ptg-cols-4"><a class="ptg-item" href="/wp-content/uploads/2019/07/bb_algiardino_casa.jpg"><img src="/wp-content/uploads/2019/07/bb_algiardino_casa.jpg" alt="La villetta del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/giardino_1.jpg"><img src="/wp-content/uploads/2019/07/giardino_1.jpg" alt="Il giardino del B&amp;B Al Giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/giardino_3.jpg"><img src="/wp-content/uploads/2019/07/giardino_3.jpg" alt="Vista del giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/giardino_5.jpg"><img src="/wp-content/uploads/2019/07/giardino_5.jpg" alt="Il viale del giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/giardino_9.jpg"><img src="/wp-content/uploads/2019/07/giardino_9.jpg" alt="Angolo verde del giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/giardino_10.jpg"><img src="/wp-content/uploads/2019/07/giardino_10.jpg" alt="Piante e fiori del giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/giardino_11.jpg"><img src="/wp-content/uploads/2019/07/giardino_11.jpg" alt="Il giardino in fiore" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/giardino12.jpg"><img src="/wp-content/uploads/2019/07/giardino12.jpg" alt="Scorcio del giardino" loading="lazy" /></a></div>
+[/vc_column_text][/vc_column][/vc_row]
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>8</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[il-bed-and-breackfast-lecce-al-giardino]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>1</wp:menu_order>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_vc_js_status]]></wp:meta_key>
+			<wp:meta_value><![CDATA[true]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_shortcodes_custom_css]]></wp:meta_key>
+			<wp:meta_value><![CDATA[.vc_custom_1562317637817{background-color: #f7f7f7 !important;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_title]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Bed & Breakfast zona stadio a Lecce | B&B Al Giardino Lecce]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_description]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Soggiorna Al Giardino, un bed & breakfast romantico a due passi dal meglio che Lecce ha da offrire. Le camere sono dotate di parcheggio interno]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Le camere del b&b]]></title>
+		<link>https://www.beb-algiardino.com/le-camere-del-bed-and-breakfast-a-lecce-salento/</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?page_id=10</guid>
+		<description></description>
+		<content:encoded><![CDATA[[vc_row][vc_column width="1/3"][vc_column_text]
+<h3>Il bed and breakfast è dotato di 3 camere nelle seguenti tipologie:</h3>
+<ul>
+<li><strong>STANDARD</strong> (con bagno privato esterno) doppia/matrimoniale</li>
+<li><strong>SUPERIOR</strong> (con bagno privato esterno) matrimoniale</li>
+<li><strong>FAMILY</strong> (con bagno interno) matrimoniale più due letti singoli</li>
+</ul>
+[/vc_column_text][/vc_column][vc_column width="1/3"][vc_column_text]
+<h3>Servizi comuni delle camere</h3>
+<ul>
+<li>ogni camera è servita da un bagno privato</li>
+<li>phon</li>
+<li>TV LED 22&#8243;</li>
+<li>riscaldamento</li>
+<li>climatizzatore autonomo</li>
+<li>luci d&#8217;emergenza negli spazi comuni</li>
+<li>frigobar in ogni camera</li>
+<li>internet wireless gratuito</li>
+</ul>
+[/vc_column_text][/vc_column][vc_column width="1/3"][vc_column_text]
+<ul>
+<li>cassa forte in camera</li>
+<li>biancheria per letto e bagno inclusa</li>
+<li>finestre con doppio vetro</li>
+<li>letti con materasso ortopedico</li>
+<li>pulizia quotidiana delle camere e dei bagni (eccetto i giorni festivi)</li>
+<li>deposito bagagli per partenze tardive</li>
+</ul>
+[/vc_column_text][/vc_column][/vc_row]
+[vc_row el_class="pt-panel" css=".vc_custom_1562320021438{background-color: #f2f2f2 !important;}"][vc_column][vc_column_text]
+<h3 class="pt-green pt-center">Le camere del b&amp;b</h3>
+[/vc_column_text][vc_row_inner][vc_column_inner width="1/3"][vc_column_text]
+<h3>Camera Standard</h3>
+<div class="ptg ptg-cols-1"><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8648.jpg"><img src="/wp-content/uploads/2019/07/DSCN8648.jpg" alt="Camera Standard - letto matrimoniale" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8647.jpg"><img src="/wp-content/uploads/2019/07/DSCN8647.jpg" alt="Camera Standard - dettaglio" loading="lazy" /></a></div>
+[/vc_column_text][/vc_column_inner][vc_column_inner width="1/3"][vc_column_text]
+<h3>Camera Superior</h3>
+<div class="ptg ptg-cols-1"><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8634.jpg"><img src="/wp-content/uploads/2019/07/DSCN8634.jpg" alt="Camera Superior - letto matrimoniale" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8669.jpg"><img src="/wp-content/uploads/2019/07/DSCN8669.jpg" alt="Camera Superior - dettaglio" loading="lazy" /></a></div>
+[/vc_column_text][/vc_column_inner][vc_column_inner width="1/3"][vc_column_text]
+<h3>Camera Family</h3>
+<div class="ptg ptg-cols-1"><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8640.jpg"><img src="/wp-content/uploads/2019/07/DSCN8640.jpg" alt="Camera Family - letto matrimoniale" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8645.jpg"><img src="/wp-content/uploads/2019/07/DSCN8645.jpg" alt="Camera Family - letti singoli" loading="lazy" /></a></div>
+[/vc_column_text][/vc_column_inner][/vc_row_inner][vc_empty_space height="24px"][vc_column_text]
+<div class="ptg ptg-cols-4"><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8652.jpg"><img src="/wp-content/uploads/2019/07/DSCN8652.jpg" alt="Bagno privato delle camere" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8671-1.jpg"><img src="/wp-content/uploads/2019/07/DSCN8671-1.jpg" alt="Camera con balcone" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8675.jpg"><img src="/wp-content/uploads/2019/07/DSCN8675.jpg" alt="Terrazza con vista giardino" loading="lazy" /></a><a class="ptg-item" href="/wp-content/uploads/2019/07/DSCN8653.jpg"><img src="/wp-content/uploads/2019/07/DSCN8653.jpg" alt="Dettaglio del bagno" loading="lazy" /></a></div>
+[/vc_column_text][/vc_column][/vc_row]
+[vc_row][vc_column width="1/2"][vc_column_text]
+<p>Colazione offerta da rinomato Lounge Bar della zona situato nelle vicinanze del B&amp;b Al Giardino.</p>
+[/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
+<p>Servizio transfer su richiesta da/per la Stazione Ferroviaria di Lecce e da/per Airport Terminal City. Materiale informativo sulla città.<br />
+Al fine di offrirVi un ulteriore servizio di qualità ed un prezzo migliore, il nostro B&amp;B è convenzionato con ristoranti e pizzerie.</p>
+[/vc_column_text][/vc_column][/vc_row]
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>10</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[le-camere-del-bed-and-breakfast-a-lecce-salento]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>2</wp:menu_order>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_vc_js_status]]></wp:meta_key>
+			<wp:meta_value><![CDATA[true]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_shortcodes_custom_css]]></wp:meta_key>
+			<wp:meta_value><![CDATA[.vc_custom_1562320021438{background-color: #f2f2f2 !important;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_title]]></wp:meta_key>
+			<wp:meta_value><![CDATA[B&B vicino a Piazza Sant'Oronzo Lecce | B&B Al Giardino Lecce]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_description]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Dotato di camere con arredi moderni e connessione WiFi gratuita in tutte le aree, il B&B Al Giardino si trova a Lecce, a 10 minuti dalla stazione centrale]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Le tariffe]]></title>
+		<link>https://www.beb-algiardino.com/listino-prezzi-del-bed-and-breakfast/</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?page_id=12</guid>
+		<description></description>
+		<content:encoded><![CDATA[[vc_row][vc_column width="1/2"][vc_column_text]
+<h3 class="pt-green">Bassa stagione</h3>
+<ul>
+<li>Camera doppia uso singola: 40,00 €</li>
+<li>Camera doppia o matrimoniale: 60,00 €</li>
+<li>Camera tripla: 75,00 €</li>
+<li>Camera quadrupla: 95,00 €<br />
+(con bagno in camera)</li>
+</ul>
+[/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
+<h3 class="pt-green">Alta stagione</h3>
+<p>Ponti ed eventi, festività natalizie e pasquali, dal 10 luglio al 31 agosto</p>
+<ul>
+<li>Camera doppia uso singola: 50,00 €</li>
+<li>Camera doppia o matrimoniale: 70,00 €</li>
+<li>Camera tripla: 90,00 €</li>
+<li>Camera quadrupla: 110,00 €<br />
+(con bagno in camera)</li>
+</ul>
+[/vc_column_text][/vc_column][/vc_row]
+[vc_row][vc_column][vc_column_text]
+<p>Letto aggiunto: 20,00 euro per notte<br />
+Supplemento culla: 10,00 euro per notte</p>
+<p><strong>Riduzioni per soggiorni prolungati, individuali o di gruppo (escluso periodo dal 10/07 al 31/08).</strong></p>
+<p><strong>Le tariffe indicate non sono comprensive dell&#8217;imposta Comunale di soggiorno di seguito indicata, per la quale si rinvia al seguente link: <a href="https://www.comune.lecce.it/aree-tematiche/tasse/servizi-comunali/imposta-di-soggiorno" target="_blank" rel="noopener noreferrer">www.comune.lecce.it</a></strong></p>
+<table class="pt-table"><tbody><tr><td><b>Tipologia della struttura</b></td><td><b>Tariffa in euro alta stagione dal 01/05 al 31/10</b></td><td><b>Tariffa in euro bassa stagione dal 01/11 al 30/04</b></td></tr><tr><td>Affittacamere, B&amp;B, case e appartamenti per vacanza, agriturismi</td><td>Euro 2,50 a notte per massimo 5 notti consecutive</td><td>Euro 1,50 a notte per massimo 5 notti consecutive</td></tr></tbody></table>
+[/vc_column_text][/vc_column][/vc_row]
+[vc_row el_class="pt-panel" css=".vc_custom_1562321677684{background-color: #f7f7f7 !important;}"][vc_column width="1/2"][vc_column_text]
+<h3 class="pt-green">Modalità di prenotazione e regolamento interno</h3>
+<p><strong>Per richiedere la disponibilità:</strong></p>
+<ol>
+<li>Telefonare ai numeri +39 0832 458137 &#8211; +39 333 6848593.</li>
+<li>Inviare una e-mail a: info@beb-algiardino.com Per prenotare è richiesto il versamento di una caparra pari al 30% dell&#8217;importo totale del soggiorno (il deposito non è rimborsabile) e la successiva comunicazione via e-mail a info@beb-algiardino.com degli estremi dell&#8217;avvenuto pagamento.</li>
+</ol>
+[/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
+<h3 class="pt-green">Modalità di pagamento:</h3>
+<ol>
+<li><strong>Bonifico Bancario Beneficiario</strong><br />
+Salvatore Alessandro<br />
+Banca Intesa San Paolo<br />
+CODICE IBAN : IT44 Z030 6916 0991 0000 0006 402<br />
+CODICE BIC : BCITITMM</li>
+<li><strong>Vaglia postale</strong><br />
+Pagamento a mezzo vaglia postale intestato a Salvatore Alessandro, via F. Scarpa nr.7 &#8211; 73100 Lecce.</li>
+<li><strong>PostePay</strong><br />
+Richiedere telefonicamente i riferimenti per effettuare il pagamento.</li>
+</ol>
+[/vc_column_text][/vc_column][/vc_row]
+[vc_row][vc_column width="1/2"][vc_column_text]
+<p>La prenotazione è valida a tutti gli effetti dal giorno del ricevimento dell&#8217;acconto, il pagamento del saldo va effettuato al momento dell&#8217;arrivo o nel corso della mattina seguente.</p>
+<p>I clienti al loro arrivo devono consegnare per la registrazione i documenti d&#8217;identità che saranno restituiti a registrazione avvenuta; non sono ammessi i minori se non accompagnati da un maggiorenne che se ne assume in proprio la responsabilità; le camere devono essere liberate entro le 10:30 a.m. del giorno di partenza; il presente regolamento si intende interamente accettato all&#8217;atto della prenotazione.</p>
+<p>Si declina ogni responsabilità per i danni arrecati al conduttore da eventi in alcun modo connessi all&#8217;uso dell&#8217;appartamento, incluso danni fisici, materiali e perdite causate da ogni genere di attività illecita.</p>
+<p>Ogni malattia o sintomatologia infettiva e/o contagiosa deve essere dichiarata<br />
+immediatamente in Direzione.</p>
+[/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
+<h3 class="pt-green">Cancellazioni</h3>
+<p>Le cancellazioni possono essere effettuate mediante e-mail o raccomandata a.r..<br />
+Possono essere effettuate fino a 7 giorni della data prevista d&#8217;arrivo e non comportano alcun costo aggiuntivo; le cancellazioni effettuate fino a 1 giorno prima della data prevista di arrivo comportano l&#8217;addebito del costo della prima notte; le cancellazioni tardive e la mancata presentazione comportano l&#8217;addebito dell&#8217;intero importo.</p>
+[/vc_column_text][/vc_column][/vc_row]
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>12</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[listino-prezzi-del-bed-and-breakfast]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>3</wp:menu_order>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_vc_js_status]]></wp:meta_key>
+			<wp:meta_value><![CDATA[true]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_shortcodes_custom_css]]></wp:meta_key>
+			<wp:meta_value><![CDATA[.vc_custom_1562321677684{background-color: #f7f7f7 !important;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_title]]></wp:meta_key>
+			<wp:meta_value><![CDATA[B&B vicino a Piazza Mazzini a Lecce | B&B Al Giardino Lecce]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_description]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Al Giardino B&B per un soggiorno rilassante e piacevole con camere curate nei minimi particolari. Posizione strategica, a soli 5 minuti dal centro]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Dove siamo]]></title>
+		<link>https://www.beb-algiardino.com/dove-siamo/</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?page_id=14</guid>
+		<description></description>
+		<content:encoded><![CDATA[[vc_row][vc_column width="1/4"][vc_column_text]
+<p><img src="/wp-content/uploads/2019/07/bb_algiardino_casa.jpg" alt="La villetta del B&amp;B Al Giardino a Lecce" loading="lazy" class="pt-photo" /></p>
+<h4 class="pt-green">B&amp;B AL GIARDINO</h4>
+<p>Via Francesco Scarpa, 7 &#8211; 73100 Lecce<br />
+Tel. 0832 458137 Cell. 333 6848593</p>
+<p><b>COORDINATE GPS</b><br />
+40.35843, 18.1839202</p>
+[/vc_column_text][/vc_column][vc_column width="3/4"][vc_column_text]
+<div class="pt-map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3040.2744971710144!2d18.181932115224164!3d40.35843746710691!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13442ef72c4bfcbd%3A0xa0fdf7c7455be0ba!2sBed+%26+Breakfast+Al+Giardino!5e0!3m2!1sit!2sit!4v1562331335588!5m2!1sit!2sit" width="600" height="450" style="border:0" allowfullscreen loading="lazy" title="Mappa: B&amp;B Al Giardino, Via Francesco Scarpa 7, Lecce"></iframe></div>
+[/vc_column_text][/vc_column][/vc_row]
+[vc_row el_class="pt-panel" css=".vc_custom_1562332493799{background-color: #f7f7f7 !important;}"][vc_column width="1/2"][vc_column_text]
+<h2 class="pt-green">Distanze dai luoghi di particolare interesse turistico di Lecce</h2>
+<p><em>Clicca sulle voci per visualizzare la mappa del Salento con il percorso</em></p>
+<ul>
+<li><a href="https://maps.google.it/maps?f=q&amp;source=embed&amp;hl=it&amp;q=via+Francesco+Scarpa,+7+-+73100+Lecce&amp;ll=40.358422,18.184417&amp;z=14" target="_blank" rel="noopener noreferrer">Piazza Mazzini</a> (700 m)</li>
+<li><a href="https://maps.google.it/maps?f=q&amp;source=embed&amp;hl=it&amp;q=via+Francesco+Scarpa,+7+-+73100+Lecce&amp;ll=40.358422,18.184417&amp;z=14" target="_blank" rel="noopener noreferrer">Piazza S. Oronzo</a> (1 Km)</li>
+<li><a href="https://maps.google.it/maps?f=q&amp;source=embed&amp;hl=it&amp;q=via+Francesco+Scarpa,+7+-+73100+Lecce&amp;ll=40.358422,18.184417&amp;z=14" target="_blank" rel="noopener noreferrer">Villa Comunale</a> (850 m)</li>
+<li><a href="https://maps.google.it/maps?f=q&amp;source=embed&amp;hl=it&amp;q=via+Francesco+Scarpa,+7+-+73100+Lecce&amp;ll=40.358422,18.184417&amp;z=14" target="_blank" rel="noopener noreferrer">Stadio Via Del Mare</a> (2 Km)</li>
+<li><a href="https://maps.google.com/maps?q=Anfiteatro+Romano,+lecce&amp;hl=it" target="_blank" rel="noopener noreferrer">Anfiteatro Romano</a> (1 km)</li>
+<li><a href="https://maps.google.com/maps?q=Basilica+di+S.+Croce,+lecce&amp;hl=it" target="_blank" rel="noopener noreferrer">Basilica di S. Croce</a> (1 km)</li>
+<li><a href="https://maps.google.com/maps?q=Castello+Carlo+V,+lecce&amp;hl=it" target="_blank" rel="noopener noreferrer">Castello Carlo V</a> (1 km)</li>
+<li><a href="https://maps.google.com/maps?q=Stazione+Di+Lecce,+Lecce,+LE,+Italia&amp;hl=it" target="_blank" rel="noopener noreferrer">Stazione di Lecce</a> (2 Km)</li>
+<li><a href="https://maps.google.com/maps?q=Piazza+Palio+lecce&amp;hl=it" target="_blank" rel="noopener noreferrer">Piazza Palio</a> (850 m)</li>
+<li><a href="https://maps.google.com/maps?q=Casa+di+Cura+Petrucciani+lecce&amp;hl=it" target="_blank" rel="noopener noreferrer">Casa di Cura Petrucciani</a> (800 m)</li>
+<li><a href="https://maps.google.com/maps?q=viale+Giovanni+Paolo+II,+lecce&amp;hl=it" target="_blank" rel="noopener noreferrer">Parco giochi per bambini, viale G. Paolo II</a> (400 m)</li>
+</ul>
+[/vc_column_text][/vc_column][vc_column width="1/2"][vc_column_text]
+<h3 class="pt-green">Località costiere di particolare bellezza naturale ed artistica</h3>
+<ul>
+<li><a href="https://maps.google.com/maps?q=Porto+Cesareo&amp;hl=it" target="_blank" rel="noopener noreferrer">Porto Cesareo</a> (29Km)</li>
+<li><a href="https://maps.google.com/maps?q=Gallipoli&amp;hl=it" target="_blank" rel="noopener noreferrer">Gallipoli</a> (42Km)</li>
+<li><a href="https://maps.google.com/maps?q=Santa+Maria+di+Leuca&amp;hl=it" target="_blank" rel="noopener noreferrer">S. Maria di Leuca</a> (85Km)</li>
+<li><a href="https://maps.google.com/maps?q=Santa+Cesarea+Terme&amp;hl=it" target="_blank" rel="noopener noreferrer">Santa Cesarea Terme</a> (49Km)</li>
+<li><a href="https://maps.google.com/maps?q=Otranto&amp;hl=it" target="_blank" rel="noopener noreferrer">Otranto</a> (47Km)</li>
+</ul>
+[/vc_column_text][/vc_column][/vc_row]
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>14</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[dove-siamo]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>4</wp:menu_order>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_vc_js_status]]></wp:meta_key>
+			<wp:meta_value><![CDATA[true]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_shortcodes_custom_css]]></wp:meta_key>
+			<wp:meta_value><![CDATA[.vc_custom_1562332493799{background-color: #f7f7f7 !important;}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_title]]></wp:meta_key>
+			<wp:meta_value><![CDATA[B&B a Lecce nel cuore del Salento | B&B Al Giardino Lecce]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_description]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Bed and Breakfast vicino al centro di Lecce. Il nostro B&B si compone di tre camere dotate di bagno privato.]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Contattaci]]></title>
+		<link>https://www.beb-algiardino.com/contattaci/</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?page_id=16</guid>
+		<description></description>
+		<content:encoded><![CDATA[[vc_row][vc_column width="1/4"][vc_column_text]
+<h3 class="pt-green">AL GIARDINO b&amp;b</h3>
+<p>Via Francesco Scarpa, 7<br />
+73100 Lecce<br />
+Tel. +39 0832 458137<br />
+Cell. +39 333 6848593<br />
+CIS: LE07503561000013453<br />
+e-mail: <a href="mailto:info@beb-algiardino.com">info@beb-algiardino.com</a></p>
+<p><a class="pt-btn pt-btn-wa" href="https://api.whatsapp.com/send?phone=393336848593" target="_blank" rel="noopener noreferrer">Scrivici su WhatsApp</a></p>
+<p><a href="https://www.facebook.com/algiardinolecce/" target="_blank" rel="noopener noreferrer">Facebook</a> &#183; <a href="https://www.instagram.com/beb.algiardino.lecce/" target="_blank" rel="noopener noreferrer">Instagram</a></p>
+[/vc_column_text][/vc_column][vc_column width="3/4"][vc_column_text]
+<h3 class="pt-green">Inviaci una richiesta compilando il modulo</h3>
+[/vc_column_text][vc_column_text]
+[contact-form-7 title="Modulo di contatto 1"]
+[/vc_column_text][/vc_column][/vc_row]
+]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>16</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[contattaci]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>5</wp:menu_order>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_vc_js_status]]></wp:meta_key>
+			<wp:meta_value><![CDATA[true]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_wpb_shortcodes_custom_css]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_title]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Contatti B&B nel centro di Lecce | B&B Al Giardino Lecce]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_aioseop_description]]></wp:meta_key>
+			<wp:meta_value><![CDATA[Qualità e convenienza nel b&b a 5 minuti dalla Sant'Antonio a Fulgenzio. Gentili e cordiali per un rilassante soggiorno, per sentirti a casa lontano da casa.]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Home]]></title>
+		<link>https://www.beb-algiardino.com/?p=24</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?p=24</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>24</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[24]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>1</wp:menu_order>
+		<wp:post_type><![CDATA[nav_menu_item]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="nav_menu" nicename="menu-principale"><![CDATA[Menu principale]]></category>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_type]]></wp:meta_key>
+			<wp:meta_value><![CDATA[post_type]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_menu_item_parent]]></wp:meta_key>
+			<wp:meta_value><![CDATA[0]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object_id]]></wp:meta_key>
+			<wp:meta_value><![CDATA[2]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object]]></wp:meta_key>
+			<wp:meta_value><![CDATA[page]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_target]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_classes]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:1:{i:0;s:0:"";}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_xfn]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_url]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Il b&b Al Giardino]]></title>
+		<link>https://www.beb-algiardino.com/?p=23</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?p=23</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>23</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[23]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>2</wp:menu_order>
+		<wp:post_type><![CDATA[nav_menu_item]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="nav_menu" nicename="menu-principale"><![CDATA[Menu principale]]></category>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_type]]></wp:meta_key>
+			<wp:meta_value><![CDATA[post_type]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_menu_item_parent]]></wp:meta_key>
+			<wp:meta_value><![CDATA[0]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object_id]]></wp:meta_key>
+			<wp:meta_value><![CDATA[8]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object]]></wp:meta_key>
+			<wp:meta_value><![CDATA[page]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_target]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_classes]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:1:{i:0;s:0:"";}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_xfn]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_url]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Le camere del b&b]]></title>
+		<link>https://www.beb-algiardino.com/?p=22</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?p=22</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>22</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[22]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>3</wp:menu_order>
+		<wp:post_type><![CDATA[nav_menu_item]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="nav_menu" nicename="menu-principale"><![CDATA[Menu principale]]></category>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_type]]></wp:meta_key>
+			<wp:meta_value><![CDATA[post_type]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_menu_item_parent]]></wp:meta_key>
+			<wp:meta_value><![CDATA[0]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object_id]]></wp:meta_key>
+			<wp:meta_value><![CDATA[10]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object]]></wp:meta_key>
+			<wp:meta_value><![CDATA[page]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_target]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_classes]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:1:{i:0;s:0:"";}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_xfn]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_url]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Le tariffe]]></title>
+		<link>https://www.beb-algiardino.com/?p=21</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?p=21</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>21</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[21]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>4</wp:menu_order>
+		<wp:post_type><![CDATA[nav_menu_item]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="nav_menu" nicename="menu-principale"><![CDATA[Menu principale]]></category>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_type]]></wp:meta_key>
+			<wp:meta_value><![CDATA[post_type]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_menu_item_parent]]></wp:meta_key>
+			<wp:meta_value><![CDATA[0]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object_id]]></wp:meta_key>
+			<wp:meta_value><![CDATA[12]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object]]></wp:meta_key>
+			<wp:meta_value><![CDATA[page]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_target]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_classes]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:1:{i:0;s:0:"";}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_xfn]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_url]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Dove siamo]]></title>
+		<link>https://www.beb-algiardino.com/?p=20</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?p=20</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>20</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[20]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>5</wp:menu_order>
+		<wp:post_type><![CDATA[nav_menu_item]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="nav_menu" nicename="menu-principale"><![CDATA[Menu principale]]></category>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_type]]></wp:meta_key>
+			<wp:meta_value><![CDATA[post_type]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_menu_item_parent]]></wp:meta_key>
+			<wp:meta_value><![CDATA[0]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object_id]]></wp:meta_key>
+			<wp:meta_value><![CDATA[14]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object]]></wp:meta_key>
+			<wp:meta_value><![CDATA[page]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_target]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_classes]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:1:{i:0;s:0:"";}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_xfn]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_url]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+	<item>
+		<title><![CDATA[Contattaci]]></title>
+		<link>https://www.beb-algiardino.com/?p=19</link>
+		<pubDate>Fri, 05 Jul 2019 12:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<guid isPermaLink="false">https://www.beb-algiardino.com/?p=19</guid>
+		<description></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>19</wp:post_id>
+		<wp:post_date><![CDATA[2019-07-05 12:00:00]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-07-05 12:00:00]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[19]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>6</wp:menu_order>
+		<wp:post_type><![CDATA[nav_menu_item]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<category domain="nav_menu" nicename="menu-principale"><![CDATA[Menu principale]]></category>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_type]]></wp:meta_key>
+			<wp:meta_value><![CDATA[post_type]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_menu_item_parent]]></wp:meta_key>
+			<wp:meta_value><![CDATA[0]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object_id]]></wp:meta_key>
+			<wp:meta_value><![CDATA[16]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_object]]></wp:meta_key>
+			<wp:meta_value><![CDATA[page]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_target]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_classes]]></wp:meta_key>
+			<wp:meta_value><![CDATA[a:1:{i:0;s:0:"";}]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_xfn]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_menu_item_url]]></wp:meta_key>
+			<wp:meta_value><![CDATA[]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+</channel>
+</rss>
