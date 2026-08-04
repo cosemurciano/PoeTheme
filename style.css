@@ -4,7 +4,7 @@ Theme URI: https://example.com/poetheme
 Author: Cosè Murciano
 Author URI: https://example.com
 Description: Tema WordPress moderno con supporto completo per Gutenberg, accessibilità e SEO ottimizzata.
-Version: 1.35.9
+Version: 1.36.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: poetheme
@@ -27,9 +27,29 @@ Tags: blog, accessibility-ready, custom-logo, custom-menu, rtl-language-support,
   box-sizing: border-box;
 }
 
-.poetheme-layout-full .poetheme-container {
-  width: 100%;
-  max-width: none;
+/* Layout "Larghezza piena": le fasce (testata, top bar, footer) restano a
+   tutta pagina, ma i contenitori interni rispettano la larghezza sito in px
+   (--poetheme-site-width). Il vecchio override width:100%/max-width:none
+   ignorava del tutto il valore impostato nelle opzioni. */
+
+/* Layout "Larghezza box": l'intero sito (fasce comprese) sta in un box
+   centrato largo quanto la larghezza sito, con lo sfondo pagina ai lati. */
+body.poetheme-layout-boxed {
+  max-width: var(--poetheme-site-width);
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 40px rgba(15, 23, 42, 0.12);
+}
+
+/* Nel layout box le righe WPBakery "stretch" non devono uscire dal box:
+   il JS del builder le dimensiona sulla viewport con stili inline. */
+.poetheme-layout-boxed .poetheme-content-area .vc_row[data-vc-full-width="true"],
+.poetheme-layout-boxed .poetheme-content-area .wpb_row[data-vc-full-width="true"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  left: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 [x-cloak] {

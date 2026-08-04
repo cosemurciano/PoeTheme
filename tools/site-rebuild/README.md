@@ -70,9 +70,10 @@ Gli slug identici agli originali preservano gli URL indicizzati dai motori di ri
    Instagram: https://www.instagram.com/beb.algiardino.lecce/).
 10. **Media library (consigliato, non obbligatorio)**: le pagine mostrano le immagini
    anche senza che i file siano registrati nella libreria media, ma per poterle
-   riutilizzare dall'editor conviene reindicizzarle senza duplicarle:
-   - con WP-CLI: `wp media import "wp-content/uploads/2019/07/*.jpg" --skip-copy`
-   - oppure con un plugin tipo **Media Sync**.
+   riutilizzare dall'editor conviene reindicizzarle senza duplicarle. Da PoeTheme
+   1.36.0 c'è lo strumento integrato **Poe Theme → Media Sync**: seleziona la
+   cartella `2019/07` (o tutte), usa "Anteprima" per verificare e poi "Sincronizza".
+   In alternativa: WP-CLI `wp media import "wp-content/uploads/2019/07/*.jpg" --skip-copy`.
 
 ## Scelte di ricostruzione e migliorie
 

@@ -93,11 +93,18 @@ function poetheme_sanitize_palette_global( $input ) {
     $input    = is_array( $input ) ? $input : array();
     $output   = array();
 
-    $layout            = isset( $input['layout_mode'] ) ? sanitize_key( $input['layout_mode'] ) : $defaults['layout_mode'];
-    $output['layout_mode'] = in_array( $layout, array( 'full', 'boxed' ), true ) ? $layout : $defaults['layout_mode'];
+    // Solo le chiavi presenti nel payload entrano nella palette: una palette
+    // senza layout/larghezza non deve sovrascrivere le Impostazioni globali
+    // (il vecchio backfill con i default forzava sempre full/1200).
+    if ( isset( $input['layout_mode'] ) ) {
+        $layout                = sanitize_key( $input['layout_mode'] );
+        $output['layout_mode'] = in_array( $layout, array( 'full', 'boxed' ), true ) ? $layout : $defaults['layout_mode'];
+    }
 
-    $width                 = isset( $input['site_width'] ) ? absint( $input['site_width'] ) : $defaults['site_width'];
-    $output['site_width']  = max( 960, min( 1920, $width ) );
+    if ( isset( $input['site_width'] ) ) {
+        $width                = absint( $input['site_width'] );
+        $output['site_width'] = max( 960, min( 1920, $width ) );
+    }
 
     return $output;
 }
@@ -213,8 +220,15 @@ function poetheme_palette_apply_global( $options ) {
     $palette = poetheme_get_active_palette();
 
     if ( $palette && ! empty( $palette['global'] ) && is_array( $palette['global'] ) ) {
+        // Le Impostazioni globali salvate esplicitamente dall'utente hanno la
+        // precedenza: la palette fornisce layout/larghezza solo come default
+        // quando l'utente non li ha mai configurati. In caso contrario la
+        // larghezza in px impostata in admin non veniva mai applicata.
+        $saved_global = get_option( 'poetheme_global', array() );
+        $saved_global = is_array( $saved_global ) ? $saved_global : array();
+
         foreach ( poetheme_get_palette_global_keys() as $key ) {
-            if ( isset( $palette['global'][ $key ] ) ) {
+            if ( isset( $palette['global'][ $key ] ) && ! array_key_exists( $key, $saved_global ) ) {
                 $options[ $key ] = $palette['global'][ $key ];
             }
         }
