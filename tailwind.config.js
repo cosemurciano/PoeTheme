@@ -12,6 +12,14 @@ module.exports = {
     './inc/**/*.php',
     './assets/js/**/*.js',
   ],
+  // Classi composte dinamicamente in PHP (es. 'md:col-span-' . $span nel
+  // footer): la scansione dei sorgenti non le vede, vanno messe in safelist.
+  safelist: [
+    {
+      pattern: /^col-span-(1[0-2]|[1-9])$/,
+      variants: ['md'],
+    },
+  ],
   theme: {
     extend: {},
   },

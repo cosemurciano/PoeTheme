@@ -269,12 +269,12 @@ function poetheme_render_global_page() {
                                         <legend class="screen-reader-text"><?php esc_html_e( 'Layout', 'poetheme' ); ?></legend>
                                         <label for="poetheme-global-layout-full">
                                             <input id="poetheme-global-layout-full" type="radio" name="<?php echo esc_attr( $layout_field ); ?>" value="full" <?php checked( 'full', $layout_mode ); ?>>
-                                            <?php esc_html_e( 'Larghezza piena (100% della pagina)', 'poetheme' ); ?>
+                                            <?php esc_html_e( 'Larghezza piena (fasce a tutta pagina, contenuti centrati alla larghezza impostata)', 'poetheme' ); ?>
                                         </label>
                                         <br>
                                         <label for="poetheme-global-layout-boxed">
                                             <input id="poetheme-global-layout-boxed" type="radio" name="<?php echo esc_attr( $layout_field ); ?>" value="boxed" <?php checked( 'boxed', $layout_mode ); ?>>
-                                            <?php esc_html_e( 'Larghezza box', 'poetheme' ); ?>
+                                            <?php esc_html_e( 'Larghezza box (tutto il sito in un box centrato)', 'poetheme' ); ?>
                                         </label>
                                         <p id="poetheme-global-layout-help" class="description poetheme-field__help"><?php esc_html_e( 'Scegli come allineare l’intero sito, incluse testata e piè di pagina.', 'poetheme' ); ?></p>
                                     </fieldset>
@@ -284,7 +284,7 @@ function poetheme_render_global_page() {
                                 <th scope="row" class="poetheme-field__label"><label for="<?php echo esc_attr( $width_id ); ?>"><?php esc_html_e( 'Larghezza sito (px)', 'poetheme' ); ?></label></th>
                                 <td class="poetheme-field__control">
                                     <input type="number" name="poetheme_global[site_width]" id="<?php echo esc_attr( $width_id ); ?>" value="<?php echo esc_attr( $site_width ); ?>" min="960" max="1920" step="10" class="small-text" aria-describedby="poetheme-global-width-help">
-                                    <p id="poetheme-global-width-help" class="description poetheme-field__help"><?php esc_html_e( 'Imposta la larghezza massima del sito per il layout Box. Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
+                                    <p id="poetheme-global-width-help" class="description poetheme-field__help"><?php esc_html_e( 'Larghezza massima dei contenuti, valida per entrambi i layout (nel layout Box delimita l’intero sito). Valori consentiti da 960 a 1920 pixel.', 'poetheme' ); ?></p>
                                 </td>
                             </tr>
                             <tr class="poetheme-field">
