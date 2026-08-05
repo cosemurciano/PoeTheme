@@ -963,6 +963,9 @@ body.admin-bar .poetheme-header--style-5 {
 
 .poetheme-lightbox__content {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   max-width: min(1024px, 100%);
   max-height: 100%;
   outline: none;
@@ -976,20 +979,48 @@ body.admin-bar .poetheme-header--style-5 {
   height: auto;
   border-radius: 0.75rem;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  cursor: zoom-in;
+  transition: opacity 0.2s ease;
 }
 
-.poetheme-lightbox__close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 999px;
+.poetheme-lightbox.is-loading .poetheme-lightbox__image {
+  opacity: 0.35;
+}
+
+/* Zoom: l'immagine passa alla dimensione naturale e si sposta con lo
+   scroll del contenitore (comodo anche su mobile, dove lo swipe torna
+   ad essere un pan). */
+.poetheme-lightbox.is-zoomed .poetheme-lightbox__content {
+  position: fixed;
+  inset: 0;
+  display: block;
+  max-width: none;
+  max-height: none;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.poetheme-lightbox.is-zoomed .poetheme-lightbox__image {
+  max-width: none;
+  max-height: none;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 0;
+  box-shadow: none;
+  cursor: zoom-out;
+}
+
+.poetheme-lightbox__close,
+.poetheme-lightbox__zoom,
+.poetheme-lightbox__nav {
+  position: fixed;
+  z-index: 2;
   border: none;
+  border-radius: 999px;
   background: rgba(17, 24, 39, 0.85);
   color: #f9fafb;
-  font-size: 1.5rem;
-  line-height: 1;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -997,10 +1028,61 @@ body.admin-bar .poetheme-header--style-5 {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
+.poetheme-lightbox__close {
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.poetheme-lightbox__zoom {
+  top: 1rem;
+  left: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.poetheme-lightbox__nav {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.poetheme-lightbox__nav--prev {
+  left: 1rem;
+}
+
+.poetheme-lightbox__nav--next {
+  right: 1rem;
+}
+
 .poetheme-lightbox__close:hover,
-.poetheme-lightbox__close:focus {
+.poetheme-lightbox__close:focus,
+.poetheme-lightbox__zoom:hover,
+.poetheme-lightbox__zoom:focus,
+.poetheme-lightbox__nav:hover,
+.poetheme-lightbox__nav:focus {
   background: rgba(30, 64, 175, 0.95);
   color: #ffffff;
+}
+
+.poetheme-lightbox__counter {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.75);
+  color: #f9fafb;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
 }
 
 body.poetheme-lightbox-open {
@@ -1016,6 +1098,26 @@ body.poetheme-lightbox-open {
     max-width: calc(100vw - 2rem);
     max-height: calc(100vh - 4rem);
     border-radius: 0.5rem;
+  }
+
+  .poetheme-lightbox__nav {
+    top: auto;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    transform: none;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .poetheme-lightbox__nav--prev {
+    left: 0.75rem;
+  }
+
+  .poetheme-lightbox__nav--next {
+    right: 0.75rem;
+  }
+
+  .poetheme-lightbox__counter {
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
   }
 
   .poetheme-lightbox__close {

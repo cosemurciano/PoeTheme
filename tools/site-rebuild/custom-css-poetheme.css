@@ -4,9 +4,14 @@
    (oppure Aspetto > Personalizza > CSS aggiuntivo)
    =================================================================== */
 
-/* Colore brand (verde del logo) per i titoli di sezione */
-.pt-green {
-    color: #399b28;
+/* Colore brand (verde del logo) per i titoli di sezione.
+   La palette del tema colora i heading con regole !important
+   (body.poetheme-has-color-settings main h2 { ... !important }):
+   serve un selettore più specifico con !important perché il verde
+   di sezione non venga sovrascritto. */
+.pt-green,
+body.poetheme-has-color-settings main .pt-green {
+    color: #399b28 !important;
 }
 
 .pt-center {
@@ -28,8 +33,9 @@
 }
 
 /* Sezione "Servizi del b&b" (home): titolo su foto + box traslucido */
-.pt-hero-title {
-    color: #ffffff;
+.pt-hero-title,
+body.poetheme-has-color-settings main .pt-hero-title {
+    color: #ffffff !important;
     text-align: center;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
     font-size: 1.75rem;
