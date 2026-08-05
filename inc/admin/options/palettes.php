@@ -127,10 +127,16 @@ function poetheme_sanitize_palette_data( $data ) {
     $fonts  = isset( $data['fonts'] ) && is_array( $data['fonts'] ) ? $data['fonts'] : array();
     $global = isset( $data['global'] ) && is_array( $data['global'] ) ? $data['global'] : array();
 
+    // I sanitizer delle opzioni riempiono OGNI chiave mancante con i default
+    // (o con i valori correnti risolti, palette attiva inclusa): per un form
+    // completo è corretto, ma una palette importata da JSON deve conservare
+    // SOLO le chiavi dichiarate nel file. Senza questo filtro un JSON parziale
+    // diventava un set completo che, applicato, sovrascriveva tutte le regole
+    // CSS di colori e font configurate manualmente.
     $sanitized = array(
         'name'   => $name,
-        'colors' => poetheme_sanitize_color_options( $colors ),
-        'fonts'  => poetheme_sanitize_font_options( $fonts ),
+        'colors' => array_intersect_key( poetheme_sanitize_color_options( $colors ), $colors ),
+        'fonts'  => array_intersect_key( poetheme_sanitize_font_options( $fonts ), $fonts ),
         'global' => poetheme_sanitize_palette_global( $global ),
     );
 
